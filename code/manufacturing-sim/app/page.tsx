@@ -3,7 +3,7 @@ import Map from "../components/Map";
 
 export default function Home() {
   return (
-    <main className="bg-[#FAFAFA]">
+    <main className="bg-[#FAFAFA] h-screen">
       <div>
         <Map></Map>
       </div>
