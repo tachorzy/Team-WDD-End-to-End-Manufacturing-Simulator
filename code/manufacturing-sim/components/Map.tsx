@@ -4,13 +4,19 @@ import React from "react"
 import { ComposableMap, Geographies, Geography } from "react-simple-maps"
 
 const geoUrl =
-  "https://raw.githubusercontent.com/wingstop-driven-developers/wdd/feature-mapUI/code/manufacturing-sim/public/map/world.json?token=GHSAT0AAAAAACKF25AEMJODHVXYRMWXXUJ2ZOGUE7Q"
+  "https://raw.githubusercontent.com/wingstop-driven-developers/wdd/feature-mapUI/code/manufacturing-sim/public/map/world.json?token=GHSAT0AAAAAACKF25AFXD4GAVMCVAP3TSH2ZOGWNPQ"
 
 const Map = () => {
 
     return(
-        <div className="w-[60%] bg-stone-100 absolute self-center right-0 bottom-0 xl:mr-32">
-            <ComposableMap >
+        <div className=" w-[60%] bg-stone-100 absolute self-center right-0 bottom-0 xl:mr-32 -pl-12">
+            <ComposableMap 
+                projection="geoEqualEarth"
+                projectionConfig={{
+                    rotate: [-1.0, 0, 0],
+                    scale: 160,
+                  }}
+            >
                 <Geographies geography={geoUrl}>
                     {({ geographies }) =>
                         geographies.map(geo => (
