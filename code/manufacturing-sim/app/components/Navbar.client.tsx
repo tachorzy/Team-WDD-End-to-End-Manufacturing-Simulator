@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 
-
 type MenuOption = {
   icon: JSX.Element; 
   text: string;
@@ -32,7 +31,7 @@ const Navbar = () => {
           ""
         )}
         <div className={nav ? "fixed top-0 left-0 w-[300px] h-screen bg-white z-10 duration-300" : "fixed top-0 left-[-100%] w-[300px] h-screen bg-white z-10 duration-300"}>
-          <Image src="/icons/navbar/close.svg" onClick={() => setNav(!nav)} width={30} height={30} className="absolute right-4 top-4 cursor-pointer" />
+          <Image src="/icons/navbar/close.svg" onClick={() => setNav(!nav)} width={30} height={30} className="absolute right-4 top-4 cursor-pointer" alt="close icon"/>
           <h2 className="text-2xl p-4">
             Manufacturing Simu<span className="font-bold">SLAY</span>tor
           </h2>
