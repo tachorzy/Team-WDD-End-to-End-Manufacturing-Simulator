@@ -1,40 +1,41 @@
 'use client';
 // import font later
-import React from "react"
-import { ComposableMap, Geographies, Geography } from "react-simple-maps"
+import React from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
-const geoUrl =
-  "https://raw.githubusercontent.com/wingstop-driven-developers/wdd/feature-mapUI/code/manufacturing-sim/public/map/world.json?token=GHSAT0AAAAAACKF25AFXD4GAVMCVAP3TSH2ZOGWNPQ"
-
-const Map = () => {
-
-    return(
-        <div className=" w-[60%] bg-stone-100 absolute self-center right-0 bottom-0 xl:mr-32 -pl-12">
-            <ComposableMap 
-                projection="geoEqualEarth"
-                projectionConfig={{
-                    rotate: [-1.0, 0, 0],
-                    scale: 160,
-                  }}
-            >
-                <Geographies geography={geoUrl}>
-                    {({ geographies }) =>
-                        geographies.map(geo => (
-                            <Geography
-                                key={geo.rsmKey} geography={geo}
-                                fill="#BDBDBD"
-                                stroke="#FFFFFF"
-                                className={"hover:fill-[#425EB3] cursor-pointer transition duration-300 ease-in-out transform hover:shadow-lg hover:rounded-lg hover:z-50 hover:opacity-80 stroke-[0.75]"}
-                            />
-                        ))
-                    }
-                </Geographies>
-            </ComposableMap>
-        </div>
-
-        // <div className={""}>
-        // </div>  
-    );
+interface MapProps {
+  position: { lat: number, lon: number };
 }
 
-export default Map;
+const customIcon = new L.Icon({
+  iconUrl: '/map/factorymapmarker.png',
+  iconSize: [35, 35], 
+  iconAnchor: [17, 35], 
+  popupAnchor: [0, -35]
+});
+
+const ChangeView = ({ center, zoom }) => {
+  const map = useMap();
+  map.flyTo(center, zoom);
+  return null;
+};
+
+const MapComponent: React.FC<MapProps> = ({ positions })=> {
+  const initialZoom = 4;
+  const zoomInLevel = 15; 
+
+  return (
+    <MapContainer center={[37.0902, -95.7129]} zoom={initialZoom} style={{ height: '400px', width: '100%' }}>
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      {positions.map((position, index) => (
+        <Marker key={index} position={[position.lat, position.lon]} icon={customIcon}>
+          <Popup>Factory Data or we can redirect user to another page whnen they click on it</Popup>
+        </Marker>
+      ))}
+    </MapContainer>
+  );
+};
+
+export default MapComponent;
