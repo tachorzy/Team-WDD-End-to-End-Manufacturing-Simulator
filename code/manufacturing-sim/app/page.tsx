@@ -1,8 +1,12 @@
 'use client';
 import React, { useState } from 'react';
 import Image from "next/image";
+import Dashboard from "../components/Dashboard"
+const Navbar = React.lazy(() => import('.//components/Navbar.client'));
+
 import Map from "../components/Map";
 import Searchbar from "../components/Searchbar";
+
 
 export default function Home() {
   const [positions, setPositions] = useState<Array<{ lat: number, lon: number }>>([]);
@@ -16,6 +20,8 @@ export default function Home() {
       <div className="w-full max-w-4xl h-96 bg-gray-200 shadow-lg rounded-lg">
         <Map positions={positions} />
       </div>
+
+      <Dashboard></Dashboard>
     </main>
   );
 }
