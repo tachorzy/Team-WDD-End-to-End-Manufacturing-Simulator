@@ -23,12 +23,12 @@ On Windows, follow these steps:
 
 1. Build the Go application
 ```bash
-$env:GOOS = "linux"; $env:GOARCH = "amd64"; go build -o main ./lambda/<function>
+$env:GOOS = "linux"; $env:GOARCH = "amd64"; go build -o bootstrap ./lambda/<function>
 ```
 
 2. Zip the binary with a third party tool, 7z
 ```bash
-7z a deployment.zip .\main
+7z a deployment.zip .\bootstrap
 ```
 
 3. Upload the binary to the target lambda function
