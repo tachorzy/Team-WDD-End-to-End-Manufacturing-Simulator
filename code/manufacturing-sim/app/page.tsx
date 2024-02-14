@@ -13,7 +13,7 @@ export default function Home() {
   return(
     <main className="bg-[#FAFAFA] h-screen flex flex-col items-center justify-center">
     <div className="w-full max-w-md p-4 bg-white shadow-lg rounded-lg mb-8">
-      <LocationSearch onSearch={handleNewLocation} />
+      <Searchbar onSearch={handleNewLocation} />
     </div>
     <div className="w-full max-w-4xl h-96 bg-gray-200 shadow-lg rounded-lg">
       <Map positions={positions} />
