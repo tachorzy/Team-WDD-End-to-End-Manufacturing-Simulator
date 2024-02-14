@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Dashboard from "../components/Dashboard"
+import React, { Suspense } from 'react';
+const Navbar = React.lazy(() => import('.//components/Navbar.client'));
 
 export default function Home() {
   return (
