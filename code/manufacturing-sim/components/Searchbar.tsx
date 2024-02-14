@@ -6,7 +6,7 @@ interface SearchProps {
   onSearch: (position: { lat: number, lon: number }) => void;
 }
 
-const LocationSearch: React.FC<SearchProps> = ({ onSearch }) => {
+const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
   const [address, setAddress] = useState('');
 
   const handleSearch = async () => {
@@ -50,4 +50,4 @@ const LocationSearch: React.FC<SearchProps> = ({ onSearch }) => {
   );
 };
 
-export default LocationSearch;
+export default Searchbar;

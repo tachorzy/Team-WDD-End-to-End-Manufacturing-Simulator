@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Image from "next/image";
 import Map from "../components/Map";
-import LocationSearch from "../components/LocationSearch";
+import Searchbar from "../components/Searchbar";
 
 export default function Home() {
   const [positions, setPositions] = useState<Array<{ lat: number, lon: number }>>([]);
