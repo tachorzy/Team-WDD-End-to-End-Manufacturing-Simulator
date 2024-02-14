@@ -14,14 +14,4 @@ const Tile: React.FC<TileProps> = ({ label, value }) => {
   );
 };
 
-const Dashboard: React.FC = () => {
-  return (
-    <div>
-      <Tile value={10} label="Sites" />
-      <Tile value={5} label="Gateways" />
-      <Tile value={100} label="Assets" />
-    </div>
-  );
-};
-
-export default Dashboard;
+export default Tile;
