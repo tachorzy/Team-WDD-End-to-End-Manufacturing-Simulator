@@ -6,10 +6,10 @@ import LocationSearch from "../components/LocationSearch";
 
 export default function Home() {
   const [positions, setPositions] = useState<Array<{ lat: number, lon: number }>>([]);
-
   const handleNewLocation = (newPosition: { lat: number, lon: number }) => {
     setPositions((prevPositions) => [...prevPositions, newPosition]);
   };
+  
   return(
     <main className="bg-[#FAFAFA] h-screen flex flex-col items-center justify-center">
     <div className="w-full max-w-md p-4 bg-white shadow-lg rounded-lg mb-8">
