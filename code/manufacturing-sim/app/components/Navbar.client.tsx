@@ -1,9 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { CiGlobe } from "react-icons/ci";
-import { MdOutlineFactory } from "react-icons/md";
-import { GoGear } from "react-icons/go";
-import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import Image from "next/image";
 
 type MenuOption = {
   icon: JSX.Element; 
@@ -14,16 +11,16 @@ const Navbar = () => {
   const [nav, setNav] = useState<boolean>(false); 
 
   const menuOptions: MenuOption[] = [
-    { icon: <CiGlobe size={25} className="mr-4" />, text: "Home" },
-    { icon: <MdOutlineFactory size={25} className="mr-4" />, text: "Sites" },
-    { icon: <GoGear size={25} className="mr-4" />, text: "Assets" },
+    { icon: <Image src="/icons/navbar/globe.svg" width={25} height={25} className="mr-4 select-none" alt="globe icon"/>, text: "Home" },
+    { icon: <Image src="icons/navbar/factory.svg" width={26} height={26} className="mr-4 select-none"  alt="factory icon"/>, text: "Sites" },
+    { icon: <Image src="icons/navbar/cog.svg" width={25} height={25} className="mr-4 select-none"  alt="cog icon"/>, text: "Assets" },
   ];
 
   return (
     <div className="max-w-[1640px] mx-auto flex justify-between items-center p-4 shadow-sm">
       <div className="flex items-center">
         <div onClick={() => setNav(!nav)} className="cursor-pointer">
-          <AiOutlineMenu size={30} />
+          <Image src="/icons/navbar/hamburger-menu.svg" width={30} height={30} alt="menu icon"/>
         </div>
         <h1 className="text-2xl sm:text-3xl lg:text-4xl px-2">
           Manufacturing Simu<span className="font-bold">SLAY</span>tor
@@ -34,7 +31,7 @@ const Navbar = () => {
           ""
         )}
         <div className={nav ? "fixed top-0 left-0 w-[300px] h-screen bg-white z-10 duration-300" : "fixed top-0 left-[-100%] w-[300px] h-screen bg-white z-10 duration-300"}>
-          <AiOutlineClose onClick={() => setNav(!nav)} size={30} className="absolute right-4 top-4 cursor-pointer" />
+          <Image src="/icons/navbar/close.svg" onClick={() => setNav(!nav)} width={30} height={30} className="absolute right-4 top-4 cursor-pointer" alt="close icon"/>
           <h2 className="text-2xl p-4">
             Manufacturing Simu<span className="font-bold">SLAY</span>tor
           </h2>
