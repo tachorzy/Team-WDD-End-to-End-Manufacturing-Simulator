@@ -10,7 +10,7 @@ interface MapProps {
 }
 
 const customIcon = new L.Icon({
-  iconUrl: '/map/factorymapmarker.png',
+  iconUrl: '/map/factory-map-marker.svg',
   iconSize: [35, 35], 
   iconAnchor: [17, 35], 
   popupAnchor: [0, -35]
