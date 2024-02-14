@@ -5,8 +5,11 @@ interface SearchProps {
   onSearch: (position: { lat: number, lon: number }) => void;
 }
 
+const INITIAL_ADDRESS_STATE = '';
+
+
 const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState(INITIAL_ADDRESS_STATE);
 
   const handleSearch = async () => {
     const coordinates = await getCoordinates(address);
@@ -40,7 +43,17 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         placeholder="Enter factory address"
         className="rounded w-11/12 p-3 text-DarkBlue"
       />
-      <button onClick={handleSearch} className="bg-LightBlue rounded p-3 font-bold hover:bg-MainBlue">Search</button>
+
+      {address === INITIAL_ADDRESS_STATE 
+        ? (
+          <button onClick={handleSearch} className="bg-DarkGray rounded p-3 font-bold inactive">Search</button>
+        )
+        : (
+          <button onClick={handleSearch} className="bg-gradient-to-r from-MainBlue to-Iris rounded p-3 font-bold transition-colors duration-700 ease-in ease-out hover:scale-[101.5%]">Search</button>
+
+        )
+
+      }
     </div>
   );
 };
