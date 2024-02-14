@@ -1,1 +1,6 @@
+# Ignore executables without extensions
+*
+!*.*
+!*/
+
 *.zip
