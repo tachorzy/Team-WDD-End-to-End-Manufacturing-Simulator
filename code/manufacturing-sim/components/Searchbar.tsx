@@ -1,4 +1,3 @@
-'use client';
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -6,8 +5,11 @@ interface SearchProps {
   onSearch: (position: { lat: number, lon: number }) => void;
 }
 
+const INITIAL_ADDRESS_STATE = '';
+
+
 const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState(INITIAL_ADDRESS_STATE);
 
   const handleSearch = async () => {
     const coordinates = await getCoordinates(address);
@@ -22,7 +24,6 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         params: {
           q: address,
           api_key:process.env.NEXT_PUBLIC_GEOCODE_API_KEY
-          
         }
       });
 
@@ -34,16 +35,25 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className="mb-3 md:w-96">
-      <div className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <input
-          type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder="Enter factory address"
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
+    <div className="flex flex-row gap-x-2 w-full max-w-md p-2 bg-DarkBlue rounded-lg mb-8">
+      <input
+        type="text"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        placeholder="Enter factory address"
+        className="rounded w-11/12 p-3 text-DarkBlue"
+      />
+
+      {address === INITIAL_ADDRESS_STATE 
+        ? (
+          <button onClick={handleSearch} className="bg-DarkGray rounded p-3 font-bold inactive">Search</button>
+        )
+        : (
+          <button onClick={handleSearch} className="bg-gradient-to-r from-MainBlue to-Iris rounded p-3 font-bold transition-colors duration-700 ease-in ease-out hover:scale-[101.5%]">Search</button>
+
+        )
+
+      }
     </div>
   );
 };

@@ -20,6 +20,7 @@ const config: Config = {
         "DarkGray" : "#374048",
         "Gray" : "#BDBDBD",
         "LightGray" : "#FAFAFA",
+        "Iris" : "#7C91D5"
       }
     },
   },
