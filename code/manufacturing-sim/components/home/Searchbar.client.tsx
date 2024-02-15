@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -41,18 +42,17 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         value={address}
         onChange={(e) => setAddress(e.target.value)}
         placeholder="Enter factory address"
-        className="rounded w-11/12 p-3 text-DarkBlue"
+        className="rounded w-11/12 p-3 text-DarkBlue font-medium"
       />
 
       {address === INITIAL_ADDRESS_STATE 
         ? (
-          <button onClick={handleSearch} className="bg-DarkGray rounded p-3 font-bold inactive">Search</button>
+          <button onClick={handleSearch} className="bg-DarkGray dark:text-white rounded p-3 font-bold inactive">Search</button>
         )
         : (
           <button onClick={handleSearch} className="bg-gradient-to-r from-MainBlue to-Iris rounded p-3 font-bold transition-colors duration-700 ease-in ease-out hover:scale-[101.5%]">Search</button>
 
         )
-
       }
     </div>
   );

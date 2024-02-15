@@ -9,7 +9,7 @@ const Dashboard: React.FC = () => {
     ]
     
     return (
-      <div>
+      <div className="flex flex-row gap-x-8 mb-8">
         {tileData.map((tile,index) => (
             <Tile key={index} value={tile.value} label={tile.label} />
         ))}
