@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Image from "next/image";
 import Dashboard from "../components/Dashboard"
-const Navbar = React.lazy(() => import('../components/HamburgerMennu.client'));
+import Navbar from "../components/Navbar/Navbar";
 
 import Map from "../components/Map";
 import Searchbar from "../components/Searchbar";
@@ -16,7 +16,7 @@ export default function Home() {
   
   return(
     <main className="bg-[#FAFAFA] h-screen flex flex-col overflow-hidden">
-      <Navbar />
+      <Navbar/>
 
       {/* <Searchbar onSearch={handleNewLocation} />
       <div className="w-full max-w-4xl h-96 bg-gray-200 shadow-lg rounded-lg">

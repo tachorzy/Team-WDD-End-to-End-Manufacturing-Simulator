@@ -17,7 +17,7 @@ const HamburgerMenu = () => {
   ];
 
   return (
-    <div className="mx-auto flex justify-between items-center p-">
+    <div className="flex justify-between align-bottom mt-0.5">
       <span onClick={() => setNav(!nav)} className="cursor-pointer">
         <Image src="/icons/navbar/hamburger-menu.svg" width={50} height={50} alt="menu icon"/>
       </span>
