@@ -18,5 +18,15 @@
         "tabWidth": 4
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "tests/**/*"
+      ],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
 }
