@@ -1,3 +1,8 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "wesbos/typescript"
+  ],
+  "rules": {
+    "no-console": 2
+  }
 }
