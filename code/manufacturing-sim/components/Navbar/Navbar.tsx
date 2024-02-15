@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
     ]
     
     return (
-      <div className="flex flex-row gap-x-[82%] mx-32 mt-2">
+      <div className="flex flex-row gap-x-[82%] mt-2">
         <Image src="/branding/TensorIoT-Logo-Black.svg" width={150} height={150} alt="brand" className="select-none my-4"></Image>
         <HamburgerMenu/>
       </div>
