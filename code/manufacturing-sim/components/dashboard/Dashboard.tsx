@@ -1,5 +1,5 @@
 import React from 'react'
-import Tile  from "./Tiles"
+import Tile  from "../Tiles"
 
 const Dashboard: React.FC = () => {
     const tileData =[

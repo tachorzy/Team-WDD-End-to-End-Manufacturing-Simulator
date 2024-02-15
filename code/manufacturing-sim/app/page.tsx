@@ -1,10 +1,10 @@
 'use client';
 import React, { useState } from 'react';
 import Image from "next/image";
-import Dashboard from "../components/Dashboard"
-import Navbar from "../components/Navbar/Navbar";
+import Dashboard from "../components/home/Dashboard"
+import Navbar from "../components/navbar/Navbar";
 
-import Map from "../components/Map";
+import Map from "../components/home/Map";
 import Searchbar from "../components/Searchbar";
 import { TypeAnimation } from 'react-type-animation';
 
@@ -29,14 +29,17 @@ export default function Home() {
             />   
         </div>
         <Searchbar onSearch={handleNewLocation} />
-        <div className="w-2/3 max-w-4xl bg-gray-200 shadow-lg rounded-lg -mt-16 mb-24">
-          <Map positions={positions} />
-        </div>
+      
       </div>
+      <div className="flex flex-col">
+          <div className="w-full max-w-4xl bg-gray-200 shadow-lg rounded-lg mt-16 mb-4">
+            <Map positions={positions} />
+          </div>
+          <Dashboard></Dashboard>
+        </div>
 
 
 
-      {/* <Dashboard></Dashboard> */}
     </main>
   );
 }
