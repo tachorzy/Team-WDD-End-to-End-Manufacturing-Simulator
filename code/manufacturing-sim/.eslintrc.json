@@ -3,6 +3,16 @@
     "wesbos/typescript"
   ],
   "rules": {
-    "no-console": 2
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto",
+        "tabWidth": 4
+      }
+    ]
   }
 }
