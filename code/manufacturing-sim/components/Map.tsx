@@ -27,7 +27,7 @@ const MapComponent: React.FC<MapProps> = ({ positions })=> {
   const zoomInLevel = 15; 
 
   return (
-    <MapContainer center={[37.0902, -95.7129]} zoom={initialZoom} style={{ height: '400px', width: '100%' }}>
+    <MapContainer center={[37.0902, -95.7129]} zoom={initialZoom} style={{ height: '25rem', width: '100%' }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {positions.map((position, index) => (
         <Marker key={index} position={[position.lat, position.lon]} icon={customIcon}>

@@ -16,7 +16,7 @@ export default function Home() {
   };
   
   return(
-    <main className="bg-[#FAFAFA] h-screen flex flex-col overflow-hidden px-32">
+    <main className="bg-[#FAFAFA] min=h-screen flex flex-col px-32">
       <Navbar/>
       <div className="grid grid-cols-1 gap-y-24 mt-20">
         <h1 className="font-extrabold text-DarkGray text-4xl md:text-5xl lg:text-6xl xl:text-7xl w-1/2 mb-1.5">End-to-End<br/>Manufacturing Simulator</h1>
@@ -29,11 +29,12 @@ export default function Home() {
             />   
         </div>
         <Searchbar onSearch={handleNewLocation} />
+        <div className="w-2/3 max-w-4xl bg-gray-200 shadow-lg rounded-lg -mt-16 mb-24">
+          <Map positions={positions} />
+        </div>
       </div>
 
-      {/* <div className="w-full max-w-4xl h-96 bg-gray-200 shadow-lg rounded-lg">
-        <Map positions={positions} />
-      </div> */}
+
 
       {/* <Dashboard></Dashboard> */}
     </main>
