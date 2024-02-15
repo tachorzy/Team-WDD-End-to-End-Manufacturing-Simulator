@@ -28,7 +28,7 @@ const HamburgerMenu = () => {
         ""
       )}
 
-      <div className={nav ? "fixed top-0 left-0 w-1/4 h-screen bg-white z-10 duration-300 pt-1.5" : "fixed top-0 left-[-100%] w-1/4 h-screen bg-white z-10 duration-300 pt-1.5"}>
+      <div className={nav ? "fixed top-0 left-0 w-1/4 h-screen bg-white z-10 duration-300 pt-1.5 z-50" : "fixed top-0 left-[-100%] w-1/4 h-screen bg-white z-10 duration-300 pt-1.5 z-50"}>
         <Image src="/icons/navbar/close.svg" onClick={() => setNav(!nav)} width={30} height={30} className="select-none absolute right-4 top-4 cursor-pointer mt-2" alt="close icon"/>
         <Image src="/branding/TensorIoT-Logo-Black.svg" width={150} height={150} alt="brand" className="select-none my-4 ml-14"></Image>
         <nav className="flex flex-col mr-12 text-gray-800">

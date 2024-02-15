@@ -4,8 +4,8 @@ import Image from "next/image";
 import Dashboard from "../components/dashboard/Dashboard"
 import Navbar from "../components/navbar/Navbar";
 import LandingPageTitle from '@/components/home/LandingPageTitle';
-import Map from "../components/home/Map";
-import Searchbar from "../components/home/Searchbar";
+import Map from "../components/home/Map.client";
+import Searchbar from "../components/home/Searchbar.client";
 
 
 export default function Home() {
