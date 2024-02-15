@@ -18,7 +18,7 @@ export default function Home() {
   return(
     <main className="bg-[#FAFAFA] h-screen flex flex-col overflow-hidden px-32">
       <Navbar/>
-      <div className="grid grid-cols-1 gap-y-4 mt-20">
+      <div className="grid grid-cols-1 gap-y-24 mt-20">
         <h1 className="font-extrabold text-DarkGray text-4xl md:text-5xl lg:text-6xl xl:text-7xl w-1/2 mb-1.5">End-to-End<br/>Manufacturing Simulator</h1>
         <div className="absolute flex flex-row gap-x-2 mt-[15.5%] w-1/3">
             <Image src="/icons/home/chevron-horizontal.svg" width={15} height={15} alt="chevron" className="relative h-full pt-1.5 select-none"></Image>
@@ -28,9 +28,8 @@ export default function Home() {
               cursor={true}
             />   
         </div>
-     
+        <Searchbar onSearch={handleNewLocation} />
       </div>
-      {/* <Searchbar onSearch={handleNewLocation} /> */}
 
       {/* <div className="w-full max-w-4xl h-96 bg-gray-200 shadow-lg rounded-lg">
         <Map positions={positions} />
