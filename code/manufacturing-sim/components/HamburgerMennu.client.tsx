@@ -19,16 +19,18 @@ const HamburgerMenu = () => {
   return (
     <div className="mx-auto flex justify-between items-center p-">
       <span onClick={() => setNav(!nav)} className="cursor-pointer">
-        <Image src="/icons/navbar/hamburger-menu.svg" width={30} height={30} alt="menu icon"/>
+        <Image src="/icons/navbar/hamburger-menu.svg" width={50} height={50} alt="menu icon"/>
       </span>
+      
       {nav ? (
         <div className="bg-black/70 fixed w-full h-screen z-10 top-0 left-0"></div>
       ) : (
         ""
       )}
+
       <div className={nav ? "fixed top-0 left-0 w-1/4 h-screen bg-white z-10 duration-300 pt-1.5" : "fixed top-0 left-[-100%] w-1/4 h-screen bg-white z-10 duration-300 pt-1.5"}>
         <Image src="/icons/navbar/close.svg" onClick={() => setNav(!nav)} width={30} height={30} className="select-none absolute right-4 top-4 cursor-pointer mt-2" alt="close icon"/>
-        <Image src="/branding/TensorIoT-Logo-Black.svg" width={150} height={150} alt="brand" className="select-none my-4 ml-12"></Image>
+        <Image src="/branding/TensorIoT-Logo-Black.svg" width={150} height={150} alt="brand" className="select-none my-4 ml-14"></Image>
         <nav className="flex flex-col mr-12 text-gray-800">
           {menuOptions.map(({ icon, text }, index) => {
             return (

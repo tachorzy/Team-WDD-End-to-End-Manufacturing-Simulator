@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Image from "next/image";
 import Dashboard from "../components/Dashboard"
-const Navbar = React.lazy(() => import('./components/HamburgerMennu.client'));
+const Navbar = React.lazy(() => import('../components/HamburgerMennu.client'));
 
 import Map from "../components/Map";
 import Searchbar from "../components/Searchbar";
