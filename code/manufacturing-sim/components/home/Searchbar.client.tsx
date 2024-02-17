@@ -8,6 +8,8 @@ interface SearchProps {
 }
 
 const INITIAL_ADDRESS_STATE = '';
+const INIITIAL_LATITUDE_STATE = '';
+const INITIAL_LONGITUDE_STATE = '';
 
 
 const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
@@ -17,7 +19,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
   const [longitude, setLongitude] = useState("");
 
   const handleSearch = async () => {
-    const coordinates = await getCoordinates(address);
+    const coordinates = isAddressSearchBarActive ? await getCoordinates(address) : await getCoodinates(latitude, longitude);
     if (coordinates) {
       onSearch(coordinates);
     }
@@ -38,6 +40,18 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
       return undefined;
     }
   };
+
+  const getCoodinates = async (latitude: string, longitude: string): Promise<{ lat: number, lon: number } | undefined> => {
+    try { 
+      const lat = Number(latitude);
+      const lon = Number(longitude);
+      return { lat, lon };
+      // we should show a tooltip if the latitude and/or longitude are not valid
+    }
+    catch (error) {
+      return undefined;
+    }
+  }
 
   return (
     <div className="flex flex-row gap-x-2 w-[45%] p-2 bg-DarkBlue rounded-lg mb-8">
@@ -74,7 +88,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
       </button>
 
 
-      {address === INITIAL_ADDRESS_STATE 
+      {address === INITIAL_ADDRESS_STATE && (longitude === INIITIAL_LATITUDE_STATE && latitude === INITIAL_LONGITUDE_STATE)
           ? (
             <button onClick={handleSearch} className="bg-DarkGray dark:text-white rounded p-3 font-bold inactive">Search</button>
           )
