@@ -1,12 +1,13 @@
-'use client';
-import React, { useState } from 'react';
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import Dashboard from "../components/dashboard/Dashboard"
-import Navbar from "../components/navbar/Navbar";
 import LandingPageTitle from '@/components/home/LandingPageTitle';
 import Map from "../components/home/Map.client";
 import Searchbar from "../components/home/Searchbar.client";
 
+const Navbar = React.lazy(() => import("./components/Navbar.client"));
 
 export default function Home() {
   const [positions, setPositions] = useState<Array<{ lat: number, lon: number }>>([]);
