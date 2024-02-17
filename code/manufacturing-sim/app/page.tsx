@@ -15,9 +15,9 @@ export default function Home() {
   };
   
   return(
-    <main className="bg-[#FAFAFA] min=h-screen flex flex-col px-32">
+    <main className="flex flex-col bg-[#FAFAFA] min-h-screen px-32 mx-auto">
       <Navbar/>
-      <div className="grid grid-cols-1 gap-y-24 mt-20">
+      <div className="flex flex-col block items-center justify-center gap-y-24 mt-16 mx-auto">
         <LandingPageTitle/>
         <Searchbar onSearch={handleNewLocation} />
       </div>
