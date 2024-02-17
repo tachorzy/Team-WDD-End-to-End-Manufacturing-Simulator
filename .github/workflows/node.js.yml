@@ -29,5 +29,5 @@ jobs:
       working-directory: ./code/manufacturing-sim
       
     - name: Tests
-      run: npm test
+      run: npm run test
       working-directory: ./code/manufacturing-sim
