@@ -26,7 +26,6 @@ export default function Home() {
               Define your industry
             </Link> 
           </div>
-
           <div className="flex flex-col items-center justify-center mt-[50%] gap-y-8">
             <div id="searchbar">
               <Searchbar onSearch={handleNewLocation}/>
