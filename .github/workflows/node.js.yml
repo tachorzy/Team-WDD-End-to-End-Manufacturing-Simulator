@@ -22,7 +22,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    
+        cache-dependency-path: './code/manufacturing-sim/package-lock.json'
+        
     - name: npm install
       run: npm ci
       working-directory: ./code/manufacturing-sim
