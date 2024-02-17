@@ -1,0 +1,40 @@
+name: Go
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+      
+      - name: Install dependencies
+        run: go get ./...
+        working-directory: ./code/backend/api
+      
+      - name: Build
+        run: go build -o build/main -v cmd/main.go
+        working-directory: ./code/backend/api
+      
+      - name: Generate code coverage report
+        run: go test ./... -coverprofile="build/coverage.out" 
+        working-directory: ./code/backend/api
+
+      - name: Generate code coverage report html
+        run: go tool cover -html="build/coverage.out" -o build/coverage.html
+        working-directory: ./code/backend/api
+
+      - name: Upload code coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: go-coverage-report
+          path: |
+            ./code/backend/api/build/coverage.out
+            ./code/backend/api/build/coverage.html
+
