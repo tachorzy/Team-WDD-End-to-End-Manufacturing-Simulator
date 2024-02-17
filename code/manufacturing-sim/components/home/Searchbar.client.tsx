@@ -77,21 +77,21 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
               <input
                 type="text"
                 value={latitude}
-                onChange={(e) => setLatitude(e.target.value)}
+                onChange={(e) => { setLatitude(e.target.value); setInvalidInput(false) } }
                 placeholder="Enter latitude"
                 className="rounded w-6/12 p-3 text-DarkBlue font-medium"
               />
               <input
                 type="text"
                 value={longitude}
-                onChange={(e) => setLongitude(e.target.value)}
+                onChange={(e) =>  { setLongitude(e.target.value); setInvalidInput(false) }}
                 placeholder="Enter longitude"
                 className="rounded w-6/12 p-3 text-DarkBlue font-medium"
               />
           </div>
         }
 
-        <button onClick={() => setIsAddressSearchBarActive(!isAddressSearchBarActive)} className="flex flex-col group bg-MainBlue dark:text-white rounded p-2.5 w-20 font-bold transition-colors duration-700 ease-in ease-out hover:scale-[101%] items-center">
+        <button onClick={() => { setIsAddressSearchBarActive(!isAddressSearchBarActive); setInvalidInput(false) } } className="flex flex-col group bg-MainBlue dark:text-white rounded p-2.5 w-20 font-bold transition-colors duration-700 ease-in ease-out hover:scale-[101%] items-center">
           <Image src="/icons/searchbar/cycle.svg" width={35} height={35} alt="switch searchbar" className="group-hover:rotate-180 transform duration-500"></Image>
         </button>
 
