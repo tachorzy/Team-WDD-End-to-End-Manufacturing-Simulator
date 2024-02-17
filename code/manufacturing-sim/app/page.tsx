@@ -27,9 +27,9 @@ export default function Home() {
             </Link> 
           </div>
           <div className="flex flex-col items-center justify-center mt-[50%] gap-y-8">
-            <div id="searchbar">
+            <span id="searchbar" className="flex flex-col w-full items-center justify-center">
               <Searchbar onSearch={handleNewLocation}/>
-            </div>
+            </span>
             <div className="w-full max-w-4xl shadow-lg rounded-lg mb-4">
               <Map positions={positions} />
             </div>
