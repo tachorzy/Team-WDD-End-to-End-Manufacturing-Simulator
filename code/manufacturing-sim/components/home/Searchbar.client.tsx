@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
 
 interface SearchProps {
   onSearch: (position: { lat: number, lon: number }) => void;
@@ -39,7 +40,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className="flex flex-row gap-x-2 w-full max-w-md p-2 bg-DarkBlue rounded-lg mb-8">
+    <div className="flex flex-row gap-x-2 w-[45%] p-2 bg-DarkBlue rounded-lg mb-8">
        {isAddressSearchBarActive ? 
           <input
             type="text"
@@ -54,20 +55,23 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
               type="text"
               value={latitude}
               onChange={(e) => setLatitude(e.target.value)}
-              placeholder="Enter factory address"
-              className="rounded w-5/12 p-3 text-DarkBlue font-medium"
+              placeholder="Enter latitude"
+              className="rounded w-6/12 p-3 text-DarkBlue font-medium"
             />
             <input
               type="text"
               value={longitude}
               onChange={(e) => setLongitude(e.target.value)}
-              placeholder="Enter factory address"
-              className="rounded w-5/12 p-3 text-DarkBlue font-medium"
+              placeholder="Enter longitude"
+              className="rounded w-6/12 p-3 text-DarkBlue font-medium"
             />
         </div>
       }
 
-      <button className="bg-MainBlue dark:text-white rounded p-3 font-bold hover:scale-[101.5%]"></button>
+      <button onClick={() => setIsAddressSearchBarActive(!isAddressSearchBarActive)} className="flex flex-col bg-MainBlue dark:text-white rounded p-2.5 w-20 font-bold transition-colors duration-700 ease-in ease-out hover:scale-[101%] items-center">
+        <Image src="/icons/searchbar/cycle.svg" width={35} height={35} alt="switch searchbar"></Image>
+
+      </button>
 
 
       {address === INITIAL_ADDRESS_STATE 
