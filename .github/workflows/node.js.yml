@@ -27,4 +27,13 @@ jobs:
     - name: npm install
       run: npm ci
       working-directory: ./code/manufacturing-sim
+
+      
+    - name: Linting
+      run: npm run lint:fix
+      working-directory: ./code/manufacturing-sim
+
+    - name: Tests
+      run: npm run test:coverage
+      working-directory: ./code/manufacturing-sim
       
