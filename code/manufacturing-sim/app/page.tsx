@@ -19,11 +19,13 @@ export default function Home() {
       <Navbar/>
       <div className="flex flex-col block items-center justify-center gap-y-24 mt-16 mx-auto">
         <LandingPageTitle/>
-        <Searchbar onSearch={handleNewLocation} />
       </div>
 
-      <div className="flex flex-col">
-        <div className="w-full max-w-4xl bg-gray-200 shadow-lg rounded-lg mt-16 mb-4">
+      <div className="flex flex-col items-center justify-center mt-[50%] gap-y-8">
+        <div>
+          <Searchbar onSearch={handleNewLocation}/>
+        </div>
+        <div className="w-full max-w-4xl shadow-lg rounded-lg mb-4">
           <Map positions={positions} />
         </div>
         <Dashboard></Dashboard>
