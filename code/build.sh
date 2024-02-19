@@ -34,6 +34,7 @@ else
     # Verify installion
     node -v
     npm -v
+fi
 
 # Update PATH to include the Node.js binary
 export PATH="$NODE_DIR/bin:$PATH"
