@@ -5,7 +5,5 @@
 # go test ./...
 
 # frontend
-cd ./manufacturing-sim
-npm ci
-npm run lint:fix
-npm run test:coverage
+chmod +x ./manufacturing-sim/build.sh
+./manufacturing-sim/build.sh
