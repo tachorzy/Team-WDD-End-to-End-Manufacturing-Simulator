@@ -1,7 +1,12 @@
-# test
-ls
-go --version
-node --version
+# Install Node.js and npm
+sudo apt-get update
+sudo apt-get install -y nodejs npm
+
+echo "Node.js and npm versions:"
+node -v
+npm -v
+
+
 
 # backend
 # cd ./backend/api
