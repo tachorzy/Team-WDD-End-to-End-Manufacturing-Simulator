@@ -15,6 +15,12 @@ Make sure you have the following on your machine:
 
 ## Usage
 
+Generate code coverage report:
+```bash
+go test ./... -coverprofile="build/coverage.out"
+go tool cover -html="build/coverage.out" -o build/coverage.html
+```
+
 TBA ( SAM for local testing )
 
 ## Manual Deployment
@@ -23,20 +29,26 @@ On Windows, follow these steps:
 
 1. Build the Go application
 ```bash
-$env:GOOS = "linux"; $env:GOARCH = "amd64"; go build -o bootstrap ./lambda/<function>
+$env:GOOS = "linux"; $env:GOARCH = "amd64"; go build -o build/bootstrap ./cmd/main
 ```
 
 2. Zip the binary with a third party tool, 7z
 ```bash
-7z a deployment.zip .\bootstrap
+7z a main.zip ./build/bootstrap
 ```
 
 3. Upload the binary to the target lambda function
 
 ## Folder Structure
 
-`/lambda`: temporarily for manual deployment
+`/cmd`: project entry
 
-`/handlers`: describes the logic for each endpoint 
+`/pkg`: source code folder
 
-`/routes`: describes what each endpoint are
+`/build`: any compiled or generated files
+
+`/pkg/lambda`: temporarily for manual deployment
+
+`/pkg/handlers`: describes the logic for each endpoint 
+
+`/pkg/routes`: describes what each endpoint are
