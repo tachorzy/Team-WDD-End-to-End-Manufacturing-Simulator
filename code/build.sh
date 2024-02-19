@@ -1,6 +1,6 @@
 # Install Node.js and npm
-sudo apt-get update
-sudo apt-get install -y nodejs npm
+apt-get update
+apt-get install -y nodejs npm
 
 echo "Node.js and npm versions:"
 node -v
