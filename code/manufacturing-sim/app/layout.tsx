@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "TensorIoT End-to-End Manufacturing Simulator",
-  description: "We connect you to your devices to make them smarter.",
+    title: "TensorIoT End-to-End Manufacturing Simulator",
+    description: "We connect you to your devices to make them smarter.",
 };
 
 export default function RootLayout({
@@ -16,7 +16,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={inter.className + " scroll-smooth"}>{children}</body>
+            <body className={`${inter.className} scroll-smooth`}>
+                {children}
+            </body>
         </html>
     );
 }
