@@ -25,7 +25,7 @@ install_go() {
   # Create Node.js directory
   mkdir -p "$GO_DIR"
   # Download Go tarball
-  curl -o "$GO_DIR/go$GO_VERSION.$GO_PLATFORM.tar.gz" "https://golang.org/dl/go$GO_VERSION.$GO_PLATFORM.tar.gz"
+  curl -o "$GO_DIR/go$GO_VERSION.$GO_PLATFORM.tar.gz" "https://go.dev/dl/go$GO_VERSION.$GO_PLATFORM.tar.gz"
   # Extract Go tarball
   tar -C "$HOME" -xzf "$GO_DIR/go$GO_VERSION.$GO_PLATFORM.tar.gz"
   # Clean up the tarball
