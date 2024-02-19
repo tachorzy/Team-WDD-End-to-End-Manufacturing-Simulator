@@ -34,5 +34,6 @@ npm -v
 # go test ./...
 
 # frontend
-chmod +x ./manufacturing-sim/build.sh
-./manufacturing-sim/build.sh
+cd manufacturing-sim
+chmod +x build.sh
+./build.sh
