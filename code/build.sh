@@ -1,3 +1,8 @@
+# test
+ls
+go --version
+node --version
+
 # backend
 # cd ./backend/api
 # go get ./...
@@ -5,5 +10,5 @@
 # go test ./...
 
 # frontend
-chmod +x ./manufacturing-sim/build.sh
-./manufacturing-sim/build.sh
+# chmod +x ./manufacturing-sim/build.sh
+# ./manufacturing-sim/build.sh
