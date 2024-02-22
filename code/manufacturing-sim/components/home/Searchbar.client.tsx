@@ -3,8 +3,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import { error } from "console";
-import { Niconne } from "next/font/google";
 
 interface SearchProps {
     onSearch: (position: { lat: number; lon: number }) => void;
@@ -31,31 +29,40 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         }
     };
 
+    interface GeocodeResponse {
+        lat: number;
+        lon: number;
+    }
+
     const getCoordinates = async (
-        address: string,
+        inputAddress: string,
     ): Promise<{ lat: number; lon: number } | undefined> => {
         try {
             const response = await axios.get("https://geocode.maps.co/search", {
                 params: {
-                    q: address,
+                    q: inputAddress,
                     api_key: process.env.NEXT_PUBLIC_GEOCODE_API_KEY,
                 },
             });
 
-            const { lat, lon } = response.data[0];
-            return { lat, lon };
+            if (Array.isArray(response.data) && response.data.length > 0) {
+                const firstResult = response.data[0] as GeocodeResponse;
+                const { lat, lon } = firstResult;
+                return { lat, lon };
+            }
+            return undefined;
         } catch (error) {
             return undefined;
         }
     };
 
     const getCoodinates = async (
-        latitude: string,
-        longitude: string,
+        inputLatitude: string,
+        inputLongitude: string,
     ): Promise<{ lat: number; lon: number } | undefined> => {
         try {
-            const lat = Number(latitude);
-            const lon = Number(longitude);
+            const lat = Number(inputLatitude);
+            const lon = Number(inputLongitude);
             console.log(`lat: ${lat}, lon: ${lon}`);
             if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180)
                 return { lat, lon };
@@ -105,6 +112,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                 )}
 
                 <button
+                    type="button"
                     onClick={() => {
                         setIsAddressSearchBarActive(!isAddressSearchBarActive);
                         setInvalidInput(false);
@@ -124,6 +132,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                 longitude === INIITIAL_LATITUDE_STATE &&
                 latitude === INITIAL_LONGITUDE_STATE ? (
                     <button
+                        type="button"
                         onClick={handleSearch}
                         className="bg-DarkGray dark:text-white rounded p-3 font-bold inactive"
                     >
@@ -131,6 +140,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                     </button>
                 ) : (
                     <button
+                        type="button"
                         onClick={handleSearch}
                         className="bg-gradient-to-r from-MainBlue to-Iris rounded p-3 font-bold transition-colors duration-700 ease-in ease-out hover:scale-[101.5%]"
                     >
