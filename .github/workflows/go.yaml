@@ -37,4 +37,3 @@ jobs:
           path: |
             ./code/backend/api/build/coverage.out
             ./code/backend/api/build/coverage.html
-
