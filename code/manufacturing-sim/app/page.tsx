@@ -7,7 +7,7 @@ import Dashboard from "../components/dashboard/Dashboard";
 import LandingPageTitle from "@/components/home/LandingPageTitle";
 import Map from "../components/home/Map.client";
 import Searchbar from "../components/home/Searchbar.client";
-import Navbar from "../components/navbar/Navbar";
+import Navbar from "../components/Navbar/HamburgerMenu";
 
 export default function Home() {
     const [positions, setPositions] = useState<
