@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
     ];
 
     return (
-        <div className="flex flex-row items-center justify-center gap-x-[10%] mx-28 mt-2">
+        <div className="flex flex-row items-center justify-center gap-x-[17.5%] mx-24 mt-2">
             <Image
                 src="/branding/TensorIoT-Logo-Black.svg"
                 width={150}
