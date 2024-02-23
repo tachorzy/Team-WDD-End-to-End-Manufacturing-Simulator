@@ -32,7 +32,7 @@ export default function Home() {
                             Define your industry
                         </Link>
                     </div>
-                    <div className="flex flex-col items-center justify-center mt-[50%] gap-y-8">
+                    <div className="flex flex-col items-center justify-center mt-[80%] gap-y-8">
                         <span
                             id="searchbar"
                             className="flex flex-col w-full items-center justify-center"
