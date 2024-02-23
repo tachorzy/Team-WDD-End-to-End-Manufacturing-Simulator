@@ -22,8 +22,9 @@ export default function Home() {
             <div className="flex flex-col bg-[url('/background/Grid.svg')] max-h-1/2 rounded-3xl bg-opacity-[15%]">
                 <div className="px-32">
                     <Navbar pageId="Home"/>
-                    <div className="flex flex-col block items-center justify-center gap-y-16 mt-16 mx-auto">
+                    <div className="flex flex-col block items-center justify-center gap-y-5 mt-16 mx-auto overflow-hidden max-h-screen">
                         <LandingPageTitle />
+                        <Image src={"/background/radial.svg"} width={800} height={800} alt="radial background image" className="absolute z-0 mt-[85%] "></Image>
                         <Link
                             href="#searchbar"
                             className="rounded-full bg-gradient-to-br from-DarkGray via-[#555F68] to-DarkGray opacity-[95%] border-solid border-2 border-neutral-400 p-3 transform transition duration-500 hover:scale-[102.5%] hover:border-MainBlue font-semibold"

@@ -76,7 +76,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
     };
 
     return (
-        <div className="mb-8 w-[45%] items-center">
+        <div className="mb-8 w-[45%] items-center z-30">
             <div className="flex flex-row gap-x-2 p-2 bg-DarkBlue rounded-lg">
                 {isAddressSearchBarActive ? (
                     <input
