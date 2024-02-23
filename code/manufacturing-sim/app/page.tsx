@@ -7,7 +7,7 @@ import Dashboard from "../components/dashboard/Dashboard";
 import LandingPageTitle from "@/components/home/LandingPageTitle";
 import Map from "../components/home/Map.client";
 import Searchbar from "../components/home/Searchbar.client";
-import Navbar from "../components/Navbar/HamburgerMenu";
+import Navbar from "../components/Navbar/Navbar";
 
 export default function Home() {
     const [positions, setPositions] = useState<
@@ -21,7 +21,7 @@ export default function Home() {
         <main className="flex flex-col bg-[#FAFAFA] min-h-screen mx-auto smooth-scroll">
             <div className="flex flex-col bg-[url('/background/Grid.svg')] max-h-1/2 rounded-3xl bg-opacity-[15%]">
                 <div className="px-32">
-                    <Navbar />
+                    <Navbar/>
                     <div className="flex flex-col block items-center justify-center gap-y-16 mt-16 mx-auto">
                         <LandingPageTitle />
                         <Link
