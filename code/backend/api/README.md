@@ -17,7 +17,7 @@ Make sure you have the following on your machine:
 
 Generate code coverage report:
 ```bash
-go test ./... -coverprofile="build/coverage.out"
+go test ./pkg/... -coverprofile="build/coverage.out"
 go tool cover -html="build/coverage.out" -o build/coverage.html
 ```
 
