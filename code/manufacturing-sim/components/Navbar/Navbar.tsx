@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Sidebar from "./Sidebar.client";
+import SignUpButton from "./SignUpButton";
 
 const Navbar: React.FC = () => {
     const navbarLinks = [
@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
     ];
 
     return (
-        <div className="flex flex-row items-center justify-center gap-x-[15%] mx-48 mt-2">
+        <div className="flex flex-row items-center justify-center gap-x-[10%] mx-28 mt-2">
             <Image
                 src="/branding/TensorIoT-Logo-Black.svg"
                 width={150}
@@ -28,13 +28,12 @@ const Navbar: React.FC = () => {
                     </div>
                 ))}
             </div>
-            <div>
+            <div className="flex flex-row gap-x-6 items-center justify-center">
                 <Link href={"/"}>
                     <h1 className="text-lg font-medium text-[#494949]">{"Login"}</h1>
                 </Link>
+                <SignUpButton/>
             </div>
-            
-
         </div>
     );
 };
