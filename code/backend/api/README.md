@@ -29,15 +29,17 @@ On Windows, follow these steps:
 
 1. Build the Go application
 ```bash
-$env:GOOS = "linux"; $env:GOARCH = "amd64"; go build -o build/bootstrap ./cmd/main
+$env:GOOS = "linux"; $env:GOARCH = "amd64"; go build -o build/bootstrap <PATH_TO_LAMBDA_FUNCTION>/main.go
 ```
 
 2. Zip the binary with a third party tool, 7z
 ```bash
-7z a main.zip ./build/bootstrap
+7z a ./build/main.zip ./build/bootstrap
 ```
 
-3. Upload the binary to the target lambda function
+3. Upload the zip file to the target lambda function
+
+4. Test the endpoint on API Gateway
 
 ## Folder Structure
 

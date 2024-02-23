@@ -5,6 +5,8 @@
 
 # Build
 *.zip
+*.html
+*.out
 
 # IDE
 .vscode
