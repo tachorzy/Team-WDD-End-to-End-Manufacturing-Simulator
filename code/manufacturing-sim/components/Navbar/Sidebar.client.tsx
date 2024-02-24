@@ -8,7 +8,7 @@ type MenuOption = {
     text: string;
 };
 
-const HamburgerMenu = () => {
+const Sidebar = () => {
     const [nav, setNav] = useState<boolean>(false);
 
     const menuOptions: MenuOption[] = [
@@ -104,4 +104,4 @@ const HamburgerMenu = () => {
     );
 };
 
-export default HamburgerMenu;
+export default Sidebar;
