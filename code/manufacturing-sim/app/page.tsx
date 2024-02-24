@@ -41,6 +41,7 @@ export default function Home() {
                             <Searchbar onSearch={handleNewLocation} />
                         </span>
                         <div className="w-full rounded-full mb-4">
+                            <h1 className="mx-24 mb-0.5 text-DarkBlue text-3xl font-semibold">Recent Factories</h1>
                             <FactoryTable/>
                             <Map positions={positions} />
                         </div>
