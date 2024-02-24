@@ -82,7 +82,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                 <div className="flex flex-col gap-y-2 w-full">
                     {isAddressSearchBarActive ? (
                         <div>
-                            <Image src="/icons/searchbar/search.svg" width={30} height={30} className="absolute float-left justify-center self-center ml-6 mt-6" alt="maginify glass"></Image>
+                            <Image src="/icons/searchbar/search.svg" width={30} height={30} className="absolute select-none float-left justify-center self-center ml-6 mt-6" alt="maginify glass"></Image>
                             <input
                                 type="text"
                                 value={address}
@@ -92,27 +92,30 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                             />
                         </div>
                     ) : (
-                        <div className="flex flex-row gap-x-2">
-                            <input
-                                type="text"
-                                value={latitude}
-                                onChange={(e) => {
-                                    setLatitude(e.target.value);
-                                    setInvalidInput(false);
-                                }}
-                                placeholder="Enter latitude"
-                                className="rounded w-6/12 p-3 text-DarkBlue font-medium"
-                            />
-                            <input
-                                type="text"
-                                value={longitude}
-                                onChange={(e) => {
-                                    setLongitude(e.target.value);
-                                    setInvalidInput(false);
-                                }}
-                                placeholder="Enter longitude"
-                                className="rounded w-6/12 p-3 text-DarkBlue font-medium"
-                            />
+                        <div className="flex flex-row">
+                            <Image src="/icons/searchbar/search.svg" width={30} height={30} className="absolute select-none float-left justify-center self-center ml-6 mt-0.5" alt="maginify glass"></Image>
+                            <div className="flex flex-row gap-x-0 w-full">
+                                <input
+                                    type="text"
+                                    value={latitude}
+                                    onChange={(e) => {
+                                        setLatitude(e.target.value);
+                                        setInvalidInput(false);
+                                    }}
+                                    placeholder="Enter latitude"
+                                    className="rounded-l-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-br from-MainBlue to-DarkBlue border-white border-r-[3px]"
+                                />
+                                <input
+                                    type="text"
+                                    value={longitude}
+                                    onChange={(e) => {
+                                        setLongitude(e.target.value);
+                                        setInvalidInput(false);
+                                    }}
+                                    placeholder="Enter longitude"
+                                    className="rounded-r-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-bl from-MainBlue to-DarkBlue"
+                                />
+                            </div>
                         </div>
                     )}
                 </div>
