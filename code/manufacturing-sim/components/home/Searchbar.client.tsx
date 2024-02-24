@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-
+import SearchModeButton from "./searchbar/SearchModeButton";
 interface SearchProps {
     onSearch: (position: { lat: number; lon: number }) => void;
 }
@@ -77,56 +77,42 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
 
     return (
         <div className="mb-8 w-[45%] items-center z-30">
-            <div className="flex flex-row gap-x-2 p-2 bg-DarkBlue rounded-lg">
-                {isAddressSearchBarActive ? (
-                    <input
-                        type="text"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        placeholder="Enter factory address"
-                        className="rounded w-11/12 p-3 text-DarkBlue font-medium"
-                    />
-                ) : (
-                    <div className="flex flex-row gap-x-2">
+            <div className="flex flex-row gap-x-2 p-2 bg-gradient-to-br from-DarkGray via-[#555F68] to-DarkGray rounded-lg">
+                <div className="flex flex-col gap-y-2">
+                    {isAddressSearchBarActive ? (
                         <input
                             type="text"
-                            value={latitude}
-                            onChange={(e) => {
-                                setLatitude(e.target.value);
-                                setInvalidInput(false);
-                            }}
-                            placeholder="Enter latitude"
-                            className="rounded w-6/12 p-3 text-DarkBlue font-medium"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            placeholder="Enter factory address"
+                            className="rounded w-11/12 p-3 text-DarkBlue font-medium"
                         />
-                        <input
-                            type="text"
-                            value={longitude}
-                            onChange={(e) => {
-                                setLongitude(e.target.value);
-                                setInvalidInput(false);
-                            }}
-                            placeholder="Enter longitude"
-                            className="rounded w-6/12 p-3 text-DarkBlue font-medium"
-                        />
-                    </div>
-                )}
-
-                <button
-                    type="button"
-                    onClick={() => {
-                        setIsAddressSearchBarActive(!isAddressSearchBarActive);
-                        setInvalidInput(false);
-                    }}
-                    className="flex flex-col group bg-MainBlue dark:text-white rounded p-2.5 w-20 font-bold transition-colors duration-700 ease-in ease-out hover:scale-[101%] items-center"
-                >
-                    <Image
-                        src="/icons/searchbar/cycle.svg"
-                        width={35}
-                        height={35}
-                        alt="switch searchbar"
-                        className="group-hover:rotate-180 transform duration-500"
-                    />
-                </button>
+                    ) : (
+                        <div className="flex flex-row gap-x-2">
+                            <input
+                                type="text"
+                                value={latitude}
+                                onChange={(e) => {
+                                    setLatitude(e.target.value);
+                                    setInvalidInput(false);
+                                }}
+                                placeholder="Enter latitude"
+                                className="rounded w-6/12 p-3 text-DarkBlue font-medium"
+                            />
+                            <input
+                                type="text"
+                                value={longitude}
+                                onChange={(e) => {
+                                    setLongitude(e.target.value);
+                                    setInvalidInput(false);
+                                }}
+                                placeholder="Enter longitude"
+                                className="rounded w-6/12 p-3 text-DarkBlue font-medium"
+                            />
+                        </div>
+                    )}
+                    <SearchModeButton/>
+                </div>
 
                 {address === INITIAL_ADDRESS_STATE &&
                 longitude === INIITIAL_LATITUDE_STATE &&
@@ -134,7 +120,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                     <button
                         type="button"
                         onClick={handleSearch}
-                        className="bg-DarkGray dark:text-white rounded p-3 font-bold inactive"
+                        className="h-1/2 bg-DarkGray dark:text-white rounded p-3 font-bold inactive border-2 border-[#C5C9D6] border-solid rounded-lg text-[#494949] hover:scale-[101.5%] hover:border-MainBlue"
                     >
                         Search
                     </button>
@@ -142,7 +128,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                     <button
                         type="button"
                         onClick={handleSearch}
-                        className="bg-gradient-to-r from-MainBlue to-Iris rounded p-3 font-bold transition-colors duration-700 ease-in ease-out hover:scale-[101.5%]"
+                        className="h-1/2 bg-gradient-to-r from-MainBlue to-Iris rounded p-3 font-bold transition-colors duration-700 ease-in ease-out hover:scale-[101.5%] border-2 border-[#C5C9D6] border-solid rounded-lg text-[#494949] hover:scale-[101.5%] hover:border-MainBlue"
                     >
                         Search
                     </button>
