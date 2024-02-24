@@ -5,7 +5,7 @@ import Link from "next/link";
 const SearchModeButton = (props: {isAddressSearchBarActive: boolean, setIsAddressSearchBarActive: React.Dispatch<React.SetStateAction<boolean>>, setInvalidInput: React.Dispatch<React.SetStateAction<boolean>>}) => {
     
     const addressIcon = props.isAddressSearchBarActive ? "address-white.svg" : "address-blue.svg";
-    const coordsIcon = !props.isAddressSearchBarActive ? "address-white.svg" : "address-blue.svg";
+    const coordsIcon = !props.isAddressSearchBarActive ? "compass-white.svg" : "compass-blue.svg";
 
     return (
         <div className="flex flex-row rounded w-80">
