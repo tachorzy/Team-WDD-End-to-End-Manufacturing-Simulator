@@ -8,6 +8,7 @@ import LandingPageTitle from "@/components/home/LandingPageTitle";
 import Map from "../components/home/Map.client";
 import Searchbar from "../components/home/Searchbar.client";
 import Navbar from "../components/Navbar/Navbar";
+import FactoryTable from "@/components/home/FactoryTable.client";
 
 export default function Home() {
     const [positions, setPositions] = useState<
@@ -39,7 +40,8 @@ export default function Home() {
                         >
                             <Searchbar onSearch={handleNewLocation} />
                         </span>
-                        <div className="w-full max-w-4xl rounded-full mb-4">
+                        <div className="w-full rounded-full mb-4">
+                            <FactoryTable/>
                             <Map positions={positions} />
                         </div>
                         {/* <Dashboard /> */}

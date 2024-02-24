@@ -1,16 +1,25 @@
 import React from "react";
 
-const LandingPageTitle = () => (
+const FactoryTable = () => (
     <div className="flex flex-col items-center justify-center mx-auto z-30">
-        <h1 className="font-medium text-MainBlue text-lg py-2">Bringing innovation to life. </h1>
-        <h1 className="font-semibold bg-gradient-to-br from-DarkGray via-[#555F68] to-DarkGray bg-clip-text text-transparent text-3xl text-center md:text-4xl lg:text-5xl xl:text-6xl pb-4">
-            End-to-End
-            <br/>
-            Manufacturing Simulator
-        </h1>
-
-        <h1 className="font-regular text-[#797979] text-xl py-2">We connect your devices to make them smarter.</h1>
+        <table className="table-auto w-10/12 text-center mb-4 rounded-3xl">
+            <thead className="text-[#858A8F] font-medium text-sm border-b-2 border-[#858A8F] border-opacity-[70%]">
+                <tr className="rounded-3xl">
+                    <th scope="col" className="px-4 py-2.5"> Facility Name</th>
+                    <th scope="col" className="px-4 py-2.5"> Address</th>
+                    <th scope="col" className="px-4 py-2.5"> Latitude</th>
+                    <th scope="col" className="px-4 py-2.5"> Longitude</th>
+                    <th scope="col" className="px-4 py-2.5"> City </th>
+                    <th scope="col" className="px-4 py-2.5"> State </th>
+                    <th scope="col" className="px-4 py-2.5"> Country</th>
+                    <th scope="col" className="px-4 py-2.5"> OEEE</th>
+                    <th scope="col" className="px-4 py-2.5"> Lastest Update</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 );
 
-export default LandingPageTitle;
+export default FactoryTable;
