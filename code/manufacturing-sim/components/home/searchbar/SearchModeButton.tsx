@@ -8,7 +8,7 @@ const SearchModeButton = (props: {isAddressSearchBarActive: boolean, setIsAddres
     const coordsIcon = !props.isAddressSearchBarActive ? "compass-white.svg" : "compass-blue.svg";
 
     return (
-        <div className="flex flex-row gap-x-16 rounded w-80 items-center justify-center mx-[36%] mb-4">
+        <div className="flex flex-row gap-x-16 rounded w-80 items-center justify-center mx-[36%] mt-4 mb-4">
             
             <div className="group">
                 <button

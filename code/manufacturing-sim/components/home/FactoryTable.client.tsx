@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import Link from "next/link";
 // interface Facility {
 //     name: string;
 //     address: string;
@@ -54,7 +54,7 @@ const FactoryTable = () => {
             {facilities.length > 0 ? (
                 <>
                     {facilities.map((facility) => (
-                        <tr className="flex-grow text-sm text-[#858A8F]">
+                        <tr className="flex-grow text-sm text-[#858A8F] h-2">
                             <td className="border px-4 py-2.5">{facility.name}</td>
                             <td className="border px-4 py-2.5">{facility.address}</td>
                             <td className="border px-4 py-2.5">{facility.lat}</td>
@@ -76,6 +76,10 @@ const FactoryTable = () => {
             )
             }
             </tbody>
+            <Link href={"/"} className="group left-20 align-middle justify-self-end text-MainBlue hover:text-DarkBlue font-semibold md:text-lg text-sm pt-2 flex-none" target="_blank">
+                View all
+                <span className="pl-0.5 text-xl pt-2 group-hover:pl-1.5 duration-500">›</span>
+            </Link>
         </table>
     </div>
 )};
