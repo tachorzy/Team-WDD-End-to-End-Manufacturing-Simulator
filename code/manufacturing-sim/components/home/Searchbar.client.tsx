@@ -76,18 +76,19 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
     };
 
     return (
-        <div className="mb-8 w-3/4 items-center z-30">
+        <div className="mb-8 w-3/4 items-cente justify-center z-30">
+            <SearchModeButton setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidInput={setInvalidInput}/>
             <div className="flex flex-row gap-x-2 p-2 rounded-full">
                 <div className="flex flex-col gap-y-2 w-full">
                     {isAddressSearchBarActive ? (
                         <div>
-                            <Image src="/icons/searchbar/search.svg" width={30} height={30} className="absolute float-left justify-center self-center ml-6 mt-5" alt="maginify glass"></Image>
+                            <Image src="/icons/searchbar/search.svg" width={30} height={30} className="absolute float-left justify-center self-center ml-6 mt-6" alt="maginify glass"></Image>
                             <input
                                 type="text"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 placeholder="Enter factory address"
-                                className="rounded-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-br from-MainBlue to-DarkBlue font-medium"
+                                className="rounded-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-br from-MainBlue to-DarkBlue"
                             />
                         </div>
                     ) : (
@@ -114,7 +115,6 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                             />
                         </div>
                     )}
-                    {/* <SearchModeButton setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidInput={setInvalidInput}/> */}
                 </div>
 
                 {address === INITIAL_ADDRESS_STATE &&
