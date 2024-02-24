@@ -113,7 +113,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                                         setInvalidInput(false);
                                     }}
                                     placeholder="Enter longitude"
-                                    className="w-full pl-20 pl-3 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-bl from-MainBlue to-DarkBlue"
+                                    className="w-full pl-20 p-6 pl-5 border-l-[3px] border-white text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-bl from-MainBlue to-DarkBlue"
                                 />
                             </div>
                         </div>
