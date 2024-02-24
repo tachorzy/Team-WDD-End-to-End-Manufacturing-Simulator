@@ -32,17 +32,17 @@ export default function Home() {
                             Define your industry
                         </Link>
                     </div>
-                    <div className="flex flex-col items-center justify-center mt-[80%] gap-y-8">
+                    <div className="flex flex-col w-full items-center justify-center mt-[80%] gap-y-8">
                         <span
                             id="searchbar"
                             className="flex flex-col w-full items-center justify-center"
                         >
                             <Searchbar onSearch={handleNewLocation} />
                         </span>
-                        <div className="w-full max-w-4xl shadow-lg rounded-lg mb-4">
+                        <div className="w-full max-w-4xl rounded-full mb-4">
                             <Map positions={positions} />
                         </div>
-                        <Dashboard />
+                        {/* <Dashboard /> */}
                     </div>
                 </div>
             </div>

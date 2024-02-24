@@ -76,7 +76,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
     };
 
     return (
-        <div className="mb-8 w-3/4 items-cente justify-center z-30">
+        <div className="mb-8 w-3/4 items-center justify-center z-30">
             <SearchModeButton setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidInput={setInvalidInput}/>
             <div className="flex flex-row p-2 rounded-full">
                 <div className="flex flex-col gap-y-2 w-full">
