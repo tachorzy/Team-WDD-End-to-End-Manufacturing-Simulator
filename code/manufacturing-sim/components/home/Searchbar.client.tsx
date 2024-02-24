@@ -78,7 +78,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
     return (
         <div className="mb-8 w-3/4 items-cente justify-center z-30">
             <SearchModeButton setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidInput={setInvalidInput}/>
-            <div className="flex flex-row gap-x-2 p-2 rounded-full">
+            <div className="flex flex-row p-2 rounded-full">
                 <div className="flex flex-col gap-y-2 w-full">
                     {isAddressSearchBarActive ? (
                         <div>
@@ -88,7 +88,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 placeholder="Enter factory address"
-                                className="rounded-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-br from-MainBlue to-DarkBlue"
+                                className="rounded-l-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-br from-MainBlue to-DarkBlue"
                             />
                         </div>
                     ) : (
@@ -103,7 +103,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                                         setInvalidInput(false);
                                     }}
                                     placeholder="Enter latitude"
-                                    className="rounded-l-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-br from-MainBlue to-DarkBlue border-white border-r-[3px]"
+                                    className="rounded-l-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-br from-MainBlue to-DarkBlue"
                                 />
                                 <input
                                     type="text"
@@ -113,7 +113,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                                         setInvalidInput(false);
                                     }}
                                     placeholder="Enter longitude"
-                                    className="rounded-r-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-bl from-MainBlue to-DarkBlue"
+                                    className="w-full pl-20 pl-3 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-bl from-MainBlue to-DarkBlue"
                                 />
                             </div>
                         </div>
@@ -126,7 +126,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                     <button
                         type="button"
                         onClick={handleSearch}
-                        className="h-1/2 bg-DarkGray dark:text-white rounded p-3 font-bold inactive border-2 border-[#C5C9D6] border-solid rounded-lg text-[#494949] hover:scale-[101.5%] hover:border-MainBlue"
+                        className="rounded-r-full bg-DarkBlue border-l-[3px] border-white dark:text-white p-3 font-bold inactive text-[#494949] hover:border-MainBlue"
                     >
                         Search
                     </button>
@@ -134,7 +134,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                     <button
                         type="button"
                         onClick={handleSearch}
-                        className="h-1/2 bg-gradient-to-r from-MainBlue to-Iris rounded p-3 font-bold transition-colors duration-700 ease-in ease-out hover:scale-[101.5%] border-2 border-[#C5C9D6] border-solid rounded-lg text-[#494949] hover:scale-[101.5%] hover:border-MainBlue"
+                        className="rounded-r-full border-l-[3px] border-white bg-DarkBlue rounded p-3 font-bold transition-colors duration-700 ease-in ease-out"
                     >
                         Search
                     </button>
