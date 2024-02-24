@@ -78,14 +78,14 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
     return (
         <div className="mb-8 w-[45%] items-center z-30">
             <div className="flex flex-row gap-x-2 p-2 bg-gradient-to-br from-DarkGray via-[#555F68] to-DarkGray rounded-lg">
-                <div className="flex flex-col gap-y-2">
+                <div className="flex flex-col gap-y-2 w-full">
                     {isAddressSearchBarActive ? (
                         <input
                             type="text"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
                             placeholder="Enter factory address"
-                            className="rounded w-11/12 p-3 text-DarkBlue font-medium"
+                            className="rounded w-full p-3 text-DarkBlue font-medium"
                         />
                     ) : (
                         <div className="flex flex-row gap-x-2">
@@ -111,7 +111,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                             />
                         </div>
                     )}
-                    <SearchModeButton/>
+                    <SearchModeButton setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidInput={setInvalidInput}/>
                 </div>
 
                 {address === INITIAL_ADDRESS_STATE &&
