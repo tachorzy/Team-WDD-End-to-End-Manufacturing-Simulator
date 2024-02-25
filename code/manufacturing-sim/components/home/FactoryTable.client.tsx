@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useSortableTable } from "../../hooks/useSortableTable";
 
 const FactoryTable = () => {
 
@@ -15,10 +14,7 @@ const FactoryTable = () => {
     ] 
 
     const [facilities, setFacilities] = useState(STATIC_DATA_REPLACE_LATER);
-    const [tableData, handleSorting] = useSortableTable(facilities);
-    const [sortField, setSortField] = useState("");
-    const [sortDirection, setSortDirection] = useState("asc");
-    
+    const [sort, setSort] = useState({ key: "name", direction: "name" });
     //useEffect to fetch data from the backend will go here.
 
     const tableHeaders = [
@@ -33,12 +29,18 @@ const FactoryTable = () => {
         { id: "lastUpdate", label: "Last Update" }
     ];  
 
-    const handleSortingChange = (accessor) => {
-        const sortOrder = accessor === sortField && sortDirection === "asc" ? "desc" : "asc";
-        setSortField(accessor);
-        setSortDirection(sortOrder);
-        handleSorting(accessor, sortOrder);
-    };
+    function handleHeaderClick(header) {  
+        setSort({ key: header.id, direction: 
+            header.id === sort.key ? sort.direction === "asc" ? "desc" : "asc" : "desc"});
+        console.log(`HEADER CLICKED ${header.id}, ${sort.key}, ${sort.direction}`)
+    }
+
+    function getSortedArray(arrayToSort) {
+        if (sort.direction === "asc")
+            return arrayToSort.sort((a, b) => (a[sort.key] > b[sort.key] ? 1 : -1));
+        return arrayToSort.sort((a, b) => (a[sort.key] > b[sort.key] ? -1 : 1));
+    }
+
 
     return (
         <div className="flex flex-col items-center justify-center mx-auto z-30">
@@ -46,7 +48,7 @@ const FactoryTable = () => {
                 <thead className="text-[#858A8F] font-medium text-sm border-b-2 border-[#858A8F] border-opacity-[70%]">
                     <tr className="rounded-3xl">
                         {tableHeaders.map((header) => (
-                                <th key={header.id} onClick={() => handleSortingChange(header)} scope="col" className="cursor-pointer px-4 py-2.5">{header.label}</th>
+                                <th key={header.id} onClick={() => handleHeaderClick(header)} scope="col" className="cursor-pointer px-4 py-2.5">{header.label}</th>
                             ))
                         }
                     </tr>
@@ -55,7 +57,7 @@ const FactoryTable = () => {
                     {facilities.length > 0 
                         ? (
                             <>
-                                {facilities.slice(0, 3).map((facility) => (
+                                {getSortedArray(facilities).slice(0, 3).map((facility) => (
                                     <tr className="flex-grow text-sm text-[#858A8F] h-2">
                                         {['name', 'address', 'lat', 'lon', 'city', 'state', 'country', 'OEEE', 'lastUpdate'].map((property) => (
                                             <td className="border px-4 py-2.5">{facility[property]}</td>
@@ -70,7 +72,7 @@ const FactoryTable = () => {
                         )
                     }
                 </tbody>
-                <Link href={"/"} className="group right-20 right-0 self-end align-middle justify-self-end text-right text-MainBlue hover:text-DarkBlue font-semibold md:text-lg text-sm pt-2 flex-none" target="_blank">
+                <Link href={"/"} className="group right-20 right-0 self-end align-middle justify-self-end text-right text-MainBlue hover:text-DarkBlue font-semibold md:text-lg text-sm pt-2 flex-none">
                     View all
                     <span className="pl-0.5 text-xl pt-2 group-hover:pl-1.5 duration-500">›</span>
                 </Link>
