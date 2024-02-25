@@ -2,17 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-// interface Facility {
-//     name: string;
-//     address: string;
-//     lat: number;
-//     lon: number;
-//     city: string;
-//     state: string;
-//     country: string;
-//     OEEE: number;
-//     lastUpdate: string;
-// }
+import { useSortableTable } from "../../hooks/useSortableTable";
 
 const FactoryTable = () => {
 
@@ -25,8 +15,9 @@ const FactoryTable = () => {
     ] 
 
     const [facilities, setFacilities] = useState(STATIC_DATA_REPLACE_LATER);
+    const [tableData, handleSorting] = useSortableTable(facilities);
     const [sortField, setSortField] = useState("");
-    const [sortDirection, setSortDirection] = useState('asc');
+    const [sortDirection, setSortDirection] = useState("asc");
     
     //useEffect to fetch data from the backend will go here.
 
@@ -41,23 +32,6 @@ const FactoryTable = () => {
         { id: "OEEE", label: "OEEE" },
         { id: "lastUpdate", label: "Last Update" }
     ];  
-
-
-    const handleSorting = (sortField, sortDirection) => {
-        if (sortField) {
-            const sorted = [...facilities].sort((a, b) => {
-            if (a[sortField] === undefined) return 1;
-            if (b[sortField] === undefined) return -1;
-            if (a[sortField] === undefined && b[sortField] === undefined) return 0;
-            return (
-                a[sortField].toString().localeCompare(b[sortField].toString(), "en", {
-                numeric: true,
-                }) * (sortDirection === "asc" ? 1 : -1)
-               );
-            });
-            setFacilities(sorted);
-        }
-        };
 
     const handleSortingChange = (accessor) => {
         const sortOrder = accessor === sortField && sortDirection === "asc" ? "desc" : "asc";
