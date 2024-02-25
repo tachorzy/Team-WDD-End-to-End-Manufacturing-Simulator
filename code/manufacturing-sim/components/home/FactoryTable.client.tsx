@@ -27,7 +27,7 @@ const FactoryTable = () => {
         { id: "lat", label: "Latitude" },
         { id: "lon", label: "Longitude" },
         { id: "city", label: "City" },
-        { id: "state", label: "State/Province/Region" },
+        { id: "state", label: "Region" },
         { id: "country", label: "Country" },
         { id: "OEEE", label: "OEEE" },
         { id: "lastUpdate", label: "Last Update" }
