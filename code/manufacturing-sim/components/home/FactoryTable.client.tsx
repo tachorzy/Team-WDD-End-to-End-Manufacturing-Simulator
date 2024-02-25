@@ -15,7 +15,7 @@ const FactoryTable = () => {
     ] 
 
     const [facilities, setFacilities] = useState(STATIC_DATA_REPLACE_LATER);
-    const [sort, setSort] = useState({ key: "name", direction: "name" });
+    const [sort, setSort] = useState({ key: "name", direction: "" });
     //useEffect to fetch data from the backend will go here.
 
     const tableHeaders = [
@@ -30,13 +30,13 @@ const FactoryTable = () => {
         { id: "lastUpdate", label: "Last Update" }
     ];  
 
-    function handleHeaderClick(header) {  
+    function handleHeaderClick(header: {id: string, label: string}) {  
         setSort({ key: header.id, direction: 
             header.id === sort.key ? sort.direction === "asc" ? "desc" : "asc" : "desc"});
         console.log(`HEADER CLICKED ${header.id}, ${sort.key}, ${sort.direction}`)
     }
 
-    function getSortedArray(arrayToSort) {
+    function getSortedArray(arrayToSort: []) {
         if (sort.direction === "asc")
             return arrayToSort.sort((a, b) => (a[sort.key] > b[sort.key] ? 1 : -1));
         return arrayToSort.sort((a, b) => (a[sort.key] > b[sort.key] ? -1 : 1));
@@ -49,9 +49,9 @@ const FactoryTable = () => {
                     <tr className="rounded-3xl">
                         {tableHeaders.map((header) => (
                                 <th key={header.id} onClick={() => handleHeaderClick(header)} scope="col" className="cursor-pointer px-4 py-2.5">
-                                    <div className="flex flex-row gap-x-2">
+                                    <div className="flex flex-row gap-x-0 align-bottom">
                                         {header.label}
-                                        <span><Caret direction={sort.direction}></Caret></span>
+                                        {sort.direction != "" && <span><Caret direction={sort.direction}></Caret></span>}
                                     </div> 
                                 </th>
                             ))
