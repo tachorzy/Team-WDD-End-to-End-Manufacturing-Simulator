@@ -81,8 +81,14 @@ func ReadFactory(ctx context.Context, request events.APIGatewayProxyRequest) (ev
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Headers:    map[string]string{"Content-Type": "application/json"},
-		Body:       string(factoryJSON),
+		Headers: map[string]string{
+			"Content-Type":                     "application/json",
+			"Access-Control-Allow-Origin":      "*",                                                                    // Ideally, replace * with your domain
+			"Access-Control-Allow-Methods":     "GET,POST,OPTIONS",                                                     // The methods you want to allow
+			"Access-Control-Allow-Headers":     "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token", // The headers you want to allow
+			"Access-Control-Allow-Credentials": "true",                                                                 // If your frontend includes credentials with requests. Use "false" otherwise.
+		},
+		Body: string(factoryJSON),
 	}, nil
 }
 
