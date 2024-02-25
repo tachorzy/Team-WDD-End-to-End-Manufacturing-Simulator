@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Link from "next/link";
 // interface Facility {
@@ -15,28 +17,54 @@ import Link from "next/link";
 const FactoryTable = () => {
 
     const STATIC_DATA_REPLACE_LATER = [
-        {name: "Facility 1", address: "1234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
-        {name: "Facility 1", address: "1234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
-        {name: "Facility 1", address: "1234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
-        {name: "Facility 1", address: "1234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
-        {name: "Facility 1", address: "1234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"}
+        {name: "Facility 11", address: "1234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
+        {name: "Facility 4", address: "3232 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
+        {name: "Facility 1", address: "2234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
+        {name: "Facility 0", address: "4234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
+        {name: "Facility 1", address: "5234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"}
     ] 
 
     const [facilities, setFacilities] = useState(STATIC_DATA_REPLACE_LATER);
+    const [sortField, setSortField] = useState("");
+    const [sortDirection, setSortDirection] = useState('asc');
+    
     //useEffect to fetch data from the backend will go here.
 
-
     const tableHeaders = [
-        "Facility Name",
-        "Address",
-        "Latitude",
-        "Longitude",
-        "City",
-        "State/Province/Region",
-        "Country",
-        "OEEE",
-        "Lastest Update"
+        { id: "name", label: "Facility Name" },
+        { id: "address", label: "Address" },
+        { id: "lat", label: "Latitude" },
+        { id: "lon", label: "Longitude" },
+        { id: "city", label: "City" },
+        { id: "state", label: "State/Province/Region" },
+        { id: "country", label: "Country" },
+        { id: "OEEE", label: "OEEE" },
+        { id: "lastUpdate", label: "Last Update" }
     ];  
+
+
+    const handleSorting = (sortField, sortDirection) => {
+        if (sortField) {
+            const sorted = [...facilities].sort((a, b) => {
+            if (a[sortField] === undefined) return 1;
+            if (b[sortField] === undefined) return -1;
+            if (a[sortField] === undefined && b[sortField] === undefined) return 0;
+            return (
+                a[sortField].toString().localeCompare(b[sortField].toString(), "en", {
+                numeric: true,
+                }) * (sortDirection === "asc" ? 1 : -1)
+               );
+            });
+            setFacilities(sorted);
+        }
+        };
+
+    const handleSortingChange = (accessor) => {
+        const sortOrder = accessor === sortField && sortDirection === "asc" ? "desc" : "asc";
+        setSortField(accessor);
+        setSortDirection(sortOrder);
+        handleSorting(accessor, sortOrder);
+    };
 
     return (
         <div className="flex flex-col items-center justify-center mx-auto z-30">
@@ -44,7 +72,7 @@ const FactoryTable = () => {
                 <thead className="text-[#858A8F] font-medium text-sm border-b-2 border-[#858A8F] border-opacity-[70%]">
                     <tr className="rounded-3xl">
                         {tableHeaders.map((header) => (
-                                <th scope="col" className="px-4 py-2.5">{header}</th>
+                                <th key={header.id} onClick={() => handleSortingChange(header)} scope="col" className="cursor-pointer px-4 py-2.5">{header.label}</th>
                             ))
                         }
                     </tr>
