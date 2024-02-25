@@ -2,12 +2,13 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Caret from "./table/Caret";
 
 const FactoryTable = () => {
 
     const STATIC_DATA_REPLACE_LATER = [
-        {name: "Facility 11", address: "1234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
-        {name: "Facility 4", address: "3232 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
+        {name: "ADNOC Oil Rig", address: "1234 Main St", lat: 123.456, lon: 123.456, city: "Abu Dhabi", state: "Abu Dhabi", country: "UAE", OEEE: 0.85, lastUpdate: "2022-01-01"},
+        {name: "Agile Developer", address: "3232 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
         {name: "Facility 1", address: "2234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
         {name: "Facility 0", address: "4234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"},
         {name: "Facility 1", address: "5234 Main St", lat: 123.456, lon: 123.456, city: "City", state: "State", country: "Country", OEEE: 0.85, lastUpdate: "2022-01-01"}
@@ -41,14 +42,18 @@ const FactoryTable = () => {
         return arrayToSort.sort((a, b) => (a[sort.key] > b[sort.key] ? -1 : 1));
     }
 
-
     return (
         <div className="flex flex-col items-center justify-center mx-auto z-30">
             <table className="table-auto w-10/12 text-center mb-4 rounded-3xl">
                 <thead className="text-[#858A8F] font-medium text-sm border-b-2 border-[#858A8F] border-opacity-[70%]">
                     <tr className="rounded-3xl">
                         {tableHeaders.map((header) => (
-                                <th key={header.id} onClick={() => handleHeaderClick(header)} scope="col" className="cursor-pointer px-4 py-2.5">{header.label}</th>
+                                <th key={header.id} onClick={() => handleHeaderClick(header)} scope="col" className="cursor-pointer px-4 py-2.5">
+                                    <div className="flex flex-row gap-x-2">
+                                        {header.label}
+                                        <span><Caret direction={sort.direction}></Caret></span>
+                                    </div> 
+                                </th>
                             ))
                         }
                     </tr>
