@@ -42,7 +42,7 @@ const api = axios.create({
     }
   };
 
-  const createFactory = async (newFactory: NewFactoryRequest): Promise<Factory> => {
+  const createFactory = async (newFactory: CreateFactory): Promise<Factory> => {
     try {
       const response = await api.post<Factory>('/factories', newFactory);
       console.log("API Response:", response.data);
