@@ -13,6 +13,11 @@ This is our serverless REST API.
 Make sure you have the following on your machine:
 - Go - [Download & Install](https://go.dev/dl/)
 
+Make sure you have a zip tool, here is the recommended:
+```bash
+go.exe install github.com/aws/aws-lambda-go/cmd/build-lambda-zip@latest
+```
+
 ## Usage
 
 Generate code coverage report:
@@ -23,23 +28,30 @@ go tool cover -html="build/coverage.out" -o build/coverage.html
 
 TBA ( SAM for local testing )
 
-## Manual Deployment
+## Manual Deployment (Windows)
 
-On Windows, follow these steps:
+Follow these steps and run the commands in Powershell:
 
-1. Build the Go application
+1. Set environment variables for Linux build
 ```bash
-$env:GOOS = "linux"; $env:GOARCH = "amd64"; go build -o build/bootstrap <PATH_TO_LAMBDA_FUNCTION>/main.go
+$env:GOOS = "linux"
+$env:GOARCH = "amd64"
+$env:CGO_ENABLED = "0"
 ```
 
-2. Zip the binary with a third party tool, 7z
+2. Replace `<PATH_TO_LAMBDA_FUNCTION>`, and build the Go application
 ```bash
-7z a ./build/main.zip ./build/bootstrap
+go build -o build/bootstrap <PATH_TO_LAMBDA_FUNCTION>/main.go
 ```
 
-3. Upload the zip file to the target lambda function
+3. Zip the binary with a zip tool
+```bash
+~\Go\Bin\build-lambda-zip.exe -o build/bootstrap.zip build/bootstrap
+```
 
-4. Test the endpoint on API Gateway
+4. Upload the zip file to the target lambda function
+
+5. Test the endpoint on API Gateway
 
 ## Folder Structure
 
