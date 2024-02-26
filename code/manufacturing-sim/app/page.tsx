@@ -8,6 +8,7 @@ import LandingPageTitle from "@/components/home/LandingPageTitle";
 import Map from "../components/home/Map.client";
 import Searchbar from "../components/home/Searchbar.client";
 import Navbar from "../components/Navbar/Navbar";
+import FactoryTable from "@/components/home/FactoryTable.client";
 
 export default function Home() {
     const [positions, setPositions] = useState<
@@ -32,17 +33,19 @@ export default function Home() {
                             Define your industry
                         </Link>
                     </div>
-                    <div className="flex flex-col items-center justify-center mt-[80%] gap-y-8">
+                    <div className="flex flex-col w-full items-center justify-center mt-[80%] gap-y-8">
                         <span
                             id="searchbar"
                             className="flex flex-col w-full items-center justify-center"
                         >
                             <Searchbar onSearch={handleNewLocation} />
                         </span>
-                        <div className="w-full max-w-4xl shadow-lg rounded-lg mb-4">
+                        <div className="w-full rounded-full mb-4">
+                            <h1 className="mx-24 mb-0.5 text-DarkBlue text-3xl font-semibold">Recent Factories</h1>
+                            <FactoryTable/>
                             <Map positions={positions} />
                         </div>
-                        <Dashboard />
+                        {/* <Dashboard /> */}
                     </div>
                 </div>
             </div>
