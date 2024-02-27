@@ -22,7 +22,7 @@ go.exe install github.com/aws/aws-lambda-go/cmd/build-lambda-zip@latest
 
 Generate code coverage report:
 ```bash
-go test ./pkg/... -coverprofile="build/coverage.out"
+go test ./internal/... -coverprofile="build/coverage.out"
 go tool cover -html="build/coverage.out" -o build/coverage.html
 ```
 
@@ -57,7 +57,9 @@ go build -o build/bootstrap <PATH_TO_LAMBDA_FUNCTION>/main.go
 
 `/cmd`: project entry
 
-`/pkg`: source code folder
+`/internal`: source code folder
+
+`/pkg`: old source code folder
 
 `/build`: any compiled or generated files
 
