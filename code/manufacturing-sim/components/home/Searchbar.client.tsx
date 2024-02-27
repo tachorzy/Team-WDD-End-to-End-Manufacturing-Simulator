@@ -5,6 +5,8 @@ import axios from "axios";
 import Image from "next/image";
 import SearchModeButton from "./searchbar/SearchModeButton";
 import ErrorMessage from "./searchbar/ErrorMessage";
+import { createFactory, CreateFactory } from "@/app/api/factories/factoryAPI"; // Import the missing module from the correct file path
+
 interface SearchProps {
     onSearch: (position: { lat: number; lon: number }) => void;
 }
@@ -60,10 +62,10 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                 return { lat, lon };
 
             setInvalidInput(true);
-            return undefined;
+            return Infinity as any;
             // we should show a tooltip if the latitude and/or longitude are not valid
         } catch (error) {
-            return undefined;
+            return Infinity as any;
         }
     };
 
@@ -74,6 +76,22 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
             : await getCoodinates(latitude, longitude);
         if (coordinates) {
             onSearch(coordinates);
+        }
+
+        const newFactory: CreateFactory = {
+            name: "New Factory",
+            location: {
+                latitude: coordinates.lat,
+                longitude: coordinates.lon,
+            },
+            description: `New factory operating from ${coordinates?.lat}, ${coordinates?.lon}`,
+        };
+
+        try {
+            const factory = await createFactory(newFactory);
+            console.log(`Created factory: ${factory}`);
+        } catch (error) {
+            console.error('Failed to create factory:', error);
         }
     };
 

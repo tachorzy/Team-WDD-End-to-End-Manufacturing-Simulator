@@ -10,7 +10,7 @@ interface Factory{
     description:string;
 }
 
-interface CreateFactory{
+export interface CreateFactory{
     name: string;
   location: {
     longitude: number;
