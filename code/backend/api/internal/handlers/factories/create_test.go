@@ -69,3 +69,28 @@ func TestHandleCreateRequest_DynamoDBPutItemError(t *testing.T) {
 		t.Errorf("Expected error message to start with '%s', got '%s'", expectedBodyPrefix, response.Body)
 	}
 }
+
+func TestHandleCreateRequest_Success(t *testing.T) {
+	mockDDBClient := &MockDynamoDBClient{
+		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+			return &dynamodb.PutItemOutput{}, nil
+		},
+	}
+
+	handler := NewCreateFactoryHandler(mockDDBClient)
+
+	request := events.APIGatewayProxyRequest{
+		Body: `{"name":"Test Factory","location":{"longitude":10,"latitude":20},"description":"Test Description"}`,
+	}
+
+	ctx := context.Background()
+	response, err := handler.HandleCreateRequest(ctx, request)
+
+	if err != nil {
+		t.Fatalf("Did not expect an error, got %v", err)
+	}
+
+	if response.StatusCode != 200 {
+		t.Errorf("Expected StatusCode 200 for successful creation, got %d", response.StatusCode)
+	}
+}
