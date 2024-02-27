@@ -31,9 +31,9 @@ const (
 	TABLENAME = "Factory"
 )
 
-func HandleRequest(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var factory Factory
-	err := json.Unmarshal([]byte(event.Body), &factory)
+	err := json.Unmarshal([]byte(request.Body), &factory)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
