@@ -78,7 +78,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
             onSearch(coordinates);
         }
 
-        const newFactory: CreateFactory = {
+        const newFactory = {
             name: "New Factory",
             location: {
                 latitude: coordinates.lat,
@@ -159,7 +159,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                 )}
             </div>
             {invalidInput && (
-                ErrorMessage({ message: "Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°."  })
+                <ErrorMessage message={"Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°."} />
             )}
         </form>
     );

@@ -21,7 +21,7 @@ export interface CreateFactory{
 
 
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_AWS_ENDPOINT, 
+    baseURL: "=https://ml6d31yqsl.execute-api.us-east-2.amazonaws.com/dev/", 
     headers: {
       'Content-Type': 'application/json',
     },
