@@ -19,7 +19,7 @@ func (m *MockDynamoDBClient) PutItem(ctx context.Context, params *dynamodb.PutIt
 	return nil, errors.New("PutItem method not implemented")
 }
 
-func TestHandleRequest_BadJSON(t *testing.T) {
+func TestHandleCreateRequest_BadJSON(t *testing.T) {
 	mockDDBClient := &MockDynamoDBClient{}
 
 	handler := NewCreateFactoryHandler(mockDDBClient)
@@ -37,5 +37,35 @@ func TestHandleRequest_BadJSON(t *testing.T) {
 
 	if response.StatusCode != 400 {
 		t.Errorf("Expected StatusCode 400 for bad JSON, got %d", response.StatusCode)
+	}
+}
+
+func TestHandleCreateRequest_DynamoDBPutItemError(t *testing.T) {
+	mockDDBClient := &MockDynamoDBClient{
+		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+			return nil, errors.New("mock dynamodb error")
+		},
+	}
+
+	handler := NewCreateFactoryHandler(mockDDBClient)
+
+	request := events.APIGatewayProxyRequest{
+		Body: `{"name":"Test Factory","location":{"longitude":10,"latitude":20},"description":"Test Description"}`,
+	}
+
+	ctx := context.Background()
+	response, err := handler.HandleCreateRequest(ctx, request)
+
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != 500 {
+		t.Errorf("Expected StatusCode 500 for DynamoDB put item error, got %d", response.StatusCode)
+	}
+
+	expectedBodyPrefix := "Error putting item into DynamoDB"
+	if response.Body[:len(expectedBodyPrefix)] != expectedBodyPrefix {
+		t.Errorf("Expected error message to start with '%s', got '%s'", expectedBodyPrefix, response.Body)
 	}
 }
