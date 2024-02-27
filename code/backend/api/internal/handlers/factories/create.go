@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/google/uuid"
+	"net/http"
 )
 
 type Location struct {
@@ -39,22 +40,24 @@ func NewCreateFactoryHandler(db DynamoDBClient) *Handler {
 	}
 }
 
+var FactoryMarshalMap = attributevalue.MarshalMap
+
 func (h Handler) HandleCreateRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var factory Factory
 	if err := json.Unmarshal([]byte(request.Body), &factory); err != nil {
 		return events.APIGatewayProxyResponse{
-			StatusCode: 400,
+			StatusCode: http.StatusBadRequest,
 			Body:       fmt.Sprintf("Error parsing JSON body: %s", err.Error()),
 		}, nil
 	}
 
 	factory.FactoryId = uuid.NewString()
 
-	av, err := attributevalue.MarshalMap(factory)
+	av, err := FactoryMarshalMap(factory)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
-			StatusCode: 500,
-			Body:       fmt.Sprintf("Error marshalling factorywrapper to DynamoDB format: %s", err.Error()),
+			StatusCode: http.StatusInternalServerError,
+			Body:       fmt.Sprintf("Error marshalling factory to DynamoDB format: %s", err.Error()),
 		}, nil
 	}
 
@@ -65,13 +68,13 @@ func (h Handler) HandleCreateRequest(ctx context.Context, request events.APIGate
 
 	if _, err := h.DynamoDB.PutItem(ctx, input); err != nil {
 		return events.APIGatewayProxyResponse{
-			StatusCode: 500,
+			StatusCode: http.StatusInternalServerError,
 			Body:       fmt.Sprintf("Error putting item into DynamoDB: %s", err.Error()),
 		}, nil
 	}
 
 	return events.APIGatewayProxyResponse{
-		StatusCode: 200,
+		StatusCode: http.StatusOK,
 		Body:       fmt.Sprintf("factoryId %s created successfully", factory.FactoryId),
 	}, nil
 }

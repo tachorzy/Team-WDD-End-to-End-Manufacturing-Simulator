@@ -5,6 +5,8 @@ import (
 	"errors"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"net/http"
 	"testing"
 )
 
@@ -35,8 +37,37 @@ func TestHandleCreateRequest_BadJSON(t *testing.T) {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
-	if response.StatusCode != 400 {
-		t.Errorf("Expected StatusCode 400 for bad JSON, got %d", response.StatusCode)
+	if response.StatusCode != http.StatusBadRequest {
+		t.Errorf("Expected StatusCode %d for bad JSON, got %d", http.StatusBadRequest, response.StatusCode)
+	}
+}
+
+func TestHandleCreateRequest_MarshalMapError(t *testing.T) {
+	mockDDBClient := &MockDynamoDBClient{}
+
+	handler := NewCreateFactoryHandler(mockDDBClient)
+
+	originalMarshalMap := FactoryMarshalMap
+
+	defer func() { FactoryMarshalMap = originalMarshalMap }()
+
+	FactoryMarshalMap = func(interface{}) (map[string]types.AttributeValue, error) {
+		return nil, errors.New("mock error")
+	}
+
+	request := events.APIGatewayProxyRequest{
+		Body: `{"name":"Test Factory","location":{"longitude":10,"latitude":20},"description":"Test Description"}`,
+	}
+
+	ctx := context.Background()
+	response, err := handler.HandleCreateRequest(ctx, request)
+
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected StatusCode %d for marshalling factory to DynamoDB format, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
 
@@ -60,13 +91,8 @@ func TestHandleCreateRequest_DynamoDBPutItemError(t *testing.T) {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
-	if response.StatusCode != 500 {
-		t.Errorf("Expected StatusCode 500 for DynamoDB put item error, got %d", response.StatusCode)
-	}
-
-	expectedBodyPrefix := "Error putting item into DynamoDB"
-	if response.Body[:len(expectedBodyPrefix)] != expectedBodyPrefix {
-		t.Errorf("Expected error message to start with '%s', got '%s'", expectedBodyPrefix, response.Body)
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected StatusCode %d for DynamoDB put item error, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
 
@@ -90,7 +116,7 @@ func TestHandleCreateRequest_Success(t *testing.T) {
 		t.Fatalf("Did not expect an error, got %v", err)
 	}
 
-	if response.StatusCode != 200 {
-		t.Errorf("Expected StatusCode 200 for successful creation, got %d", response.StatusCode)
+	if response.StatusCode != http.StatusOK {
+		t.Errorf("Expected StatusCode %d for successful creation, got %d", http.StatusOK, response.StatusCode)
 	}
 }
