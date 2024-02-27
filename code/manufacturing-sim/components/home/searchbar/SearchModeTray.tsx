@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const SearchModeButton = (props: {isAddressSearchBarActive: boolean, setIsAddressSearchBarActive: React.Dispatch<React.SetStateAction<boolean>>, setInvalidInput: React.Dispatch<React.SetStateAction<boolean>>}) => {
+const SearchModeTray = (props: {isAddressSearchBarActive: boolean, setIsAddressSearchBarActive: React.Dispatch<React.SetStateAction<boolean>>, setInvalidInput: React.Dispatch<React.SetStateAction<boolean>>}) => {
     
     const addressIcon = props.isAddressSearchBarActive ? "address-white.svg" : "address-blue.svg";
     const coordsIcon = !props.isAddressSearchBarActive ? "compass-white.svg" : "compass-blue.svg";
@@ -40,4 +40,4 @@ const SearchModeButton = (props: {isAddressSearchBarActive: boolean, setIsAddres
     );
 };
 
-export default SearchModeButton;
+export default SearchModeTray;

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import SearchModeButton from "./searchbar/SearchModeButton";
+import SearchModeTray from "./searchbar/SearchModeTray";
 import ErrorMessage from "./searchbar/ErrorMessage";
 import { createFactory, CreateFactory } from "@/app/api/factories/factoryAPI"; // Import the missing module from the correct file path
 
@@ -62,10 +62,10 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                 return { lat, lon };
 
             setInvalidInput(true);
-            return Infinity as any;
+            return undefined
             // we should show a tooltip if the latitude and/or longitude are not valid
         } catch (error) {
-            return Infinity as any;
+            return undefined;
         }
     };
 
@@ -97,7 +97,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
 
     return (
         <form onSubmit={handleSubmit} method="POST" className="w-3/4 items-center justify-center z-30">
-            <SearchModeButton setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidInput={setInvalidInput}/>
+            <SearchModeTray setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidInput={setInvalidInput}/>
             <div className="flex flex-row p-2 rounded-full">
                 <div className="flex flex-col gap-y-2 w-full">
                     {isAddressSearchBarActive ? (

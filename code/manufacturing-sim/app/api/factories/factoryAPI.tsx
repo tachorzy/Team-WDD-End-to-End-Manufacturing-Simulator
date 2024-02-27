@@ -10,18 +10,8 @@ interface Factory{
     description:string;
 }
 
-export interface CreateFactory{
-    name: string;
-  location: {
-    longitude: number;
-    latitude: number;
-  };
-  description: string;
-}
-
-
 const api = axios.create({
-    baseURL: "=https://ml6d31yqsl.execute-api.us-east-2.amazonaws.com/dev/", 
+    baseURL: process.env.NEXT_PUBLIC_AWS_ENDPOINT, 
     headers: {
       'Content-Type': 'application/json',
     },
@@ -42,7 +32,7 @@ const api = axios.create({
     }
   };
 
-  const createFactory = async (newFactory: CreateFactory): Promise<Factory> => {
+  const createFactory = async (newFactory: Factory): Promise<Factory> => {
     try {
       const response = await api.post<Factory>('/factories', newFactory);
       console.log("API Response:", response.data);
