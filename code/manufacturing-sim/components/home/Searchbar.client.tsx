@@ -20,15 +20,6 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
     const [longitude, setLongitude] = useState("");
     const [invalidInput, setInvalidInput] = useState(false);
 
-    const handleSearch = async () => {
-        const coordinates = isAddressSearchBarActive
-            ? await getCoordinates(address)
-            : await getCoodinates(latitude, longitude);
-        if (coordinates) {
-            onSearch(coordinates);
-        }
-    };
-
     interface GeocodeResponse {
         lat: number;
         lon: number;
@@ -75,8 +66,20 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         }
     };
 
+    const handleSubmit = async (event : React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const coordinates = isAddressSearchBarActive
+            ? await getCoordinates(address)
+            : await getCoodinates(latitude, longitude);
+        if (coordinates) {
+            onSearch(coordinates);
+        }
+    };
+
+
+
     return (
-        <div className="w-3/4 items-center justify-center z-30">
+        <form onSubmit={handleSubmit} method="POST" className="w-3/4 items-center justify-center z-30">
             <SearchModeButton setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidInput={setInvalidInput}/>
             <div className="flex flex-row p-2 rounded-full">
                 <div className="flex flex-col gap-y-2 w-full">
@@ -124,16 +127,14 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                 longitude === INIITIAL_LATITUDE_STATE &&
                 latitude === INITIAL_LONGITUDE_STATE ? (
                     <button
-                        type="button"
-                        onClick={handleSearch}
+                        type="submit"
                         className="rounded-r-full bg-DarkBlue border-l-[3px] border-white dark:text-white p-3 font-bold inactive text-[#494949] hover:border-MainBlue"
                     >
                         Search
                     </button>
                 ) : (
                     <button
-                        type="button"
-                        onClick={handleSearch}
+                        type="submit"
                         className="rounded-r-full border-l-[3px] border-white bg-DarkBlue rounded p-3 font-bold transition-colors duration-700 ease-in ease-out"
                     >
                         Search
@@ -158,7 +159,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                     </p>
                 </span>
             )}
-        </div>
+        </form>
     );
 };
 
