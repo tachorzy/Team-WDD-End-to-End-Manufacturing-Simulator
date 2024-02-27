@@ -66,3 +66,22 @@ go build -o build/bootstrap <PATH_TO_LAMBDA_FUNCTION>/main.go
 `/pkg/handlers`: describes the logic for each endpoint 
 
 `/pkg/routes`: describes what each endpoint are
+
+## Debugging
+
+1. AttributeValue Marshaling Error
+
+### Problem
+Unable to find primary key in item
+
+### Solution
+Add `dynamodbav` to Go struct types
+
+### Example
+```go
+FactoryId   string   `json:"factoryId" dynamodbav:"factoryId"`
+```
+
+### Reference
+- https://stackoverflow.com/questions/56827932/one-or-more-parameter-values-were-invalid-missing-the-key-id-in-the-item-status
+- https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue

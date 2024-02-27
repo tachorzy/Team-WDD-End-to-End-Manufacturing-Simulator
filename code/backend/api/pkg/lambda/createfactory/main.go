@@ -2,45 +2,82 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/google/uuid"
 )
 
 type Location struct {
-	Longitude float64 `json:"longitude"`
-	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude" dynamodbav:"longitude"`
+	Latitude  float64 `json:"latitude" dynamodbav:"latitude"`
 }
 
 type Factory struct {
-	FactoryId   string   `json:"factoryId"`
-	Name        string   `json:"name"`
-	Location    Location `json:"location"`
-	Description string   `json:"description"`
+	FactoryId   string   `json:"factoryId" dynamodbav:"factoryId"`
+	Name        string   `json:"name" dynamodbav:"name"`
+	Location    Location `json:"location" dynamodbav:"location"`
+	Description string   `json:"description" dynamodbav:"description"`
 }
 
-func HandleRequest(ctx context.Context, factory Factory) (string, error) {
-	sess := session.Must(session.NewSession())
-	svc := dynamodb.New(sess)
+const (
+	AWSREGION = "us-east-2"
+	TABLENAME = "Factory"
+)
 
-	av, err := dynamodbattribute.MarshalMap(factory)
+func HandleRequest(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	var factory Factory
+	err := json.Unmarshal([]byte(event.Body), &factory)
 	if err != nil {
-		return "", err
+		return events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Body:       fmt.Sprintf("Error parsing JSON body: %s", err.Error()),
+		}, nil
+	}
+
+	factory.FactoryId = uuid.NewString()
+
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(AWSREGION))
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       fmt.Sprintf("Error loading AWS configuration: %s", err.Error()),
+		}, nil
+	}
+
+	svc := dynamodb.NewFromConfig(cfg)
+
+	av, err := attributevalue.MarshalMap(factory)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       fmt.Sprintf("Error marshalling factory to DynamoDB format: %s", err.Error()),
+		}, nil
 	}
 
 	input := &dynamodb.PutItemInput{
 		Item:      av,
-		TableName: aws.String("Factory"),
+		TableName: aws.String(TABLENAME),
 	}
 
-	_, err = svc.PutItem(input)
+	_, err = svc.PutItem(ctx, input)
 	if err != nil {
-		return "", err
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       fmt.Sprintf("Error putting item into DynamoDB: %s", err.Error()),
+		}, nil
 	}
 
-	return factory.FactoryId, nil
+	return events.APIGatewayProxyResponse{
+		StatusCode: 200,
+		Body:       fmt.Sprintf("factoryId %s created successfully", factory.FactoryId),
+	}, nil
 }
 
 func main() {
