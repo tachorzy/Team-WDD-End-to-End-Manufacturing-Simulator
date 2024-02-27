@@ -1,11 +1,7 @@
 package main
 
-import (
-	"github.com/aws/aws-lambda-go/lambda"
-	"wdd/api/pkg/routes"
-)
+import "fmt"
 
 func main() {
-	handler := routes.InitializeRoutes()
-	lambda.Start(handler)
+	fmt.Print("Hello, wdd API!")
 }
