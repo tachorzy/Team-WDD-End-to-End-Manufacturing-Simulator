@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import SearchModeButton from "./searchbar/SearchModeButton";
+import ErrorMessage from "./searchbar/ErrorMessage";
 interface SearchProps {
     onSearch: (position: { lat: number; lon: number }) => void;
 }
@@ -76,8 +77,6 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         }
     };
 
-
-
     return (
         <form onSubmit={handleSubmit} method="POST" className="w-3/4 items-center justify-center z-30">
             <SearchModeButton setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidInput={setInvalidInput}/>
@@ -142,22 +141,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                 )}
             </div>
             {invalidInput && (
-                <span
-                    id="invalidCoords"
-                    className="flex flex-row gap-x-0.5 text-red-400 font-semibold text-xs mt-0.5"
-                >
-                    <Image
-                        src="/icons/searchbar/map-error.svg"
-                        width={25}
-                        height={25}
-                        alt="error pin"
-                    />
-                    <p className="pt-0.5">
-                        Invalid latitude or longitude provided. Latitude must be
-                        between -90° and 90°. Longitude must be between -180°
-                        and 180°.
-                    </p>
-                </span>
+                ErrorMessage({ message: "Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°."  })
             )}
         </form>
     );
