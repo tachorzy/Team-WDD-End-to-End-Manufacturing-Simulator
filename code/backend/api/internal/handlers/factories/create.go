@@ -12,28 +12,6 @@ import (
 	"net/http"
 )
 
-type Location struct {
-	Longitude float64 `json:"longitude" dynamodbav:"longitude"`
-	Latitude  float64 `json:"latitude" dynamodbav:"latitude"`
-}
-
-type Factory struct {
-	FactoryId   string   `json:"factoryId" dynamodbav:"factoryId"`
-	Name        string   `json:"name" dynamodbav:"name"`
-	Location    Location `json:"location" dynamodbav:"location"`
-	Description string   `json:"description" dynamodbav:"description"`
-}
-
-const TABLENAME = "Factory"
-
-type DynamoDBClient interface {
-	PutItem(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error)
-}
-
-type Handler struct {
-	DynamoDB DynamoDBClient
-}
-
 func NewCreateFactoryHandler(db DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
