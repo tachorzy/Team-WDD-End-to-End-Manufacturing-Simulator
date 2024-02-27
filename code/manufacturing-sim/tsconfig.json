@@ -8,7 +8,7 @@
     "types": [
       "jest",
       "node",
-      "@testing-library/jest-dom"
+      "@testing-library/jest-dom" 
     ],
     "allowJs": true,
     "skipLibCheck": true,

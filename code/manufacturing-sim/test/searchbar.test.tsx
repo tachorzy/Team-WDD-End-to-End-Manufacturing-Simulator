@@ -2,23 +2,25 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
-import axios from 'axios';
-import '@testing-library/jest-dom/extend-expect'
-import Searchbar from '../components/home/Searchbar.client';
+import React from "react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
+import axios from "axios";
+import "@testing-library/jest-dom";
+import Searchbar from "../components/home/Searchbar.client";
 
-jest.mock('axios');
+jest.mock("axios");
 
-test('updates address on change', async () => {
-  const onSearch = jest.fn((value) => {})
+test("updates address on change", async () => {
+    const onSearch = jest.fn((value) => {});
 
-  const { getByPlaceholderText } = render(<Searchbar onSearch={onSearch}/>)
+    const { getByPlaceholderText } = render(<Searchbar onSearch={onSearch} />);
 
-  const addressInput = getByPlaceholderText('Enter factory address');
-  fireEvent.change(addressInput, { target: { value: '901 Bagby St, Houston, TX 77002' } });
-  onSearch('901 Bagby St, Houston, TX 77002')
-  expect(onSearch).toHaveBeenCalledWith('901 Bagby St, Houston, TX 77002');
+    const addressInput = getByPlaceholderText("Enter factory address");
+    fireEvent.change(addressInput, {
+        target: { value: "901 Bagby St, Houston, TX 77002" },
+    });
+    onSearch("901 Bagby St, Houston, TX 77002");
+    expect(onSearch).toHaveBeenCalledWith("901 Bagby St, Houston, TX 77002");
 });
 /* Needs Fixing
 
@@ -48,27 +50,27 @@ test('validates latitude and longitude correctly', async () => {
   );
 }); */
 
-test('displays results on map', async () => {
-  const onSearchMock = jest.fn();
+test("displays results on map", async () => {
+    const onSearchMock = jest.fn();
 
-  const response = {
-    data: [
-      {
-        lat: 40.7128, 
-        lon: -74.0060, 
-      },
-    ],
-  };
-  //axios.get.mockResolvedValue(resp);
-  (axios.get as jest.Mock).mockResolvedValue(response);
+    const response = {
+        data: [
+            {
+                lat: 40.7128,
+                lon: -74.006,
+            },
+        ],
+    };
+    // axios.get.mockResolvedValue(resp);
+    (axios.get as jest.Mock).mockResolvedValue(response);
 
-  const { getByText } = render(<Searchbar onSearch={onSearchMock} />);
+    const { getByText } = render(<Searchbar onSearch={onSearchMock} />);
 
-  const addressInput = getByText('Search');
+    const addressInput = getByText("Search");
 
-  fireEvent.click(addressInput);
+    fireEvent.click(addressInput);
 
-  await waitFor(() => expect(onSearchMock).toHaveBeenCalled());
+    await waitFor(() => expect(onSearchMock).toHaveBeenCalled());
 });
 
 /*
@@ -82,38 +84,38 @@ test('disables button on empty search bar', () => {
   const searchButton = getByText('');
 
   expect(searchButton).toBeDisabled();
-});*/
+}); */
 
-test.each(['New York', 'Berlin', 'Tokyo'])(
-  'searches for %s',
-  async (address) => {
-    const onSearchMock = jest.fn();
-    const response = {
-      data: [
-        {
-          lat: 40.7128, 
-          lon: -74.0060, 
-        },
-      ],
-    };
-    
-    (axios.get as jest.Mock).mockResolvedValue(response);
+test.each(["New York", "Berlin", "Tokyo"])(
+    "searches for %s",
+    async (address) => {
+        const onSearchMock = jest.fn();
+        const response = {
+            data: [
+                {
+                    lat: 40.7128,
+                    lon: -74.006,
+                },
+            ],
+        };
 
-    const { getByPlaceholderText, getByText } = render(
-      <Searchbar onSearch={onSearchMock} />
-    );
+        (axios.get as jest.Mock).mockResolvedValue(response);
 
-    const addressInput = getByPlaceholderText('Enter factory address');
-    fireEvent.change(addressInput, { target: { value: address } });
+        const { getByPlaceholderText, getByText } = render(
+            <Searchbar onSearch={onSearchMock} />,
+        );
 
-    const searchButton = getByText('Search');
-    fireEvent.click(searchButton);
+        const addressInput = getByPlaceholderText("Enter factory address");
+        fireEvent.change(addressInput, { target: { value: address } });
 
-    await waitFor(() =>
-      expect(onSearchMock).toHaveBeenCalledWith({
-        lat: 40.7128,
-        lon: -74.0060,
-      })
-    );
-  }
+        const searchButton = getByText("Search");
+        fireEvent.click(searchButton);
+
+        await waitFor(() =>
+            expect(onSearchMock).toHaveBeenCalledWith({
+                lat: 40.7128,
+                lon: -74.006,
+            }),
+        );
+    },
 );
