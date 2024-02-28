@@ -21,5 +21,5 @@ func main() {
 	svc := dynamodb.NewFromConfig(cfg)
 	handler := factories.NewCreateFactoryHandler(svc)
 
-	lambda.Start(handler.HandleCreateRequest)
+	lambda.Start(handler.HandleCreateFactoryRequest)
 }
