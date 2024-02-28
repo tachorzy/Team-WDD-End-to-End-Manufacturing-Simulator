@@ -16,6 +16,7 @@
     "test:no-watchall": "jest  --no-watchAll"
   },
   "dependencies": {
+    "@testing-library/jest-dom": "^6.4.2",
     "@types/react-simple-maps": "^3.0.4",
     "axios": "^1.6.7",
     "dotenv": "^16.4.3",
@@ -32,7 +33,6 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@types/jest": "^29.5.12",
     "@types/node": "^20",

@@ -17,13 +17,13 @@ jobs:
       - name: Install dependencies
         run: go get ./...
         working-directory: ./code/backend/api
-      
+
       - name: Build
-        run: go build -o build/main -v cmd/main.go
+        run: go build -o build -v ./cmd/...
         working-directory: ./code/backend/api
       
       - name: Generate code coverage report
-        run: go test ./pkg/... -coverprofile="build/coverage.out" 
+        run: go test -v ./internal/... -coverprofile="build/coverage.out" 
         working-directory: ./code/backend/api
 
       - name: Generate code coverage report html
