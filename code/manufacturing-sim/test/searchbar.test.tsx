@@ -10,6 +10,26 @@ import Searchbar from "../components/home/Searchbar.client";
 
 jest.mock("axios");
 
+test("returns error when api has no respond", async () => {
+    const onSearchMock = jest.fn((value) => undefined);
+
+    const response = {};
+    // axios.get.mockResolvedValue(resp);
+    (axios.get as jest.Mock).mockResolvedValue(response);
+
+    const { getByText } = render(<Searchbar onSearch={onSearchMock} />);
+
+    const addressInput = getByText("Search");
+
+    fireEvent.click(addressInput);
+
+    await waitFor( () => {
+        expect(Searchbar).toThrow(Error)
+    });
+    
+});
+
+
 test("updates address on change", async () => {
     const onSearch = jest.fn((value) => {});
 
@@ -22,33 +42,6 @@ test("updates address on change", async () => {
     onSearch("901 Bagby St, Houston, TX 77002");
     expect(onSearch).toHaveBeenCalledWith("901 Bagby St, Houston, TX 77002");
 });
-/* Needs Fixing
-
-
-test('validates latitude and longitude correctly', async () => {
-  const onSearch = jest.fn((value) => {})
-
-  const { getByPlaceholderText, getByText } = render( <Searchbar onSearch={onSearch} />);
-  
-
-  const latitudeInput = getByPlaceholderText('Enter latitude');
-  const longitudeInput = getByPlaceholderText('Enter longitude');
-
-
-  
-
-  fireEvent.change(latitudeInput, { target: { value: '40.7128' } });
-  fireEvent.change(longitudeInput, { target: { value: '-74.0060' } });
-
-  expect(onSearch).not.toHaveBeenCalled();
-
-  fireEvent.change(latitudeInput, { target: { value: '1000' } });
-  fireEvent.change(longitudeInput, { target: { value: '2000' } });
-
-  await waitFor(() =>
-    expect(getByText(/Invalid latitude or longitude/)).toBeInTheDocument()
-  );
-}); */
 
 test("displays results on map", async () => {
     const onSearchMock = jest.fn();
@@ -72,19 +65,6 @@ test("displays results on map", async () => {
 
     await waitFor(() => expect(onSearchMock).toHaveBeenCalled());
 });
-
-/*
-Needs fixing
-
-test('disables button on empty search bar', () => {
-  const onSearchMock = jest.fn();
-
-  const { getByText } = render(<Searchbar onSearch={onSearchMock} />);
-
-  const searchButton = getByText('');
-
-  expect(searchButton).toBeDisabled();
-}); */
 
 test.each(["New York", "Berlin", "Tokyo"])(
     "searches for %s",
@@ -119,3 +99,31 @@ test.each(["New York", "Berlin", "Tokyo"])(
         );
     },
 );
+
+/*
+Needs fixing
+
+test('disables button on empty search bar', () => {
+  const onSearchMock = jest.fn();
+
+  const { getByText } = render(<Searchbar onSearch={onSearchMock} />);
+
+  const searchButton = getByText('');
+
+  expect(searchButton).toBeDisabled();
+}); 
+
+test("validates latitude and longitude correctly", async () => {
+  fireEvent.change(latitudeInput, { target: { value: "40.7128" } });
+  fireEvent.change(longitudeInput, { target: { value: "-74.0060" } });
+
+  expect(onSearch).not.toHaveBeenCalled();
+
+  fireEvent.change(latitudeInput, { target: { value: "1000" } });
+  fireEvent.change(longitudeInput, { target: { value: "2000" } });
+
+  await waitFor(() =>
+    expect(getByText(/Invalid latitude or longitude/)).toBeInTheDocument()
+  );
+});
+*/
