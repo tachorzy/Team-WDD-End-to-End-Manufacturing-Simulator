@@ -180,6 +180,42 @@ func TestHandleReadFactoryRequest_WithId_ItemNotFound(t *testing.T) {
 	}
 }
 
+func TestHandleReadFactoryRequest_WithId_UnmarshalMapError(t *testing.T) {
+	mockDDBClient := &MockDynamoDBClient{
+		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+			item := map[string]types.AttributeValue{
+				"factoryId":   &types.AttributeValueMemberS{Value: "1"},
+				"name":        &types.AttributeValueMemberS{Value: "Factory 1"},
+				"description": &types.AttributeValueMemberS{Value: "Description 1"},
+			}
+			return &dynamodb.GetItemOutput{Item: item}, nil
+		},
+	}
+	handler := NewReadFactoryHandler(mockDDBClient)
+
+	originalFactoryUnmarshalMap := FactoryUnmarshalMap
+
+	defer func() { FactoryUnmarshalMap = originalFactoryUnmarshalMap }()
+
+	FactoryUnmarshalMap = func(map[string]types.AttributeValue, interface{}) error {
+		return errors.New("mock error")
+	}
+
+	request := events.APIGatewayProxyRequest{
+		QueryStringParameters: map[string]string{"id": "1"},
+	}
+
+	ctx := context.Background()
+	response, err := handler.HandleReadFactoryRequest(ctx, request)
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d for unmarshalling factory from DynamoDB format, got %d", http.StatusInternalServerError, response.StatusCode)
+	}
+}
+
 func TestHandleReadFactoryRequest_WithId_Success(t *testing.T) {
 	mockDDBClient := &MockDynamoDBClient{
 		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
