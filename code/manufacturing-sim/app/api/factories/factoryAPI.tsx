@@ -31,7 +31,6 @@ const api = axios.create({
     }
   };
 
-
   const createFactory = async (newFactory: Factory): Promise<Factory> => {
     try {
         const payload = {
