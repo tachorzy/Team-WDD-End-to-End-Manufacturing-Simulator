@@ -1,13 +1,23 @@
 "use client";
 
 // import font later
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
+import { getAllFactories } from "@/app/api/factories/factoryAPI";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 interface MapProps {
     position: { lat: number; lon: number };
+}
+interface Factory{
+    factoryId: string;
+    name:string;
+    location:{
+        longitude: number;
+        latitude: number;
+    };
+    description:string;
 }
 
 const customIcon = new L.Icon({
@@ -34,6 +44,22 @@ const ChangeView = ({ center, zoom }) => {
 const MapComponent: React.FC<MapProps> = ({ positions }) => {
     const initialZoom = 4;
     const zoomInLevel = 15;
+    const [factories, setFactories] = useState<Factory[]>([]);
+
+    useEffect(() => {
+        const fetchFactories = async () => {
+            try {
+                const response = await getAllFactories();
+                const data = JSON.parse(response.body);
+                setFactories(data);
+                console.log(factories);
+            } catch (error) {
+                console.error('Error fetching factories:', error);
+            }
+        };
+
+        fetchFactories();
+    }, []);
 
     return (
         <div>
@@ -49,6 +75,20 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                         zoom={zoomInLevel}
                     />
                 )}
+                {factories.map((factory, index) => (
+                    <Marker
+                        key={index}
+                        position={[factory.location.latitude, factory.location.longitude]}
+                        icon={customIcon}
+                    >
+                        <Popup>
+                            <div>
+                                <h3>{factory.name}</h3>
+                                <p>{factory.description}</p>
+                            </div>
+                        </Popup>
+                    </Marker>
+                ))}
                 {positions.map((position, index) => (
                     <Marker
                         key={index}

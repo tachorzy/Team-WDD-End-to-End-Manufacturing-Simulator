@@ -53,11 +53,12 @@ const api = axios.create({
 
   const getAllFactories = async (): Promise<Factory[]> => {
     try {
-        const response = await api.get<Factory[]>('/factories');
-        return response.data;
+        const response = await api.get<Factory[]>('/factories'); 
+        console.log("API Response:", response.data);
+        return response.data; 
     } catch (error) {
-        console.error('Failed to fetch factories:', error);
-        throw new Error('Failed to fetch factories');
+        console.error(`Failed to fetch all factories: `, error);
+        throw new Error(`Failed to fetch all factories.`);
     }
 };
 
