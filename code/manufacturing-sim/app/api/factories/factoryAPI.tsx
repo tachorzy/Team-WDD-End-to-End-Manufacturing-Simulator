@@ -33,7 +33,6 @@ const api = axios.create({
         const response = await api.get<Factory>('/factories', {
             params: { factoryId }
           }); 
-          console.log("API Response:", response.data);
       return response.data;
     } catch (error) {
       
@@ -45,7 +44,6 @@ const api = axios.create({
   const createFactory = async (newFactory: NewFactoryRequest): Promise<Factory> => {
     try {
       const response = await api.post<Factory>('/factories', newFactory);
-      console.log("API Response:", response.data);
       return response.data;
     } catch (error) {
       console.error('Failed to add new factory:', error);
@@ -53,4 +51,14 @@ const api = axios.create({
     }
   };
 
-  export { getFactory, createFactory };
+  const getAllFactories = async (): Promise<Factory[]> => {
+    try {
+        const response = await api.get<Factory[]>('/factories');
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch factories:', error);
+        throw new Error('Failed to fetch factories');
+    }
+};
+
+  export { getFactory, createFactory,getAllFactories};
