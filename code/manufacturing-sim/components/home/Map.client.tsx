@@ -96,8 +96,10 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                         icon={customIcon}
                     >
                         <Popup>
-                            Factory Data or we can redirect user to another page
-                            when they click on it
+                            <div>
+                                <h3 className="font-bold">{`New Facility ${positions.length+1}`}</h3>
+                                <p>{`Located: ${position.lat}, ${position.lon}`}</p>
+                            </div>
                         </Popup>
                     </Marker>
                 ))}
