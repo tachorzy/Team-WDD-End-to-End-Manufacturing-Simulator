@@ -10,18 +10,7 @@ import (
 	"testing"
 )
 
-type MockDynamoDBClient struct {
-	PutItemFunc func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error)
-}
-
-func (m *MockDynamoDBClient) PutItem(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
-	if m.PutItemFunc != nil {
-		return m.PutItemFunc(ctx, params, optFns...)
-	}
-	return nil, errors.New("PutItem method not implemented")
-}
-
-func TestHandleCreateRequest_BadJSON(t *testing.T) {
+func TestHandleCreateFactoryRequest_BadJSON(t *testing.T) {
 	mockDDBClient := &MockDynamoDBClient{}
 
 	handler := NewCreateFactoryHandler(mockDDBClient)
@@ -42,7 +31,7 @@ func TestHandleCreateRequest_BadJSON(t *testing.T) {
 	}
 }
 
-func TestHandleCreateRequest_MarshalMapError(t *testing.T) {
+func TestHandleCreateFactoryRequest_MarshalMapError(t *testing.T) {
 	mockDDBClient := &MockDynamoDBClient{}
 
 	handler := NewCreateFactoryHandler(mockDDBClient)
@@ -71,7 +60,7 @@ func TestHandleCreateRequest_MarshalMapError(t *testing.T) {
 	}
 }
 
-func TestHandleCreateRequest_DynamoDBPutItemError(t *testing.T) {
+func TestHandleCreateFactoryRequest_DynamoDBPutItemError(t *testing.T) {
 	mockDDBClient := &MockDynamoDBClient{
 		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
@@ -96,7 +85,7 @@ func TestHandleCreateRequest_DynamoDBPutItemError(t *testing.T) {
 	}
 }
 
-func TestHandleCreateRequest_Success(t *testing.T) {
+func TestHandleCreateFactoryRequest_Success(t *testing.T) {
 	mockDDBClient := &MockDynamoDBClient{
 		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
