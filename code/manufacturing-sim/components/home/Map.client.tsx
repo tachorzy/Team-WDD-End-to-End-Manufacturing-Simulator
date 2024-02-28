@@ -83,7 +83,8 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                     >
                         <Popup>
                             <div>
-                                <h3>{factory.name}</h3>
+                                <h3 className="font-bold">{factory.name}</h3>
+                                <p>{`Located: ${factory.location.latitude}, ${factory.location.longitude}`}</p>
                                 <p>{factory.description}</p>
                             </div>
                         </Popup>
