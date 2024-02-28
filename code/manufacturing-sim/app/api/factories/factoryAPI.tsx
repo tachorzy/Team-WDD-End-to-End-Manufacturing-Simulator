@@ -10,16 +10,6 @@ interface Factory{
     description:string;
 }
 
-interface CreateFactory{
-    name: string;
-  location: {
-    longitude: number;
-    latitude: number;
-  };
-  description: string;
-}
-
-
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_AWS_ENDPOINT, 
     headers: {
@@ -41,7 +31,19 @@ const api = axios.create({
     }
   };
 
-  const createFactory = async (newFactory: NewFactoryRequest): Promise<Factory> => {
+  const getAllFactories = async (): Promise<Factory> => {
+    try {
+        const response = await api.get<Factory>('/factories'); 
+          console.log("API Response:", response.data);
+      return response.data;
+    } catch (error) {
+      
+      console.error(`Failed to fetch all factories: `, error);
+      throw new Error(`Failed to fetch all factories.`);
+    }
+  };
+
+  const createFactory = async (newFactory: Factory): Promise<Factory> => {
     try {
       const response = await api.post<Factory>('/factories', newFactory);
       return response.data;
@@ -50,6 +52,7 @@ const api = axios.create({
       throw new Error('Failed to add new factory');
     }
   };
+
 
   const getAllFactories = async (): Promise<Factory[]> => {
     try {
@@ -62,3 +65,4 @@ const api = axios.create({
 };
 
   export { getFactory, createFactory,getAllFactories};
+
