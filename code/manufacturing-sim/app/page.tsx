@@ -9,6 +9,7 @@ import Map from "../components/home/Map.client";
 import Searchbar from "../components/home/Searchbar.client";
 import Navbar from "../components/Navbar/Navbar";
 import FactoryTable from "@/components/home/FactoryTable.client";
+import FactoryInfo from "@/components/factory/FactoryInfo.client";
 
 export default function Home() {
     const [positions, setPositions] = useState<
@@ -46,6 +47,7 @@ export default function Home() {
                             <Map positions={positions} />
                         </div>
                         {/* <Dashboard /> */}
+                        <FactoryInfo/>
                     </div>
                 </div>
             </div>
