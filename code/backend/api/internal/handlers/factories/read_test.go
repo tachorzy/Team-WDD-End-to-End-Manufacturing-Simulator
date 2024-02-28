@@ -154,8 +154,34 @@ func TestHandleReadFactoryRequest_WithId_GetItemError(t *testing.T) {
 	}
 }
 
+func TestHandleReadFactoryRequest_WithId_ItemNotFound(t *testing.T) {
+	mockDDBClient := &MockDynamoDBClient{
+		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+			return &dynamodb.GetItemOutput{
+				Item: nil,
+			}, nil
+		},
+	}
+
+	handler := NewReadFactoryHandler(mockDDBClient)
+
+	request := events.APIGatewayProxyRequest{
+		QueryStringParameters: map[string]string{"id": "1"},
+	}
+
+	ctx := context.Background()
+	response, err := handler.HandleReadFactoryRequest(ctx, request)
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusNotFound {
+		t.Errorf("Expected status code %d for DynamoDb get item not found, got %d", http.StatusNotFound, response.StatusCode)
+	}
+}
+
 func TestHandleReadFactoryRequest_WithId_Success(t *testing.T) {
-	mockDB := &MockDynamoDBClient{
+	mockDDBClient := &MockDynamoDBClient{
 		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			item := map[string]types.AttributeValue{
 				"factoryId":   &types.AttributeValueMemberS{Value: "1"},
@@ -166,7 +192,7 @@ func TestHandleReadFactoryRequest_WithId_Success(t *testing.T) {
 		},
 	}
 
-	handler := NewReadFactoryHandler(mockDB)
+	handler := NewReadFactoryHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
 		QueryStringParameters: map[string]string{"id": "1"},
