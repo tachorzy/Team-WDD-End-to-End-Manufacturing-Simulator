@@ -2,20 +2,17 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const SearchModeTray = (props: {isAddressSearchBarActive: boolean, setIsAddressSearchBarActive: React.Dispatch<React.SetStateAction<boolean>>, setInvalidInput: React.Dispatch<React.SetStateAction<boolean>>}) => {
+const SearchModeTray = (props: {isAddressSearchBarActive: boolean, setIsAddressSearchBarActive: React.Dispatch<React.SetStateAction<boolean>>, setInvalidCoords: React.Dispatch<React.SetStateAction<boolean>>, setInvalidAddress: React.Dispatch<React.SetStateAction<boolean>>}) => {
     
-    const addressIcon = props.isAddressSearchBarActive ? "address-white.svg" : "address-blue.svg";
-    const coordsIcon = !props.isAddressSearchBarActive ? "compass-white.svg" : "compass-blue.svg";
-
     return (
         <div className="flex flex-row gap-x-16 rounded w-80 items-center justify-center mx-[36%] mt-4 mb-4">
-            
             <div className="group">
                 <button
                     type="button"
                     onClick={() => {
                         props.setIsAddressSearchBarActive(!props.isAddressSearchBarActive);
-                        props.setInvalidInput(false);
+                        props.setInvalidCoords(false);
+                        props.setInvalidAddress(false);
                     }}
                     className={(props.isAddressSearchBarActive ? "text-MainBlue" : "text-DarkGray opacity-[60%]") + " flex flex-row gap-x-1 h-10 w-1/2 font-semibold transition-colors duration-700 ease-in ease-out items-center justify-center"}
                 >
@@ -28,7 +25,8 @@ const SearchModeTray = (props: {isAddressSearchBarActive: boolean, setIsAddressS
                     type="button"
                     onClick={() => {
                         props.setIsAddressSearchBarActive(!props.isAddressSearchBarActive);
-                        props.setInvalidInput(false);
+                        props.setInvalidCoords(false);
+                        props.setInvalidAddress(false);
                     }}
                     className={(!props.isAddressSearchBarActive ? "text-MainBlue" : "text-DarkGray opacity-[60%]") + " flex flex-row gap-x-1 h-10 w-1/2 font-semibold transition-colors duration-700 ease-in ease-out items-center justify-center"}
                 >

@@ -5,7 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import SearchModeTray from "./searchbar/SearchModeTray";
 import ErrorMessage from "./searchbar/ErrorMessage";
-import { createFactory, CreateFactory } from "@/app/api/factories/factoryAPI"; // Import the missing module from the correct file path
+import { createFactory } from "@/app/api/factories/factoryAPI"; // Import the missing module from the correct file path
 
 interface SearchProps {
     onSearch: (position: { lat: number; lon: number }) => void;
@@ -21,7 +21,8 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
     const [address, setAddress] = useState(INITIAL_ADDRESS_STATE);
     const [latitude, setLatitude] = useState("");
     const [longitude, setLongitude] = useState("");
-    const [invalidInput, setInvalidInput] = useState(false);
+    const [invalidCoords, setInvalidCoords] = useState(false);
+    const [invalidAddress, setInvalidAddress] = useState(false);
 
     interface GeocodeResponse {
         lat: number;
@@ -42,8 +43,12 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
             if (Array.isArray(response.data) && response.data.length > 0) {
                 const firstResult = response.data[0] as GeocodeResponse;
                 const { lat, lon } = firstResult;
+
+                console.log(`coords: ${lat}, ${lon}`)
+
                 return { lat, lon };
             }
+
             return undefined;
         } catch (error) {
             return undefined;
@@ -60,10 +65,9 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
             console.log(`lat: ${lat}, lon: ${lon}`);
             if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180)
                 return { lat, lon };
-
-            setInvalidInput(true);
+            
+            setInvalidCoords(true);
             return undefined
-            // we should show a tooltip if the latitude and/or longitude are not valid
         } catch (error) {
             return undefined;
         }
@@ -81,8 +85,8 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         const newFactory = {
             name: "New Factory",
             location: {
-                latitude: coordinates.lat,
-                longitude: coordinates.lon,
+                latitude: coordinates?.lat,
+                longitude: coordinates?.lon,
             },
             description: `New factory operating from ${coordinates?.lat}, ${coordinates?.lon}`,
         };
@@ -97,7 +101,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
 
     return (
         <form onSubmit={handleSubmit} method="POST" className="w-3/4 items-center justify-center z-30">
-            <SearchModeTray setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidInput={setInvalidInput}/>
+            <SearchModeTray setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidCoords={setInvalidCoords} setInvalidAddress={setInvalidAddress}/>
             <div className="flex flex-row p-2 rounded-full">
                 <div className="flex flex-col gap-y-2 w-full">
                     {isAddressSearchBarActive ? (
@@ -120,7 +124,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                                     value={latitude}
                                     onChange={(e) => {
                                         setLatitude(e.target.value);
-                                        setInvalidInput(false);
+                                        setInvalidCoords(false);
                                     }}
                                     placeholder="Enter latitude"
                                     className="rounded-l-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-br from-MainBlue to-DarkBlue"
@@ -130,7 +134,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                                     value={longitude}
                                     onChange={(e) => {
                                         setLongitude(e.target.value);
-                                        setInvalidInput(false);
+                                        setInvalidCoords(false);
                                     }}
                                     placeholder="Enter longitude"
                                     className="w-full pl-20 p-6 pl-5 border-l-[3px] border-white text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-bl from-MainBlue to-DarkBlue"
@@ -139,7 +143,6 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                         </div>
                     )}
                 </div>
-
                 {address === INITIAL_ADDRESS_STATE &&
                 longitude === INIITIAL_LATITUDE_STATE &&
                 latitude === INITIAL_LONGITUDE_STATE ? (
@@ -158,8 +161,11 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                     </button>
                 )}
             </div>
-            {invalidInput && (
+            {invalidCoords && (
                 <ErrorMessage message={"Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°."} />
+            )}
+            {invalidAddress && (
+                <ErrorMessage message={"We couldn't find the address that you're looking for. Please try again."} />
             )}
         </form>
     );
