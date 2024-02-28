@@ -20,7 +20,7 @@ func TestHandleCreateFactoryRequest_BadJSON(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleCreateRequest(ctx, request)
+	response, err := handler.HandleCreateFactoryRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -49,7 +49,7 @@ func TestHandleCreateFactoryRequest_MarshalMapError(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleCreateRequest(ctx, request)
+	response, err := handler.HandleCreateFactoryRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -74,7 +74,7 @@ func TestHandleCreateFactoryRequest_DynamoDBPutItemError(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleCreateRequest(ctx, request)
+	response, err := handler.HandleCreateFactoryRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -99,7 +99,7 @@ func TestHandleCreateFactoryRequest_Success(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleCreateRequest(ctx, request)
+	response, err := handler.HandleCreateFactoryRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Did not expect an error, got %v", err)

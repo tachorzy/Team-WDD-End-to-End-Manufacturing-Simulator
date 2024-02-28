@@ -18,7 +18,7 @@ func TestHandleDeleteFactoryRequest_MissingFactoryId(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleDeleteRequest(ctx, request)
+	response, err := handler.HandleDeleteFactoryRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Did not expect an error, got %v", err)
@@ -44,7 +44,7 @@ func TestHandleDeleteFactoryRequest_ErrorDeletingItem(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleDeleteRequest(ctx, request)
+	response, err := handler.HandleDeleteFactoryRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Did not expect an error, got %v", err)
@@ -70,7 +70,7 @@ func TestHandleDeleteFactoryRequest_Success(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleDeleteRequest(ctx, request)
+	response, err := handler.HandleDeleteFactoryRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Did not expect an error, got %v", err)
