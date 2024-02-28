@@ -67,6 +67,42 @@ func TestHandleReadFactoryRequest_WithoutId_UnmarshalListOfMapsError(t *testing.
 	}
 }
 
+func TestHandleReadFactoryRequest_WithoutId_JSONMarshalError(t *testing.T) {
+	mockDDBClient := &MockDynamoDBClient{
+		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+			items := []map[string]types.AttributeValue{
+				{
+					"factoryId":   &types.AttributeValueMemberS{Value: "Test ID"},
+					"name":        &types.AttributeValueMemberS{Value: "Test Name"},
+					"description": &types.AttributeValueMemberS{Value: "Test Description"},
+				},
+			}
+			return &dynamodb.ScanOutput{Items: items}, nil
+		},
+	}
+	handler := NewReadFactoryHandler(mockDDBClient)
+
+	originalFactoryJSONMarshal := FactoryJSONMarshal
+
+	defer func() { FactoryJSONMarshal = originalFactoryJSONMarshal }()
+
+	FactoryJSONMarshal = func(v interface{}) ([]byte, error) {
+		return nil, errors.New("mock marshal error")
+	}
+
+	request := events.APIGatewayProxyRequest{}
+
+	ctx := context.Background()
+	response, err := handler.HandleReadFactoryRequest(ctx, request)
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d for marshalling factory in JSON format, got %d", http.StatusInternalServerError, response.StatusCode)
+	}
+}
+
 func TestHandleReadFactoryRequest_WithoutId_Success(t *testing.T) {
 	mockDDBClient := &MockDynamoDBClient{
 		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {

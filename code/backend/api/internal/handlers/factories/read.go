@@ -20,6 +20,7 @@ func NewReadFactoryHandler(db DynamoDBClient) *Handler {
 
 var FactoryUnmarshalListOfMaps = attributevalue.UnmarshalListOfMaps
 var FactoryUnmarshalMap = attributevalue.UnmarshalMap
+var FactoryJSONMarshal = json.Marshal
 
 func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	factoryId := request.QueryStringParameters["id"]
@@ -44,7 +45,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 			}, nil
 		}
 
-		factoriesJSON, err := json.Marshal(factories)
+		factoriesJSON, err := FactoryJSONMarshal(factories)
 		if err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
@@ -90,7 +91,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 		}, nil
 	}
 
-	factoryJSON, err := json.Marshal(factory)
+	factoryJSON, err := FactoryJSONMarshal(factory)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
