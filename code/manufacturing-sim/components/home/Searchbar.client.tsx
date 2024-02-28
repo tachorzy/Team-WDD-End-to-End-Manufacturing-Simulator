@@ -85,15 +85,14 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         const newFactory = {
             name: "New Factory",
             location: {
-                latitude: coordinates?.lat,
-                longitude: coordinates?.lon,
+                latitude: parseFloat(coordinates?.lat),
+                longitude: parseFloat(coordinates?.lon),
             },
             description: `New factory operating from ${coordinates?.lat}, ${coordinates?.lon}`,
         };
 
         try {
             const factory = await createFactory(newFactory);
-            console.log(`Created factory: ${factory}`);
         } catch (error) {
             console.error('Failed to create factory:', error);
         }

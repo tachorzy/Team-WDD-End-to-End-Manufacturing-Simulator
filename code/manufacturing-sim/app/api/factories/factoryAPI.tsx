@@ -34,13 +34,17 @@ const api = axios.create({
 
   const createFactory = async (newFactory: Factory): Promise<Factory> => {
     try {
-      const response = await api.post<Factory>('/factories', newFactory);
-      return response.data;
+        const payload = {
+            body: JSON.stringify(newFactory)
+        };
+        const response = await api.post<Factory>('/factories', payload);
+        console.log(response);
+        return response.data;
     } catch (error) {
-      console.error('Failed to add new factory:', error);
-      throw new Error('Failed to add new factory');
+        console.error('Failed to add new factory:', error);
+        throw new Error('Failed to add new factory');
     }
-  };
+};
 
 
   const getAllFactories = async (): Promise<Factory[]> => {
