@@ -2,12 +2,34 @@ package factories
 
 import (
 	"context"
+	"errors"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"net/http"
 	"testing"
 )
+
+func TestHandleReadFactoryRequest_WithoutId_ScanError(t *testing.T) {
+	mockDDBClient := &MockDynamoDBClient{
+		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+			return nil, errors.New("mock dynamodb error")
+		},
+	}
+	handler := NewReadFactoryHandler(mockDDBClient)
+
+	request := events.APIGatewayProxyRequest{}
+
+	ctx := context.Background()
+	response, err := handler.HandleReadFactoryRequest(ctx, request)
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d for DynamoDB scan error, got %d", http.StatusInternalServerError, response.StatusCode)
+	}
+}
 
 func TestHandleReadFactoryRequest_WithoutId_Success(t *testing.T) {
 	mockDDBClient := &MockDynamoDBClient{
@@ -33,7 +55,7 @@ func TestHandleReadFactoryRequest_WithoutId_Success(t *testing.T) {
 	}
 
 	if response.StatusCode != http.StatusOK {
-		t.Errorf("Expected status code %d, got %d", http.StatusOK, response.StatusCode)
+		t.Errorf("Expected status code %d for successful read without id, got %d", http.StatusOK, response.StatusCode)
 	}
 }
 
@@ -62,6 +84,6 @@ func TestHandleReadFactoryRequest_WithId_Success(t *testing.T) {
 	}
 
 	if response.StatusCode != http.StatusOK {
-		t.Errorf("Expected status code %d, got %d", http.StatusOK, response.StatusCode)
+		t.Errorf("Expected status code %d for successful read with id, got %d", http.StatusOK, response.StatusCode)
 	}
 }
