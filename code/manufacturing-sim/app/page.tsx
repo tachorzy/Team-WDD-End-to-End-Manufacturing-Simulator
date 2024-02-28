@@ -10,6 +10,7 @@ import Searchbar from "../components/home/Searchbar.client";
 import Navbar from "../components/Navbar/Navbar";
 import FactoryTable from "@/components/home/FactoryTable.client";
 
+
 export default function Home() {
     const [positions, setPositions] = useState<
         Array<{ lat: number; lon: number }>
@@ -46,6 +47,7 @@ export default function Home() {
                             <Map positions={positions} />
                         </div>
                         {/* <Dashboard /> */}
+                       
                     </div>
                 </div>
             </div>
