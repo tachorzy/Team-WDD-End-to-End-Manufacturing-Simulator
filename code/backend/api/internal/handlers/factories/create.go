@@ -20,7 +20,7 @@ func NewCreateFactoryHandler(db DynamoDBClient) *Handler {
 
 var FactoryMarshalMap = attributevalue.MarshalMap
 
-func (h Handler) HandleCreateRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var factory Factory
 	if err := json.Unmarshal([]byte(request.Body), &factory); err != nil {
 		return events.APIGatewayProxyResponse{
