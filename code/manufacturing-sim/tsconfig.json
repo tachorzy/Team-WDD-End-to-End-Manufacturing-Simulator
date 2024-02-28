@@ -39,7 +39,7 @@
     ".next/types/**/*.ts",
     "./jest.config.js",
     "./postcss.config.js",
-    "server.js",
+    "server.js"
   ],
   "exclude": [
     "node_modules"
