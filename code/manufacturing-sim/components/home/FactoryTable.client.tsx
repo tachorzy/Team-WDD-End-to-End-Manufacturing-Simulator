@@ -74,7 +74,7 @@ const FactoryTable = () => {
         </thead>
         <tbody>
           {facilities.length > 0 ? (
-            getSortedArray(facilities).map((facility) => (
+            getSortedArray(facilities).slice(0, 6).map((facility) => (
               <tr key={facility.factoryId} className="text-sm text-[#858A8F]">
                 {tableHeaders.map((header) => {
                   let cellValue;
