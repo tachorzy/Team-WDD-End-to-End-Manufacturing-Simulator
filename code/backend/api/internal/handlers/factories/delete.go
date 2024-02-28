@@ -18,7 +18,7 @@ func NewDeleteFactoryHandler(db DynamoDBClient) *Handler {
 
 func (h Handler) HandleDeleteRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	factoryId := request.QueryStringParameters["id"]
-	print(factoryId)
+
 	if factoryId == "" {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
