@@ -23,7 +23,7 @@ jobs:
         working-directory: ./code/backend/api
       
       - name: Generate code coverage report
-        run: go test ./internal/... -coverprofile="build/coverage.out" 
+        run: go test -v ./internal/... -coverprofile="build/coverage.out" 
         working-directory: ./code/backend/api
 
       - name: Generate code coverage report html

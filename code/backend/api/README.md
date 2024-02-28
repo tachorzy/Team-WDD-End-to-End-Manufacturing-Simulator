@@ -22,7 +22,7 @@ go.exe install github.com/aws/aws-lambda-go/cmd/build-lambda-zip@latest
 
 Generate code coverage report:
 ```bash
-go test ./internal/... -coverprofile="build/coverage.out"
+go test -v ./internal/... -coverprofile="build/coverage.out"
 go tool cover -html="build/coverage.out" -o build/coverage.html
 ```
 
