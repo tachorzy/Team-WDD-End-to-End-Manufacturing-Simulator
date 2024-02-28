@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestHandleReactFactoryRequest_WithoutId_Success(t *testing.T) {
+func TestHandleReadFactoryRequest_WithoutId_Success(t *testing.T) {
 	mockDDBClient := &MockDynamoDBClient{
 		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			items := []map[string]types.AttributeValue{

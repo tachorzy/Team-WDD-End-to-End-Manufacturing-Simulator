@@ -29,7 +29,7 @@ func TestHandleDeleteFactoryRequest_MissingFactoryId(t *testing.T) {
 	}
 }
 
-func TestHandleDeleteFactoryRequest_ErrorDeletingItem(t *testing.T) {
+func TestHandleDeleteFactoryRequest_DeleteItemError(t *testing.T) {
 	mockDDBClient := &MockDynamoDBClient{
 		DeleteItemFunc: func(ctx context.Context, params *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
 			return nil, errors.New("mock DynamoDB error")

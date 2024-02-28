@@ -60,7 +60,7 @@ func TestHandleCreateFactoryRequest_MarshalMapError(t *testing.T) {
 	}
 }
 
-func TestHandleCreateFactoryRequest_DynamoDBPutItemError(t *testing.T) {
+func TestHandleCreateFactoryRequest_PutItemError(t *testing.T) {
 	mockDDBClient := &MockDynamoDBClient{
 		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
