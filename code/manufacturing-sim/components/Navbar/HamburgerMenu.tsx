@@ -18,7 +18,7 @@ const HamburgerMenu: React.FC = () => {
                 alt="brand"
                 className="select-none my-4"
             />
-            <Sidebar/>
+            <Sidebar />
         </div>
     );
 };
