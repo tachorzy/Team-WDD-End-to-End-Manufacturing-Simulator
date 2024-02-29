@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# wdd frontend
 
-## Getting Started
+This is our frontend
 
-First, run the development server:
+## Technologies
 
+- Next.js - [Documentation](https://nextjs.org/docs)
+- TailwindCSS - [Documentation](https://tailwindcss.com/docs)
+- TypeScript - [Documentation](https://www.typescriptlang.org/docs/)
+- Jest - [Documentation](https://jestjs.io/docs/getting-started)
+- Eslint - [Documentation](https://eslint.org/docs/latest/)
+- 
+
+## Requirements
+
+Make sure you have the following on your machine:
+Node - [Download & Install](https://nodejs.org/en/download/) | [Documentation](https://nodejs.org/en/docs/)
+
+## Usage
+
+Install dependencies without cache:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Lint and format the project, fix if any:
+```bash
+npm run lint:fix
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Build the project into static files and check for type errors:
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Run tests and generate coverage
+```bash
+npm run test:coverage
+```
 
-## Learn More
+Run the development server:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Run the development server with https:
+```bash
+npm run dev:https
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Run for production:
+```bash
+npm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Deployment 
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+TBA
