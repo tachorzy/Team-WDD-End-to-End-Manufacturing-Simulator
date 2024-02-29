@@ -1,23 +1,23 @@
 "use client";
 
 // import font later
-import React, { useEffect,useState } from "react";
-import { getAllFactories } from "@/app/api/factories/factoryAPI";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
+import { getAllFactories } from "@/app/api/factories/factoryAPI";
 import "leaflet/dist/leaflet.css";
 
 interface MapProps {
     position: { lat: number; lon: number };
 }
-interface Factory{
+interface Factory {
     factoryId: string;
-    name:string;
-    location:{
+    name: string;
+    location: {
         longitude: number;
         latitude: number;
     };
-    description:string;
+    description: string;
 }
 
 const customIcon = new L.Icon({
@@ -54,7 +54,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                 setFactories(data);
                 console.log(factories);
             } catch (error) {
-                console.error('Error fetching factories:', error);
+                console.error("Error fetching factories:", error);
             }
         };
 
@@ -78,7 +78,10 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                 {factories.map((factory, index) => (
                     <Marker
                         key={index}
-                        position={[factory.location.latitude, factory.location.longitude]}
+                        position={[
+                            factory.location.latitude,
+                            factory.location.longitude,
+                        ]}
                         icon={customIcon}
                     >
                         <Popup>
@@ -98,7 +101,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                     >
                         <Popup>
                             <div>
-                                <h3 className="font-bold">{`New Facility ${positions.length+1}`}</h3>
+                                <h3 className="font-bold">{`New Facility ${positions.length + 1}`}</h3>
                                 <p>{`Located: ${position.lat}, ${position.lon}`}</p>
                             </div>
                         </Popup>

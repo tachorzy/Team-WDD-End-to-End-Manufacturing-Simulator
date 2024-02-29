@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-const ErrorMessage = (props: {message: string}) => (
+const ErrorMessage = (props: { message: string }) => (
     <span
         id="invalidCoords"
         className="flex flex-row gap-x-0.5 text-red-400 font-semibold text-xs mt-0.5 pl-3"
