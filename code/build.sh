@@ -31,10 +31,6 @@ install_go() {
   mkdir -p "$GO_DIR"
   # Download Go tarball
   curl -o "$GO_DIR/go.tar.gz" "https://dl.google.com/go/go$GO_VERSION.$GO_PLATFORM.tar.gz"
-
-  file "$GO_DIR/go.tar.gz"
-  cat "$GO_DIR/go.tar.gz"
-
   # Extract Go tarball
   tar -xzf "$GO_DIR/go.tar.gz" -C "$GO_DIR" --strip-components=1
   # Clean up the tarball
