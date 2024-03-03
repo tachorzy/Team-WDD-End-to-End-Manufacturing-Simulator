@@ -54,6 +54,8 @@ const FactoryTable = () => {
         });
     }
 
+    /*
+    TODO: why do we need to sort the keys?
     function getSortedArray(arrayToSort: Factory[]) {
         return sort.direction === "asc"
             ? [...arrayToSort].sort((a, b) =>
@@ -63,6 +65,7 @@ const FactoryTable = () => {
                   a[sort.key] < b[sort.key] ? 1 : -1,
               );
     }
+    */
 
     return (
         <div className="flex flex-col items-center justify-center mx-auto z-30">
@@ -90,43 +93,41 @@ const FactoryTable = () => {
                 </thead>
                 <tbody>
                     {facilities.length > 0 ? (
-                        getSortedArray(facilities)
-                            .slice(0, 6)
-                            .map((facility) => (
-                                <tr
-                                    key={facility.factoryId}
-                                    className="text-sm text-[#858A8F]"
-                                >
-                                    {tableHeaders.map((header) => {
-                                        let cellValue:
-                                            | Location
-                                            | string
-                                            | number
-                                            | undefined;
-                                        if (
-                                            header.id === "lat" ||
-                                            header.id === "lon"
-                                        ) {
-                                            cellValue =
-                                                facility.location[
-                                                    header.id === "lat"
-                                                        ? "latitude"
-                                                        : "longitude"
-                                                ];
-                                        } else {
-                                            cellValue = facility[header.id];
-                                        }
-                                        return (
-                                            <td
-                                                key={header.id}
-                                                className="border px-4 py-2.5"
-                                            >
-                                                {cellValue?.toString()}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            ))
+                        facilities.slice(0, 6).map((facility) => (
+                            <tr
+                                key={facility.factoryId}
+                                className="text-sm text-[#858A8F]"
+                            >
+                                {tableHeaders.map((header) => {
+                                    let cellValue:
+                                        | Location
+                                        | string
+                                        | number
+                                        | undefined;
+                                    if (
+                                        header.id === "lat" ||
+                                        header.id === "lon"
+                                    ) {
+                                        cellValue =
+                                            facility.location[
+                                                header.id === "lat"
+                                                    ? "latitude"
+                                                    : "longitude"
+                                            ];
+                                    } else {
+                                        cellValue = facility[header.id];
+                                    }
+                                    return (
+                                        <td
+                                            key={header.id}
+                                            className="border px-4 py-2.5"
+                                        >
+                                            {cellValue?.toString()}
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        ))
                     ) : (
                         <tr>
                             <td

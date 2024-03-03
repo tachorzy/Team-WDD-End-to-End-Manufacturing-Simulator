@@ -1,6 +1,6 @@
 "use client";
 
-// import font later
+// TODO: import font later
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
@@ -62,6 +62,12 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
         fetchFactories();
     }, [factories]);
 
+    function generateLatLng() {
+        const coordinate = positions[positions.length - 1];
+
+        return new L.LatLng(coordinate.lat, coordinate.lon);
+    }
+
     return (
         <div>
             <MapContainer
@@ -71,10 +77,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
             >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 {positions.length > 0 && (
-                    <ChangeView
-                        center={positions[positions.length - 1]}
-                        zoom={zoomInLevel}
-                    />
+                    <ChangeView center={generateLatLng()} zoom={zoomInLevel} />
                 )}
                 {factories.map((factory, index) => (
                     <Marker

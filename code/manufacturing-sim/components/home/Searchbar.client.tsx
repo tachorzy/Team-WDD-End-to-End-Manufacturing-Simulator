@@ -78,6 +78,11 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         const coordinates = isAddressSearchBarActive
             ? await getCoordinates(address)
             : validCoordinates(latitude, longitude);
+
+        if (!coordinates) {
+            return;
+        }
+
         if (coordinates) {
             onSearch(coordinates);
         }
@@ -85,8 +90,8 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         const newFactory = {
             name: "New Factory",
             location: {
-                latitude: coordinates?.lat,
-                longitude: coordinates?.lon,
+                latitude: coordinates.lat,
+                longitude: coordinates.lon,
             },
             description: `New factory operating from ${coordinates?.lat}, ${coordinates?.lon}`,
         };
