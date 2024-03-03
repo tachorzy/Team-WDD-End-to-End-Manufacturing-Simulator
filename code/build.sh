@@ -17,7 +17,6 @@ NODE_DIR="$HOME/node"
 NODE_BIN="$HOME/node/bin"
 
 check_go_exist() {
-    ls $GO_BIN
     if [ -x "$GO_BIN/go" ]; then
         INSTALLED_GO_VERSION=$($GO_BIN/go version | awk '{print $3}')
         if [ "go$GO_VERSION" = "$INSTALLED_GO_VERSION" ]; then
@@ -28,10 +27,12 @@ check_go_exist() {
 }
 
 install_go() {
-  # Create Node.js directory
+  # Create Go directory
   mkdir -p "$GO_DIR"
   # Download Go tarball
   curl -o "$GO_DIR/go$GO_VERSION.$GO_PLATFORM.tar.gz" "https://go.dev/dl/go$GO_VERSION.$GO_PLATFORM.tar.gz"
+
+  ls $GO_DIR
   # Extract Go tarball
   tar -xzf "$GO_DIR/go$GO_VERSION.$GO_PLATFORM.tar.gz" -C "$GO_DIR" --strip-components=1
   # Clean up the tarball
