@@ -4,7 +4,8 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
-import { getAllFactories, Factory } from "@/app/api/factories/factoryAPI";
+import { getAllFactories } from "@/app/api/factories/factoryAPI";
+import { Factory } from "@/app/types/types";
 import "leaflet/dist/leaflet.css";
 
 interface Coordinate {
@@ -57,11 +58,9 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                 console.error("Error fetching factories:", error);
             }
         };
-    
+
         fetchFactories();
-    }, []);
-
-
+    }, [factories]);
 
     function generateLatLng() {
         const coordinate = positions[positions.length - 1];
