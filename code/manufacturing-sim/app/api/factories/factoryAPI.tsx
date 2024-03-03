@@ -1,12 +1,13 @@
 import axios from "axios";
 
-interface Factory {
-    factoryId: string;
+export interface Location {
+    longitude: number;
+    latitude: number;
+}
+export interface Factory {
+    factoryId?: string; // TODO: temporarily optional?
     name: string;
-    location: {
-        longitude: number;
-        latitude: number;
-    };
+    location: Location;
     description: string;
 }
 

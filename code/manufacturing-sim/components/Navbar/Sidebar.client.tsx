@@ -52,7 +52,17 @@ const Sidebar = () => {
 
     return (
         <div className="flex justify-between align-bottom mt-0.5">
-            <span onClick={() => setNav(!nav)} className="cursor-pointer">
+            <span
+                onClick={() => setNav(!nav)}
+                onKeyDown={(event) => {
+                    // TODO: refactor
+                    console.log(event);
+                }}
+                role="button"
+                tabIndex={0}
+                className="cursor-pointer"
+                aria-label="Toggle navigation"
+            >
                 <Image
                     src="/icons/navbar/hamburger-menu.svg"
                     width={50}

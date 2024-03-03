@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import {
+    Factory,
+    Location,
+    getAllFactories,
+} from "@/app/api/factories/factoryAPI";
 import Caret from "./table/Caret";
-import { getAllFactories } from "@/app/api/factories/factoryAPI";
+
+interface Header {
+    id: string;
+    label: string;
+}
+
+interface TableHeader {
+    id: keyof Factory | "lat" | "lon";
+    label: string;
+}
 
 const FactoryTable = () => {
-    const [facilities, setFacilities] = useState([]);
+    const [facilities, setFacilities] = useState<Factory[]>([]);
     const [sort, setSort] = useState({ key: "name", direction: "" });
 
     useEffect(() => {
         const fetchFactories = async () => {
             try {
                 const response = await getAllFactories();
-                console.log("Full API Response:", response);
-                const parsedData = JSON.parse(response.body);
-                setFacilities(parsedData);
-                console.log(parsedData);
+                setFacilities(response);
+                console.log(response);
             } catch (error) {
                 console.error("Error fetching factories:", error);
             }
@@ -23,26 +35,26 @@ const FactoryTable = () => {
         fetchFactories();
     }, []);
 
-    const tableHeaders = [
+    const tableHeaders: TableHeader[] = [
         { id: "name", label: "Facility Name" },
         { id: "lat", label: "Latitude" },
         { id: "lon", label: "Longitude" },
         { id: "description", label: "Description" },
     ];
 
-    function handleHeaderClick(header) {
+    function handleHeaderClick(header: Header) {
+        let direction = "desc";
+        if (header.id === sort.key) {
+            direction = sort.direction === "asc" ? "desc" : "asc";
+        }
+
         setSort({
             key: header.id,
-            direction:
-                header.id === sort.key
-                    ? sort.direction === "asc"
-                        ? "desc"
-                        : "asc"
-                    : "desc",
+            direction,
         });
     }
 
-    function getSortedArray(arrayToSort) {
+    function getSortedArray(arrayToSort: Factory[]) {
         return sort.direction === "asc"
             ? [...arrayToSort].sort((a, b) =>
                   a[sort.key] > b[sort.key] ? 1 : -1,
@@ -86,7 +98,11 @@ const FactoryTable = () => {
                                     className="text-sm text-[#858A8F]"
                                 >
                                     {tableHeaders.map((header) => {
-                                        let cellValue;
+                                        let cellValue:
+                                            | Location
+                                            | string
+                                            | number
+                                            | undefined;
                                         if (
                                             header.id === "lat" ||
                                             header.id === "lon"
@@ -105,7 +121,7 @@ const FactoryTable = () => {
                                                 key={header.id}
                                                 className="border px-4 py-2.5"
                                             >
-                                                {cellValue}
+                                                {cellValue?.toString()}
                                             </td>
                                         );
                                     })}

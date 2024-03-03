@@ -4,20 +4,16 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
-import { getAllFactories } from "@/app/api/factories/factoryAPI";
+import { getAllFactories, Factory } from "@/app/api/factories/factoryAPI";
 import "leaflet/dist/leaflet.css";
 
-interface MapProps {
-    position: { lat: number; lon: number };
+interface Coordinate {
+    lat: number;
+    lon: number;
 }
-interface Factory {
-    factoryId: string;
-    name: string;
-    location: {
-        longitude: number;
-        latitude: number;
-    };
-    description: string;
+
+interface MapProps {
+    positions: Coordinate[];
 }
 
 const customIcon = new L.Icon({
@@ -27,7 +23,13 @@ const customIcon = new L.Icon({
     popupAnchor: [0, -35],
 });
 
-const ChangeView = ({ center, zoom }) => {
+const ChangeView = ({
+    center,
+    zoom,
+}: {
+    center: L.LatLngExpression;
+    zoom: number | undefined;
+}) => {
     const map = useMap();
 
     useEffect(() => {
@@ -50,8 +52,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
         const fetchFactories = async () => {
             try {
                 const response = await getAllFactories();
-                const data = JSON.parse(response.body);
-                setFactories(data);
+                setFactories(response);
                 console.log(factories);
             } catch (error) {
                 console.error("Error fetching factories:", error);
@@ -59,7 +60,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
         };
 
         fetchFactories();
-    }, []);
+    }, [factories]);
 
     return (
         <div>

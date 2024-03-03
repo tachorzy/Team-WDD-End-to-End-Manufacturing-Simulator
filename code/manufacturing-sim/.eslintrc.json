@@ -28,5 +28,10 @@
         "jest": true
       }
     }
-  ]
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
 }
