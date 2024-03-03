@@ -3,7 +3,7 @@ export interface Location {
     latitude: number;
 }
 export interface Factory {
-    factoryId: string;
+    factoryId?: string;
     name: string;
     location: Location;
     description: string;
