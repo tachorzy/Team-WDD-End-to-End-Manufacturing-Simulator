@@ -32,14 +32,14 @@ const getFactory = async (factoryId: string): Promise<Factory> => {
 const createFactory = async (newFactory: Factory): Promise<Factory> => {
     try {
         const payload = {
-            body: JSON.stringify(newFactory)
+            body: JSON.stringify(newFactory),
         };
-        const response = await api.post<Factory>('/factories', payload);
+        const response = await api.post<Factory>("/factories", payload);
         console.log(response);
         return response.data;
     } catch (error) {
-        console.error('Failed to add new factory:', error);
-        throw new Error('Failed to add new factory');
+        console.error("Failed to add new factory:", error);
+        throw new Error("Failed to add new factory");
     }
 };
 
