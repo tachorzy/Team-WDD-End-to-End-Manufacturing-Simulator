@@ -11,6 +11,10 @@ NODE_VERSION="20.0.0"
 NODE_PLATFORM="linux-x64"
 NODE_DIR="$HOME/node"
 
+# golangci-lint installation variables
+GOLANGCI_LINT_VERSION="1.51.0"
+GOLANGCI_LINT_BIN="$HOME/.golangci-lint/bin"
+
 check_go_exist() {
     if [ -x "$GO_BIN/go" ]; then
         INSTALLED_GO_VERSION=$($GO_BIN/go version | awk '{print $3}')
@@ -32,16 +36,22 @@ install_go() {
   rm "$GO_DIR/go$GO_VERSION.$GO_PLATFORM.tar.gz"
 }
 
-# Check and install Go if necessary
-if check_go_exist; then
-  echo "Go v$GO_VERSION is already installed."
-else
-  echo "Go v$GO_VERSION is not installed. Installing now..."
-  install_go
+check_golangci_lint_exist() {
+    if [ -x "$GOLANGCI_LINT_BIN/golangci-lint" ]; then
+        INSTALLED_VERSION=$("$GOLANGCI_LINT_BIN/golangci-lint" --version | awk '{print $4}')
+        if [ "$GOLANGCI_LINT_VERSION" = "$INSTALLED_VERSION" ]; then
+            return 0
+        fi
+    fi
+    return 1
+}
 
-  # Verify installation
-  go version
-fi
+install_golangci_lint() {
+    # Create golangci-lint directory
+    mkdir -p "$GOLANGCI_LINT_BIN"
+    # Download golangci-lint binary
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$GOLANGCI_LINT_BIN" "v$GOLANGCI_LINT_VERSION"
+}
 
 check_node_exist() {
   if [ -x "$NODE_DIR/bin/node" ]; then
@@ -64,20 +74,26 @@ install_node() {
   rm "$NODE_DIR/node-$NODE_VERSION-$PLATFORM.tar.xz"
 }
 
-# Check and install Node.js if necessary
-if check_node_exist; then
-  echo "Node.js v$NODE_VERSION is already installed."
-else
-  echo "Node.js v$NODE_VERSION is not installed. Installing now..."
-  install_node
-
-  # Verify installion
-  node -v
-  npm -v
+# Check and install Go if necessary
+if ! check_go_exist; then
+    echo "Go v$GO_VERSION is not installed. Installing now..."
+    install_go
 fi
 
-# Update PATH to include the Go and Node.js binary
-export PATH="$GO_BIN:$NODE_DIR/bin:$PATH"
+# Check and install golangci-lint if necessary
+if ! check_golangci_lint_exist; then
+    echo "golangci-lint v$GOLANGCI_LINT_VERSION is not installed. Installing now..."
+    install_golangci_lint
+fi
+
+# Check and install Node.js if necessary
+if ! check_node_exist; then
+    echo "Node.js v$NODE_VERSION is not installed. Installing now..."
+    install_node
+fi
+
+# Update PATH to include the Go, Node.js, and golangci-lint binaries
+export PATH="$GO_BIN:$NODE_DIR/bin:$GOLANGCI_LINT_BIN:$PATH"
 
 # Run backend script
 cd backend/api

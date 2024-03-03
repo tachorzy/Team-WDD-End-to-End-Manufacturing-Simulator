@@ -27,7 +27,7 @@ go install github.com/aws/aws-lambda-go/cmd/build-lambda-zip@latest
 
 Lint:
 ```bash
-golangci run
+golangci-lint run ./...
 ```
 
 Generate code coverage report:
