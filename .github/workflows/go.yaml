@@ -41,8 +41,9 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v4
         with:
-          args: --config ./code/backend/api/.golangci.yaml
+          args: --config ./.golangci.yaml
           version: 'v1.51'
+        working-directory: ./code/backend/api
 
   test:
     name: test go files
