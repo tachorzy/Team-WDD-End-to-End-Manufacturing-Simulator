@@ -102,7 +102,7 @@ const FactoryTable = () => {
                                                     : "longitude"
                                             ];
                                     } else {
-                                        cellValue = facility[header.id];
+                                        cellValue = facility[header.id as keyof Factory];
                                     }
                                     return (
                                         <td

@@ -55,7 +55,7 @@ export interface Factory {
         throw new Error(`Failed to fetch all factories: ${response.statusText}`);
       }
       const responseBody = await response.json();
-      const data = JSON.parse(responseBody.body);
+      const data = JSON.parse(responseBody.body) as Factory[];
       console.log("The data from server:", data);
       return data;
     } catch (error) {
