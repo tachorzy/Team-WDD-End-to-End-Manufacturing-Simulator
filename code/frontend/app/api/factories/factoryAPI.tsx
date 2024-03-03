@@ -1,10 +1,12 @@
-interface Factory {
+
+export interface Location{
+    longitude:number,
+    latitude:number,
+}
+export interface Factory {
     factoryId: string;
     name: string;
-    location: {
-      longitude: number;
-      latitude: number;
-    };
+    location: Location,
     description: string;
   }
   
@@ -61,5 +63,5 @@ interface Factory {
     }
   };
   
-  export { getFactory, createFactory, getAllFactories };
+  export {getFactory, createFactory, getAllFactories };
   
