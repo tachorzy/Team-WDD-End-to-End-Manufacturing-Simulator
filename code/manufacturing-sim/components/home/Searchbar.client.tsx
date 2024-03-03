@@ -44,7 +44,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                 const firstResult = response.data[0] as GeocodeResponse;
                 const { lat, lon } = firstResult;
 
-                console.log(`coords: ${lat}, ${lon}`)
+                console.log(`coords: ${lat}, ${lon}`);
 
                 return { lat, lon };
             }
@@ -65,15 +65,15 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
             console.log(`lat: ${lat}, lon: ${lon}`);
             if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180)
                 return { lat, lon };
-            
+
             setInvalidCoords(true);
-            return undefined
+            return undefined;
         } catch (error) {
             return undefined;
         }
     };
 
-    const handleSubmit = async (event : React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const coordinates = isAddressSearchBarActive
             ? await getCoordinates(address)
@@ -94,18 +94,33 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         try {
             const factory = await createFactory(newFactory);
         } catch (error) {
-            console.error('Failed to create factory:', error);
+            console.error("Failed to create factory:", error);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} method="POST" className="w-3/4 items-center justify-center z-30">
-            <SearchModeTray setIsAddressSearchBarActive={setIsAddressSearchBarActive} isAddressSearchBarActive={isAddressSearchBarActive} setInvalidCoords={setInvalidCoords} setInvalidAddress={setInvalidAddress}/>
+        <form
+            onSubmit={handleSubmit}
+            method="POST"
+            className="w-3/4 items-center justify-center z-30"
+        >
+            <SearchModeTray
+                setIsAddressSearchBarActive={setIsAddressSearchBarActive}
+                isAddressSearchBarActive={isAddressSearchBarActive}
+                setInvalidCoords={setInvalidCoords}
+                setInvalidAddress={setInvalidAddress}
+            />
             <div className="flex flex-row p-2 rounded-full">
                 <div className="flex flex-col gap-y-2 w-full">
                     {isAddressSearchBarActive ? (
                         <div>
-                            <Image src="/icons/searchbar/search.svg" width={30} height={30} className="absolute select-none float-left justify-center self-center ml-6 mt-6" alt="maginify glass"></Image>
+                            <Image
+                                src="/icons/searchbar/search.svg"
+                                width={30}
+                                height={30}
+                                className="absolute select-none float-left justify-center self-center ml-6 mt-6"
+                                alt="maginify glass"
+                            />
                             <input
                                 type="text"
                                 value={address}
@@ -116,7 +131,13 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                         </div>
                     ) : (
                         <div className="flex flex-row">
-                            <Image src="/icons/searchbar/search.svg" width={30} height={30} className="absolute select-none float-left justify-center self-center ml-6 mt-0.5" alt="maginify glass"></Image>
+                            <Image
+                                src="/icons/searchbar/search.svg"
+                                width={30}
+                                height={30}
+                                className="absolute select-none float-left justify-center self-center ml-6 mt-0.5"
+                                alt="maginify glass"
+                            />
                             <div className="flex flex-row gap-x-0 w-full">
                                 <input
                                     type="text"
@@ -161,10 +182,14 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                 )}
             </div>
             {invalidCoords && (
-                <ErrorMessage message={"Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°."} />
+                <ErrorMessage message="Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°." />
             )}
             {invalidAddress && (
-                <ErrorMessage message={"We couldn't find the address that you're looking for. Please try again."} />
+                <ErrorMessage
+                    message={
+                        "We couldn't find the address that you're looking for. Please try again."
+                    }
+                />
             )}
         </form>
     );

@@ -29,7 +29,7 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	factory.FactoryId = uuid.NewString()
+	factory.FactoryID = uuid.NewString()
 
 	av, err := FactoryMarshalMap(factory)
 	if err != nil {
@@ -44,7 +44,7 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 		TableName: aws.String(TABLENAME),
 	}
 
-	if _, err := h.DynamoDB.PutItem(ctx, input); err != nil {
+	if _, err = h.DynamoDB.PutItem(ctx, input); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
 			Body:       fmt.Sprintf("Error putting item into DynamoDB: %s", err.Error()),
@@ -53,6 +53,6 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
-		Body:       fmt.Sprintf("factoryId %s created successfully", factory.FactoryId),
+		Body:       fmt.Sprintf("factoryId %s created successfully", factory.FactoryID),
 	}, nil
 }

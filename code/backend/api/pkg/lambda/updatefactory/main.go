@@ -16,18 +16,18 @@ type Location struct {
 }
 
 type Factory struct {
-	FactoryId   string   `json:"factoryId"`
+	FactoryID   string   `json:"factoryId"`
 	Name        string   `json:"name"`
 	Location    Location `json:"location"`
 	Description string   `json:"description"`
 }
 
-func factoryExists(factoryId string, svc *dynamodb.DynamoDB) (bool, error) {
+func factoryExists(factoryID string, svc *dynamodb.DynamoDB) (bool, error) {
 	input := &dynamodb.GetItemInput{
 		TableName: aws.String("Factory"),
 		Key: map[string]*dynamodb.AttributeValue{
 			"FactoryId": {
-				S: aws.String(factoryId),
+				S: aws.String(factoryID),
 			},
 		},
 	}
@@ -45,13 +45,13 @@ func HandleRequest(ctx context.Context, factory Factory) (string, error) {
 	svc := dynamodb.New(sess)
 
 	// Check if FactoryId exists
-	exists, err := factoryExists(factory.FactoryId, svc)
+	exists, err := factoryExists(factory.FactoryID, svc)
 	if err != nil {
 		return "", err
 	}
 
 	if !exists {
-		return "", fmt.Errorf("factory with ID %s does not exist", factory.FactoryId)
+		return "", fmt.Errorf("factory with ID %s does not exist", factory.FactoryID)
 	}
 
 	// Update existing item
@@ -77,7 +77,7 @@ func HandleRequest(ctx context.Context, factory Factory) (string, error) {
 		TableName: aws.String("Factory"),
 		Key: map[string]*dynamodb.AttributeValue{
 			"factoryId": {
-				S: aws.String(factory.FactoryId),
+				S: aws.String(factory.FactoryID),
 			},
 		},
 		ReturnValues:     aws.String("UPDATED_NEW"),
@@ -89,7 +89,7 @@ func HandleRequest(ctx context.Context, factory Factory) (string, error) {
 		return "", err
 	}
 
-	return factory.FactoryId, nil
+	return factory.FactoryID, nil
 }
 
 func main() {
