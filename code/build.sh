@@ -17,6 +17,7 @@ NODE_DIR="$HOME/node"
 NODE_BIN="$HOME/node/bin"
 
 check_go_exist() {
+    ls $GO_BIN
     if [ -x "$GO_BIN/go" ]; then
         INSTALLED_GO_VERSION=$($GO_BIN/go version | awk '{print $3}')
         if [ "go$GO_VERSION" = "$INSTALLED_GO_VERSION" ]; then
@@ -55,8 +56,8 @@ install_golangci_lint() {
 }
 
 check_node_exist() {
-  if [ -x "$NODE_DIR/bin/node" ]; then
-    INSTALLED_VERSION=$($NODE_DIR/bin/node -v)
+  if [ -x "$NODE_BIN/node" ]; then
+    INSTALLED_VERSION=$($NODE_BIN/node -v)
     if [ "v$NODE_VERSION" = "$INSTALLED_VERSION" ]; then
       return 0
     fi
@@ -79,21 +80,18 @@ install_node() {
 if ! check_go_exist; then
     echo "Go v$GO_VERSION is not installed. Installing now..."
     install_go
-    [ $? -eq 0 ] || exit 1
 fi
 
 # Check and install golangci-lint if necessary
 if ! check_golangci_lint_exist; then
     echo "golangci-lint v$GOLANGCI_LINT_VERSION is not installed. Installing now..."
     install_golangci_lint
-    [ $? -eq 0 ] || exit 1
 fi
 
 # Check and install Node.js if necessary
 if ! check_node_exist; then
     echo "Node.js v$NODE_VERSION is not installed. Installing now..."
     install_node
-    [ $? -eq 0 ] || exit 1
 fi
 
 # Update PATH to include the Go, Node.js, and golangci-lint binaries
