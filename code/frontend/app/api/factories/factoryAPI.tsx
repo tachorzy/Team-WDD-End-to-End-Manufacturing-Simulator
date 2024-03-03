@@ -1,12 +1,15 @@
 import axios from "axios";
 
-interface Factory {
-    factoryId: string;
+// TODO: currently the api calls are running infinitely
+
+export interface Location {
+    longitude: number;
+    latitude: number;
+}
+export interface Factory {
+    factoryId?: string; // TODO: temporarily optional?
     name: string;
-    location: {
-        longitude: number;
-        latitude: number;
-    };
+    location: Location;
     description: string;
 }
 
@@ -32,14 +35,14 @@ const getFactory = async (factoryId: string): Promise<Factory> => {
 const createFactory = async (newFactory: Factory): Promise<Factory> => {
     try {
         const payload = {
-            body: JSON.stringify(newFactory)
+            body: JSON.stringify(newFactory),
         };
-        const response = await api.post<Factory>('/factories', payload);
+        const response = await api.post<Factory>("/factories", payload);
         console.log(response);
         return response.data;
     } catch (error) {
-        console.error('Failed to add new factory:', error);
-        throw new Error('Failed to add new factory');
+        console.error("Failed to add new factory:", error);
+        throw new Error("Failed to add new factory");
     }
 };
 

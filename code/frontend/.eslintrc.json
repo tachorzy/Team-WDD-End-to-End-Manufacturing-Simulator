@@ -1,6 +1,7 @@
 {
   "extends": [
-    "wesbos/typescript"
+    "wesbos/typescript",
+    "plugin:@next/next/recommended"
   ],
   "plugins": [
     "@typescript-eslint",
@@ -28,5 +29,10 @@
         "jest": true
       }
     }
-  ]
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
 }

@@ -3,12 +3,16 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Dashboard from "../components/dashboard/Dashboard";
+import dynamic from "next/dynamic";
 import LandingPageTitle from "@/components/home/LandingPageTitle";
-import Map from "../components/home/Map.client";
-import Searchbar from "../components/home/Searchbar.client";
-import Navbar from "../components/Navbar/Navbar";
 import FactoryTable from "@/components/home/FactoryTable.client";
+import Searchbar from "@/components/home/Searchbar.client";
+import Navbar from "@/components/Navbar/Navbar";
+
+const Map = dynamic(() => import("@/components/home/Map.client"), {
+    loading: () => <p>A map is loading</p>,
+    ssr: false,
+});
 
 export default function Home() {
     const [positions, setPositions] = useState<
@@ -23,7 +27,7 @@ export default function Home() {
             <div className="flex flex-col bg-[url('/background/Grid.svg')] max-h-1/2 rounded-3xl bg-opacity-[15%]">
                 <div className="px-32">
                     <Navbar pageId="Home" />
-                    <div className="flex flex-col block items-center justify-center gap-y-5 mt-16 mx-auto overflow-hidden max-h-screen">
+                    <div className="flex flex-col items-center justify-center gap-y-5 mt-16 mx-auto overflow-hidden max-h-screen">
                         <LandingPageTitle />
                         <Image
                             src="/background/radial.svg"
