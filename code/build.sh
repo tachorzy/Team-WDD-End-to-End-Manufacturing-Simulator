@@ -32,7 +32,7 @@ install_go() {
   # Download Go tarball
   curl -o "$GO_DIR/go.tar.gz" "https://go.dev/dl/go$GO_VERSION.$GO_PLATFORM.tar.gz"
 
-  file go.tar.gz
+  file "$GO_DIR/go.tar.gz"
 
   # Extract Go tarball
   tar -xzf "$GO_DIR/go.tar.gz" -C "$GO_DIR" --strip-components=1
