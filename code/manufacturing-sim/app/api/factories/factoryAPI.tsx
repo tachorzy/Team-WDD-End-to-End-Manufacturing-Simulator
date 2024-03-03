@@ -1,5 +1,7 @@
 import axios from "axios";
 
+// TODO: currently the api calls are running infinitely
+
 export interface Location {
     longitude: number;
     latitude: number;
