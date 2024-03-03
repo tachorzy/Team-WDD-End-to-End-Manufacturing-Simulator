@@ -32,7 +32,8 @@ install_go() {
   # Download Go tarball
   curl -o "$GO_DIR/go$GO_VERSION.$GO_PLATFORM.tar.gz" "https://go.dev/dl/go$GO_VERSION.$GO_PLATFORM.tar.gz"
 
-  ls $GO_DIR
+  file go1.20.linux-amd64.tar.gz
+
   # Extract Go tarball
   tar -xzf "$GO_DIR/go$GO_VERSION.$GO_PLATFORM.tar.gz" -C "$GO_DIR" --strip-components=1
   # Clean up the tarball
