@@ -1,10 +1,10 @@
-name: Node.js CI
+name: Node
 
 on: [push]
 
 jobs:
-  build:
-
+  ci:
+    name: run node ci
     runs-on: ubuntu-latest
 
     strategy:
@@ -12,27 +12,27 @@ jobs:
         node-version: [20.x]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: './code/manufacturing-sim/package-lock.json'
+        cache-dependency-path: './code/frontend/package-lock.json'
         
     - name: Install dependencies without cache
       run: npm ci
-      working-directory: ./code/manufacturing-sim
+      working-directory: ./code/frontend
 
     - name: Linting
       run: npm run lint:fix
-      working-directory: ./code/manufacturing-sim
+      working-directory: ./code/frontend
 
     - name: Building
       run: npm run build
-      working-directory: ./code/manufacturing-sim
+      working-directory: ./code/frontend
 
     - name: Tests
       run: npm run test:coverage
-      working-directory: ./code/manufacturing-sim
+      working-directory: ./code/frontend
       

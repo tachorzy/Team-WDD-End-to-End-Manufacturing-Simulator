@@ -3,16 +3,16 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
+import { createFactory } from "@/app/api/factories/factoryAPI";
 import SearchModeTray from "./searchbar/SearchModeTray";
 import ErrorMessage from "./searchbar/ErrorMessage";
-import { createFactory } from "@/app/api/factories/factoryAPI"; // Import the missing module from the correct file path
 
 interface SearchProps {
     onSearch: (position: { lat: number; lon: number }) => void;
 }
 
 const INITIAL_ADDRESS_STATE = "";
-const INIITIAL_LATITUDE_STATE = "";
+const INITIAL_LATITUDE_STATE = "";
 const INITIAL_LONGITUDE_STATE = "";
 
 const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
@@ -55,10 +55,10 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         }
     };
 
-    const getCoodinates = async (
+    const validCoordinates = (
         inputLatitude: string,
         inputLongitude: string,
-    ): Promise<{ lat: number; lon: number } | undefined> => {
+    ): { lat: number; lon: number } | undefined => {
         try {
             const lat = Number(inputLatitude);
             const lon = Number(inputLongitude);
@@ -77,7 +77,12 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         event.preventDefault();
         const coordinates = isAddressSearchBarActive
             ? await getCoordinates(address)
-            : await getCoodinates(latitude, longitude);
+            : validCoordinates(latitude, longitude);
+
+        if (!coordinates) {
+            return;
+        }
+
         if (coordinates) {
             onSearch(coordinates);
         }
@@ -85,14 +90,14 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         const newFactory = {
             name: "New Factory",
             location: {
-                latitude: parseFloat(coordinates?.lat),
-                longitude: parseFloat(coordinates?.lon),
+                latitude: coordinates.lat,
+                longitude: coordinates.lon,
             },
             description: `New factory operating from ${coordinates?.lat}, ${coordinates?.lon}`,
         };
 
         try {
-            const factory = await createFactory(newFactory);
+            await createFactory(newFactory);
         } catch (error) {
             console.error("Failed to create factory:", error);
         }
@@ -164,7 +169,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
                     )}
                 </div>
                 {address === INITIAL_ADDRESS_STATE &&
-                longitude === INIITIAL_LATITUDE_STATE &&
+                longitude === INITIAL_LATITUDE_STATE &&
                 latitude === INITIAL_LONGITUDE_STATE ? (
                     <button
                         type="submit"

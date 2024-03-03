@@ -104,7 +104,7 @@ chmod +x build.sh
 [ $? -eq 0 ] || exit 1
 
 # Run frontend script
-cd ../../manufacturing-sim
+cd ../../frontend
 chmod +x build.sh
 ./build.sh
 [ $? -eq 0 ] || exit 1
