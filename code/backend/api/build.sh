@@ -1,5 +1,7 @@
 export GO111MODULE=on
 
+go env
+
 go clean -modcache
 [ $? -eq 0 ] || exit 1
 

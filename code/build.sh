@@ -95,13 +95,16 @@ fi
 
 # Update PATH to include the Go, Node.js, and golangci-lint binaries
 export PATH="$GO_BIN:$NODE_BIN:$GOLANGCI_LINT_BIN:$PATH"
+export GOPATH="$GO_DIR"
 
 # Run backend script
 cd backend/api
 chmod +x build.sh
 ./build.sh
+[ $? -eq 0 ] || exit 1
 
 # Run frontend script
 cd ../../manufacturing-sim
 chmod +x build.sh
 ./build.sh
+[ $? -eq 0 ] || exit 1
