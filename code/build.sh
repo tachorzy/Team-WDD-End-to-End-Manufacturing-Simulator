@@ -30,7 +30,7 @@ install_go() {
   # Create Go directory
   mkdir -p "$GO_DIR"
   # Download Go tarball
-  curl -o "$GO_DIR/go.tar.gz" "https://go.dev/dl/go$GO_VERSION.$GO_PLATFORM.tar.gz"
+  curl -o "$GO_DIR/go.tar.gz" "https://dl.google.com/go/go$GO_VERSION.$GO_PLATFORM.tar.gz"
 
   file "$GO_DIR/go.tar.gz"
   cat "$GO_DIR/go.tar.gz"
