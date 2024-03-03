@@ -30,14 +30,14 @@ install_go() {
   # Create Go directory
   mkdir -p "$GO_DIR"
   # Download Go tarball
-  curl -o "$GO_DIR/go$GO_VERSION.$GO_PLATFORM.tar.gz" "https://go.dev/dl/go$GO_VERSION.$GO_PLATFORM.tar.gz"
+  curl -o "$GO_DIR/go.tar.gz" "https://go.dev/dl/go$GO_VERSION.$GO_PLATFORM.tar.gz"
 
-  file go1.20.linux-amd64.tar.gz
+  file go.tar.gz
 
   # Extract Go tarball
-  tar -xzf "$GO_DIR/go$GO_VERSION.$GO_PLATFORM.tar.gz" -C "$GO_DIR" --strip-components=1
+  tar -xzf "$GO_DIR/go.tar.gz" -C "$GO_DIR" --strip-components=1
   # Clean up the tarball
-  rm "$GO_DIR/go$GO_VERSION.$GO_PLATFORM.tar.gz"
+  rm "$GO_DIR/go.tar.gz"
 }
 
 check_golangci_lint_exist() {
@@ -71,11 +71,11 @@ install_node() {
   # Create Node.js directory
   mkdir -p "$NODE_DIR"
   # Download Node.js tarball
-  curl -o "$NODE_DIR/node-$NODE_VERSION-$PLATFORM.tar.xz" "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-$PLATFORM.tar.xz"
+  curl -o "$NODE_DIR/node.tar.xz" "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-$PLATFORM.tar.xz"
   # Extract Node.js tarball
-  tar -xJf "$NODE_DIR/node-$NODE_VERSION-$PLATFORM.tar.xz" -C "$NODE_DIR" --strip-components=1
+  tar -xJf "$NODE_DIR/node.tar.xz" -C "$NODE_DIR" --strip-components=1
   # Clean up the tarball
-  rm "$NODE_DIR/node-$NODE_VERSION-$PLATFORM.tar.xz"
+  rm "$NODE_DIR/node.tar.xz"
 }
 
 # Check and install Go if necessary
