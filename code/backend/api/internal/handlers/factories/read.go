@@ -23,9 +23,9 @@ var FactoryUnmarshalMap = attributevalue.UnmarshalMap
 var FactoryJSONMarshal = json.Marshal
 
 func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	factoryId := request.QueryStringParameters["id"]
+	factoryID := request.QueryStringParameters["id"]
 
-	if factoryId == "" {
+	if factoryID == "" {
 		input := &dynamodb.ScanInput{
 			TableName: aws.String("Factory"),
 		}
@@ -38,7 +38,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 		}
 
 		var factories []Factory
-		if err := FactoryUnmarshalListOfMaps(result.Items, &factories); err != nil {
+		if err = FactoryUnmarshalListOfMaps(result.Items, &factories); err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
 				Body:       fmt.Sprintf("Failed to unmarshal factories: %v", err),
@@ -60,7 +60,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 	}
 
 	key := map[string]types.AttributeValue{
-		"factoryId": &types.AttributeValueMemberS{Value: factoryId},
+		"factoryId": &types.AttributeValueMemberS{Value: factoryID},
 	}
 
 	input := &dynamodb.GetItemInput{
@@ -79,12 +79,12 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 	if result.Item == nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusNotFound,
-			Body:       fmt.Sprintf("Factory with ID %s not found", factoryId),
+			Body:       fmt.Sprintf("Factory with ID %s not found", factoryID),
 		}, nil
 	}
 
 	var factory Factory
-	if err := FactoryUnmarshalMap(result.Item, &factory); err != nil {
+	if err = FactoryUnmarshalMap(result.Item, &factory); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
 			Body:       fmt.Sprintf("Failed to unmarshal Record, %v", err),
