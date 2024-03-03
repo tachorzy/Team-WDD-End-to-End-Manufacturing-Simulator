@@ -18,10 +18,6 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
-      - name: Install dependencies
-        run: go get ./...
-        working-directory: ./code/backend/api
-
       - name: Build
         run: go build -o build -v ./cmd/...
         working-directory: ./code/backend/api
@@ -56,10 +52,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
-
-      - name: Install dependencies
-        run: go get ./...
-        working-directory: ./code/backend/api
 
       - name: Run tests with code coverage report
         run: go test -v ./internal/... -coverprofile="coverage.out"

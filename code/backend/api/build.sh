@@ -1,6 +1,3 @@
-go get ./...
-[ $? -eq 0 ] || exit 1
-
 go build -o build -v ./cmd/...
 [ $? -eq 0 ] || exit 1
 
