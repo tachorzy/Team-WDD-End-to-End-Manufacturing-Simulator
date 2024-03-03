@@ -16,8 +16,6 @@ const Navbar = (props: NavbarProps) => {
         { label: "Assets", link: "/" },
     ];
 
-    // const textColor = "text-[#494949]";
-
     return (
         <div className="flex flex-row items-center justify-center gap-x-[15%] xl:gap-x-[17.5%] mx-24 mt-2">
             <Image

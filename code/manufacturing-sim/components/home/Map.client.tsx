@@ -79,24 +79,27 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                 {positions.length > 0 && (
                     <ChangeView center={generateLatLng()} zoom={zoomInLevel} />
                 )}
-                {factories.map((factory, index) => (
-                    <Marker
-                        key={index}
-                        position={[
-                            factory.location.latitude,
-                            factory.location.longitude,
-                        ]}
-                        icon={customIcon}
-                    >
-                        <Popup>
-                            <div>
-                                <h3 className="font-bold">{factory.name}</h3>
-                                <p>{`Located: ${factory.location.latitude}, ${factory.location.longitude}`}</p>
-                                <p>{factory.description}</p>
-                            </div>
-                        </Popup>
-                    </Marker>
-                ))}
+                {Array.isArray(factories) &&
+                    factories.map((factory, index) => (
+                        <Marker
+                            key={index}
+                            position={[
+                                factory.location.latitude,
+                                factory.location.longitude,
+                            ]}
+                            icon={customIcon}
+                        >
+                            <Popup>
+                                <div>
+                                    <h3 className="font-bold">
+                                        {factory.name}
+                                    </h3>
+                                    <p>{`Located: ${factory.location.latitude}, ${factory.location.longitude}`}</p>
+                                    <p>{factory.description}</p>
+                                </div>
+                            </Popup>
+                        </Marker>
+                    ))}
                 {positions.map((position, index) => (
                     <Marker
                         key={index}

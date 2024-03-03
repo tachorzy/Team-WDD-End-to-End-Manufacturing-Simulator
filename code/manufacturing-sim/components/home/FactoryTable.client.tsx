@@ -54,19 +54,6 @@ const FactoryTable = () => {
         });
     }
 
-    /*
-    TODO: why do we need to sort the keys?
-    function getSortedArray(arrayToSort: Factory[]) {
-        return sort.direction === "asc"
-            ? [...arrayToSort].sort((a, b) =>
-                  a[sort.key] > b[sort.key] ? 1 : -1,
-              )
-            : [...arrayToSort].sort((a, b) =>
-                  a[sort.key] < b[sort.key] ? 1 : -1,
-              );
-    }
-    */
-
     return (
         <div className="flex flex-col items-center justify-center mx-auto z-30">
             <table className="table-auto w-10/12 text-center mb-4 rounded-3xl">

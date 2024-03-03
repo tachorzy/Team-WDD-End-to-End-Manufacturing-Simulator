@@ -3,11 +3,16 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import LandingPageTitle from "@/components/home/LandingPageTitle";
 import FactoryTable from "@/components/home/FactoryTable.client";
-import Map from "../components/home/Map.client";
-import Searchbar from "../components/home/Searchbar.client";
-import Navbar from "../components/Navbar/Navbar";
+import Searchbar from "@/components/home/Searchbar.client";
+import Navbar from "@/components/Navbar/Navbar";
+
+const Map = dynamic(() => import("@/components/home/Map.client"), {
+    loading: () => <p>A map is loading</p>,
+    ssr: false,
+});
 
 export default function Home() {
     const [positions, setPositions] = useState<

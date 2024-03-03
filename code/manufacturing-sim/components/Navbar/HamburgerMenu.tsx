@@ -3,14 +3,6 @@ import Image from "next/image";
 import Sidebar from "./Sidebar.client";
 
 const HamburgerMenu: React.FC = () => (
-    /*
-    const tileData = [
-        { label: "Sites", value: 10 },
-        { label: "Gateways", value: 5 },
-        { label: "Assets", value: 100 },
-    ];
-    */
-
     <div className="flex flex-row gap-x-[82%] mt-2">
         <Image
             src="/branding/TensorIoT-Logo-Black.svg"
