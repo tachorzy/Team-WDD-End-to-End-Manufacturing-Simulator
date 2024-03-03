@@ -8,6 +8,7 @@ import Map from "../components/home/Map.client";
 import Searchbar from "../components/home/Searchbar.client";
 import Navbar from "../components/Navbar/Navbar";
 import FactoryTable from "@/components/home/FactoryTable.client";
+import NewFactoryForm from "@/components/NewFactoryForm";
 
 export default function Home() {
     const [positions, setPositions] = useState<
@@ -52,10 +53,10 @@ export default function Home() {
                             <FactoryTable />
                             <Map positions={positions} />
                         </div>
-                        {/* <Dashboard /> */}
                     </div>
                 </div>
             </div>
+            <NewFactoryForm/>
         </main>
     );
 }
