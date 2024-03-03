@@ -1,0 +1,23 @@
+linters:
+  enable:
+    - cyclop # cyclomatic complexity
+    - dupl # duplicated code
+    - errcheck # unchecked errors
+    - gosec # security
+    - gosimple # simplifying code
+    - govet # report sus constructs
+    - ineffassign # unused assignments
+    - revive # golint replacement
+    - staticcheck # static analysis checks
+    - typecheck # check types
+    - unused # unused constants, variables, functions and types
+    - whitespace # check leading and trailing
+
+linters-settings:
+  govet:
+    enable-all: true
+    disable:
+      - fieldalignment
+    settings:
+      shadow:
+        strict: true

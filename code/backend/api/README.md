@@ -13,12 +13,22 @@ This is our serverless REST API.
 Make sure you have the following on your machine:
 - Go - [Download & Install](https://go.dev/dl/)
 
+Make sure you have the golangci tool, here is the command:
+```bash
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.0
+```
+
 Make sure you have a zip tool, here is the recommended:
 ```bash
-go.exe install github.com/aws/aws-lambda-go/cmd/build-lambda-zip@latest
+go install github.com/aws/aws-lambda-go/cmd/build-lambda-zip@latest
 ```
 
 ## Usage
+
+Lint:
+```bash
+golangci-lint run ./...
+```
 
 Generate code coverage report:
 ```bash

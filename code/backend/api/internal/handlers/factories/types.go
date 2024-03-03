@@ -13,7 +13,7 @@ type Location struct {
 }
 
 type Factory struct {
-	FactoryId   string   `json:"factoryId" dynamodbav:"factoryId"`
+	FactoryID   string   `json:"factoryId" dynamodbav:"factoryId"`
 	Name        string   `json:"name" dynamodbav:"name"`
 	Location    Location `json:"location" dynamodbav:"location"`
 	Description string   `json:"description" dynamodbav:"description"`
