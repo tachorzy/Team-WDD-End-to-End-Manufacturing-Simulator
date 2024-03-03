@@ -17,9 +17,9 @@ func NewDeleteFactoryHandler(db DynamoDBClient) *Handler {
 }
 
 func (h Handler) HandleDeleteFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	factoryId := request.QueryStringParameters["id"]
+	factoryID := request.QueryStringParameters["id"]
 
-	if factoryId == "" {
+	if factoryID == "" {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
 			Body:       "Missing factory 'id' in query string parameters.",
@@ -27,7 +27,7 @@ func (h Handler) HandleDeleteFactoryRequest(ctx context.Context, request events.
 	}
 
 	key := map[string]types.AttributeValue{
-		"factoryId": &types.AttributeValueMemberS{Value: factoryId},
+		"factoryId": &types.AttributeValueMemberS{Value: factoryID},
 	}
 
 	input := &dynamodb.DeleteItemInput{
@@ -44,6 +44,6 @@ func (h Handler) HandleDeleteFactoryRequest(ctx context.Context, request events.
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
-		Body:       fmt.Sprintf("factoryId %s deleted successfully", factoryId),
+		Body:       fmt.Sprintf("factoryId %s deleted successfully", factoryID),
 	}, nil
 }

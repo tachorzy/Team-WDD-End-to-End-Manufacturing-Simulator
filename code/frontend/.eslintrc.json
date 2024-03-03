@@ -1,0 +1,38 @@
+{
+  "extends": [
+    "wesbos/typescript",
+    "plugin:@next/next/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "import"
+  ],
+  "rules": {
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto",
+        "tabWidth": 4
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "tests/**/*"
+      ],
+      "env": {
+        "jest": true
+      }
+    }
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
+}

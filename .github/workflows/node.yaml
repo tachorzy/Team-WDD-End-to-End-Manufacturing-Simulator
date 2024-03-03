@@ -1,0 +1,38 @@
+name: Node
+
+on: [push]
+
+jobs:
+  ci:
+    name: run node ci
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: './code/frontend/package-lock.json'
+        
+    - name: Install dependencies without cache
+      run: npm ci
+      working-directory: ./code/frontend
+
+    - name: Linting
+      run: npm run lint:fix
+      working-directory: ./code/frontend
+
+    - name: Building
+      run: npm run build
+      working-directory: ./code/frontend
+
+    - name: Tests
+      run: npm run test:coverage
+      working-directory: ./code/frontend
+      
