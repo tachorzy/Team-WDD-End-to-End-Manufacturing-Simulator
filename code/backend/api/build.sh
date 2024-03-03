@@ -1,4 +1,6 @@
-go clean -cache
+export GO111MODULE=on
+
+go clean -modcache
 [ $? -eq 0 ] || exit 1
 
 go build -o build -v ./cmd/...
