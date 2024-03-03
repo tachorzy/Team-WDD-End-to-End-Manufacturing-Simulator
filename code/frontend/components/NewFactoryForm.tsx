@@ -7,6 +7,8 @@ import Image from "next/image";
 const NewFactoryForm = () => {
 
     const [isVisible, setVisibility] = useState(true)
+    const [factoryName, setFactoryName] = useState("")
+    const [factoryDescription, setFactoryDescription] = useState("")
 
     return (
         <div className="w-full absolute h-full items-center justify-center m-auto">
