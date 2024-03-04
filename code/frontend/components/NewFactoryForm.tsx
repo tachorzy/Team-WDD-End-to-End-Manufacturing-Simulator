@@ -12,10 +12,9 @@ const NewFactoryForm = () => {
 
     return (
         <div className="w-full absolute h-full items-center justify-center m-auto">
-            
             {isVisible &&
                 <>
-                    <form className="w-[50%] h-96 flex flex-col absolute bg-white rounded-3xl shadow-xl z-50 mx-[25%] my-[85%] px-4 items-center justify-center gap-y-6">
+                    <form className="w-[50%] h-96 flex flex-col relative bg-white rounded-3xl shadow-xl z-50 mx-[25%] my-[85%] px-4 items-center justify-center gap-y-6">
                         <Image
                             src="/icons/navbar/close.svg"
                             onClick={() => setVisibility(false)}
@@ -25,7 +24,7 @@ const NewFactoryForm = () => {
                             alt="close icon"
                         />
                        <h1 className="text-black text-3xl font-semibold my-3">Provide your factory details</h1>
-                       <div className="w-9/12">
+                       <div className="w-9/12 z-30">
                             <Image
                                 src="/icons/navbar/factory.svg"
                                 width={30}
@@ -44,7 +43,7 @@ const NewFactoryForm = () => {
                                 className="rounded-full w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 bg-neutral-200"
                             />
                        </div>
-                       <div className="w-9/12">
+                       <div className="w-9/12 z-30">
                             <Image
                                 src="/icons/navbar/factory.svg"
                                 width={30}
@@ -64,10 +63,11 @@ const NewFactoryForm = () => {
                        </div>
                        <button
                         type="submit"
-                        className="w-1/4 rounded-full bg-gradient-to-br from-DarkGray to-black dark:text-white py-3 px-6 font-bold inactive text-[#494949] hover:scale-[101.5%] transform transition duration-500"
+                        className="w-1/4 rounded-full z-30 bg-gradient-to-br from-DarkGray to-black dark:text-white py-3 px-6 font-bold inactive text-[#494949] hover:scale-[101.5%] transform transition duration-500"
                         >
                             Create
                         </button>
+                        <Image src="/branding/Tensor-Cube.svg" width={250} height={250} className="absolute z-10 opacity-5 bottom-0 right-0" alt="tensor branding"/>
                     </form>
                     <span className="bg-black/70 fixed w-full h-full z-30 top-0 left-0"/>
                 </>
