@@ -6,14 +6,18 @@ import Image from "next/image";
 import { createFactory } from "@/app/api/factories/factoryAPI";
 import ErrorMessage from "./searchbar/ErrorMessage";
 
-const NewFactoryForm = (props: { latitude: number; longitude: number }) => {
-    const [isVisible, setVisibility] = useState(true);
+const NewFactoryForm = (props: {
+    latitude: number;
+    longitude: number;
+    visibility: boolean;
+}) => {
+    const { latitude, longitude, visibility } = props;
+
+    const [isVisible, setVisibility] = useState(visibility);
     const [factoryName, setFactoryName] = useState("");
     const [factoryDescription, setFactoryDescription] = useState("");
     const [invalidName, setInvalidName] = useState(false);
     const [invalidDescription, setInvalidDescription] = useState(false);
-
-    const { latitude, longitude } = props;
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
