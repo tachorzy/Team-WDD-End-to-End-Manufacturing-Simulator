@@ -1,4 +1,4 @@
-import localFont from 'next/font/local'
+import localFont from "next/font/local";
 
 // export const interTightRegular = localFont({
 //     src: '../fonts/inter-tight/InterTight-Regular.ttf',

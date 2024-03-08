@@ -6,7 +6,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import LandingPageTitle from "@/components/home/LandingPageTitle";
 import FactoryTable from "@/components/home/FactoryTable.client";
-import NewFactoryForm from "@/components/NewFactoryForm";
+import NewFactoryForm from "@/components/home/NewFactoryForm";
 import Searchbar from "@/components/home/Searchbar.client";
 import Navbar from "@/components/Navbar/Navbar";
 
@@ -61,7 +61,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <NewFactoryForm/>
+            <NewFactoryForm />
         </main>
     );
 }
