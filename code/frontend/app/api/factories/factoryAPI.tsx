@@ -1,31 +1,25 @@
-import axios from "axios";
+import { Factory, ApiResponse } from "@/app/types/types";
 
-// TODO: currently the api calls are running infinitely
+const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
-export interface Location {
-    longitude: number;
-    latitude: number;
-}
-export interface Factory {
-    factoryId?: string; // TODO: temporarily optional?
-    name: string;
-    location: Location;
-    description: string;
-}
-
-const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_AWS_ENDPOINT,
+const requestOptions: RequestInit = {
     headers: {
         "Content-Type": "application/json",
     },
-});
+};
 
 const getFactory = async (factoryId: string): Promise<Factory> => {
     try {
-        const response = await api.get<Factory>("/factories", {
-            params: { factoryId },
-        });
-        return response.data;
+        const response = await fetch(
+            `${BASE_URL}/factories?factoryId=${factoryId}`,
+            requestOptions,
+        );
+        if (!response.ok) {
+            throw new Error(
+                `Failed to fetch factory with ID ${factoryId}: ${response.statusText}`,
+            );
+        }
+        return (await response.json()) as Factory;
     } catch (error) {
         console.error(`Failed to fetch factory with ID ${factoryId}:`, error);
         throw new Error(`Failed to fetch factory with ID ${factoryId}`);
@@ -34,12 +28,17 @@ const getFactory = async (factoryId: string): Promise<Factory> => {
 
 const createFactory = async (newFactory: Factory): Promise<Factory> => {
     try {
-        const payload = {
+        const response = await fetch(`${BASE_URL}/factories`, {
+            ...requestOptions,
+            method: "POST",
             body: JSON.stringify(newFactory),
-        };
-        const response = await api.post<Factory>("/factories", payload);
-        console.log(response);
-        return response.data;
+        });
+        if (!response.ok) {
+            throw new Error(
+                `Failed to add new factory: ${response.statusText}`,
+            );
+        }
+        return (await response.json()) as Factory;
     } catch (error) {
         console.error("Failed to add new factory:", error);
         throw new Error("Failed to add new factory");
@@ -48,9 +47,15 @@ const createFactory = async (newFactory: Factory): Promise<Factory> => {
 
 const getAllFactories = async (): Promise<Factory[]> => {
     try {
-        const response = await api.get<Factory[]>("/factories");
-        console.log("API Response:", response.data);
-        return response.data;
+        const response = await fetch(`${BASE_URL}/factories`, requestOptions);
+        if (!response.ok) {
+            throw new Error(
+                `Failed to fetch all factories: ${response.statusText}`,
+            );
+        }
+        const responseBody = (await response.json()) as ApiResponse;
+        const data = JSON.parse(responseBody.body) as Factory[];
+        return data;
     } catch (error) {
         console.error("Failed to fetch all factories: ", error);
         throw new Error("Failed to fetch all factories.");
