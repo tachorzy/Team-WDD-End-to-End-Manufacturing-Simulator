@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-// import Link from "next/link";
 import Image from "next/image";
 import { createFactory } from "@/app/api/factories/factoryAPI";
 import ErrorMessage from "./searchbar/ErrorMessage";
@@ -9,11 +8,9 @@ import ErrorMessage from "./searchbar/ErrorMessage";
 const NewFactoryForm = (props: {
     latitude: number;
     longitude: number;
-    visibility: boolean;
     setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const { latitude, longitude, visibility, setQueryMade } = props;
-
+    const { latitude, longitude, setQueryMade } = props;
     const [isVisible, setVisibility] = useState(true);
     const [factoryName, setFactoryName] = useState("");
     const [factoryDescription, setFactoryDescription] = useState("");

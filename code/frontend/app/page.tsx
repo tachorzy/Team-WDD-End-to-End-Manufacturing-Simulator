@@ -50,7 +50,10 @@ export default function Home() {
                             id="searchbar"
                             className="flex flex-col w-full items-center justify-center"
                         >
-                            <Searchbar onSearch={handleNewLocation} setQueryMade={setQueryMade}/>
+                            <Searchbar
+                                onSearch={handleNewLocation}
+                                setQueryMade={setQueryMade}
+                            />
                         </span>
                         <div className="w-full rounded-full mb-4">
                             <h1 className="mx-24 mb-0.5 text-DarkBlue text-3xl font-semibold">
@@ -61,9 +64,7 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
-                {isQueryMade && 
-                    <NewFactoryForm latitude={0} longitude={0}/>
-                }
+                {isQueryMade && <NewFactoryForm latitude={0} longitude={0} />}
             </div>
         </main>
     );
