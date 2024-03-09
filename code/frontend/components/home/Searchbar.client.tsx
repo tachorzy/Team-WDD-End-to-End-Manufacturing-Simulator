@@ -9,13 +9,14 @@ import ErrorMessage from "./searchbar/ErrorMessage";
 
 interface SearchProps {
     onSearch: (position: { lat: number; lon: number }) => void;
+    setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const INITIAL_ADDRESS_STATE = "";
 const INITIAL_LATITUDE_STATE = "";
 const INITIAL_LONGITUDE_STATE = "";
 
-const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
+const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
     const [isAddressSearchBarActive, setIsAddressSearchBarActive] =
         useState(true);
     const [address, setAddress] = useState(INITIAL_ADDRESS_STATE);
@@ -84,6 +85,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch }) => {
         }
 
         if (coordinates) {
+            setQueryMade(true)
             onSearch(coordinates);
         }
 

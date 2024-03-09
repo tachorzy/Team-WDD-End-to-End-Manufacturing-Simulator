@@ -10,10 +10,11 @@ const NewFactoryForm = (props: {
     latitude: number;
     longitude: number;
     visibility: boolean;
+    setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const { latitude, longitude, visibility } = props;
+    const { latitude, longitude, visibility, setQueryMade } = props;
 
-    const [isVisible, setVisibility] = useState(visibility);
+    const [isVisible, setVisibility] = useState(true);
     const [factoryName, setFactoryName] = useState("");
     const [factoryDescription, setFactoryDescription] = useState("");
     const [invalidName, setInvalidName] = useState(false);
@@ -34,6 +35,7 @@ const NewFactoryForm = (props: {
         };
         try {
             await createFactory(newFactory);
+            setQueryMade(false);
         } catch (error) {
             console.error("Failed to create factory:", error);
         }
