@@ -64,7 +64,13 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
-                {isQueryMade && <NewFactoryForm latitude={0} longitude={0} />}
+                {isQueryMade && (
+                    <NewFactoryForm
+                        latitude={0}
+                        longitude={0}
+                        setQueryMade={setQueryMade}
+                    />
+                )}
             </div>
         </main>
     );
