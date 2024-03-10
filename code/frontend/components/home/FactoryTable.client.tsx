@@ -27,7 +27,6 @@ const FactoryTable = () => {
             try {
                 const response = await getAllFactories();
                 setFacilities(response);
-                console.log(response);
             } catch (error) {
                 console.error("Error fetching factories:", error);
             }

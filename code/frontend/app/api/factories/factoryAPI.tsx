@@ -49,7 +49,6 @@ const createFactory = async (newFactory: Factory): Promise<Factory> => {
 const getAllFactories = async (): Promise<Factory[]> => {
     try {
         const response = await api.get<Factory[]>("/factories");
-        console.log("API Response:", response.data);
         return response.data;
     } catch (error) {
         console.error("Failed to fetch all factories: ", error);

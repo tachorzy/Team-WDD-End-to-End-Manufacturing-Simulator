@@ -53,7 +53,6 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
             try {
                 const response = await getAllFactories();
                 setFactories(response);
-                console.log(factories);
             } catch (error) {
                 console.error("Error fetching factories:", error);
             }
