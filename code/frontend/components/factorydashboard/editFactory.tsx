@@ -36,10 +36,6 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
             setInvalidName(true);
             return;
         }
-        if (formData.description?.length > 200) {
-            setInvalidDescription(true);
-            return;
-        }
 
         try {
             // to be continued...will update with update factory endpoint soon slayyyy
