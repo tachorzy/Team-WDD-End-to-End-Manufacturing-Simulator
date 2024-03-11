@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-
-import {
-    Factory,
-    Location,
-    getAllFactories,
-} from "@/app/api/factories/factoryAPI";
+import { getAllFactories } from "@/app/api/factories/factoryAPI";
+import { Factory, Location } from "@/app/types/types";
 import Caret from "./table/Caret";
 
 interface Header {
@@ -102,7 +98,9 @@ const FactoryTable = () => {
                                                     : "longitude"
                                             ];
                                     } else {
-                                        cellValue = facility[header.id];
+                                        cellValue = facility[
+                                            header.id as keyof Factory
+                                        ] as string | number | undefined;
                                     }
                                     return (
                                         <td

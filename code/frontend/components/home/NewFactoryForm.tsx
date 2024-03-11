@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-// import Link from "next/link";
 import Image from "next/image";
 import { createFactory } from "@/app/api/factories/factoryAPI";
+import { Factory } from "@/app/types/types";
 import ErrorMessage from "./searchbar/ErrorMessage";
 
 const NewFactoryForm = (props: {
@@ -11,8 +11,9 @@ const NewFactoryForm = (props: {
     longitude: number;
     visibility: boolean;
     setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
+    onFactorySubmit: (position: { lat: number; lon: number }) => void;
 }) => {
-    const { latitude, longitude, visibility, setQueryMade } = props;
+    const { latitude, longitude, visibility, setQueryMade, onFactorySubmit } = props;
 
     const [isVisible, setVisibility] = useState(true);
     const [factoryName, setFactoryName] = useState("");
@@ -22,26 +23,34 @@ const NewFactoryForm = (props: {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (factoryName === "") setInvalidName(true);
-        else if (factoryDescription.length > 200) setInvalidDescription(true);
+        if (factoryName === "" || factoryDescription.length > 200) {
+            setInvalidName(factoryName === "");
+            setInvalidDescription(factoryDescription.length > 200);
+            return; 
+        }
 
-        const newFactory = {
+      
+        const newFactory: Factory = {
             name: factoryName,
             location: {
-                latitude,
-                longitude,
+                latitude: Number(latitude), 
+                longitude: Number(longitude),
             },
             description: factoryDescription,
         };
+
         try {
             await createFactory(newFactory);
+            onFactorySubmit({ lat: latitude, lon: longitude });
             setQueryMade(false);
+            setVisibility(false);
         } catch (error) {
             console.error("Failed to create factory:", error);
         }
     };
 
-    return (
+
+    return   (
         <div className="w-full absolute h-full items-center justify-center m-auto">
             {isVisible && (
                 <>

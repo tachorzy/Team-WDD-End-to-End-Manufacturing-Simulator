@@ -4,7 +4,9 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
-import { getAllFactories, Factory } from "@/app/api/factories/factoryAPI";
+import { getAllFactories } from "@/app/api/factories/factoryAPI";
+import { Factory } from "@/app/types/types";
+import Link from "next/link";
 import "leaflet/dist/leaflet.css";
 
 interface Coordinate {
@@ -59,7 +61,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
         };
 
         fetchFactories();
-    }, [factories]);
+    }, []);
 
     function generateLatLng() {
         const coordinate = positions[positions.length - 1];
@@ -95,6 +97,11 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                                     </h3>
                                     <p>{`Located: ${factory.location.latitude}, ${factory.location.longitude}`}</p>
                                     <p>{factory.description}</p>
+                                    <Link
+                                        href={`/factorydashboard/${factory.factoryId}`}
+                                    >
+                                        View Factory
+                                    </Link>
                                 </div>
                             </Popup>
                         </Marker>

@@ -74,37 +74,22 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
         }
     };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+    
+        // Determine coordinates from either address or manual input
         const coordinates = isAddressSearchBarActive
             ? await getCoordinates(address)
             : validCoordinates(latitude, longitude);
-
-        if (!coordinates) {
-            return;
-        }
-
+    
         if (coordinates) {
-            setQueryMade(true)
-            onSearch(coordinates);
-        }
-
-        const newFactory = {
-            name: "New Factory",
-            location: {
-                latitude: coordinates.lat,
-                longitude: coordinates.lon,
-            },
-            description: `New factory operating from ${coordinates?.lat}, ${coordinates?.lon}`,
-        };
-
-        try {
-            await createFactory(newFactory);
-        } catch (error) {
-            console.error("Failed to create factory:", error);
+            setQueryMade(true); 
+            onSearch(coordinates); 
+        } else {
+            isAddressSearchBarActive ? setInvalidAddress(true) : setInvalidCoords(true);
         }
     };
-
+    
     return (
         <form
             onSubmit={handleSubmit}
