@@ -8,6 +8,7 @@ import LandingPageTitle from "@/components/home/LandingPageTitle";
 import FactoryTable from "@/components/home/FactoryTable.client";
 import Searchbar from "@/components/home/Searchbar.client";
 import Navbar from "@/components/Navbar/Navbar";
+import NewFactoryForm from "@/components/home/NewFactoryForm";
 
 const Map = dynamic(() => import("@/components/home/Map.client"), {
     loading: () => <p>A map is loading</p>,
@@ -18,6 +19,7 @@ export default function Home() {
     const [positions, setPositions] = useState<
         Array<{ lat: number; lon: number }>
     >([]);
+    const [isQueryMade, setQueryMade] = useState(false);
     const handleNewLocation = (newPosition: { lat: number; lon: number }) => {
         setPositions((prevPositions) => [...prevPositions, newPosition]);
     };
@@ -48,7 +50,10 @@ export default function Home() {
                             id="searchbar"
                             className="flex flex-col w-full items-center justify-center"
                         >
-                            <Searchbar onSearch={handleNewLocation} />
+                            <Searchbar
+                                onSearch={handleNewLocation}
+                                setQueryMade={setQueryMade}
+                            />
                         </span>
                         <div className="w-full rounded-full mb-4">
                             <h1 className="mx-24 mb-0.5 text-DarkBlue text-3xl font-semibold">
@@ -57,9 +62,15 @@ export default function Home() {
                             <FactoryTable />
                             <Map positions={positions} />
                         </div>
-                        {/* <Dashboard /> */}
                     </div>
                 </div>
+                {isQueryMade && (
+                    <NewFactoryForm
+                        latitude={0}
+                        longitude={0}
+                        setQueryMade={setQueryMade}
+                    />
+                )}
             </div>
         </main>
     );
