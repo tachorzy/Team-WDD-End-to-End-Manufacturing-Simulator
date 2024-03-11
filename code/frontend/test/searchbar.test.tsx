@@ -97,7 +97,7 @@ describe('Searchbar Component', () => {
     });
   });
 
-  // Add more test cases based on your component's behavior
+
 
   // Test cases for SearchModeTray
   test('should switch to address search mode when Address button is clicked', () => {
@@ -111,7 +111,6 @@ describe('Searchbar Component', () => {
     );
 
     fireEvent.click(getByText('Address'));
-    // Add expectations based on your component's behavior
   });
 
   test('should switch to coordinates search mode when Coordinates button is clicked', () => {
@@ -125,7 +124,6 @@ describe('Searchbar Component', () => {
     );
 
     fireEvent.click(getByText('Coordinates'));
-    // Add expectations based on your component's behavior
   });
 
  
