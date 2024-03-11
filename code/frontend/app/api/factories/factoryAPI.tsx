@@ -15,8 +15,7 @@ const getFactory = async (factoryId: string): Promise<Factory> => {
             requestOptions,
         );
         if (!response.ok) {
-            
-            throw new Error(               
+            throw new Error(
                 `Failed to fetch factory with ID ${factoryId}: ${response.statusText}`,
             );
         }
@@ -37,19 +36,17 @@ const createFactory = async (newFactory: Factory): Promise<Factory> => {
 
         if (!response.ok) {
             console.log(response);
-            throw new Error(`Failed to add new factory: ${response.statusText}`);
+            throw new Error(
+                `Failed to add new factory: ${response.statusText}`,
+            );
         }
 
-    
         return (await response.json()) as Factory;
     } catch (error) {
         console.error("Failed to add new factory:", error);
         throw new Error("Failed to add new factory");
     }
 };
-
-
-
 
 const getAllFactories = async (): Promise<Factory[]> => {
     try {

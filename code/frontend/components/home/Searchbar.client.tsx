@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import { createFactory } from "@/app/api/factories/factoryAPI";
 import SearchModeTray from "./searchbar/SearchModeTray";
 import ErrorMessage from "./searchbar/ErrorMessage";
 
@@ -74,22 +73,24 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
         }
     };
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-    
+
         // Determine coordinates from either address or manual input
         const coordinates = isAddressSearchBarActive
             ? await getCoordinates(address)
             : validCoordinates(latitude, longitude);
-    
+
         if (coordinates) {
-            setQueryMade(true); 
-            onSearch(coordinates); 
+            setQueryMade(true);
+            onSearch(coordinates);
+        } else if (isAddressSearchBarActive) {
+            setInvalidAddress(true);
         } else {
-            isAddressSearchBarActive ? setInvalidAddress(true) : setInvalidCoords(true);
+            setInvalidCoords(true);
         }
     };
-    
+
     return (
         <form
             onSubmit={handleSubmit}

@@ -1,21 +1,23 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+
 
 const SearchModeButton = (props: {
     isAddressSearchBarActive: boolean;
     setIsAddressSearchBarActive: React.Dispatch<React.SetStateAction<boolean>>;
     setInvalidInput: React.Dispatch<React.SetStateAction<boolean>>;
-}) => { 
-    const {isAddressSearchBarActive, setIsAddressSearchBarActive, setInvalidInput} = props;
+}) => {
+    const {
+        isAddressSearchBarActive,
+        setIsAddressSearchBarActive,
+        setInvalidInput,
+    } = props;
     return (
         <div className="flex flex-row rounded w-80">
             <button
                 type="button"
                 onClick={() => {
-                    setIsAddressSearchBarActive(
-                        !isAddressSearchBarActive,
-                    );
+                    setIsAddressSearchBarActive(!isAddressSearchBarActive);
                     setInvalidInput(false);
                 }}
                 className={`${
@@ -36,9 +38,7 @@ const SearchModeButton = (props: {
             <button
                 type="button"
                 onClick={() => {
-                    setIsAddressSearchBarActive(
-                        !isAddressSearchBarActive,
-                    );
+                    setIsAddressSearchBarActive(!isAddressSearchBarActive);
                     setInvalidInput(false);
                 }}
                 className={`${
@@ -58,6 +58,6 @@ const SearchModeButton = (props: {
             </button>
         </div>
     );
-}
+};
 
 export default SearchModeButton;

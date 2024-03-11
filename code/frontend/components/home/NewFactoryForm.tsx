@@ -13,7 +13,8 @@ const NewFactoryForm = (props: {
     setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
     onFactorySubmit: (position: { lat: number; lon: number }) => void;
 }) => {
-    const { latitude, longitude, visibility, setQueryMade, onFactorySubmit } = props;
+    const { latitude, longitude, visibility, setQueryMade, onFactorySubmit } =
+        props;
 
     const [isVisible, setVisibility] = useState(true);
     const [factoryName, setFactoryName] = useState("");
@@ -26,14 +27,13 @@ const NewFactoryForm = (props: {
         if (factoryName === "" || factoryDescription.length > 200) {
             setInvalidName(factoryName === "");
             setInvalidDescription(factoryDescription.length > 200);
-            return; 
+            return;
         }
 
-      
         const newFactory: Factory = {
             name: factoryName,
             location: {
-                latitude: Number(latitude), 
+                latitude: Number(latitude),
                 longitude: Number(longitude),
             },
             description: factoryDescription,
@@ -49,8 +49,7 @@ const NewFactoryForm = (props: {
         }
     };
 
-
-    return   (
+    return (
         <div className="w-full absolute h-full items-center justify-center m-auto">
             {isVisible && (
                 <>
