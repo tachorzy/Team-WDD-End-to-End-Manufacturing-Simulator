@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"net/http"
 	"testing"
 )
@@ -55,6 +56,31 @@ func TestHandleUpdateFactoryRequest_UpdateExpressionBuilderError(t *testing.T) {
 	}
 
 	if response.StatusCode != http.StatusInternalServerError {
-		t.Errorf("Expected StatusCode %d for , got %d", http.StatusInternalServerError, response.StatusCode)
+		t.Errorf("Expected StatusCode %d for building update expression, got %d", http.StatusInternalServerError, response.StatusCode)
+	}
+}
+
+func TestHandleUpdateFactoryRequest_UpdateItemError(t *testing.T) {
+	mockDDBClient := &MockDynamoDBClient{
+		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
+			return nil, errors.New("mock dynamodb error")
+		},
+	}
+
+	handler := NewUpdateFactoryHandler(mockDDBClient)
+
+	request := events.APIGatewayProxyRequest{
+		Body: `{"factoryId": "1", "name":"Test Factory","location":{"longitude":10,"latitude":20},"description":"Test Description"}`,
+	}
+
+	ctx := context.Background()
+	response, err := handler.HandleUpdateFactoryRequest(ctx, request)
+
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected StatusCode %d for DynamoDB update item error, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
