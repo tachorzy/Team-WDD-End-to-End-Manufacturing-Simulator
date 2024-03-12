@@ -63,4 +63,23 @@ const getAllFactories = async (): Promise<Factory[]> => {
     }
 };
 
-export { getFactory, createFactory, getAllFactories };
+const updateFactory = async (factoryData: Factory): Promise<Factory> => {
+    const response = await fetch(
+        `${BASE_URL}/factories/id=${factoryData.factoryId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(factoryData),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(`Failed to update factory: ${response.statusText}`);
+    }
+
+    return (await response.json()) as Factory;
+};
+
+export { getFactory, createFactory, getAllFactories, updateFactory };
