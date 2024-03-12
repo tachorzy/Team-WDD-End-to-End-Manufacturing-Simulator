@@ -18,6 +18,10 @@ func NewUpdateFactoryHandler(db DynamoDBClient) *Handler {
 	}
 }
 
+var UpdateExpressionBuilder = func(update expression.UpdateBuilder) (expression.Expression, error) {
+	return expression.NewBuilder().WithUpdate(update).Build()
+}
+
 func (h Handler) HandleUpdateFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var factory Factory
 	if err := json.Unmarshal([]byte(request.Body), &factory); err != nil {
@@ -36,7 +40,7 @@ func (h Handler) HandleUpdateFactoryRequest(ctx context.Context, request events.
 	update.Set(expression.Name("location.longitude"), expression.Value(factory.Location.Longitude))
 	update.Set(expression.Name("location.latitude"), expression.Value(factory.Location.Latitude))
 
-	expr, err := expression.NewBuilder().WithUpdate(update).Build()
+	expr, err := UpdateExpressionBuilder(update)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
