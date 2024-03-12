@@ -85,7 +85,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
         }
 
         if (coordinates) {
-            setQueryMade(true)
+            setQueryMade(true);
             onSearch(coordinates);
         }
 
