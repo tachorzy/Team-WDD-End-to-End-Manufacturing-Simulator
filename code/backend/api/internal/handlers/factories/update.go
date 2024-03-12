@@ -35,12 +35,23 @@ func (h Handler) HandleUpdateFactoryRequest(ctx context.Context, request events.
 		"factoryId": &types.AttributeValueMemberS{Value: factory.FactoryID},
 	}
 
-	update := expression.Set(expression.Name("name"), expression.Value(factory.Name))
-	update.Set(expression.Name("description"), expression.Value(factory.Description))
-	update.Set(expression.Name("location.longitude"), expression.Value(factory.Location.Longitude))
-	update.Set(expression.Name("location.latitude"), expression.Value(factory.Location.Latitude))
+	var updateBuilder expression.UpdateBuilder
+	if factory.Name != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("name"), expression.Value(*factory.Name))
+	}
+	if factory.Description != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("description"), expression.Value(*factory.Description))
+	}
+	if factory.Location != nil {
+		if factory.Location.Longitude != nil {
+			updateBuilder = updateBuilder.Set(expression.Name("location.longitude"), expression.Value(*factory.Location.Longitude))
+		}
+		if factory.Location.Latitude != nil {
+			updateBuilder = updateBuilder.Set(expression.Name("location.latitude"), expression.Value(*factory.Location.Latitude))
+		}
+	}
 
-	expr, err := UpdateExpressionBuilder(update)
+	expr, err := UpdateExpressionBuilder(updateBuilder)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
