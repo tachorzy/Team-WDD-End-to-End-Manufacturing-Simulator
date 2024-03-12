@@ -84,3 +84,28 @@ func TestHandleUpdateFactoryRequest_UpdateItemError(t *testing.T) {
 		t.Errorf("Expected StatusCode %d for DynamoDB update item error, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
+
+func TestHandleUpdateFactoryRequest_Success(t *testing.T) {
+	mockDDBClient := &MockDynamoDBClient{
+		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
+			return &dynamodb.UpdateItemOutput{}, nil
+		},
+	}
+
+	handler := NewUpdateFactoryHandler(mockDDBClient)
+
+	request := events.APIGatewayProxyRequest{
+		Body: `{"factoryId": "1", "name":"Test Factory","location":{"longitude":10,"latitude":20},"description":"Test Description"}`,
+	}
+
+	ctx := context.Background()
+	response, err := handler.HandleUpdateFactoryRequest(ctx, request)
+
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		t.Errorf("Expected StatusCode %d for successful update, got %d", http.StatusOK, response.StatusCode)
+	}
+}
