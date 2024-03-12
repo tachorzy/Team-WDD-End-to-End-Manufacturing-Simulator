@@ -30,11 +30,6 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 		"Content-Type":                "application/json",
 	}
 
-	responseBody, err := json.Marshal(map[string]interface{}{
-		"message":   fmt.Sprintf("factoryId %s created successfully", factory.FactoryID),
-		"factoryId": factory.FactoryID,
-	})
-
 	if err := json.Unmarshal([]byte(request.Body), &factory); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
@@ -45,6 +40,18 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 
 	factory.FactoryID = uuid.NewString()
 	factory.DateCreated = time.Now().Format(time.RFC3339)
+
+	responseBody, err := json.Marshal(map[string]interface{}{
+		"message":   fmt.Sprintf("factoryId %s created successfully", factory.FactoryID),
+		"factoryId": factory.FactoryID,
+	})
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
+			Body:       fmt.Sprintf("Error marshalling response body: %s", err.Error()),
+		}, nil
+	}
 
 	av, err := FactoryMarshalMap(factory)
 	if err != nil {

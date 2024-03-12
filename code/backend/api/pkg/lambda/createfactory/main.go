@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -15,7 +16,7 @@ type Location struct {
 }
 
 type Factory struct {
-	FactoryId   string   `json:"factoryId"`
+	FactoryID   string   `json:"factoryId"`
 	Name        string   `json:"name"`
 	Location    Location `json:"location"`
 	Description string   `json:"description"`
@@ -40,7 +41,7 @@ func HandleRequest(ctx context.Context, factory Factory) (string, error) {
 		return "", err
 	}
 
-	return factory.FactoryId, nil
+	return factory.FactoryID, nil
 }
 
 func main() {
