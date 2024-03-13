@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 
-
 const SearchModeButton = (props: {
     isAddressSearchBarActive: boolean;
     setIsAddressSearchBarActive: React.Dispatch<React.SetStateAction<boolean>>;

@@ -33,14 +33,11 @@ const createFactory = async (newFactory: Factory): Promise<Factory> => {
             method: "POST",
             body: JSON.stringify(newFactory),
         });
-
         if (!response.ok) {
-            console.log(response);
             throw new Error(
                 `Failed to add new factory: ${response.statusText}`,
             );
         }
-
         return (await response.json()) as Factory;
     } catch (error) {
         console.error("Failed to add new factory:", error);

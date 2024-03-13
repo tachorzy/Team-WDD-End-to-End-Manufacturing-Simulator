@@ -9,7 +9,6 @@ import ErrorMessage from "./searchbar/ErrorMessage";
 const NewFactoryForm = (props: {
     latitude: number;
     longitude: number;
-    visibility: boolean;
     setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
     onFactorySubmit: (position: { lat: number; lon: number }) => void;
 }) => {
