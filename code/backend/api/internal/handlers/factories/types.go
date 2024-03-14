@@ -9,8 +9,8 @@ import (
 const TABLENAME = "Factory"
 
 type Location struct {
-	Longitude float64 `json:"longitude" dynamodbav:"longitude"`
-	Latitude  float64 `json:"latitude" dynamodbav:"latitude"`
+	Longitude *float64 `json:"longitude,omitempty" dynamodbav:"longitude"`
+	Latitude  *float64 `json:"latitude,omitempty" dynamodbav:"latitude"`
 }
 
 type Factory struct {
