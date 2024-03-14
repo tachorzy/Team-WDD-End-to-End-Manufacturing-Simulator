@@ -2,6 +2,7 @@ const Caret = ({ direction }: { direction: string }) => {
     console.log(`Caret direction: ${direction}`);
     return (
         <svg
+            data-testid="caret"
             className={`w-5 h-5 py-0.5 ml-1 fill-current text-[#858A8F] ${
                 direction === "desc" ? "transform rotate-180" : ""
             }`}
