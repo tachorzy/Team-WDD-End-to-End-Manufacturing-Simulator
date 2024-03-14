@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Caret from "./table/Caret";
 import { getAllFactories } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
+import Caret from "./table/Caret";
 
 interface Header {
     id: string;

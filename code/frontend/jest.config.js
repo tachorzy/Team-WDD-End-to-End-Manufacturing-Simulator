@@ -9,6 +9,6 @@ module.exports = {
         ],
     },
     moduleNameMapper: {
-        '^@/(.*)$': '<rootDir>/app/api/factories/factoryAPI'
-    } 
+        "^@/(.*)$": "<rootDir>/app/api/factories/factoryAPI",
+    },
 };
