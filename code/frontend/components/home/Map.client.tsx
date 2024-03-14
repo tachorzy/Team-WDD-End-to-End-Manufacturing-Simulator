@@ -69,11 +69,12 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     }
 
     return (
-        <div>
+        <div className="z-10">
             <MapContainer
                 center={[37.0902, -95.7129]}
                 zoom={initialZoom}
                 style={{ height: "25rem", width: "100%" }}
+                className="z-10"
             >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 {positions.length > 0 && (
