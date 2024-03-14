@@ -189,7 +189,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
                 )}
             </div>
             {invalidCoords && (
-                <ErrorMessage message="Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°." />
+                <ErrorMessage message="Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°." icon="map-error.svg" />
             )}
             {invalidAddress && (
                 <ErrorMessage
