@@ -73,7 +73,7 @@ const NewFactoryForm = (props: {
                                 }}
                                 placeholder="Enter factory name"
                                 // bg-gradient-to-br from-MainBlue to-DarkBlue
-                                className="rounded-full w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 bg-neutral-200"
+                                className="rounded-xl w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 border-[2.5px] border-neutral-300"
                             />
                         </div>
                         <div className="w-9/12 z-30">
@@ -84,14 +84,13 @@ const NewFactoryForm = (props: {
                                 className="absolute select-none float-left justify-center self-center ml-6 mt-3.5"
                                 alt="maginify glass"
                             />
-                            <input
-                                type="text"
+                            <textarea
                                 value={factoryDescription}
                                 onChange={(e) => {
                                     setFactoryDescription(e.target.value);
                                 }}
                                 placeholder="Enter factory description (optional)"
-                                className="rounded-full w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 bg-neutral-200"
+                                className="resize-y rounded-xl w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 border-[2.5px] border-neutral-300"
                             />
                         </div>
                         <button
