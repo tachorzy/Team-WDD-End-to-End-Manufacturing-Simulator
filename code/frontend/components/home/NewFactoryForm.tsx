@@ -91,7 +91,7 @@ const NewFactoryForm = (props: {
                                     setFactoryDescription(e.target.value);
                                 }}
                                 placeholder="Enter factory description (optional)"
-                                className="resize-y min-h-20 max-h-40 rounded-xl w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 border-[2.5px] border-neutral-300"
+                                className="resize-y min-h-20 max-h-36 rounded-xl w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 border-[2.5px] border-neutral-300"
                             />
                         </div>
                         <button
