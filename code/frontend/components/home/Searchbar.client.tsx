@@ -196,6 +196,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
                     message={
                         "We couldn't find the address that you're looking for. Please try again."
                     }
+                    icon="map-error.svg" 
                 />
             )}
         </form>
