@@ -2,6 +2,7 @@ package factories
 
 import (
 	"context"
+
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
@@ -17,6 +18,7 @@ type Factory struct {
 	Name        *string   `json:"name,omitempty" dynamodbav:"name"`
 	Location    *Location `json:"location,omitempty" dynamodbav:"location"`
 	Description *string   `json:"description,omitempty" dynamodbav:"description"`
+	DateCreated string   `json:"dateCreated" dynamodbav:"Date Created"`
 }
 
 type DynamoDBClient interface {

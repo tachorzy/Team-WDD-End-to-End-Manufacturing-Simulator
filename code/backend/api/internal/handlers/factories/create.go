@@ -4,12 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/google/uuid"
-	"net/http"
 )
 
 func NewCreateFactoryHandler(db DynamoDBClient) *Handler {
@@ -22,19 +24,40 @@ var FactoryMarshalMap = attributevalue.MarshalMap
 
 func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var factory Factory
+
+	headers := map[string]string{
+		"Access-Control-Allow-Origin": "*",
+		"Content-Type":                "application/json",
+	}
+
 	if err := json.Unmarshal([]byte(request.Body), &factory); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
+			Headers:    headers,
 			Body:       fmt.Sprintf("Error parsing JSON body: %s", err.Error()),
 		}, nil
 	}
 
 	factory.FactoryID = uuid.NewString()
+	factory.DateCreated = time.Now().Format(time.RFC3339)
+
+	responseBody, err := json.Marshal(map[string]interface{}{
+		"message":   fmt.Sprintf("factoryId %s created successfully", factory.FactoryID),
+		"factoryId": factory.FactoryID,
+	})
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
+			Body:       fmt.Sprintf("Error marshalling response body: %s", err.Error()),
+		}, nil
+	}
 
 	av, err := FactoryMarshalMap(factory)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
 			Body:       fmt.Sprintf("Error marshalling factory to DynamoDB format: %s", err.Error()),
 		}, nil
 	}
@@ -47,12 +70,14 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 	if _, err = h.DynamoDB.PutItem(ctx, input); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
 			Body:       fmt.Sprintf("Error putting item into DynamoDB: %s", err.Error()),
 		}, nil
 	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
-		Body:       fmt.Sprintf("factoryId %s created successfully", factory.FactoryID),
+		Headers:    headers,
+		Body:       string(responseBody),
 	}, nil
 }

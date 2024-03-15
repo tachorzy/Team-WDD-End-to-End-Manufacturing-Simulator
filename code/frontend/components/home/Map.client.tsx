@@ -6,6 +6,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import { getAllFactories } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
+import Link from "next/link";
 import "leaflet/dist/leaflet.css";
 
 interface Coordinate {
@@ -52,15 +53,17 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     useEffect(() => {
         const fetchFactories = async () => {
             try {
-                const response = await getAllFactories();
-                setFactories(response);
+                const response = await fetch('/api/test')
+                const { data } = await response.json();
+                console.log(data)
+                setFactories(data);
             } catch (error) {
                 console.error("Error fetching factories:", error);
             }
         };
 
         fetchFactories();
-    }, [factories]);
+    }, []);
 
     function generateLatLng() {
         const coordinate = positions[positions.length - 1];
@@ -97,6 +100,11 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                                     </h3>
                                     <p>{`Located: ${factory.location.latitude}, ${factory.location.longitude}`}</p>
                                     <p>{factory.description}</p>
+                                    <Link
+                                        href={`/factorydashboard/${factory.factoryId}`}
+                                    >
+                                        View Factory
+                                    </Link>
                                 </div>
                             </Popup>
                         </Marker>

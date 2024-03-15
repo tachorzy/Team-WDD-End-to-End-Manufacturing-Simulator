@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import { createFactory } from "@/app/api/factories/factoryAPI";
 import SearchModeTray from "./searchbar/SearchModeTray";
 import ErrorMessage from "./searchbar/ErrorMessage";
 
@@ -76,32 +75,19 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        // Determine coordinates from either address or manual input
         const coordinates = isAddressSearchBarActive
             ? await getCoordinates(address)
             : validCoordinates(latitude, longitude);
 
-        if (!coordinates) {
-            return;
-        }
-
         if (coordinates) {
             setQueryMade(true);
             onSearch(coordinates);
-        }
-
-        const newFactory = {
-            name: "New Factory",
-            location: {
-                latitude: coordinates.lat,
-                longitude: coordinates.lon,
-            },
-            description: `New factory operating from ${coordinates?.lat}, ${coordinates?.lon}`,
-        };
-
-        try {
-            await createFactory(newFactory);
-        } catch (error) {
-            console.error("Failed to create factory:", error);
+        } else if (isAddressSearchBarActive) {
+            setInvalidAddress(true);
+        } else {
+            setInvalidCoords(true);
         }
     };
 

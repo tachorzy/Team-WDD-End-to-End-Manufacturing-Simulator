@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { getAllFactories } from "@/app/api/factories/factoryAPI";
+import { Factory, Location } from "@/app/types/types";
 import Caret from "./table/Caret";
 
 interface Header {
@@ -19,7 +21,9 @@ const FactoryTable = () => {
     useEffect(() => {
         const fetchFactories = async () => {
             try {
-                const response = await getAllFactories();
+                //const response = await getAllFactories();
+                const body = await fetch('/api/test')
+                const response = await body.json();
                 setFacilities(response);
             } catch (error) {
                 console.error("Error fetching factories:", error);
