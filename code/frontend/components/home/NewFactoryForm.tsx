@@ -10,6 +10,7 @@ const NewFactoryForm = (props: {
     latitude: number;
     longitude: number;
     setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
+    visibility: React.Dispatch<React.SetStateAction<boolean>>;
     onFactorySubmit: (position: { lat: number; lon: number }) => void;
 }) => {
     const { latitude, longitude, visibility, setQueryMade, onFactorySubmit } =
