@@ -20,8 +20,8 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
     const [isAddressSearchBarActive, setIsAddressSearchBarActive] =
         useState(true);
     const [address, setAddress] = useState(INITIAL_ADDRESS_STATE);
-    const [latitude, setLatitude] = useState("");
-    const [longitude, setLongitude] = useState("");
+    const [latitude, setLatitude] = useState(INITIAL_LATITUDE_STATE);
+    const [longitude, setLongitude] = useState(INITIAL_LONGITUDE_STATE);
     const [invalidCoords, setInvalidCoords] = useState(false);
     const [invalidAddress, setInvalidAddress] = useState(false);
 
@@ -175,16 +175,16 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
                 latitude === INITIAL_LONGITUDE_STATE ? (
                     <button
                         type="submit"
-                        className="rounded-r-full bg-DarkBlue border-l-[3px] border-white dark:text-white p-3 font-bold inactive text-[#494949] hover:border-MainBlue"
+                        className="disabled rounded-r-full bg-DarkBlue border-l-[3px] border-white dark:text-white p-3 font-bold inactive text-[#494949] hover:border-MainBlue"
                     >
-                        Search
+                        Create facility
                     </button>
                 ) : (
                     <button
                         type="submit"
                         className="rounded-r-full border-l-[3px] border-white bg-DarkBlue rounded p-3 font-bold transition-colors duration-700 ease-in ease-out"
                     >
-                        Search
+                        Create facility
                     </button>
                 )}
             </div>
