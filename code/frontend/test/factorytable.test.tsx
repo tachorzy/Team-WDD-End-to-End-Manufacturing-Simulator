@@ -76,38 +76,37 @@ describe("FactoryTable", () => {
         );
     });
 
-    describe("FactoryTable", () => {
-        test("displays data correctly in table cells", async () => {
-            render(<FactoryTable />);
-            await waitFor(() =>
-                expect(
-                    screen.getByText(fakeFactories[0].name),
-                ).toBeInTheDocument(),
-            );
+    test("displays data correctly in table cells", async () => {
+        render(<FactoryTable />);
+        await waitFor(() =>
+            expect(
+                screen.getByText(fakeFactories[0].name),
+            ).toBeInTheDocument(),
+        );
 
-            expect(screen.getByText(fakeFactories[0].name)).toBeInTheDocument();
-            expect(
-                screen.getByText(fakeFactories[0].lat.toString()),
-            ).toBeInTheDocument();
-            expect(
-                screen.getByText(fakeFactories[0].lon.toString()),
-            ).toBeInTheDocument();
-            expect(
-                screen.getByText(fakeFactories[0].description),
-            ).toBeInTheDocument();
+        expect(screen.getByText(fakeFactories[0].name)).toBeInTheDocument();
+        expect(
+            screen.getByText(fakeFactories[0].lat.toString()),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(fakeFactories[0].lon.toString()),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(fakeFactories[0].description),
+        ).toBeInTheDocument();
 
-            expect(screen.getByText(fakeFactories[1].name)).toBeInTheDocument();
-            expect(
-                screen.getByText(fakeFactories[1].lat.toString()),
-            ).toBeInTheDocument();
-            expect(
-                screen.getByText(fakeFactories[1].lon.toString()),
-            ).toBeInTheDocument();
-            expect(
-                screen.getByText(fakeFactories[1].description),
-            ).toBeInTheDocument();
-        });
+        expect(screen.getByText(fakeFactories[1].name)).toBeInTheDocument();
+        expect(
+            screen.getByText(fakeFactories[1].lat.toString()),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(fakeFactories[1].lon.toString()),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(fakeFactories[1].description),
+        ).toBeInTheDocument();
     });
+
 
     test("displays View all link and navigates correctly", () => {
         render(<FactoryTable />);
@@ -115,22 +114,22 @@ describe("FactoryTable", () => {
         expect(viewAllLink).toBeInTheDocument();
         expect(viewAllLink).toHaveAttribute("href", "/");
     });
-});
 
-describe("Caret component", () => {
-    it("renders with correct direction", () => {
+
+
+    test("Caret renders with correct direction", () => {
         const { getByTestId } = render(<Caret direction="desc" />);
         const caretSvg = getByTestId("caret");
         expect(caretSvg).toHaveClass("transform rotate-180");
     });
 
-    it("renders without rotation for opposite direction", () => {
+    test("Caret renders without rotation for opposite direction", () => {
         const { getByTestId } = render(<Caret direction="asc" />);
         const caretSvg = getByTestId("caret");
         expect(caretSvg).not.toHaveClass("transform rotate-180");
     });
 
-    it("logs direction when rendered", () => {
+    test("Caret logs direction when rendered", () => {
         const spy = jest.spyOn(console, "log");
         render(<Caret direction="asc" />);
         expect(spy).toHaveBeenCalledWith("Caret direction: asc");
