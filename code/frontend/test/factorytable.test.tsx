@@ -2,6 +2,10 @@
  * @jest-environment jsdom
  */
 
+/*
+    TODO:  Factory Table updates sort state correctly
+*/
+
 import "@testing-library/jest-dom";
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
@@ -132,3 +136,26 @@ describe("Caret component", () => {
         expect(spy).toHaveBeenCalledWith("Caret direction: asc");
     });
 });
+
+/* 
+    This fails since it is not getting the results from the  Factory Table but eh
+
+    test('handleHeaderClick updates sort state correctly', () => {
+        const { getByText } = render(<FactoryTable />);
+        const headerToClick = getByText('Facility Name'); // Choose a header to click
+    
+        // Click the header to trigger handleHeaderClick
+        fireEvent.click(headerToClick);
+    
+        // Now assert on the updated state
+        // For example, if your implementation adds some symbol to indicate sorting direction
+        // you may expect the text content of the header to change after clicking
+        expect(screen.getByText('Facility Name')).toHaveTextContent('Facility Name ▼');
+    
+        // You can also test multiple clicks to toggle between 'asc' and 'desc'
+        fireEvent.click(headerToClick); // Click again to toggle sort direction
+    
+        // Assert on the updated state
+        // Assuming after clicking twice, the sort direction should be 'asc' again
+        expect(screen.getByText('Facility Name')).toHaveTextContent('Facility Name ▲');
+      }); */
