@@ -44,7 +44,8 @@ const NewFactoryForm = (props: {
                 <>
                     <form
                         onSubmit={handleSubmit}
-                        className="w-[50%] h-96 flex flex-col relative bg-white rounded-3xl shadow-xl z-50 mx-[25%] my-[85%] px-4 items-center justify-center gap-y-6"
+                        method="POST"
+                        className="w-[50%] h-[60%] flex flex-col relative bg-white rounded-3xl shadow-xl z-50 mx-[25%] my-[85%] px-4 items-center justify-center gap-y-6"
                     >
                         <Image
                             src="/icons/navbar/close.svg"
@@ -90,7 +91,7 @@ const NewFactoryForm = (props: {
                                     setFactoryDescription(e.target.value);
                                 }}
                                 placeholder="Enter factory description (optional)"
-                                className="resize-y rounded-xl w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 border-[2.5px] border-neutral-300"
+                                className="resize-y min-h-20 max-h-40 rounded-xl w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 border-[2.5px] border-neutral-300"
                             />
                         </div>
                         <button
