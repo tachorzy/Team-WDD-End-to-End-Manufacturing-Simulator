@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Factory } from "@/app/types/types";
-import { getFactory } from "@/app/api/factories/factoryAPI";
 import { usePathname } from "next/navigation";
-
 import EditFactoryForm from "./editFactory";
+
+const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
 const Header: React.FC = () => {
     const navigation = usePathname();
@@ -12,31 +12,27 @@ const Header: React.FC = () => {
 
     useEffect(() => {
         const fetchFactory = async () => {
-            if (typeof window !== "undefined") {
-                const factoryId = navigation.split("/")[2];
-                if (factoryId && typeof factoryId === "string") {
-                    try {
-                        const factoryData = await getFactory(factoryId);
-                        setFactory(factoryData);
-                    } catch (error) {
-                        console.error("Error fetching factory:", error);
+            const factoryId = navigation.split("/")[2];
+            if (factoryId) {
+                try {
+                    const response = await fetch(
+                        `${BASE_URL}/factories?id=${factoryId}`,
+                    );
+                    if (!response.ok) {
+                        throw new Error(
+                            `Failed to fetch factory with ID ${factoryId}: ${response.statusText}`,
+                        );
                     }
+                    const factoryData = (await response.json()) as Factory;
+                    setFactory(factoryData);
+                } catch (error) {
+                    console.error("Error fetching factory:", error);
                 }
             }
         };
 
         fetchFactory();
     }, [navigation]);
-
-    const handleEditButtonClick = () => {
-        setShowEditForm(true);
-    };
-    const handleCloseEditForm = () => {
-        setShowEditForm(false);
-    };
-    const handleSaveEditForm = () => {
-        setShowEditForm(false);
-    };
 
     return (
         <div className="lg:flex lg:items-center lg:justify-between">
@@ -48,22 +44,20 @@ const Header: React.FC = () => {
                     {factory ? factory.description : "Loading..."}
                 </div>
             </div>
-            <div className="mt-5 flex lg:ml-4 lg:mt-0">
-                <span className="hidden sm:block">
-                    <button
-                        type="button"
-                        className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                        onClick={handleEditButtonClick}
-                    >
-                        Edit
-                    </button>
-                </span>
+            <div className="mt-5 flex lg:mt-0 lg:ml-4">
+                <button
+                    type="button"
+                    className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    onClick={() => setShowEditForm(true)}
+                >
+                    Edit
+                </button>
 
                 {showEditForm && (
                     <EditFactoryForm
                         factory={factory}
-                        onClose={handleCloseEditForm}
-                        onSave={handleSaveEditForm}
+                        onClose={() => setShowEditForm(false)}
+                        onSave={() => setShowEditForm(false)}
                     />
                 )}
             </div>

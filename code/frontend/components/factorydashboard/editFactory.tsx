@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Factory } from "@/app/types/types";
+import { updateFactory } from "@/app/api/factories/factoryAPI";
 import Image from "next/image";
 import ErrorMessage from "../home/searchbar/ErrorMessage";
 
@@ -30,16 +31,32 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
-
-    const handleSaveChanges = () => {
-        if (!formData?.name) {
+    const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
+    const handleSaveChanges = async () => {
+        if (!formData?.name || formData?.name.trim() === "") {
             setInvalidName(true);
             return;
         }
 
+        if (formData?.description && formData.description.length > 200) {
+            setInvalidDescription(true);
+            return;
+        }
+
         try {
-            // to be continued...will update with update factory endpoint soon slayyyy
-            onSave();
+            if (formData && formData.factoryId) {
+                // await updateFactory(formData);
+                const response = await fetch(`${BASE_URL}/factories`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+                onSave();
+            } else {
+                console.error("Factory data is incomplete.");
+            }
         } catch (error) {
             console.error("Failed to update factory:", error);
         }
