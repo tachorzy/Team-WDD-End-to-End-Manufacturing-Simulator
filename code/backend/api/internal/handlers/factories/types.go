@@ -14,11 +14,11 @@ type Location struct {
 }
 
 type Factory struct {
-	FactoryID   string   `json:"factoryId" dynamodbav:"factoryId"`
-	Name        string   `json:"name" dynamodbav:"name"`
-	Location    Location `json:"location" dynamodbav:"location"`
-	Description string   `json:"description" dynamodbav:"description"`
-	DateCreated string   `json:"dateCreated" dynamodbav:"Date Created"`
+	FactoryID   string    `json:"factoryId" dynamodbav:"factoryId"`
+	Name        *string   `json:"name,omitempty" dynamodbav:"name"`
+	Location    *Location `json:"location,omitempty" dynamodbav:"location"`
+	Description *string   `json:"description,omitempty" dynamodbav:"description"`
+	DateCreated string    `json:"dateCreated" dynamodbav:"Date Created"`
 }
 
 type DynamoDBClient interface {
