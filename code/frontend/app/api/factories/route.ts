@@ -1,77 +1,49 @@
-import { NextResponse } from "next/server";
-import { Factory } from "@/app/types/types";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { Factory } from '@/app/types/types';
+import { createFactory,updateFactory,getAllFactories,getFactory } from './factoryAPI';
 
 const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
 const requestOptions: RequestInit = {
-    headers: {
-        "Content-Type": "application/json",
-    },
+  headers: {
+    'Content-Type': 'application/json',
+  },
 };
 
-const getFactory = async (factoryId: string): Promise<Factory> => {
-    const response = await fetch(
-        `${BASE_URL}/factories?id=${factoryId}`,
-        requestOptions,
-    );
-    if (!response.ok)
-        throw new Error(
-            `Failed to fetch factory with ID ${factoryId}: ${response.statusText}`,
-        );
-    return response.json() as Promise<Factory>;
-};
+export default async function(req: NextApiRequest, res: NextApiResponse) {
+  const { method } = req;
 
-const getAllFactories = async (): Promise<Factory[]> => {
-    const response = await fetch(`${BASE_URL}/factories`, requestOptions);
-    if (!response.ok) throw new Error("Failed to fetch all factories");
-    return response.json() as Promise<Factory[]>;
-};
-
-const createFactory = async (newFactory: Factory): Promise<Factory> => {
-    const response = await fetch(`${BASE_URL}/factories`, {
-        ...requestOptions,
-        method: "POST",
-        body: JSON.stringify(newFactory),
-    });
-    if (!response.ok) throw new Error("Failed to create new factory");
-    return response.json() as Promise<Factory>;
-};
-
-const updateFactory = async (factoryData: Factory): Promise<Factory> => {
-    const response = await fetch(`${BASE_URL}/factories`, {
-        ...requestOptions,
-        method: "PUT",
-        body: JSON.stringify(factoryData),
-    });
-    if (!response.ok)
-        throw new Error(`Failed to update factory: ${response.statusText}`);
-    return response.json() as Promise<Factory>;
-};
-
-export async function handler(req: Request) {
-    const { method } = req;
+  try {
     switch (method) {
-        case "GET": {
-            const url = new URL(req.url);
-            const factoryId = url.searchParams.get("id");
-            if (factoryId) {
-                const factory = await getFactory(factoryId);
-                return NextResponse.json(factory);
-            }
-            const factories = await getAllFactories();
-            return NextResponse.json(factories);
+      case 'GET': {
+        const factoryId = req.query.id as string;
+        if (factoryId) {
+          const factory = await getFactory(factoryId);
+          res.status(200).json(factory);
+        } else {
+          const factories = await getAllFactories();
+          res.status(200).json(factories);
         }
-        case "POST": {
-            const data = (await req.json()) as Factory; 
-            const factory = await createFactory(data);
-            return NextResponse.json(factory);
-        }
-        case "PUT": {
-            const data = (await req.json()) as Factory; 
-            const factory = await updateFactory(data);
-            return NextResponse.json(factory);
-        }
-        default:
-            return new NextResponse("Method Not Allowed", { status: 405 });
+        break;
+      }
+      case 'POST': {
+        const newFactory = req.body as Factory;
+        const createdFactory = await createFactory(newFactory);
+        res.status(201).json(createdFactory);
+        break;
+      }
+      case 'PUT': {
+        const factoryData = req.body as Factory;
+        const updatedFactory = await updateFactory(factoryData);
+        res.status(200).json(updatedFactory);
+        break;
+      }
+      default:
+        res.setHeader('Allow', ['GET', 'POST', 'PUT']);
+        res.status(405).end(`Method ${method} Not Allowed`);
     }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 }
