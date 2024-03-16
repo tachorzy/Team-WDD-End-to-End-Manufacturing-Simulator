@@ -24,14 +24,13 @@ const NewFactoryForm = (props: {
         if (factoryName === "" || factoryDescription.length > 200) {
             setInvalidName(factoryName === "");
             setInvalidDescription(factoryDescription.length > 200);
-            return; 
+            return;
         }
 
-      
         const newFactory: Factory = {
             name: factoryName,
             location: {
-                latitude: Number(latitude), 
+                latitude: Number(latitude),
                 longitude: Number(longitude),
             },
             description: factoryDescription,
@@ -117,10 +116,16 @@ const NewFactoryForm = (props: {
                             alt="tensor branding"
                         />
                         {invalidName && (
-                            <ErrorMessage message="Please provide a name for your new facility." icon="factory-error.svg"/>
+                            <ErrorMessage
+                                message="Please provide a name for your new facility."
+                                icon="factory-error.svg"
+                            />
                         )}
                         {invalidDescription && (
-                            <ErrorMessage message="Facility description must be no more than 200 characters." icon="factory-error.svg"/>
+                            <ErrorMessage
+                                message="Facility description must be no more than 200 characters."
+                                icon="factory-error.svg"
+                            />
                         )}
                     </form>
                     <span className="bg-black/70 fixed w-full h-full z-30 top-0 left-0" />

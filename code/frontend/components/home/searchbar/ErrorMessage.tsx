@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-const ErrorMessage = (props: { message: string, icon: string }) => {
+const ErrorMessage = (props: { message: string; icon: string }) => {
     const { message, icon } = props;
 
     return (
