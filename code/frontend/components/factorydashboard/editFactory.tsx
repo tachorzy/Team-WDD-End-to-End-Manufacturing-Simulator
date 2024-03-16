@@ -95,7 +95,8 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                         placeholder="Enter factory description (optional)"
                     />
                     {invalidDescription && (
-                        <ErrorMessage message="Factory description must be no more than 200 characters." />
+                        <ErrorMessage message="Factory description must be no more than 200 characters."
+                        icon="factory-error.svg" />
                     )}
                 </div>
                 <button
