@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { getAllFactories } from "@/app/api/factories/factoryAPI";
-import { Factory } from "@/app/types/types";
+import { Factory, Location } from "@/app/types/types";
 import Caret from "./table/Caret";
 
 interface Header {

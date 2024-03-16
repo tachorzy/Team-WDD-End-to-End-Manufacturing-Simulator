@@ -4,12 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	"net/http"
 )
 
 func NewReadFactoryHandler(db DynamoDBClient) *Handler {
@@ -25,6 +26,11 @@ var FactoryJSONMarshal = json.Marshal
 func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	factoryID := request.QueryStringParameters["id"]
 
+	headers := map[string]string{
+		"Access-Control-Allow-Origin": "*",
+		"Content-Type":                "application/json",
+	}
+
 	if factoryID == "" {
 		input := &dynamodb.ScanInput{
 			TableName: aws.String(TABLENAME),
@@ -33,6 +39,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 		if err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
+				Headers:    headers,
 				Body:       fmt.Sprintf("Error fetching factories: %s", err),
 			}, nil
 		}
@@ -41,6 +48,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 		if err = FactoryUnmarshalListOfMaps(result.Items, &factories); err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
+				Headers:    headers,
 				Body:       fmt.Sprintf("Failed to unmarshal factories: %v", err),
 			}, nil
 		}
@@ -49,12 +57,14 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 		if err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
+				Headers:    headers,
 				Body:       fmt.Sprintf("Error marshalling response: %s", err),
 			}, nil
 		}
 
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusOK,
+			Headers:    headers,
 			Body:       string(factoriesJSON),
 		}, nil
 	}
@@ -72,6 +82,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
 			Body:       fmt.Sprintf("Error finding factory: %s", err),
 		}, nil
 	}
@@ -79,6 +90,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 	if result.Item == nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusNotFound,
+			Headers:    headers,
 			Body:       fmt.Sprintf("Factory with ID %s not found", factoryID),
 		}, nil
 	}
@@ -87,6 +99,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 	if err = FactoryUnmarshalMap(result.Item, &factory); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
 			Body:       fmt.Sprintf("Failed to unmarshal Record, %v", err),
 		}, nil
 	}
@@ -95,12 +108,14 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
 			Body:       fmt.Sprintf("Error marshalling response: %s", err),
 		}, nil
 	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
+		Headers:    headers,
 		Body:       string(factoryJSON),
 	}, nil
 }

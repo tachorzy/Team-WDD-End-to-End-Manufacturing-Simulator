@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import { createFactory } from "@/app/api/factories/factoryAPI";
 import SearchModeTray from "./searchbar/SearchModeTray";
 import ErrorMessage from "./searchbar/ErrorMessage";
 
@@ -20,8 +19,8 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
     const [isAddressSearchBarActive, setIsAddressSearchBarActive] =
         useState(true);
     const [address, setAddress] = useState(INITIAL_ADDRESS_STATE);
-    const [latitude, setLatitude] = useState("");
-    const [longitude, setLongitude] = useState("");
+    const [latitude, setLatitude] = useState(INITIAL_LATITUDE_STATE);
+    const [longitude, setLongitude] = useState(INITIAL_LONGITUDE_STATE);
     const [invalidCoords, setInvalidCoords] = useState(false);
     const [invalidAddress, setInvalidAddress] = useState(false);
 
@@ -76,32 +75,19 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        // Determine coordinates from either address or manual input
         const coordinates = isAddressSearchBarActive
             ? await getCoordinates(address)
             : validCoordinates(latitude, longitude);
 
-        if (!coordinates) {
-            return;
-        }
-
         if (coordinates) {
             setQueryMade(true);
             onSearch(coordinates);
-        }
-
-        const newFactory = {
-            name: "New Factory",
-            location: {
-                latitude: coordinates.lat,
-                longitude: coordinates.lon,
-            },
-            description: `New factory operating from ${coordinates?.lat}, ${coordinates?.lon}`,
-        };
-
-        try {
-            await createFactory(newFactory);
-        } catch (error) {
-            console.error("Failed to create factory:", error);
+        } else if (isAddressSearchBarActive) {
+            setInvalidAddress(true);
+        } else {
+            setInvalidCoords(true);
         }
     };
 
@@ -175,27 +161,31 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
                 latitude === INITIAL_LONGITUDE_STATE ? (
                     <button
                         type="submit"
-                        className="rounded-r-full bg-DarkBlue border-l-[3px] border-white dark:text-white p-3 font-bold inactive text-[#494949] hover:border-MainBlue"
+                        className="disabled rounded-r-full bg-DarkBlue border-l-[3px] border-white dark:text-white p-3 font-bold inactive text-[#494949] hover:border-MainBlue"
                     >
-                        Search
+                        Create facility
                     </button>
                 ) : (
                     <button
                         type="submit"
                         className="rounded-r-full border-l-[3px] border-white bg-DarkBlue rounded p-3 font-bold transition-colors duration-700 ease-in ease-out"
                     >
-                        Search
+                        Create facility
                     </button>
                 )}
             </div>
             {invalidCoords && (
-                <ErrorMessage message="Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°." />
+                <ErrorMessage
+                    message="Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°."
+                    icon="map-error.svg"
+                />
             )}
             {invalidAddress && (
                 <ErrorMessage
                     message={
                         "We couldn't find the address that you're looking for. Please try again."
                     }
+                    icon="map-error.svg"
                 />
             )}
         </form>
