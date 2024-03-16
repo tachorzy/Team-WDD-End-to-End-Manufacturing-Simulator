@@ -12,7 +12,7 @@ const NewFactoryForm = (props: {
     latitude: number;
     longitude: number;
     setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
-    visibility: React.Dispatch<React.SetStateAction<boolean>>;
+    visibility: boolean;
     onFactorySubmit: (position: { lat: number; lon: number }) => void;
 }) => {
     const { latitude, longitude, visibility, setQueryMade, onFactorySubmit } =
@@ -33,7 +33,6 @@ const NewFactoryForm = (props: {
         }
 
         const newFactory: Factory = {
-            factoryId: null,
             name: factoryName,
             location: {
                 //make sure you turn these into floats or else you will get 400 error 
