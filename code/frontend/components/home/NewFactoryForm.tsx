@@ -6,6 +6,8 @@ import { createFactory } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
 import ErrorMessage from "./searchbar/ErrorMessage";
 
+const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
+
 const NewFactoryForm = (props: {
     latitude: number;
     longitude: number;
@@ -31,18 +33,31 @@ const NewFactoryForm = (props: {
         }
 
         const newFactory: Factory = {
+            factoryId: null,
             name: factoryName,
             location: {
-                latitude: Number(latitude),
-                longitude: Number(longitude),
+                //make sure you turn these into floats or else you will get 400 error 
+                latitude: parseFloat(latitude.toString()) ,
+                longitude: parseFloat(longitude.toString()),
             },
             description: factoryDescription,
         };
 
         try {
-            await createFactory(newFactory);
+            const response = await fetch(`${BASE_URL}/factories`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newFactory),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to create factory: ${response.statusText}`);
+            }
+
             onFactorySubmit({ lat: latitude, lon: longitude });
-            setQueryMade(false);
+            setQueryMade(true);
             setVisibility(false);
         } catch (error) {
             console.error("Failed to create factory:", error);

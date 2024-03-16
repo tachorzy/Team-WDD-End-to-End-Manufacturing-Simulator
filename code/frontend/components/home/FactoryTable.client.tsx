@@ -17,13 +17,13 @@ interface TableHeader {
 const FactoryTable = () => {
     const [facilities, setFacilities] = useState<Factory[]>([]);
     const [sort, setSort] = useState({ key: "name", direction: "" });
-
+    const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
     useEffect(() => {
         const fetchFactories = async () => {
             try {
-                //const response = await getAllFactories();
-                const body = await fetch('/api/test')
-                const response = await body.json();
+                // const response = await getAllFactories();
+                const body = await fetch(`${BASE_URL}/factories`);
+                const response = (await body.json()) as Factory[];
                 setFacilities(response);
             } catch (error) {
                 console.error("Error fetching factories:", error);

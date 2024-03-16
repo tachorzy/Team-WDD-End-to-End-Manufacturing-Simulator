@@ -49,13 +49,13 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     const initialZoom = 4;
     const zoomInLevel = 15;
     const [factories, setFactories] = useState<Factory[]>([]);
-
+    const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
     useEffect(() => {
         const fetchFactories = async () => {
             try {
-                const response = await fetch('/api/test')
-                const { data } = await response.json();
-                console.log(data)
+                const response = await fetch(`${BASE_URL}/factories`);
+                const data = (await response.json()) as Factory[];
+                console.log(data);
                 setFactories(data);
             } catch (error) {
                 console.error("Error fetching factories:", error);

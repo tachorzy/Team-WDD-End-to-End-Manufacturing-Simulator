@@ -31,7 +31,7 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
-
+    const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
     const handleSaveChanges = async () => {
         if (!formData?.name || formData?.name.trim() === "") {
             setInvalidName(true);
@@ -46,10 +46,13 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
         try {
             if (formData && formData.factoryId) {
                 // await updateFactory(formData);
-                const response = await fetch('/api/factories', {
-                    method: 'PUT',
-                    body: JSON.stringify(formData)
-                })
+                const response = await fetch(`${BASE_URL}/factories`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
                 onSave();
             } else {
                 console.error("Factory data is incomplete.");
