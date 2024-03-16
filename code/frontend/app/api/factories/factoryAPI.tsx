@@ -7,7 +7,6 @@ const requestOptions: RequestInit = {
         "Content-Type": "application/json",
     },
 };
-};
 
 const getFactory = async (factoryId: string): Promise<Factory> => {
     try {
@@ -32,19 +31,13 @@ const createFactory = async (newFactory: Factory): Promise<Factory> => {
         const response = await fetch(`${BASE_URL}/factories`, {
             ...requestOptions,
             method: "POST",
-        const response = await fetch(`${BASE_URL}/factories`, {
-            ...requestOptions,
-            method: "POST",
             body: JSON.stringify(newFactory),
         });
-
         if (!response.ok) {
-            console.log(response);
             throw new Error(
                 `Failed to add new factory: ${response.statusText}`,
             );
         }
-
         return (await response.json()) as Factory;
     } catch (error) {
         console.error("Failed to add new factory:", error);
@@ -67,4 +60,20 @@ const getAllFactories = async (): Promise<Factory[]> => {
     }
 };
 
-export { getFactory, createFactory, getAllFactories };
+const updateFactory = async (factoryData: Factory): Promise<Factory> => {
+    const response = await fetch(`${BASE_URL}/factories`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(factoryData),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to update factory: ${response.statusText}`);
+    }
+
+    return (await response.json()) as Factory;
+};
+
+export { getFactory, createFactory, getAllFactories, updateFactory };
