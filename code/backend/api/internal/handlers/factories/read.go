@@ -33,7 +33,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 
 	if factoryID == "" {
 		input := &dynamodb.ScanInput{
-			TableName: aws.String("Factory"),
+			TableName: aws.String(TABLENAME),
 		}
 		result, err := h.DynamoDB.Scan(ctx, input)
 		if err != nil {

@@ -9,8 +9,8 @@ import (
 const TABLENAME = "Factory"
 
 type Location struct {
-	Longitude float64 `json:"longitude" dynamodbav:"longitude"`
-	Latitude  float64 `json:"latitude" dynamodbav:"latitude"`
+	Longitude *float64 `json:"longitude,omitempty" dynamodbav:"longitude"`
+	Latitude  *float64 `json:"latitude,omitempty" dynamodbav:"latitude"`
 }
 
 type Factory struct {
@@ -26,6 +26,7 @@ type DynamoDBClient interface {
 	GetItem(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error)
 	PutItem(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error)
 	Scan(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error)
+	UpdateItem(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error)
 }
 
 type Handler struct {

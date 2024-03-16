@@ -7,6 +7,7 @@ const requestOptions: RequestInit = {
         "Content-Type": "application/json",
     },
 };
+};
 
 const getFactory = async (factoryId: string): Promise<Factory> => {
     try {
@@ -28,6 +29,9 @@ const getFactory = async (factoryId: string): Promise<Factory> => {
 
 const createFactory = async (newFactory: Factory): Promise<Factory> => {
     try {
+        const response = await fetch(`${BASE_URL}/factories`, {
+            ...requestOptions,
+            method: "POST",
         const response = await fetch(`${BASE_URL}/factories`, {
             ...requestOptions,
             method: "POST",
