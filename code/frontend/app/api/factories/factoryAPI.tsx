@@ -61,16 +61,13 @@ const getAllFactories = async (): Promise<Factory[]> => {
 };
 
 const updateFactory = async (factoryData: Factory): Promise<Factory> => {
-    const response = await fetch(
-        `${BASE_URL}/factories/id=${factoryData.factoryId}`,
-        {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(factoryData),
+    const response = await fetch(`${BASE_URL}/factories`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
         },
-    );
+        body: JSON.stringify(factoryData),
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to update factory: ${response.statusText}`);

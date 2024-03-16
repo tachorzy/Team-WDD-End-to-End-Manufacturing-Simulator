@@ -53,8 +53,10 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     useEffect(() => {
         const fetchFactories = async () => {
             try {
-                const response = await getAllFactories();
-                setFactories(response);
+                const response = await fetch('/api/test')
+                const { data } = await response.json();
+                console.log(data)
+                setFactories(data);
             } catch (error) {
                 console.error("Error fetching factories:", error);
             }

@@ -21,7 +21,9 @@ const FactoryTable = () => {
     useEffect(() => {
         const fetchFactories = async () => {
             try {
-                const response = await getAllFactories();
+                //const response = await getAllFactories();
+                const body = await fetch('/api/test')
+                const response = await body.json();
                 setFacilities(response);
             } catch (error) {
                 console.error("Error fetching factories:", error);
