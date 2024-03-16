@@ -77,7 +77,9 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                         placeholder="Enter factory name"
                     />
                     {invalidName && (
-                        <ErrorMessage message="Please provide a name for the factory." />
+                        <ErrorMessage message="Please provide a name for the factory." 
+                        icon="factory-error.svg"
+                        />
                     )}
                 </div>
                 <div className="mb-4">
