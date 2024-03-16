@@ -8,4 +8,7 @@ module.exports = {
             },
         ],
     },
+    moduleNameMapper: {
+        "^@/(.*)$": "<rootDir>/app/api/factories/factoryAPI",
+    },
 };
