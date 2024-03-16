@@ -12,7 +12,6 @@ const NewFactoryForm = (props: {
     latitude: number;
     longitude: number;
     setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
-    visibility: boolean;
     onFactorySubmit: (position: { lat: number; lon: number }) => void;
 }) => {
     const { latitude, longitude, setQueryMade, onFactorySubmit } = props;
