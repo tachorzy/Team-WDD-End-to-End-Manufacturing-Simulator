@@ -20,8 +20,13 @@ export default function Home() {
         Array<{ lat: number; lon: number }>
     >([]);
     const [isQueryMade, setQueryMade] = useState(false);
+    const [showFormModal, setShowFormModal] = useState(false);
+    // const [currentPosition, setCurrentPosition] = useState({lat: 0, lon: 0});
+    const [tempPosition, setTempPosition] = useState<{ lat: number; lon: number } | null>(null);
+
     const handleNewLocation = (newPosition: { lat: number; lon: number }) => {
-        setPositions((prevPositions) => [...prevPositions, newPosition]);
+        setTempPosition(newPosition);
+        setShowFormModal(true);
     };
 
     return (
@@ -65,12 +70,17 @@ export default function Home() {
                     </div>
                 </div>
                 {isQueryMade && (
-                    <NewFactoryForm
-                        latitude={0}
-                        longitude={0}
-                        setQueryMade={setQueryMade}
-                    />
-                )}
+    <NewFactoryForm
+        latitude={tempPosition?.lat ?? 0}
+        longitude={tempPosition?.lon ?? 0}
+        setQueryMade={setQueryMade}
+        onFactorySubmit={(position) => {
+            setPositions(prev => [...prev, position]);
+            setTempPosition(null); 
+        }}
+    />
+)
+}
             </div>
         </main>
     );
