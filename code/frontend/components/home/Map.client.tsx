@@ -2,18 +2,12 @@
 
 // TODO: import font later
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import { getAllFactories } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
 import MapPin from "./map/MapPin";
-import Link from "next/link";
 import "leaflet/dist/leaflet.css";
-
-// interface Coordinate {
-//     lat: number;
-//     lon: number;
-// }
 
 interface MapProps {
     positions: Factory[];
@@ -91,10 +85,10 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                     factories.map((factory, index) => (
                         <MapPin
                             key={index}
-                            position={[
-                                factory.location.latitude,
-                                factory.location.longitude,
-                            ]}
+                            position={{
+                                lat: factory.location.latitude,
+                                lng: factory.location.longitude,
+                            }}
                             title={factory.name}
                             description={factory.description}
                             link={`/factorydashboard/${factory.factoryId}`}
@@ -102,12 +96,12 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                         />
                     ))}
                 {positions.map((sessionFactory, index) => (
-                        <MapPin
+                    <MapPin
                         key={index}
-                        position={[
-                            sessionFactory.location.latitude,
-                            sessionFactory.location.longitude,
-                        ]}
+                        position={{
+                            lat: sessionFactory.location.latitude,
+                            lng: sessionFactory.location.longitude,
+                        }}
                         title={sessionFactory.name}
                         description={sessionFactory.description}
                         link={`/factorydashboard/${sessionFactory.factoryId}`}
