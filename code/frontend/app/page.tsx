@@ -9,6 +9,7 @@ import FactoryTable from "@/components/home/FactoryTable.client";
 import Searchbar from "@/components/home/Searchbar.client";
 import Navbar from "@/components/Navbar/Navbar";
 import NewFactoryForm from "@/components/home/NewFactoryForm";
+import { Factory } from "@/app/types/types";
 
 const Map = dynamic(() => import("@/components/home/Map.client"), {
     loading: () => <p>A map is loading</p>,
@@ -16,9 +17,7 @@ const Map = dynamic(() => import("@/components/home/Map.client"), {
 });
 
 export default function Home() {
-    const [positions, setPositions] = useState<
-        Array<{ lat: number; lon: number }>
-    >([]);
+    const [sessionFactories, setSessionFactories] = useState<Factory[]>([]);
     const [isQueryMade, setQueryMade] = useState(false);
     const [showFormModal, setShowFormModal] = useState(false);
     // const [currentPosition, setCurrentPosition] = useState({lat: 0, lon: 0});
@@ -65,7 +64,7 @@ export default function Home() {
                                 Recent Factories
                             </h1>
                             <FactoryTable />
-                            <Map positions={positions} />
+                            <Map positions={sessionFactories} />
                         </div>
                     </div>
                 </div>
@@ -74,8 +73,8 @@ export default function Home() {
         latitude={tempPosition?.lat ?? 0}
         longitude={tempPosition?.lon ?? 0}
         setQueryMade={setQueryMade}
-        onFactorySubmit={(position) => {
-            setPositions(prev => [...prev, position]);
+        onFactorySubmit={(sessionFactory) => {
+            setSessionFactories(prev => [...prev, sessionFactory]);
             setTempPosition(null); 
         }}
     />

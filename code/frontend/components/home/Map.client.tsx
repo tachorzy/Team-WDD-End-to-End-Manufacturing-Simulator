@@ -9,13 +9,13 @@ import { Factory } from "@/app/types/types";
 import Link from "next/link";
 import "leaflet/dist/leaflet.css";
 
-interface Coordinate {
-    lat: number;
-    lon: number;
-}
+// interface Coordinate {
+//     lat: number;
+//     lon: number;
+// }
 
 interface MapProps {
-    positions: Coordinate[];
+    positions: Factory[];
 }
 
 const customIcon = new L.Icon({
@@ -68,7 +68,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     function generateLatLng() {
         const coordinate = positions[positions.length - 1];
 
-        return new L.LatLng(coordinate.lat, coordinate.lon);
+        return new L.LatLng(coordinate.location.latitude, coordinate.location.longitude);
     }
 
     return (
@@ -109,16 +109,24 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                             </Popup>
                         </Marker>
                     ))}
-                {positions.map((position, index) => (
+                {positions.map((sessionFactory, index) => (
                     <Marker
                         key={index}
-                        position={[position.lat, position.lon]}
+                        position={[sessionFactory.location.latitude, sessionFactory.location.longitude]}
                         icon={customIcon}
                     >
                         <Popup>
                             <div>
-                                <h3 className="font-bold">{`New Facility ${positions.length + 1}`}</h3>
-                                <p>{`Located: ${position.lat}, ${position.lon}`}</p>
+                                <h3 className="font-bold">
+                                    {sessionFactory.name}
+                                </h3>
+                                <p>{`Located: ${sessionFactory.location.latitude}, ${sessionFactory.location.longitude}`}</p>
+                                <p>{sessionFactory.description}</p>
+                                <Link
+                                    href={`/factorydashboard/${sessionFactory.factoryId}`}
+                                >
+                                    View Factory
+                                </Link>
                             </div>
                         </Popup>
                     </Marker>

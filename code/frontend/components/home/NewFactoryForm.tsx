@@ -12,7 +12,7 @@ const NewFactoryForm = (props: {
     latitude: number;
     longitude: number;
     setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
-    onFactorySubmit: (position: { lat: number; lon: number }) => void;
+    onFactorySubmit: (sessionFactory: Factory) => void;
 }) => {
     const { latitude, longitude, setQueryMade, onFactorySubmit } = props;
     const [isVisible, setVisibility] = useState(true);
@@ -52,7 +52,7 @@ const NewFactoryForm = (props: {
                 throw new Error(`Failed to create factory: ${response.statusText}`);
             }
 
-            onFactorySubmit({ lat: latitude, lon: longitude });
+            onFactorySubmit({ name: factoryName, description: factoryDescription, location: { latitude: latitude, longitude: longitude } });
             setQueryMade(true);
             setVisibility(false);
         } catch (error) {
