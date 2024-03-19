@@ -32,8 +32,8 @@ const NewFactoryForm = (props: {
         const newFactory: Factory = {
             name: factoryName,
             location: {
-                //make sure you turn these into floats or else you will get 400 error 
-                latitude: parseFloat(latitude.toString()) ,
+                // make sure you turn these into floats or else you will get 400 error
+                latitude: parseFloat(latitude.toString()),
                 longitude: parseFloat(longitude.toString()),
             },
             description: factoryDescription,
@@ -41,18 +41,24 @@ const NewFactoryForm = (props: {
 
         try {
             const response = await fetch(`${BASE_URL}/factories`, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(newFactory),
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to create factory: ${response.statusText}`);
+                throw new Error(
+                    `Failed to create factory: ${response.statusText}`,
+                );
             }
 
-            onFactorySubmit({ name: factoryName, description: factoryDescription, location: { latitude: latitude, longitude: longitude } });
+            onFactorySubmit({
+                name: factoryName,
+                description: factoryDescription,
+                location: { latitude, longitude },
+            });
             setQueryMade(true);
             setVisibility(false);
         } catch (error) {

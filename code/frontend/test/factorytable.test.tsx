@@ -79,9 +79,7 @@ describe("FactoryTable", () => {
     test("displays data correctly in table cells", async () => {
         render(<FactoryTable />);
         await waitFor(() =>
-            expect(
-                screen.getByText(fakeFactories[0].name),
-            ).toBeInTheDocument(),
+            expect(screen.getByText(fakeFactories[0].name)).toBeInTheDocument(),
         );
 
         expect(screen.getByText(fakeFactories[0].name)).toBeInTheDocument();
@@ -107,15 +105,12 @@ describe("FactoryTable", () => {
         ).toBeInTheDocument();
     });
 
-
     test("displays View all link and navigates correctly", () => {
         render(<FactoryTable />);
         const viewAllLink = screen.getByRole("link", { name: /View all/i });
         expect(viewAllLink).toBeInTheDocument();
         expect(viewAllLink).toHaveAttribute("href", "/");
     });
-
-
 
     test("Caret renders with correct direction", () => {
         const { getByTestId } = render(<Caret direction="desc" />);

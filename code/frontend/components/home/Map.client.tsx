@@ -6,6 +6,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import { getAllFactories } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
+import MapPin from "./map/MapPin";
 import Link from "next/link";
 import "leaflet/dist/leaflet.css";
 
@@ -68,7 +69,10 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     function generateLatLng() {
         const coordinate = positions[positions.length - 1];
 
-        return new L.LatLng(coordinate.location.latitude, coordinate.location.longitude);
+        return new L.LatLng(
+            coordinate.location.latitude,
+            coordinate.location.longitude,
+        );
     }
 
     return (
@@ -85,51 +89,30 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                 )}
                 {Array.isArray(factories) &&
                     factories.map((factory, index) => (
-                        <Marker
+                        <MapPin
                             key={index}
                             position={[
                                 factory.location.latitude,
                                 factory.location.longitude,
                             ]}
+                            title={factory.name}
+                            description={factory.description}
+                            link={`/factorydashboard/${factory.factoryId}`}
                             icon={customIcon}
-                        >
-                            <Popup>
-                                <div>
-                                    <h3 className="font-bold">
-                                        {factory.name}
-                                    </h3>
-                                    <p>{`Located: ${factory.location.latitude}, ${factory.location.longitude}`}</p>
-                                    <p>{factory.description}</p>
-                                    <Link
-                                        href={`/factorydashboard/${factory.factoryId}`}
-                                    >
-                                        View Factory
-                                    </Link>
-                                </div>
-                            </Popup>
-                        </Marker>
+                        />
                     ))}
                 {positions.map((sessionFactory, index) => (
-                    <Marker
+                        <MapPin
                         key={index}
-                        position={[sessionFactory.location.latitude, sessionFactory.location.longitude]}
+                        position={[
+                            sessionFactory.location.latitude,
+                            sessionFactory.location.longitude,
+                        ]}
+                        title={sessionFactory.name}
+                        description={sessionFactory.description}
+                        link={`/factorydashboard/${sessionFactory.factoryId}`}
                         icon={customIcon}
-                    >
-                        <Popup>
-                            <div>
-                                <h3 className="font-bold">
-                                    {sessionFactory.name}
-                                </h3>
-                                <p>{`Located: ${sessionFactory.location.latitude}, ${sessionFactory.location.longitude}`}</p>
-                                <p>{sessionFactory.description}</p>
-                                <Link
-                                    href={`/factorydashboard/${sessionFactory.factoryId}`}
-                                >
-                                    View Factory
-                                </Link>
-                            </div>
-                        </Popup>
-                    </Marker>
+                    />
                 ))}
             </MapContainer>
         </div>
