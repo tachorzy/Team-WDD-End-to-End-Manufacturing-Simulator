@@ -11,14 +11,13 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import FactoryTable from "../components/home/FactoryTable.client";
 import Caret from "../components/home/table/Caret";
-import { getAllFactories } from "../app/api/factories/factoryAPI";
 import * as api from "../app/api/factories/factoryAPI";
 
 jest.mock("../app/api/factories/factoryAPI");
 
 const fakeFactories = [
     {
-        factoryId: 1,
+        factoryId: "1",
         name: "Factory 1",
         lat: 123.456,
         lon: 456.789,
@@ -29,7 +28,7 @@ const fakeFactories = [
         },
     },
     {
-        factoryId: 2,
+        factoryId: "2",
         name: "Factory 2",
         lat: 234.567,
         lon: 567.89,
@@ -42,11 +41,20 @@ const fakeFactories = [
     // Add more fake factories as needed
 ];
 
-beforeEach(() => {
-    (getAllFactories as jest.Mock).mockResolvedValue(fakeFactories); // Mock the API response
+// Mocking the fetch function
+global.fetch = jest.fn().mockResolvedValue({
+  json: () => Promise.resolve(fakeFactories),
 });
 
 describe("FactoryTable", () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        jest.spyOn(api, "getAllFactories").mockImplementation(async () => {
+            return Promise.resolve(fakeFactories);
+        });
+    });
+
     test("renders table with correct headers", async () => {
         render(<FactoryTable />);
         await waitFor(() => screen.getAllByRole("columnheader"));
@@ -60,7 +68,12 @@ describe("FactoryTable", () => {
 
     test("renders facilities correctly", async () => {
         render(<FactoryTable />);
-        await waitFor(() => screen.getByText("Factory 1"));
+        await waitFor(() => {
+            fakeFactories.forEach((factory) => {
+                expect(screen.getByText(factory.name)).toBeInTheDocument();
+            });
+        });
+
         const facilityNames = screen.getAllByText(/Factory \d/);
         expect(facilityNames).toHaveLength(fakeFactories.length);
     });
@@ -129,4 +142,5 @@ describe("FactoryTable", () => {
         render(<Caret direction="asc" />);
         expect(spy).toHaveBeenCalledWith("Caret direction: asc");
     });
+
 });
