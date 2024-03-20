@@ -46,59 +46,61 @@ const props = {
     icon: icon
 };
 
-jest.mock('react-leaflet', () => ({
-    Marker: () => null,
-    Popup: () => null,
-}));
+describe("MapPin component", () => {
+    jest.mock('react-leaflet', () => ({
+        Marker: () => null,
+        Popup: () => null,
+    }));
 
-jest.mock('leaflet/dist/leaflet.css', () => {});
+    jest.mock('leaflet/dist/leaflet.css', () => {});
 
-test('renders MapPin without errors', () => {
-    render(<MapPin {...props} />);
-});
+    test('renders MapPin without errors', () => {
+        render(<MapPin {...props} />);
+    });
 
-test('groupFactoriesByLocation groups factories correctly', () => {
-    
-    const fakeFactoryArray: Factory[] = [
-        { 
-            factoryId: "1",
-            name: "Factory 1",
-            location: { latitude: 1, longitude: 1 },
-            description: "This is the first factory"
-        },
-        { 
-            factoryId: "2",
-            name: "Factory 2",
-            location: { latitude: 1, longitude: 1 },
-            description: "This is the second factory",
-        },
-        { 
-            factoryId: "3",
-            name: "Factory 3",
-            location: { latitude: 2, longitude: 2 },
-            description: "This is the third factory",
-        },
-    ];
-    const groupedFactories = groupFactoriesByLocation(fakeFactoryArray);
-    expect(Object.keys(groupedFactories)).toHaveLength(2);
-});
+    test('groupFactoriesByLocation groups factories correctly', () => {
+        
+        const fakeFactoryArray: Factory[] = [
+            { 
+                factoryId: "1",
+                name: "Factory 1",
+                location: { latitude: 1, longitude: 1 },
+                description: "This is the first factory"
+            },
+            { 
+                factoryId: "2",
+                name: "Factory 2",
+                location: { latitude: 1, longitude: 1 },
+                description: "This is the second factory",
+            },
+            { 
+                factoryId: "3",
+                name: "Factory 3",
+                location: { latitude: 2, longitude: 2 },
+                description: "This is the third factory",
+            },
+        ];
+        const groupedFactories = groupFactoriesByLocation(fakeFactoryArray);
+        expect(Object.keys(groupedFactories)).toHaveLength(2);
+    });
 
-jest.mock('react-leaflet', () => ({
-    Marker: ({ children} : { children: React.ReactNode}) => <div data-testid="marker">{children}</div>,
-    Popup: ({ children } : { children: React.ReactNode}) => <div data-testid="popup">{children}</div>,
-  }));
+    jest.mock('react-leaflet', () => ({
+        Marker: ({ children} : { children: React.ReactNode}) => <div data-testid="marker">{children}</div>,
+        Popup: ({ children } : { children: React.ReactNode}) => <div data-testid="popup">{children}</div>,
+    }));
 
-test('displays the details of a single factory at a location in a popup', () => {
-    const factoriesAtLocation = [
-        { factoryId: '1', name: 'Factory 1', description: 'This is the first factory', location: { latitude: 1, longitude: 1 } },
-    ];
-    const newProps: PinProps = { 
-        _key: 1234,
-        position: { lat: 1, lng: 1 },
-        factoriesAtLocation: factoriesAtLocation,
-        icon: icon 
-    };
-    render(<MapPin {...newProps} />);
-    const firstFactory = factoriesAtLocation[0];
-    expect(screen.getByTestId('popup')).toHaveTextContent(`${firstFactory.name}${firstFactory.location.latitude.toFixed(2)}°, ${firstFactory.location.longitude.toFixed(2)}°${firstFactory.description}View Factory›‹Previous1Next›`);
+    test('displays the details of a single factory at a location in a popup', () => {
+        const factoriesAtLocation = [
+            { factoryId: '1', name: 'Factory 1', description: 'This is the first factory', location: { latitude: 1, longitude: 1 } },
+        ];
+        const newProps: PinProps = { 
+            _key: 1234,
+            position: { lat: 1, lng: 1 },
+            factoriesAtLocation: factoriesAtLocation,
+            icon: icon 
+        };
+        render(<MapPin {...newProps} />);
+        const firstFactory = factoriesAtLocation[0];
+        expect(screen.getByTestId('popup')).toHaveTextContent(`${firstFactory.name}${firstFactory.location.latitude.toFixed(2)}°, ${firstFactory.location.longitude.toFixed(2)}°${firstFactory.description}View Factory›‹Previous1Next›`);
+    });
 });
