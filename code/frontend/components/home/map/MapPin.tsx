@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Marker, Popup } from "react-leaflet";
 import Link from "next/link";
 import Image from "next/image";
 import { Factory } from "@/app/types/types";
-
 
 interface PinProps {
     key: number;
@@ -22,13 +21,15 @@ const MapPin: React.FC<PinProps> = ({
 }) => {
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const currentFactory = factoriesAtLocation[currentPageIndex];
-    const link = `/factorydashboard/${currentFactory.factoryId}`
+    const link = `/factorydashboard/${currentFactory.factoryId}`;
 
     return (
         <Marker key={key} position={position} icon={icon}>
             <Popup className="w-56">
                 <div className="w-full">
-                    <h3 className="font-bold text-base text-slate-600">{currentFactory.name}</h3>
+                    <h3 className="font-bold text-base text-slate-600">
+                        {currentFactory.name}
+                    </h3>
                     <div className="flex flex-col gap-y-1">
                         <div className="flex flex-row gap-x-1 border-b-2 border-slate-300 py-0">
                             <Image
@@ -43,13 +44,14 @@ const MapPin: React.FC<PinProps> = ({
                     </div>
 
                     {currentFactory.description ? (
-                        <p className="font-text-xs text-pretty">{currentFactory.description}</p>
-                    )
-                    : (
-                        <p className="font-text-xs text-pretty text-slate-400">{"No description."}</p>
-                    )
-                        
-                    }
+                        <p className="font-text-xs text-pretty">
+                            {currentFactory.description}
+                        </p>
+                    ) : (
+                        <p className="font-text-xs text-pretty text-slate-400">
+                            No description.
+                        </p>
+                    )}
                     <div className="w-fit">
                         {link && (
                             <Link
@@ -64,17 +66,31 @@ const MapPin: React.FC<PinProps> = ({
                         )}
                     </div>
                     <div className="grid grid-rows-1 grid-cols-3 gap-x-[20%] mt-2 ">
-                        <button type="button" onClick={() => setCurrentPageIndex(currentPageIndex-1)} className="text-xs text-slate-400 hover:text-MainBlue group">
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setCurrentPageIndex(currentPageIndex - 1)
+                            }
+                            className="text-xs text-slate-400 hover:text-MainBlue group"
+                        >
                             <span className="font-semibold text-base font-bold pt-1 pr-0.5 group-hover:pr-1.5 duration-500">
-                            ‹
+                                ‹
                             </span>
                             Previous
                         </button>
-                        <p className="text-center justify-center content-center text-xs font-bold">{currentPageIndex}</p>
-                        <button type="button" onClick={() => setCurrentPageIndex(currentPageIndex+1)} className="text-xs text-slate-400 hover:text-MainBlue group">
+                        <p className="text-center justify-center content-center text-xs font-bold">
+                            {currentPageIndex}
+                        </p>
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setCurrentPageIndex(currentPageIndex + 1)
+                            }
+                            className="text-xs text-slate-400 hover:text-MainBlue group"
+                        >
                             Next
                             <span className="font-semibold text-base font-bold pt-1 pl-0.5 group-hover:pl-1.5 duration-500">
-                            ›
+                                ›
                             </span>
                         </button>
                     </div>
@@ -82,5 +98,5 @@ const MapPin: React.FC<PinProps> = ({
             </Popup>
         </Marker>
     );
-}
+};
 export default MapPin;
