@@ -94,7 +94,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                             link={`/factorydashboard/${factory.factoryId}`}
                             icon={customIcon}
                         />
-                    ))}
+                ))}
                 {positions.map((sessionFactory, index) => (
                     <MapPin
                         key={index}
