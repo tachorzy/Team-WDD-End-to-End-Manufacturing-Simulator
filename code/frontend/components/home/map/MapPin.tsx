@@ -89,7 +89,7 @@ const MapPin: React.FC<PinProps> = ({
                             </span>
                             Previous
                         </button>
-                        <p className="text-center justify-center content-center text-xs font-bold">
+                        <p className="text-center justify-center content-center text-slate-600 text-xs font-bold">
                             {currentPageIndex}
                         </p>
                         <button
