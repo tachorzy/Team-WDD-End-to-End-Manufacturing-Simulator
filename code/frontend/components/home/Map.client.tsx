@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
-import { getAllFactories } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
 import MapPin from "./map/MapPin";
 import "leaflet/dist/leaflet.css";
@@ -54,6 +53,19 @@ const ChangeView = ({
     return null;
 };
 
+export function groupFactoriesByLocation(ungroupedFactories: Factory[]) {
+    const groupedFactories: { [key: string]: Factory[] } = {};
+    ungroupedFactories.forEach((factory) => {
+        const key = `${Number(factory.location.latitude).toFixed(2)},${Number(factory.location.longitude).toFixed(2)}`;
+        if (!groupedFactories[key]) {
+            groupedFactories[key] = [];
+        }
+        groupedFactories[key].push(factory);
+    });
+
+    return groupedFactories;
+}
+
 const MapComponent: React.FC<MapProps> = ({ positions }) => {
     const initialZoom = 4;
     const zoomInLevel = 15;
@@ -81,19 +93,6 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
             coordinate.location.latitude,
             coordinate.location.longitude,
         );
-    }
-
-    function groupFactoriesByLocation(ungroupedFactories: Factory[]) {
-        const groupedFactories: { [key: string]: Factory[] } = {};
-        ungroupedFactories.forEach((factory) => {
-            const key = `${Number(factory.location.latitude).toFixed(2)},${Number(factory.location.longitude).toFixed(2)}`;
-            if (!groupedFactories[key]) {
-                groupedFactories[key] = [];
-            }
-            groupedFactories[key].push(factory);
-        });
-
-        return groupedFactories;
     }
 
     const totalFactories = factories.concat(positions);
