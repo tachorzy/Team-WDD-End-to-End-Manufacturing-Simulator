@@ -148,7 +148,7 @@ describe ("New Factory Form", () => {
         expect(descriptionTooLongError).toBeInTheDocument();
     });
 
-    test("Console logs an error on fetching data", async () => {
+    test("Console logs an error on fetching data", () => {
         (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
             ok: false,
             statusText: "404",
