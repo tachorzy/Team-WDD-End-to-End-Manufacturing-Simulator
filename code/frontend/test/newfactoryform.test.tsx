@@ -5,14 +5,21 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import NewFactoryForm from "../components/home/NewFactoryForm";
+import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
+
+// global.fetch = jest.fn(() =>
+//     Promise.resolve({
+//         json: () => Promise.resolve({})
+//     })
+// );
+
+const latitude = 40.7128;
+const longitude = -74.0060;
+const setQueryMadeMock = jest.fn();
+const onFactorySubmitMock = jest.fn();
 
 describe ("New Factory Form", () => {
     test("renders form and its compontents correctly ", () => {
-        const latitude = 40.7128;
-        const longitude = -74.0060;
-        const setQueryMadeMock = jest.fn();
-        const onFactorySubmitMock = jest.fn();
-
         render(
             <NewFactoryForm
                 latitude={latitude}
@@ -42,11 +49,6 @@ describe ("New Factory Form", () => {
     });
 
     test("Clicking close icon makes form invisible", () =>{
-        const latitude = 40.7128;
-        const longitude = -74.0060;
-        const setQueryMadeMock = jest.fn();
-        const onFactorySubmitMock = jest.fn();
-
         const { getByAltText } = render(
             <NewFactoryForm
                 latitude={latitude}
@@ -62,12 +64,7 @@ describe ("New Factory Form", () => {
         expect(closeIcon).not.toBeInTheDocument();
     });
 
-    test("Factory Name Changes Input", () => {
-        const latitude = 40.7128;
-        const longitude = -74.0060;
-        const setQueryMadeMock = jest.fn();
-        const onFactorySubmitMock = jest.fn();
-
+    test("Factory Name Changes On Input", () => {
         const { getByPlaceholderText } = render(
             <NewFactoryForm
                 latitude={latitude}
@@ -97,4 +94,55 @@ describe ("New Factory Form", () => {
         expect(descriptionInput).toHaveValue(factoryDescription); 
     });
 
+    test("Factory Name Is Blank", () => {
+        const { getByPlaceholderText, getByText } = render(
+            <NewFactoryForm
+                latitude={latitude}
+                longitude={longitude} 
+                setQueryMade={setQueryMadeMock}
+                onFactorySubmit={onFactorySubmitMock}
+            />
+        );
+
+        const nameInput = getByPlaceholderText("Enter factory name");
+        const factoryName = "";
+
+        fireEvent.change(nameInput, {
+            target: {
+                value: factoryName
+            }
+        });
+        fireEvent.click(getByText(/(Create)/));
+
+        const ErrorMessage = getByText("Please provide a name for your new facility.");
+
+        expect(nameInput).toHaveValue(factoryName);
+        expect(ErrorMessage).toBeInTheDocument();
+    });
+
+    test("Factory description is too long", () => {
+        const { getByPlaceholderText, getByText } = render(
+            <NewFactoryForm
+                latitude={latitude}
+                longitude={longitude} 
+                setQueryMade={setQueryMadeMock}
+                onFactorySubmit={onFactorySubmitMock}
+            />
+        );
+
+        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+        const factoryDescription = "This description is longer than two hundred characters long, so it can not be used in the form. please try to have descriptions less than two hundred characters long, or it will not work in the form. thanks.";
+
+        fireEvent.change(descriptionInput, {
+            target: {
+                value: factoryDescription
+            }
+        });
+        fireEvent.click(getByText(/(Create)/));
+
+        const ErrorMessage = getByText("Facility description must be no more than 200 characters.");
+
+        expect(descriptionInput).toHaveValue(factoryDescription);
+        expect(ErrorMessage).toBeInTheDocument();
+    });
 });
