@@ -14,7 +14,21 @@ interface MapProps {
 }
 
 const customIcon = new L.Icon({
-    iconUrl: "/map/factory-map-marker.svg",
+    iconUrl: "icons/map/factory-map-marker.svg",
+    iconSize: [35, 35],
+    iconAnchor: [17, 35],
+    popupAnchor: [0, -35],
+});
+
+const customIconDualFacilities = new L.Icon({
+    iconUrl: "icons/map/factory-map-marker-two.svg",
+    iconSize: [35, 35],
+    iconAnchor: [17, 35],
+    popupAnchor: [0, -35],
+});
+
+const customIconMultipleFacilities = new L.Icon({
+    iconUrl: "icons/map/factory-map-marker-multiple.svg",
     iconSize: [35, 35],
     iconAnchor: [17, 35],
     popupAnchor: [0, -35],
@@ -69,6 +83,15 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
         );
     }
 
+    function countFactoriesAtLocation(lat: number, lng: number) {
+        const factoriesAtLocation = [...factories, ...positions].filter(
+            (factory) =>
+                factory.location.latitude?.toFixed(2) === lat?.toFixed(2) &&
+                factory.location.longitude?.toFixed(2) === lng?.toFixed(2),
+        );
+        return factoriesAtLocation.length;
+    }
+
     return (
         <div className="z-10">
             <MapContainer
@@ -92,7 +115,24 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                             title={factory.name}
                             description={factory.description}
                             link={`/factorydashboard/${factory.factoryId}`}
-                            icon={customIcon}
+                            icon={
+                                countFactoriesAtLocation(
+                                    factory.location.latitude,
+                                    factory.location.longitude,
+                                ) > 2
+                                    ? customIconMultipleFacilities
+                                    : countFactoriesAtLocation(
+                                            factory.location.latitude,
+                                            factory.location.longitude,
+                                        ) > 1
+                                      ? customIconDualFacilities
+                                      : countFactoriesAtLocation(
+                                              factory.location.latitude,
+                                              factory.location.longitude,
+                                          ) === 0
+                                        ? customIconDualFacilities
+                                        : customIcon
+                            }
                         />
                     ))}
                 {positions.map((sessionFactory, index) => (
