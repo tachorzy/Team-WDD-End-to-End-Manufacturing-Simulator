@@ -53,8 +53,10 @@ const NewFactoryForm = (props: {
                     `Failed to create factory: ${response.statusText}`,
                 );
             }
-
+            const responseData = await response.json();
+            const factoryId = responseData.factoryId;
             onFactorySubmit({
+                factoryId:factoryId,
                 name: factoryName,
                 description: factoryDescription,
                 location: { latitude, longitude },
