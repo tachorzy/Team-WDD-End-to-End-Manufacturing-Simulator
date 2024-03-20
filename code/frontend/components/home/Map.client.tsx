@@ -2,24 +2,33 @@
 
 // TODO: import font later
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import { getAllFactories } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
-import Link from "next/link";
+import MapPin from "./map/MapPin";
 import "leaflet/dist/leaflet.css";
 
-interface Coordinate {
-    lat: number;
-    lon: number;
-}
-
 interface MapProps {
-    positions: Coordinate[];
+    positions: Factory[];
 }
 
 const customIcon = new L.Icon({
-    iconUrl: "/map/factory-map-marker.svg",
+    iconUrl: "icons/map/factory-map-marker.svg",
+    iconSize: [35, 35],
+    iconAnchor: [17, 35],
+    popupAnchor: [0, -35],
+});
+
+const customIconDualFacilities = new L.Icon({
+    iconUrl: "icons/map/factory-map-marker-two.svg",
+    iconSize: [35, 35],
+    iconAnchor: [17, 35],
+    popupAnchor: [0, -35],
+});
+
+const customIconMultipleFacilities = new L.Icon({
+    iconUrl: "icons/map/factory-map-marker-multiple.svg",
     iconSize: [35, 35],
     iconAnchor: [17, 35],
     popupAnchor: [0, -35],
@@ -68,8 +77,30 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     function generateLatLng() {
         const coordinate = positions[positions.length - 1];
 
-        return new L.LatLng(coordinate.lat, coordinate.lon);
+        return new L.LatLng(
+            coordinate.location.latitude,
+            coordinate.location.longitude,
+        );
     }
+
+    function groupFactoriesByLocation(ungroupedFactories: Factory[]) {
+        const groupedFactories: { [key: string]: Factory[] } = {};
+        ungroupedFactories.forEach((factory) => {
+            const key = `${Number(factory.location.latitude).toFixed(2)},${Number(factory.location.longitude).toFixed(2)}`;
+            if (!groupedFactories[key]) {
+                groupedFactories[key] = [];
+            }
+            groupedFactories[key].push(factory);
+        });
+
+        return groupedFactories;
+    }
+
+    const totalFactories = factories.concat(positions);
+    const groupedFactories = groupFactoriesByLocation([
+        ...totalFactories,
+        ...positions,
+    ]);
 
     return (
         <div className="z-10">
@@ -83,46 +114,30 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                 {positions.length > 0 && (
                     <ChangeView center={generateLatLng()} zoom={zoomInLevel} />
                 )}
-                {Array.isArray(factories) &&
-                    factories.map((factory, index) => (
-                        <Marker
-                            key={index}
-                            position={[
-                                factory.location.latitude,
-                                factory.location.longitude,
-                            ]}
-                            icon={customIcon}
-                        >
-                            <Popup>
-                                <div>
-                                    <h3 className="font-bold">
-                                        {factory.name}
-                                    </h3>
-                                    <p>{`Located: ${factory.location.latitude}, ${factory.location.longitude}`}</p>
-                                    <p>{factory.description}</p>
-                                    <Link
-                                        href={`/factorydashboard/${factory.factoryId}`}
-                                    >
-                                        View Factory
-                                    </Link>
-                                </div>
-                            </Popup>
-                        </Marker>
-                    ))}
-                {positions.map((position, index) => (
-                    <Marker
-                        key={index}
-                        position={[position.lat, position.lon]}
-                        icon={customIcon}
-                    >
-                        <Popup>
-                            <div>
-                                <h3 className="font-bold">{`New Facility ${positions.length + 1}`}</h3>
-                                <p>{`Located: ${position.lat}, ${position.lon}`}</p>
-                            </div>
-                        </Popup>
-                    </Marker>
-                ))}
+                {Object.entries(groupedFactories).map(
+                    ([key, factoriesAtLocation], index) => {
+                        const [lat, lng] = key.split(",").map(Number);
+                        const numOfSharedFacilities =
+                            factoriesAtLocation.length;
+
+                        return (
+                            <MapPin
+                                key={index}
+                                position={{ lat, lng }}
+                                factoriesAtLocation={factoriesAtLocation}
+                                icon={(() => {
+                                    if (numOfSharedFacilities === 1) {
+                                        return customIcon;
+                                    }
+                                    if (numOfSharedFacilities === 2) {
+                                        return customIconDualFacilities;
+                                    }
+                                    return customIconMultipleFacilities;
+                                })()}
+                            />
+                        );
+                    },
+                )}
             </MapContainer>
         </div>
     );

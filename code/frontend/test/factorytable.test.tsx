@@ -43,16 +43,15 @@ const fakeFactories = [
 
 // Mocking the fetch function
 global.fetch = jest.fn().mockResolvedValue({
-  json: () => Promise.resolve(fakeFactories),
+    json: () => Promise.resolve(fakeFactories),
 });
 
 describe("FactoryTable", () => {
-
     beforeEach(() => {
         jest.clearAllMocks();
-        jest.spyOn(api, "getAllFactories").mockImplementation(async () => {
-            return Promise.resolve(fakeFactories);
-        });
+        jest.spyOn(api, "getAllFactories").mockImplementation(async () =>
+            Promise.resolve(fakeFactories),
+        );
     });
 
     test("renders table with correct headers", async () => {
@@ -92,9 +91,7 @@ describe("FactoryTable", () => {
     test("displays data correctly in table cells", async () => {
         render(<FactoryTable />);
         await waitFor(() =>
-            expect(
-                screen.getByText(fakeFactories[0].name),
-            ).toBeInTheDocument(),
+            expect(screen.getByText(fakeFactories[0].name)).toBeInTheDocument(),
         );
 
         expect(screen.getByText(fakeFactories[0].name)).toBeInTheDocument();
@@ -144,5 +141,4 @@ describe("FactoryTable", () => {
         render(<Caret direction="asc" />);
         expect(spy).toHaveBeenCalledWith("Caret direction: asc");
     });
-
 });

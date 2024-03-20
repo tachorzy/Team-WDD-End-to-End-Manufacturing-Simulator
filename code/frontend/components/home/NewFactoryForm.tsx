@@ -6,13 +6,17 @@ import { createFactory } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
 import ErrorMessage from "./searchbar/ErrorMessage";
 
+interface CreateFactoryResponse {
+    factoryId: string;
+    message: string;
+}
 const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
 const NewFactoryForm = (props: {
     latitude: number;
     longitude: number;
     setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
-    onFactorySubmit: (position: { lat: number; lon: number }) => void;
+    onFactorySubmit: (sessionFactory: Factory) => void;
 }) => {
     const { latitude, longitude, setQueryMade, onFactorySubmit } = props;
     const [isVisible, setVisibility] = useState(true);
@@ -32,8 +36,8 @@ const NewFactoryForm = (props: {
         const newFactory: Factory = {
             name: factoryName,
             location: {
-                //make sure you turn these into floats or else you will get 400 error 
-                latitude: parseFloat(latitude.toString()) ,
+                // make sure you turn these into floats or else you will get 400 error
+                latitude: parseFloat(latitude.toString()),
                 longitude: parseFloat(longitude.toString()),
             },
             description: factoryDescription,
@@ -41,18 +45,27 @@ const NewFactoryForm = (props: {
 
         try {
             const response = await fetch(`${BASE_URL}/factories`, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(newFactory),
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to create factory: ${response.statusText}`);
+                throw new Error(
+                    `Failed to create factory: ${response.statusText}`,
+                );
             }
-
-            onFactorySubmit({ lat: latitude, lon: longitude });
+            const responseData =
+                (await response.json()) as CreateFactoryResponse;
+            const { factoryId } = responseData;
+            onFactorySubmit({
+                factoryId,
+                name: factoryName,
+                description: factoryDescription,
+                location: { latitude, longitude },
+            });
             setQueryMade(true);
             setVisibility(false);
         } catch (error) {

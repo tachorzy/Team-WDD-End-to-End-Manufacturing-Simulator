@@ -18,7 +18,8 @@
         "endOfLine": "auto",
         "tabWidth": 4
       }
-    ]
+    ],
+    "react/prop-types": "off"
   },
   "overrides": [
     {
