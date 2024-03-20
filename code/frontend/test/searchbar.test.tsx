@@ -27,7 +27,7 @@ describe('Searchbar Component', () => {
       <Searchbar onSearch={() => {}} setQueryMade={() => {}} />
     );
 
-    expect(getByText('Search')).toBeInTheDocument();
+    expect(getByText('Create facility')).toBeInTheDocument();
   });
 
   
@@ -41,7 +41,7 @@ describe('Searchbar Component', () => {
     // Switch to coordinates search
     fireEvent.click(getByText('Coordinates'));
 
-    const searchButton = getByText('Search');
+    const searchButton = getByText('Create facility');
     const latitudeInput = getByPlaceholderText('Enter latitude');
     const longitudeInput = getByPlaceholderText('Enter longitude');
 
@@ -65,7 +65,7 @@ describe('Searchbar Component', () => {
     // Switch to coordinates search
     fireEvent.click(getByText('Coordinates'));
 
-    const searchButton = getByText('Search');
+    const searchButton = getByText('Create facility');
     const latitudeInput = getByPlaceholderText('Enter latitude');
     const longitudeInput = getByPlaceholderText('Enter longitude');
 
