@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Factory } from "@/app/types/types";
 
-interface PinProps {
+export interface PinProps {
     _key: number;
     position: { lat: number; lng: number };
     factoriesAtLocation: Factory[];

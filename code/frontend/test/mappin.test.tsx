@@ -3,6 +3,8 @@ import { render, screen } from '@testing-library/react';
 import MapPin from '../components/home/map/MapPin';
 import { Factory } from "@/app/types/types";
 import { groupFactoriesByLocation } from '../components/home/Map.client';
+import  { PinProps } from '../components/home/map/MapPin';
+import '@testing-library/jest-dom';
 import L from 'leaflet';
 
 const fakeFactories = [
@@ -52,9 +54,8 @@ jest.mock('react-leaflet', () => ({
 jest.mock('leaflet/dist/leaflet.css', () => {});
 
 test('renders MapPin without errors', () => {
-    const div = document.createElement('div');
     render(<MapPin {...props} />);
-  });
+});
 
 test('groupFactoriesByLocation groups factories correctly', () => {
     
@@ -80,4 +81,24 @@ test('groupFactoriesByLocation groups factories correctly', () => {
     ];
     const groupedFactories = groupFactoriesByLocation(fakeFactoryArray);
     expect(Object.keys(groupedFactories)).toHaveLength(2);
+});
+
+jest.mock('react-leaflet', () => ({
+    Marker: ({ children} : { children: React.ReactNode}) => <div data-testid="marker">{children}</div>,
+    Popup: ({ children } : { children: React.ReactNode}) => <div data-testid="popup">{children}</div>,
+  }));
+
+test('displays the details of a single factory at a location in a popup', () => {
+    const factoriesAtLocation = [
+        { factoryId: '1', name: 'Factory 1', description: 'This is the first factory', location: { latitude: 1, longitude: 1 } },
+    ];
+    const newProps: PinProps = { 
+        _key: 1234,
+        position: { lat: 1, lng: 1 },
+        factoriesAtLocation: factoriesAtLocation,
+        icon: icon 
+    };
+    render(<MapPin {...newProps} />);
+    const firstFactory = factoriesAtLocation[0];
+    expect(screen.getByTestId('popup')).toHaveTextContent(`${firstFactory.name}${firstFactory.location.latitude.toFixed(2)}°, ${firstFactory.location.longitude.toFixed(2)}°${firstFactory.description}View Factory›‹Previous1Next›`);
 });
