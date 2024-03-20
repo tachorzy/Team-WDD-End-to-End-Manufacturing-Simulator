@@ -8,6 +8,20 @@ import ErrorMessage from "./searchbar/ErrorMessage";
 
 const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
+interface FactoryResponse {
+    factoryId: string;
+}
+
+interface FactorySubmitData {
+    factoryId: string;
+    name: string;
+    description: string;
+    location: {
+        latitude: number;
+        longitude: number;
+    };
+}
+
 const NewFactoryForm = (props: {
     latitude: number;
     longitude: number;
@@ -53,14 +67,15 @@ const NewFactoryForm = (props: {
                     `Failed to create factory: ${response.statusText}`,
                 );
             }
-            const responseData = await response.json();
-            const factoryId = responseData.factoryId;
-            onFactorySubmit({
-                factoryId:factoryId,
+            const responseData = (await response.json()) as FactoryResponse;
+            const { factoryId } = responseData;
+            const factorySubmitData: FactorySubmitData = {
+                factoryId,
                 name: factoryName,
                 description: factoryDescription,
                 location: { latitude, longitude },
-            });
+            };
+            onFactorySubmit(factorySubmitData);
             setQueryMade(true);
             setVisibility(false);
         } catch (error) {

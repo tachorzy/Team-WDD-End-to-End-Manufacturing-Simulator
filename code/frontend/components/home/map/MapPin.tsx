@@ -26,7 +26,7 @@ const MapPin: React.FC<PinProps> = ({
                 <div className="flex flex-col gap-y-1">
                     <div className="flex flex-row gap-x-1 border-b-2 border-slate-300 py-0">
                         <Image
-                            src={`/icons/location.svg`}
+                            src="/icons/location.svg"
                             width={17}
                             height={17}
                             className="select-none"
@@ -34,23 +34,23 @@ const MapPin: React.FC<PinProps> = ({
                         />
                         <p className="font-thin	text-slate-500 my-0 text-xs">{`${position.lat.toFixed(2)}°, ${position.lng.toFixed(2)}°`}</p>
                     </div>
-                    {/* <div className="flex flex-row gap-x-1 border-b-2 border-slate-300 py-0">
-                        <Image
-                            src={`/icons/location.svg`}
-                            width={17}
-                            height={17}
-                            className="select-none"
-                            alt="error pin"
-                        />
-                        <p className="font-thin	text-slate-500 my-0 text-xs">{`${position.lat.toFixed(2)}°, ${position.lng.toFixed(2)}°`}</p>
-                    </div> */}
                 </div>
 
-                {description && <p className="font-text-xs text-pretty">{description}</p>}
+                {description && (
+                    <p className="font-text-xs text-pretty">{description}</p>
+                )}
                 <div className="w-fit">
-                    {link && <Link href={link} className="text-sm hover:text-MainBlue group">View Factory
-                        <span className="text-lg font-bold pt-0.5 pl-0.5 group-hover:pl-1.5 duration-500">›</span>
-                    </Link>}
+                    {link && (
+                        <Link
+                            href={link}
+                            className="text-sm hover:text-MainBlue group"
+                        >
+                            View Factory
+                            <span className="text-lg font-bold pt-0.5 pl-0.5 group-hover:pl-1.5 duration-500">
+                                ›
+                            </span>
+                        </Link>
+                    )}
                 </div>
             </div>
         </Popup>

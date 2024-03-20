@@ -92,9 +92,10 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                             title={factory.name}
                             description={factory.description}
                             link={`/factorydashboard/${factory.factoryId}`}
+                            factoryId={factory.factoryId as string}
                             icon={customIcon}
                         />
-                ))}
+                    ))}
                 {positions.map((sessionFactory, index) => (
                     <MapPin
                         key={index}
@@ -105,6 +106,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                         title={sessionFactory.name}
                         description={sessionFactory.description}
                         link={`/factorydashboard/${sessionFactory.factoryId}`}
+                        factoryId={sessionFactory.factoryId as string}
                         icon={customIcon}
                     />
                 ))}
