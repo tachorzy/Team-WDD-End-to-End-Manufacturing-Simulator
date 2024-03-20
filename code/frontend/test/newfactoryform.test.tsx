@@ -6,11 +6,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import NewFactoryForm from "../components/home/NewFactoryForm";
 
-// global.fetch = jest.fn(() =>
-//     Promise.resolve({
-//         json: () => Promise.resolve({})
-//     })
-// );
+global.fetch = jest.fn(() => Promise.resolve({ ok: true})) as jest.Mock;
 
 const latitude = 40.7128;
 const longitude = -74.0060;
@@ -18,6 +14,10 @@ const setQueryMadeMock = jest.fn();
 const onFactorySubmitMock = jest.fn();
 
 describe ("New Factory Form", () => {
+    beforeEach(() => {
+        (global.fetch as jest.Mock).mockClear();
+      });
+
     test("renders form and its compontents correctly ", () => {
         render(
             <NewFactoryForm
@@ -58,8 +58,11 @@ describe ("New Factory Form", () => {
         );
         
         const closeIcon = getByAltText("close icon");
+
         expect(closeIcon).toBeInTheDocument();
+
         fireEvent.click(closeIcon);
+
         expect(closeIcon).not.toBeInTheDocument();
     });
 
@@ -144,4 +147,40 @@ describe ("New Factory Form", () => {
         expect(descriptionInput).toHaveValue(factoryDescription);
         expect(descriptionTooLongError).toBeInTheDocument();
     });
+
+    test("Console logs an error on fetching data", async () => {
+        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
+            ok: false,
+            statusText: "404",
+        }))
+        const logSpy = jest.spyOn(global.console, "log");
+
+        const { getByText, getByPlaceholderText } = render(
+            <NewFactoryForm
+                latitude={latitude}
+                longitude={longitude} 
+                setQueryMade={setQueryMadeMock}
+                onFactorySubmit={onFactorySubmitMock}
+            />
+        );
+
+        const nameInput = getByPlaceholderText("Enter factory name");
+        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+        const factoryName = "TensorIoT Factory";
+        const factoryDescription = "This is a factory used by TensorIoT in Texas";
+
+        fireEvent.change(nameInput, {
+            target: {
+                value: factoryName
+            }
+        });
+        fireEvent.change(descriptionInput, {
+            target: {
+                value: factoryDescription
+            }
+        });
+        fireEvent.click(getByText(/(Create)/))
+
+        expect(global.fetch).toHaveBeenCalled();
+    })
 });
