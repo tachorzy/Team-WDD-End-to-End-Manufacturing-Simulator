@@ -86,7 +86,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     function groupFactoriesByLocation(ungroupedFactories: Factory[]) {
         const groupedFactories: { [key: string]: Factory[] } = {};
         ungroupedFactories.forEach((factory) => {
-            const key = `${factory.location.latitude.toFixed(2)},${factory.location.longitude.toFixed(2)}`;
+            const key = `${Number(factory.location.latitude).toFixed(2)},${Number(factory.location.longitude).toFixed(2)}`;
             if (!groupedFactories[key]) {
                 groupedFactories[key] = [];
             }
