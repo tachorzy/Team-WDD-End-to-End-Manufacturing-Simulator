@@ -23,6 +23,19 @@ const MapPin: React.FC<PinProps> = ({
     const currentFactory = factoriesAtLocation[currentPageIndex];
     const link = `/factorydashboard/${currentFactory.factoryId}`;
 
+    const handlePageChange = (pageIndexChange: number) => {
+        setCurrentPageIndex((prevPageIndex) => {
+            const nextPageIndex = prevPageIndex + pageIndexChange;
+            if (
+                nextPageIndex < 0 ||
+                nextPageIndex >= factoriesAtLocation.length
+            ) {
+                return prevPageIndex;
+            }
+            return nextPageIndex;
+        });
+    };
+
     return (
         <Marker key={key} position={position} icon={icon}>
             <Popup className="w-56">
@@ -68,9 +81,7 @@ const MapPin: React.FC<PinProps> = ({
                     <div className="grid grid-rows-1 grid-cols-3 gap-x-[20%] mt-2 ">
                         <button
                             type="button"
-                            onClick={() =>
-                                setCurrentPageIndex(currentPageIndex - 1)
-                            }
+                            onClick={() => handlePageChange(-1)}
                             className="text-xs text-slate-400 hover:text-MainBlue group"
                         >
                             <span className="font-semibold text-base font-bold pt-1 pr-0.5 group-hover:pr-1.5 duration-500">
@@ -83,9 +94,7 @@ const MapPin: React.FC<PinProps> = ({
                         </p>
                         <button
                             type="button"
-                            onClick={() =>
-                                setCurrentPageIndex(currentPageIndex + 1)
-                            }
+                            onClick={() => handlePageChange(1)}
                             className="text-xs text-slate-400 hover:text-MainBlue group"
                         >
                             Next
