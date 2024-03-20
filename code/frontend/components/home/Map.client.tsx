@@ -124,9 +124,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                             <MapPin
                                 key={index}
                                 position={{ lat, lng }}
-                                title={factoriesAtLocation[0].name}
-                                description={factoriesAtLocation[0].description}
-                                link={`/factorydashboard/${factoriesAtLocation[0].factoryId}`}
+                                factoriesAtLocation={factoriesAtLocation}
                                 icon={(() => {
                                     if (numOfSharedFacilities === 1) {
                                         return customIcon;
