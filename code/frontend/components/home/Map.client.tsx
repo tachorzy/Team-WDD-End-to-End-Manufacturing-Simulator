@@ -83,17 +83,22 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
         );
     }
 
-    function countFactoriesAtLocation(lat: number, lng: number) {
-        const factoriesAtLocation = [...factories, ...positions].filter(
-            (factory) =>
-                Number(factory.location.latitude)?.toFixed(2) ===
-                    lat?.toFixed(2) &&
-                Number(factory.location.longitude)?.toFixed(2) ===
-                    lng?.toFixed(2),
-        );
-        return factoriesAtLocation.length;
+    function groupFactoriesByLocation(factories: Factory[]) {
+        const groupedFactories: { [key: string]: Factory[] } = {};
+        const totalFactories = factories.concat(positions)
+        totalFactories.forEach((factory) => {
+            const key = `${factory.location.latitude.toFixed(2)},${factory.location.longitude.toFixed(2)}`;
+            if (!groupedFactories[key]) {
+                groupedFactories[key] = [];
+            }
+            groupedFactories[key].push(factory);
+        });
+    
+        return groupedFactories;
     }
 
+    const groupedFactories = groupFactoriesByLocation([...factories, ...positions]);
+    
     return (
         <div className="z-10">
             <MapContainer
@@ -106,37 +111,22 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                 {positions.length > 0 && (
                     <ChangeView center={generateLatLng()} zoom={zoomInLevel} />
                 )}
-                {Array.isArray(factories) &&
-                    factories.map((factory, index) => (
+                {Object.entries(groupedFactories).map(([key, factoriesAtLocation], index) => {
+                    const [lat, lng] = key.split(',').map(Number);
+                    const numOfSharedFacilities = factoriesAtLocation.length;
+
+                    return (
                         <MapPin
                             key={index}
-                            position={{
-                                lat: factory.location.latitude,
-                                lng: factory.location.longitude,
-                            }}
-                            title={factory.name}
-                            description={factory.description}
-                            link={`/factorydashboard/${factory.factoryId}`}
-                            icon={(() => {
-                                if (
-                                    countFactoriesAtLocation(
-                                        factory.location.latitude,
-                                        factory.location.longitude,
-                                    ) > 2
-                                )
-                                    return customIconMultipleFacilities;
-                                if (
-                                    countFactoriesAtLocation(
-                                        factory.location.latitude,
-                                        factory.location.longitude,
-                                    ) > 1
-                                )
-                                    return customIconDualFacilities;
-                                return customIcon;
-                            })()}
+                            position={{ lat, lng }}
+                            title={factoriesAtLocation[0].name} // adjust this as needed
+                            description={factoriesAtLocation[0].description} // adjust this as needed
+                            link={`/factorydashboard/${factoriesAtLocation[0].factoryId}`} // adjust this as needed
+                            icon={numOfSharedFacilities > 2 ? customIconMultipleFacilities : numOfSharedFacilities > 1 ? customIconDualFacilities : customIcon}
                         />
-                    ))}
-                {positions.map((sessionFactory, index) => (
+                    );
+                })}
+                {/* {positions.map((sessionFactory, index) => (
                     <MapPin
                         key={index}
                         position={{
@@ -163,7 +153,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                                 return customIconDualFacilities;
                             return customIcon;
                         })()}
-                    />
+                    /> */}
                 ))}
             </MapContainer>
         </div>
