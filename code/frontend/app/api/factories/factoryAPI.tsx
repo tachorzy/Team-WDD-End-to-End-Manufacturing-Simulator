@@ -1,4 +1,4 @@
-import { Factory, ApiResponse } from "@/app/types/types";
+import { Factory } from "@/app/types/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
@@ -11,7 +11,7 @@ const requestOptions: RequestInit = {
 const getFactory = async (factoryId: string): Promise<Factory> => {
     try {
         const response = await fetch(
-            `${BASE_URL}/factories?factoryId=${factoryId}`,
+            `${BASE_URL}/factories?id=${factoryId}`,
             requestOptions,
         );
         if (!response.ok) {
@@ -53,13 +53,27 @@ const getAllFactories = async (): Promise<Factory[]> => {
                 `Failed to fetch all factories: ${response.statusText}`,
             );
         }
-        const responseBody = (await response.json()) as ApiResponse;
-        const data = JSON.parse(responseBody.body) as Factory[];
-        return data;
+        return (await response.json()) as Factory[];
     } catch (error) {
         console.error("Failed to fetch all factories: ", error);
         throw new Error("Failed to fetch all factories.");
     }
 };
 
-export { getFactory, createFactory, getAllFactories };
+const updateFactory = async (factoryData: Factory): Promise<Factory> => {
+    const response = await fetch(`${BASE_URL}/factories`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(factoryData),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to update factory: ${response.statusText}`);
+    }
+
+    return (await response.json()) as Factory;
+};
+
+export { getFactory, createFactory, getAllFactories, updateFactory };

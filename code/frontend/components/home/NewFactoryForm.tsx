@@ -3,14 +3,22 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { createFactory } from "@/app/api/factories/factoryAPI";
+import { Factory } from "@/app/types/types";
 import ErrorMessage from "./searchbar/ErrorMessage";
+
+interface CreateFactoryResponse {
+    factoryId: string;
+    message: string;
+}
+const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
 const NewFactoryForm = (props: {
     latitude: number;
     longitude: number;
     setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
+    onFactorySubmit: (sessionFactory: Factory) => void;
 }) => {
-    const { latitude, longitude, setQueryMade } = props;
+    const { latitude, longitude, setQueryMade, onFactorySubmit } = props;
     const [isVisible, setVisibility] = useState(true);
     const [factoryName, setFactoryName] = useState("");
     const [factoryDescription, setFactoryDescription] = useState("");
@@ -19,20 +27,47 @@ const NewFactoryForm = (props: {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (factoryName === "") setInvalidName(true);
-        else if (factoryDescription.length > 200) setInvalidDescription(true);
+        if (factoryName === "" || factoryDescription.length > 200) {
+            setInvalidName(factoryName === "");
+            setInvalidDescription(factoryDescription.length > 200);
+            return;
+        }
 
-        const newFactory = {
+        const newFactory: Factory = {
             name: factoryName,
             location: {
-                latitude,
-                longitude,
+                // make sure you turn these into floats or else you will get 400 error
+                latitude: parseFloat(latitude.toString()),
+                longitude: parseFloat(longitude.toString()),
             },
             description: factoryDescription,
         };
+
         try {
-            await createFactory(newFactory);
-            setQueryMade(false);
+            const response = await fetch(`${BASE_URL}/factories`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newFactory),
+            });
+
+            if (!response.ok) {
+                throw new Error(
+                    `Failed to create factory: ${response.statusText}`,
+                );
+            }
+            const responseData =
+                (await response.json()) as CreateFactoryResponse;
+            const { factoryId } = responseData;
+            onFactorySubmit({
+                factoryId,
+                name: factoryName,
+                description: factoryDescription,
+                location: { latitude, longitude },
+            });
+            setQueryMade(true);
+            setVisibility(false);
         } catch (error) {
             console.error("Failed to create factory:", error);
         }
@@ -44,7 +79,8 @@ const NewFactoryForm = (props: {
                 <>
                     <form
                         onSubmit={handleSubmit}
-                        className="w-[50%] h-96 flex flex-col relative bg-white rounded-3xl shadow-xl z-50 mx-[25%] my-[85%] px-4 items-center justify-center gap-y-6"
+                        method="POST"
+                        className="w-[50%] h-[60%] flex flex-col relative bg-white rounded-3xl shadow-xl z-50 mx-[25%] my-[85%] px-4 items-center justify-center gap-y-6"
                     >
                         <Image
                             src="/icons/navbar/close.svg"
@@ -73,7 +109,7 @@ const NewFactoryForm = (props: {
                                 }}
                                 placeholder="Enter factory name"
                                 // bg-gradient-to-br from-MainBlue to-DarkBlue
-                                className="rounded-full w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 bg-neutral-200"
+                                className="rounded-xl w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 border-[2.5px] border-neutral-300"
                             />
                         </div>
                         <div className="w-9/12 z-30">
@@ -84,14 +120,13 @@ const NewFactoryForm = (props: {
                                 className="absolute select-none float-left justify-center self-center ml-6 mt-3.5"
                                 alt="maginify glass"
                             />
-                            <input
-                                type="text"
+                            <textarea
                                 value={factoryDescription}
                                 onChange={(e) => {
                                     setFactoryDescription(e.target.value);
                                 }}
                                 placeholder="Enter factory description (optional)"
-                                className="rounded-full w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 bg-neutral-200"
+                                className="resize-y min-h-20 max-h-36 rounded-xl w-full pl-16 p-4 text-lg font-medium text-neutral-600 placeholder-neutral-400 border-[2.5px] border-neutral-300"
                             />
                         </div>
                         <button
@@ -108,10 +143,16 @@ const NewFactoryForm = (props: {
                             alt="tensor branding"
                         />
                         {invalidName && (
-                            <ErrorMessage message="Please provide a name for your new facility." />
+                            <ErrorMessage
+                                message="Please provide a name for your new facility."
+                                icon="factory-error.svg"
+                            />
                         )}
                         {invalidDescription && (
-                            <ErrorMessage message="Facility description must be no more than 200 characters." />
+                            <ErrorMessage
+                                message="Facility description must be no more than 200 characters."
+                                icon="factory-error.svg"
+                            />
                         )}
                     </form>
                     <span className="bg-black/70 fixed w-full h-full z-30 top-0 left-0" />
