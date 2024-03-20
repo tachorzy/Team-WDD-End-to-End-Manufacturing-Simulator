@@ -117,24 +117,23 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                             title={factory.name}
                             description={factory.description}
                             link={`/factorydashboard/${factory.factoryId}`}
-                            icon={
-                                countFactoriesAtLocation(
-                                    factory.location.latitude,
-                                    factory.location.longitude,
-                                ) > 2
-                                    ? customIconMultipleFacilities
-                                    : countFactoriesAtLocation(
-                                            factory.location.latitude,
-                                            factory.location.longitude,
-                                        ) > 1
-                                      ? customIconDualFacilities
-                                      : countFactoriesAtLocation(
-                                              factory.location.latitude,
-                                              factory.location.longitude,
-                                          ) === 0
-                                        ? customIconDualFacilities
-                                        : customIcon
-                            }
+                            icon={(() => {
+                                if (
+                                    countFactoriesAtLocation(
+                                        factory.location.latitude,
+                                        factory.location.longitude,
+                                    ) > 2
+                                )
+                                    return customIconMultipleFacilities;
+                                if (
+                                    countFactoriesAtLocation(
+                                        factory.location.latitude,
+                                        factory.location.longitude,
+                                    ) > 1
+                                )
+                                    return customIconDualFacilities;
+                                return customIcon;
+                            })()}
                         />
                     ))}
                 {positions.map((sessionFactory, index) => (
@@ -147,7 +146,23 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                         title={sessionFactory.name}
                         description={sessionFactory.description}
                         link={`/factorydashboard/${sessionFactory.factoryId}`}
-                        icon={customIcon}
+                        icon={(() => {
+                            if (
+                                countFactoriesAtLocation(
+                                    sessionFactory.location.latitude,
+                                    sessionFactory.location.longitude,
+                                ) > 2
+                            )
+                                return customIconMultipleFacilities;
+                            if (
+                                countFactoriesAtLocation(
+                                    sessionFactory.location.latitude,
+                                    sessionFactory.location.longitude,
+                                ) > 1
+                            )
+                                return customIconDualFacilities;
+                            return customIcon;
+                        })()}
                     />
                 ))}
             </MapContainer>
