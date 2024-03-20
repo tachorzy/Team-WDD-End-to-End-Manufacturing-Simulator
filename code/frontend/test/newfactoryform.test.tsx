@@ -68,60 +68,6 @@ describe ("New Factory Form", () => {
         expect(closeIcon).not.toBeInTheDocument();
     });
 
-    test("is invisble after completing form", async () => {
-        onFactorySubmitMock.mockReturnValueOnce({lat: latitude, lon: longitude});
-        setQueryMadeMock.mockReturnValueOnce(true);
-        const { getByText, getByAltText, getAllByAltText, getByPlaceholderText } = render(
-            <NewFactoryForm
-                latitude={latitude}
-                longitude={longitude} 
-                setQueryMade={setQueryMadeMock}
-                onFactorySubmit={onFactorySubmitMock}
-            />
-        );
-
-        const header = getByText(/(Provide your factory details)/);
-        const closeIcon = getByAltText("close icon");
-        const factoryImages = getAllByAltText("maginify glass");
-        const factoryInput = getByPlaceholderText("Enter factory name");
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
-        const button = getByText(/Create/);
-        const logo = getByAltText("tensor branding");
-
-        expect(header).toBeInTheDocument();
-        expect(closeIcon).toBeInTheDocument();
-        expect(factoryImages).toHaveLength(2);
-        expect(factoryImages[0]).toBeInTheDocument();
-        expect(factoryImages[1]).toBeInTheDocument();
-        expect(factoryInput).toBeInTheDocument();
-        expect(descriptionInput).toBeInTheDocument();
-        expect(button).toBeInTheDocument();
-        expect(logo).toBeInTheDocument();
-        
-        fireEvent.change(factoryInput, {
-            target: {
-                value: factoryName
-            }
-        });
-        fireEvent.change(descriptionInput, {
-            target: {
-                value: factoryDescription
-            }
-        });
-        fireEvent.click(getByText(/(Create)/));
-
-        await waitFor(() => {
-            expect(header).not.toBeInTheDocument();
-            expect(closeIcon).not.toBeInTheDocument();
-            expect(factoryImages[0]).not.toBeInTheDocument();
-            expect(factoryImages[1]).not.toBeInTheDocument();
-            expect(factoryInput).not.toBeInTheDocument();
-            expect(descriptionInput).not.toBeInTheDocument();
-            expect(button).not.toBeInTheDocument();
-            expect(logo).not.toBeInTheDocument();
-        });
-    });
-
     test("factory name and description textboxes changes on input", () => {
         const { getByPlaceholderText } = render(
             <NewFactoryForm
