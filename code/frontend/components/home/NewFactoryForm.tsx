@@ -6,6 +6,10 @@ import { createFactory } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
 import ErrorMessage from "./searchbar/ErrorMessage";
 
+interface CreateFactoryResponse {
+    factoryId: string;
+    message: string;
+}
 const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
 const NewFactoryForm = (props: {
@@ -53,10 +57,11 @@ const NewFactoryForm = (props: {
                     `Failed to create factory: ${response.statusText}`,
                 );
             }
-            const responseData = await response.json();
-            const factoryId = responseData.factoryId;
+            const responseData =
+                (await response.json()) as CreateFactoryResponse;
+            const { factoryId } = responseData;
             onFactorySubmit({
-                factoryId:factoryId,
+                factoryId,
                 name: factoryName,
                 description: factoryDescription,
                 location: { latitude, longitude },
