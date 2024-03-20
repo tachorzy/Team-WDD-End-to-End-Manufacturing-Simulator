@@ -83,22 +83,25 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
         );
     }
 
-    function groupFactoriesByLocation(factories: Factory[]) {
+    function groupFactoriesByLocation(ungroupedFactories: Factory[]) {
         const groupedFactories: { [key: string]: Factory[] } = {};
-        const totalFactories = factories.concat(positions)
-        totalFactories.forEach((factory) => {
+        ungroupedFactories.forEach((factory) => {
             const key = `${factory.location.latitude.toFixed(2)},${factory.location.longitude.toFixed(2)}`;
             if (!groupedFactories[key]) {
                 groupedFactories[key] = [];
             }
             groupedFactories[key].push(factory);
         });
-    
+
         return groupedFactories;
     }
 
-    const groupedFactories = groupFactoriesByLocation([...factories, ...positions]);
-    
+    const totalFactories = factories.concat(positions);
+    const groupedFactories = groupFactoriesByLocation([
+        ...totalFactories,
+        ...positions,
+    ]);
+
     return (
         <div className="z-10">
             <MapContainer
@@ -111,50 +114,32 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                 {positions.length > 0 && (
                     <ChangeView center={generateLatLng()} zoom={zoomInLevel} />
                 )}
-                {Object.entries(groupedFactories).map(([key, factoriesAtLocation], index) => {
-                    const [lat, lng] = key.split(',').map(Number);
-                    const numOfSharedFacilities = factoriesAtLocation.length;
+                {Object.entries(groupedFactories).map(
+                    ([key, factoriesAtLocation], index) => {
+                        const [lat, lng] = key.split(",").map(Number);
+                        const numOfSharedFacilities =
+                            factoriesAtLocation.length;
 
-                    return (
-                        <MapPin
-                            key={index}
-                            position={{ lat, lng }}
-                            title={factoriesAtLocation[0].name} // adjust this as needed
-                            description={factoriesAtLocation[0].description} // adjust this as needed
-                            link={`/factorydashboard/${factoriesAtLocation[0].factoryId}`} // adjust this as needed
-                            icon={numOfSharedFacilities > 2 ? customIconMultipleFacilities : numOfSharedFacilities > 1 ? customIconDualFacilities : customIcon}
-                        />
-                    );
-                })}
-                {/* {positions.map((sessionFactory, index) => (
-                    <MapPin
-                        key={index}
-                        position={{
-                            lat: sessionFactory.location.latitude,
-                            lng: sessionFactory.location.longitude,
-                        }}
-                        title={sessionFactory.name}
-                        description={sessionFactory.description}
-                        link={`/factorydashboard/${sessionFactory.factoryId}`}
-                        icon={(() => {
-                            if (
-                                countFactoriesAtLocation(
-                                    sessionFactory.location.latitude,
-                                    sessionFactory.location.longitude,
-                                ) > 2
-                            )
-                                return customIconMultipleFacilities;
-                            if (
-                                countFactoriesAtLocation(
-                                    sessionFactory.location.latitude,
-                                    sessionFactory.location.longitude,
-                                ) > 1
-                            )
-                                return customIconDualFacilities;
-                            return customIcon;
-                        })()}
-                    /> */}
-                ))}
+                        return (
+                            <MapPin
+                                key={index}
+                                position={{ lat, lng }}
+                                title={factoriesAtLocation[0].name}
+                                description={factoriesAtLocation[0].description}
+                                link={`/factorydashboard/${factoriesAtLocation[0].factoryId}`}
+                                icon={(() => {
+                                    if (numOfSharedFacilities === 1) {
+                                        return customIcon;
+                                    }
+                                    if (numOfSharedFacilities === 2) {
+                                        return customIconDualFacilities;
+                                    }
+                                    return customIconMultipleFacilities;
+                                })()}
+                            />
+                        );
+                    },
+                )}
             </MapContainer>
         </div>
     );
