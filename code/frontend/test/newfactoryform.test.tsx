@@ -5,7 +5,6 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import NewFactoryForm from "../components/home/NewFactoryForm";
-import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
 
 // global.fetch = jest.fn(() =>
 //     Promise.resolve({
@@ -114,10 +113,10 @@ describe ("New Factory Form", () => {
         });
         fireEvent.click(getByText(/(Create)/));
 
-        const ErrorMessage = getByText("Please provide a name for your new facility.");
+        const noNameError = getByText("Please provide a name for your new facility.");
 
         expect(nameInput).toHaveValue(factoryName);
-        expect(ErrorMessage).toBeInTheDocument();
+        expect(noNameError).toBeInTheDocument();
     });
 
     test("Factory description is too long", () => {
@@ -140,9 +139,9 @@ describe ("New Factory Form", () => {
         });
         fireEvent.click(getByText(/(Create)/));
 
-        const ErrorMessage = getByText("Facility description must be no more than 200 characters.");
+        const descriptionTooLongError = getByText("Facility description must be no more than 200 characters.");
 
         expect(descriptionInput).toHaveValue(factoryDescription);
-        expect(ErrorMessage).toBeInTheDocument();
+        expect(descriptionTooLongError).toBeInTheDocument();
     });
 });
