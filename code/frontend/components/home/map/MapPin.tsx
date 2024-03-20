@@ -78,33 +78,38 @@ const MapPin: React.FC<PinProps> = ({
                             </Link>
                         )}
                     </div>
-                    {factoriesAtLocation.length > 1 && (<div className="grid grid-rows-1 grid-cols-3 gap-x-[10%] mt-2 ">
-                        <button
-                            type="button"
-                            onClick={() => handlePageChange(-1)}
-                            className="text-xs text-slate-400 hover:text-MainBlue group disabled:text-slate-300 disabled:cursor-not-allowed"
-                            disabled={currentPageIndex === 0}
-                        >
-                            <span className="font-semibold text-base font-bold pt-1 pr-0.5 group-hover:pr-1.5 duration-500">
-                                ‹
-                            </span>
-                            Previous
-                        </button>
-                        <p className="text-center justify-center content-center text-slate-600 text-xs font-bold">
-                            {currentPageIndex+1}
-                        </p>
-                        <button
-                            type="button"
-                            onClick={() => handlePageChange(1)}
-                            className="text-xs text-slate-400 hover:text-MainBlue group disabled:text-slate-300 disabled:cursor-not-allowed"
-                            disabled={currentPageIndex === factoriesAtLocation.length - 1}
-                        >
-                            Next
-                            <span className="font-semibold text-base font-bold pt-1 pl-0.5 disabled:pl-0.5 group-hover:pl-1.5 duration-500">
-                                ›
-                            </span>
-                        </button>
-                    </div>)}
+                    {factoriesAtLocation.length > 1 && (
+                        <div className="grid grid-rows-1 grid-cols-3 gap-x-[10%] mt-2 ">
+                            <button
+                                type="button"
+                                onClick={() => handlePageChange(-1)}
+                                className="text-xs text-slate-400 hover:text-MainBlue group disabled:text-slate-300 disabled:cursor-not-allowed"
+                                disabled={currentPageIndex === 0}
+                            >
+                                <span className="font-semibold text-base font-bold pt-1 pr-0.5 group-hover:pr-1.5 duration-500">
+                                    ‹
+                                </span>
+                                Previous
+                            </button>
+                            <p className="text-center justify-center content-center text-slate-600 text-xs font-bold">
+                                {currentPageIndex + 1}
+                            </p>
+                            <button
+                                type="button"
+                                onClick={() => handlePageChange(1)}
+                                className="text-xs text-slate-400 hover:text-MainBlue group disabled:text-slate-300 disabled:cursor-not-allowed"
+                                disabled={
+                                    currentPageIndex ===
+                                    factoriesAtLocation.length - 1
+                                }
+                            >
+                                Next
+                                <span className="font-semibold text-base font-bold pt-1 pl-0.5 disabled:pl-0.5 group-hover:pl-1.5 duration-500">
+                                    ›
+                                </span>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </Popup>
         </Marker>
