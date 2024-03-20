@@ -1,11 +1,11 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import MapPin from '../components/home/map/MapPin';
+import React from "react";
+import L from "leaflet";
+import { render, screen } from "@testing-library/react";
 import { Factory } from "@/app/types/types";
-import { groupFactoriesByLocation } from '../components/home/Map.client';
-import  { PinProps } from '../components/home/map/MapPin';
-import '@testing-library/jest-dom';
-import L from 'leaflet';
+import MapPin, { PinProps } from "../components/home/map/MapPin";
+import { groupFactoriesByLocation } from "../components/home/Map.client";
+
+import "@testing-library/jest-dom";
 
 const fakeFactories = [
     {
@@ -42,38 +42,37 @@ const icon = L.icon({
 const props = {
     _key: 1,
     position: { lat: 1, lng: 1 },
-    factoriesAtLocation: fakeFactories, 
-    icon: icon
+    factoriesAtLocation: fakeFactories,
+    icon,
 };
 
 describe("MapPin component", () => {
-    jest.mock('react-leaflet', () => ({
+    jest.mock("react-leaflet", () => ({
         Marker: () => null,
         Popup: () => null,
     }));
 
-    jest.mock('leaflet/dist/leaflet.css', () => {});
+    jest.mock("leaflet/dist/leaflet.css", () => {});
 
-    test('renders MapPin without errors', () => {
+    test("renders MapPin without errors", () => {
         render(<MapPin {...props} />);
     });
 
-    test('groupFactoriesByLocation groups factories correctly', () => {
-        
+    test("groupFactoriesByLocation groups factories correctly", () => {
         const fakeFactoryArray: Factory[] = [
-            { 
+            {
                 factoryId: "1",
                 name: "Factory 1",
                 location: { latitude: 1, longitude: 1 },
-                description: "This is the first factory"
+                description: "This is the first factory",
             },
-            { 
+            {
                 factoryId: "2",
                 name: "Factory 2",
                 location: { latitude: 1, longitude: 1 },
                 description: "This is the second factory",
             },
-            { 
+            {
                 factoryId: "3",
                 name: "Factory 3",
                 location: { latitude: 2, longitude: 2 },
@@ -84,23 +83,34 @@ describe("MapPin component", () => {
         expect(Object.keys(groupedFactories)).toHaveLength(2);
     });
 
-    jest.mock('react-leaflet', () => ({
-        Marker: ({ children} : { children: React.ReactNode}) => <div data-testid="marker">{children}</div>,
-        Popup: ({ children } : { children: React.ReactNode}) => <div data-testid="popup">{children}</div>,
+    jest.mock("react-leaflet", () => ({
+        Marker: ({ children }: { children: React.ReactNode }) => (
+            <div data-testid="marker">{children}</div>
+        ),
+        Popup: ({ children }: { children: React.ReactNode }) => (
+            <div data-testid="popup">{children}</div>
+        ),
     }));
 
-    test('displays the details of a single factory at a location in a popup', () => {
+    test("displays the details of a single factory at a location in a popup", () => {
         const factoriesAtLocation = [
-            { factoryId: '1', name: 'Factory 1', description: 'This is the first factory', location: { latitude: 1, longitude: 1 } },
+            {
+                factoryId: "1",
+                name: "Factory 1",
+                description: "This is the first factory",
+                location: { latitude: 1, longitude: 1 },
+            },
         ];
-        const newProps: PinProps = { 
+        const newProps: PinProps = {
             _key: 1234,
             position: { lat: 1, lng: 1 },
-            factoriesAtLocation: factoriesAtLocation,
-            icon: icon 
+            factoriesAtLocation,
+            icon,
         };
         render(<MapPin {...newProps} />);
         const firstFactory = factoriesAtLocation[0];
-        expect(screen.getByTestId('popup')).toHaveTextContent(`${firstFactory.name}${firstFactory.location.latitude.toFixed(2)}°, ${firstFactory.location.longitude.toFixed(2)}°${firstFactory.description}View Factory›‹Previous1Next›`);
+        expect(screen.getByTestId("popup")).toHaveTextContent(
+            `${firstFactory.name}${firstFactory.location.latitude.toFixed(2)}°, ${firstFactory.location.longitude.toFixed(2)}°${firstFactory.description}View Factory›‹Previous1Next›`,
+        );
     });
 });
