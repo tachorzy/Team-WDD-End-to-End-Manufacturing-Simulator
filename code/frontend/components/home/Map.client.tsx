@@ -121,7 +121,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
 
                         return (
                             <MapPin
-                                key={index}
+                                _key={index}
                                 position={{ lat, lng }}
                                 factoriesAtLocation={factoriesAtLocation}
                                 icon={(() => {
