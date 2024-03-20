@@ -6,7 +6,6 @@
 /*
   TODO:
     Searchbar should handle address search correctly using global.fetch instead of axios
-      - Axios componenet is at the bottom
 */
 
 
@@ -107,12 +106,7 @@ describe('Searchbar Component', () => {
     fireEvent.click(getByText('Coordinates'));
   });
 
- 
-
-});
-
-
-/*test('should handle address search correctly', async () => {
+  test('should handle address search correctly', async () => {
     const onSearchMock = jest.fn();
     (axios.get as jest.Mock).mockResolvedValue({
       data: [
@@ -127,7 +121,7 @@ describe('Searchbar Component', () => {
       <Searchbar onSearch={onSearchMock} setQueryMade={() => {}} />
     );
 
-    const searchButton = getByText('Search');
+    const searchButton = getByText('Create facility');
     const addressInput = getByPlaceholderText('Enter factory address');
 
     fireEvent.change(addressInput, { target: { value: '123 Main St' } });
@@ -139,4 +133,8 @@ describe('Searchbar Component', () => {
         lon: -74.006,
       });
     });
-  });*/
+  });
+
+});
+
+
