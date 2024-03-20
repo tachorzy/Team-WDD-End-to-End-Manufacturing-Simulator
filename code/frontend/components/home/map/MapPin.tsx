@@ -32,7 +32,7 @@ const MapPin: React.FC<PinProps> = ({
                             className="select-none"
                             alt="error pin"
                         />
-                        <p className="font-thin	text-slate-500 my-0 text-xs">{`${position.lat.toFixed(2)}°, ${position.lng.toFixed(2)}°`}</p>
+                        <p className="font-thin	text-slate-500 my-0 text-xs">{`${Number(position.lat).toFixed(2)}°, ${Number(position.lng).toFixed(2)}°`}</p>
                     </div>
                 </div>
 

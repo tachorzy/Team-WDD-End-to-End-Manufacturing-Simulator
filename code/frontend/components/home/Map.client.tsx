@@ -86,8 +86,10 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     function countFactoriesAtLocation(lat: number, lng: number) {
         const factoriesAtLocation = [...factories, ...positions].filter(
             (factory) =>
-                factory.location.latitude?.toFixed(2) === lat?.toFixed(2) &&
-                factory.location.longitude?.toFixed(2) === lng?.toFixed(2),
+                Number(factory.location.latitude)?.toFixed(2) ===
+                    lat?.toFixed(2) &&
+                Number(factory.location.longitude)?.toFixed(2) ===
+                    lng?.toFixed(2),
         );
         return factoriesAtLocation.length;
     }
