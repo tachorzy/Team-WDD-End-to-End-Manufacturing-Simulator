@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import SearchModeTray from "./searchbar/SearchModeTray";
-import ErrorMessage from "./searchbar/ErrorMessage";
+import SearchModeTray from "./SearchModeTray";
+import ErrorMessage from "./ErrorMessage";
 
 interface SearchProps {
     onSearch: (position: { lat: number; lon: number }) => void;

@@ -6,7 +6,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import LandingPageTitle from "@/components/home/LandingPageTitle";
 import FactoryTable from "@/components/home/FactoryTable.client";
-import Searchbar from "@/components/home/Searchbar.client";
+import Searchbar from "@/components/home/searchbar/Searchbar.client";
 import Navbar from "@/components/Navbar/Navbar";
 import NewFactoryForm from "@/components/home/NewFactoryForm";
 import { Factory } from "@/app/types/types";
