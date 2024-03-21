@@ -31,7 +31,7 @@ const SearchModeTray = (props: {
                 >
                     Address
                 </button>
-                <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-MainBlue -ml-4 -mt-2" />
+                <span className={`block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-MainBlue -ml-4 -mt-2 ${isAddressSearchBarActive ? "max-w-full" : ""}`} />
             </div>
             <div className="group">
                 <button
@@ -49,7 +49,7 @@ const SearchModeTray = (props: {
                 >
                     Coordinates
                 </button>
-                <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-MainBlue -ml-[1.4rem] -mt-2" />
+                <span className={`block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-MainBlue -ml-[1.4rem] -mt-2 ${!isAddressSearchBarActive ? "max-w-full" : ""}`} />
             </div>
         </div>
     );
