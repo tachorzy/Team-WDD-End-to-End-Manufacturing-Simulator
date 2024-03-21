@@ -99,7 +99,6 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     const totalFactories = factories.concat(positions);
     const groupedFactories = groupFactoriesByLocation([
         ...totalFactories,
-        ...positions,
     ]);
 
     return (
@@ -119,7 +118,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                         const [lat, lng] = key.split(",").map(Number);
                         const numOfSharedFacilities =
                             factoriesAtLocation.length;
-
+                        console.log(`numOfSharedFacilities: ${numOfSharedFacilities}`);
                         return (
                             <MapPin
                                 key={index}
