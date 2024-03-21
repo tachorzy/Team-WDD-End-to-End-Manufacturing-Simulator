@@ -66,7 +66,7 @@ const NewFactoryForm = (props: {
                 description: factoryDescription,
                 location: { latitude, longitude },
             });
-            setQueryMade(true);
+            setQueryMade(false);
             setVisibility(false);
         } catch (error) {
             console.error("Failed to create factory:", error);

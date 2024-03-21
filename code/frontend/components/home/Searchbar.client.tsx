@@ -43,9 +43,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
             if (Array.isArray(response.data) && response.data.length > 0) {
                 const firstResult = response.data[0] as GeocodeResponse;
                 const { lat, lon } = firstResult;
-
-                console.log(`coords: ${lat}, ${lon}`);
-
+                
                 return { lat, lon };
             }
 
@@ -81,8 +79,11 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
             ? await getCoordinates(address)
             : validCoordinates(latitude, longitude);
 
+        console.log(`handleSubmit, coordinates: ${coordinates?.lat} ${coordinates?.lon}`)
+
         if (coordinates) {
             setQueryMade(true);
+            console.log(`setQueryMade is now true`)
             onSearch(coordinates);
         } else if (isAddressSearchBarActive) {
             setInvalidAddress(true);
