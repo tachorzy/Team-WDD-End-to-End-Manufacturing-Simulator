@@ -53,7 +53,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
         }
     };
 
-    const validCoordinates = (
+    const validateCoordinates = (
         inputLatitude: string,
         inputLongitude: string,
     ): { lat: number; lon: number } | undefined => {
@@ -74,10 +74,9 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        // Determine coordinates from either address or manual input
         const coordinates = isAddressSearchBarActive
             ? await getCoordinates(address)
-            : validCoordinates(latitude, longitude);
+            : validateCoordinates(latitude, longitude);
 
         if (coordinates) {
             setQueryMade(true);
