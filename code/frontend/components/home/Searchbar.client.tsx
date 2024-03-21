@@ -118,7 +118,10 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
                             <input
                                 type="text"
                                 value={address}
-                                onChange={(e) => setAddress(e.target.value)}
+                                onChange={(e) => {
+                                    setAddress(e.target.value)
+                                    setInvalidAddress(false);
+                                }}
                                 placeholder="Enter factory address"
                                 className="rounded-l-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-br from-MainBlue to-DarkBlue"
                             />
