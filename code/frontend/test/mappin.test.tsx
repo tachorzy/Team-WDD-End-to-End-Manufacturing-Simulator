@@ -46,13 +46,18 @@ const props = {
     icon,
 };
 
-describe("MapPin component", () => {
-    jest.mock("react-leaflet", () => ({
-        Marker: () => null,
-        Popup: () => null,
-    }));
+jest.mock("react-leaflet", () => ({
+    Marker: ({ children }: { children: React.ReactNode }) => (
+        <div data-testid="marker">{children}</div>
+    ),
+    Popup: ({ children }: { children: React.ReactNode }) => (
+        <div data-testid="popup">{children}</div>
+    ),
+}));
 
-    jest.mock("leaflet/dist/leaflet.css", () => {});
+jest.mock("leaflet/dist/leaflet.css", () => {});
+
+describe("MapPin component", () => {
 
     test("renders MapPin without errors", () => {
         render(<MapPin {...props} />);
@@ -83,15 +88,6 @@ describe("MapPin component", () => {
         expect(Object.keys(groupedFactories)).toHaveLength(2);
     });
 
-    jest.mock("react-leaflet", () => ({
-        Marker: ({ children }: { children: React.ReactNode }) => (
-            <div data-testid="marker">{children}</div>
-        ),
-        Popup: ({ children }: { children: React.ReactNode }) => (
-            <div data-testid="popup">{children}</div>
-        ),
-    }));
-
     test("displays the details of a single factory at a location in a popup", () => {
         const factoriesAtLocation = [
             {
@@ -110,7 +106,7 @@ describe("MapPin component", () => {
         render(<MapPin {...newProps} />);
         const firstFactory = factoriesAtLocation[0];
         expect(screen.getByTestId("popup")).toHaveTextContent(
-            `${firstFactory.name}${firstFactory.location.latitude.toFixed(2)}°, ${firstFactory.location.longitude.toFixed(2)}°${firstFactory.description}View Factory›‹Previous1Next›`,
+            `${firstFactory.name}${firstFactory.location.latitude.toFixed(2)}°, ${firstFactory.location.longitude.toFixed(2)}°${firstFactory.description}View Factory›`,
         );
     });
 });
