@@ -46,14 +46,14 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
         try {
             if (formData && formData.factoryId) {
                 // await updateFactory(formData);
-                // const response = await fetch(`${BASE_URL}/factories`, {
-                //     method: "PUT",
-                //     headers: {
-                //         "Content-Type": "application/json",
-                //     },
-                //     body: JSON.stringify(formData),
-                // });
-                // onSave();
+                const response = await fetch(`${BASE_URL}/factories`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+                onSave();
             } else {
                 console.error("Factory data is incomplete.");
             }
