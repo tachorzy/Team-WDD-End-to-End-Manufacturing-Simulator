@@ -19,7 +19,6 @@ const Map = dynamic(() => import("@/components/home/Map.client"), {
 export default function Home() {
     const [sessionFactories, setSessionFactories] = useState<Factory[]>([]);
     const [isQueryMade, setQueryMade] = useState(false);
-    const [showFormModal, setShowFormModal] = useState(false);
 
     const [tempPosition, setTempPosition] = useState<{
         lat: number;
@@ -28,7 +27,6 @@ export default function Home() {
 
     const handleNewLocation = (newPosition: { lat: number; lon: number }) => {
         setTempPosition(newPosition);
-        setShowFormModal(true);
     };
 
     return (

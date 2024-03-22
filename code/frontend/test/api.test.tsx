@@ -8,8 +8,6 @@
             - Include errors in testing to make sure they fail properly
 */
 
-import React from "react";
-import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Factory } from "@/app/types/types";
 import * as api from "../app/api/factories/factoryAPI";

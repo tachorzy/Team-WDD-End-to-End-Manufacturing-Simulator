@@ -180,7 +180,6 @@ describe("New Factory Form", () => {
                 statusText: "404",
             }),
         );
-        const logSpy = jest.spyOn(global.console, "log");
 
         const { getByText, getByPlaceholderText } = render(
             <NewFactoryForm

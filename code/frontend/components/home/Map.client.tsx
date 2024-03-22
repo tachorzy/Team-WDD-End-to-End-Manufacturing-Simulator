@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
-import { getAllFactories } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
 import MapPin from "./map/MapPin";
 import "leaflet/dist/leaflet.css";
@@ -58,9 +57,9 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     const initialZoom = 4;
     const zoomInLevel = 15;
     const [factories, setFactories] = useState<Factory[]>([]);
-    const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
     useEffect(() => {
         const fetchFactories = async () => {
+            const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
             try {
                 const response = await fetch(`${BASE_URL}/factories`);
                 const data = (await response.json()) as Factory[];
