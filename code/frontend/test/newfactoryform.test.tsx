@@ -8,7 +8,8 @@ import NewFactoryForm from "../components/home/NewFactoryForm";
 
 global.fetch = jest.fn(() => 
     Promise.resolve({ 
-        ok: true, json: () => Promise.resolve({
+        ok: true, 
+        json: () => Promise.resolve({
             factoryId: "1",
             message: ""
         })}
