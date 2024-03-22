@@ -26,7 +26,7 @@ describe ("New Factory Form", () => {
         (global.fetch as jest.Mock).mockClear();
       });
 
-    test("renders and its compontents correctly ", () => {
+    test("renders and its compontents correctly", () => {
         const { getByText, getByAltText, getAllByAltText, getByPlaceholderText } = render(
             <NewFactoryForm
                 latitude={latitude}
@@ -50,7 +50,9 @@ describe ("New Factory Form", () => {
         expect(factoryImages[0]).toBeInTheDocument();
         expect(factoryImages[1]).toBeInTheDocument();
         expect(factoryInput).toBeInTheDocument();
+        expect(factoryInput).toHaveValue("");
         expect(descriptionInput).toBeInTheDocument();
+        expect(descriptionInput).toHaveValue("");
         expect(button).toBeInTheDocument();
         expect(logo).toBeInTheDocument();
     });
@@ -73,7 +75,7 @@ describe ("New Factory Form", () => {
 
         expect(closeIcon).not.toBeInTheDocument();
     });
-
+    
     test("factory name and description textboxes changes on input", () => {
         const { getByPlaceholderText } = render(
             <NewFactoryForm
@@ -197,6 +199,7 @@ describe ("New Factory Form", () => {
             location: { latitude, longitude },
         });
         setQueryMadeMock.mockReturnValueOnce(true);
+
         const { getByText, getByAltText, getAllByAltText, getByPlaceholderText } = render(
             <NewFactoryForm
                 latitude={latitude}
