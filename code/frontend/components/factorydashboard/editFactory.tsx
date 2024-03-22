@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Factory } from "@/app/types/types";
-import { updateFactory } from "@/app/api/factories/factoryAPI";
+// import { updateFactory } from "@/app/api/factories/factoryAPI";
 import Image from "next/image";
 import ErrorMessage from "../home/searchbar/ErrorMessage";
 
@@ -46,14 +46,14 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
         try {
             if (formData && formData.factoryId) {
                 // await updateFactory(formData);
-                const response = await fetch(`${BASE_URL}/factories`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(formData),
-                });
-                onSave();
+                // const response = await fetch(`${BASE_URL}/factories`, {
+                //     method: "PUT",
+                //     headers: {
+                //         "Content-Type": "application/json",
+                //     },
+                //     body: JSON.stringify(formData),
+                // });
+                // onSave();
             } else {
                 console.error("Factory data is incomplete.");
             }
