@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 import { Factory } from "@/app/types/types";
 import MapPin, { PinProps } from "../components/home/map/MapPin";
 import { groupFactoriesByLocation } from "../components/home/Map.client";
+import { fireEvent } from '@testing-library/react';
 
 import "@testing-library/jest-dom";
 
@@ -109,4 +110,52 @@ describe("MapPin component", () => {
             `${firstFactory.name}${firstFactory.location.latitude.toFixed(2)}°, ${firstFactory.location.longitude.toFixed(2)}°${firstFactory.description}View Factory›`,
         );
     });
+
+    test('Next button correctly renders the next page of a location', () => {
+        const factoriesAtLocation = [
+          { factoryId: '1', name: 'Factory 1', description: 'This is the first factory', location: { latitude: 1, longitude: 1 } },
+          { factoryId: '2', name: 'Factory 2', description: 'This is the second factory', location: { latitude: 1, longitude: 1 } },
+        ];
+
+        const newProps: PinProps = {
+          _key: 1234,
+          position: { lat: 1, lng: 1 },
+          factoriesAtLocation: factoriesAtLocation,
+          icon: icon 
+        };
+        
+        render(<MapPin {...newProps} />);
+        
+        expect(screen.getByTestId('popup')).toHaveTextContent(factoriesAtLocation[0].name);
+        
+        const nextButton = screen.getByText('Next');
+        fireEvent.click(nextButton);
+        
+        expect(screen.getByTestId('popup')).toHaveTextContent(factoriesAtLocation[1].name);
+    });
+
+    test('Previous button correctly renders the next page of a location', () => {
+        const factoriesAtLocation = [
+          { factoryId: '1', name: 'Factory 1', description: 'This is the first factory', location: { latitude: 1, longitude: 1 } },
+          { factoryId: '2', name: 'Factory 2', description: 'This is the second factory', location: { latitude: 1, longitude: 1 } },
+        ];
+
+        const newProps: PinProps = {
+          _key: 1234,
+          position: { lat: 1, lng: 1 },
+          factoriesAtLocation: factoriesAtLocation,
+          icon: icon 
+        };
+        
+        render(<MapPin {...newProps} />);
+        
+        expect(screen.getByTestId('popup')).toHaveTextContent(factoriesAtLocation[1].name);
+        
+        const prevButton = screen.getByText('Previous');
+        fireEvent.click(prevButton);
+        
+        expect(screen.getByTestId('popup')).toHaveTextContent(factoriesAtLocation[0].name);
+    });
+
+
 });
