@@ -9,35 +9,42 @@ import NewFactoryForm from "../components/home/NewFactoryForm";
 global.fetch = jest.fn(() => Promise.resolve({ ok: true })) as jest.Mock;
 
 const latitude = 40.7128;
-const longitude = -74.0060;
+const longitude = -74.006;
 const setQueryMadeMock = jest.fn();
 const onFactorySubmitMock = jest.fn();
 const factoryName = "TensorIoT Factory";
 const factoryDescription = "This is a factory used by TensorIoT in Texas";
 
-describe ("New Factory Form", () => {
+describe("New Factory Form", () => {
     beforeEach(() => {
         (global.fetch as jest.Mock).mockClear();
-      });
+    });
 
     test("renders and its compontents correctly ", () => {
-        const { getByText, getByAltText, getAllByAltText, getByPlaceholderText } = render(
+        const {
+            getByText,
+            getByAltText,
+            getAllByAltText,
+            getByPlaceholderText,
+        } = render(
             <NewFactoryForm
                 latitude={latitude}
-                longitude={longitude} 
+                longitude={longitude}
                 setQueryMade={setQueryMadeMock}
                 onFactorySubmit={onFactorySubmitMock}
-            />
+            />,
         );
 
         const header = getByText(/(Provide your factory details)/);
         const closeIcon = getByAltText("close icon");
         const factoryImages = getAllByAltText("maginify glass");
         const factoryInput = getByPlaceholderText("Enter factory name");
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+        const descriptionInput = getByPlaceholderText(
+            "Enter factory description (optional)",
+        );
         const button = getByText(/Create/);
         const logo = getByAltText("tensor branding");
-    
+
         expect(header).toBeInTheDocument();
         expect(closeIcon).toBeInTheDocument();
         expect(factoryImages).toHaveLength(2);
@@ -53,12 +60,12 @@ describe ("New Factory Form", () => {
         const { getByAltText } = render(
             <NewFactoryForm
                 latitude={latitude}
-                longitude={longitude} 
+                longitude={longitude}
                 setQueryMade={setQueryMadeMock}
                 onFactorySubmit={onFactorySubmitMock}
-            />
+            />,
         );
-        
+
         const closeIcon = getByAltText("close icon");
 
         expect(closeIcon).toBeInTheDocument();
@@ -74,7 +81,7 @@ describe ("New Factory Form", () => {
     //     const { getByText, getByAltText, getAllByAltText, getByPlaceholderText } = render(
     //         <NewFactoryForm
     //             latitude={latitude}
-    //             longitude={longitude} 
+    //             longitude={longitude}
     //             setQueryMade={setQueryMadeMock}
     //             onFactorySubmit={onFactorySubmitMock}
     //         />
@@ -97,7 +104,7 @@ describe ("New Factory Form", () => {
     //     expect(descriptionInput).toBeInTheDocument();
     //     expect(button).toBeInTheDocument();
     //     expect(logo).toBeInTheDocument();
-        
+
     //     fireEvent.change(factoryInput, {
     //         target: {
     //             value: factoryName
@@ -126,38 +133,40 @@ describe ("New Factory Form", () => {
         const { getByPlaceholderText } = render(
             <NewFactoryForm
                 latitude={latitude}
-                longitude={longitude} 
+                longitude={longitude}
                 setQueryMade={setQueryMadeMock}
                 onFactorySubmit={onFactorySubmitMock}
-            />
+            />,
         );
 
         const nameInput = getByPlaceholderText("Enter factory name");
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+        const descriptionInput = getByPlaceholderText(
+            "Enter factory description (optional)",
+        );
 
         fireEvent.change(nameInput, {
             target: {
-                value: factoryName
-            }
+                value: factoryName,
+            },
         });
         fireEvent.change(descriptionInput, {
             target: {
-                value: factoryDescription
-            }
+                value: factoryDescription,
+            },
         });
 
         expect(nameInput).toHaveValue(factoryName);
-        expect(descriptionInput).toHaveValue(factoryDescription); 
+        expect(descriptionInput).toHaveValue(factoryDescription);
     });
 
     test("displays error message on blank factory name", () => {
         const { getByPlaceholderText, getByText } = render(
             <NewFactoryForm
                 latitude={latitude}
-                longitude={longitude} 
+                longitude={longitude}
                 setQueryMade={setQueryMadeMock}
                 onFactorySubmit={onFactorySubmitMock}
-            />
+            />,
         );
 
         const nameInput = getByPlaceholderText("Enter factory name");
@@ -165,12 +174,14 @@ describe ("New Factory Form", () => {
 
         fireEvent.change(nameInput, {
             target: {
-                value: emptyName
-            }
+                value: emptyName,
+            },
         });
         fireEvent.click(getByText(/(Create)/));
 
-        const noNameError = getByText("Please provide a name for your new facility.");
+        const noNameError = getByText(
+            "Please provide a name for your new facility.",
+        );
 
         expect(nameInput).toHaveValue(emptyName);
         expect(noNameError).toBeInTheDocument();
@@ -180,60 +191,68 @@ describe ("New Factory Form", () => {
         const { getByPlaceholderText, getByText } = render(
             <NewFactoryForm
                 latitude={latitude}
-                longitude={longitude} 
+                longitude={longitude}
                 setQueryMade={setQueryMadeMock}
                 onFactorySubmit={onFactorySubmitMock}
-            />
+            />,
         );
 
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
-        const longDescription = "This description is longer than two hundred characters long, so it can not be used in the form. please try to have descriptions less than two hundred characters long, or it will not work in the form. thanks.";
+        const descriptionInput = getByPlaceholderText(
+            "Enter factory description (optional)",
+        );
+        const longDescription =
+            "This description is longer than two hundred characters long, so it can not be used in the form. please try to have descriptions less than two hundred characters long, or it will not work in the form. thanks.";
 
         fireEvent.change(descriptionInput, {
             target: {
-                value: longDescription
-            }
+                value: longDescription,
+            },
         });
         fireEvent.click(getByText(/(Create)/));
 
-        const descriptionTooLongError = getByText("Facility description must be no more than 200 characters.");
+        const descriptionTooLongError = getByText(
+            "Facility description must be no more than 200 characters.",
+        );
 
         expect(descriptionInput).toHaveValue(longDescription);
         expect(descriptionTooLongError).toBeInTheDocument();
     });
 
     test("logs error fetch error in console", () => {
-        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
-            ok: false,
-            statusText: "404",
-        }))
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                ok: false,
+                statusText: "404",
+            }),
+        );
         const logSpy = jest.spyOn(global.console, "log");
 
         const { getByText, getByPlaceholderText } = render(
             <NewFactoryForm
                 latitude={latitude}
-                longitude={longitude} 
+                longitude={longitude}
                 setQueryMade={setQueryMadeMock}
                 onFactorySubmit={onFactorySubmitMock}
-            />
+            />,
         );
 
         const nameInput = getByPlaceholderText("Enter factory name");
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+        const descriptionInput = getByPlaceholderText(
+            "Enter factory description (optional)",
+        );
 
         fireEvent.change(nameInput, {
             target: {
-                value: factoryName
-            }
+                value: factoryName,
+            },
         });
         fireEvent.change(descriptionInput, {
             target: {
-                value: factoryDescription
-            }
+                value: factoryDescription,
+            },
         });
-        fireEvent.click(getByText(/(Create)/))
+        fireEvent.click(getByText(/(Create)/));
 
         expect(global.fetch).toHaveBeenCalled();
-    })
-
+    });
 });
