@@ -159,7 +159,6 @@ describe ("New Factory Form", () => {
             ok: false,
             statusText: "404",
         }))
-        const logSpy = jest.spyOn(global.console, "log");
 
         const { getByText, getByPlaceholderText } = render(
             <NewFactoryForm
@@ -186,7 +185,7 @@ describe ("New Factory Form", () => {
         fireEvent.click(getByText(/(Create)/))
 
         expect(global.fetch).toHaveBeenCalled();
-    })
+    });
 
     test("is invisble after completing form", async () => {
         onFactorySubmitMock.mockReturnValueOnce({
@@ -233,7 +232,7 @@ describe ("New Factory Form", () => {
                 value: factoryDescription
             }
         });
-        fireEvent.click(getByText(/(Create)/));
+        fireEvent.click(button);
 
         await waitFor(() => {
             expect(header).not.toBeInTheDocument();
