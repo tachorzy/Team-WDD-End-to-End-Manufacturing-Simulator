@@ -89,7 +89,7 @@ describe("MapPin component", () => {
         expect(Object.keys(groupedFactories)).toHaveLength(2);
     });
 
-    test("displays the details of a single factory at a location in a popup", () => {
+    test("Displays the details of a single factory at a location in a popup", () => {
         const factoriesAtLocation = [
             {
                 factoryId: "1",
@@ -175,5 +175,32 @@ describe("MapPin component", () => {
       
         expect(nextButton).toBeDisabled();
       });
+
+    test('Displays the details of a all factories at a marker\'s location', () => {
+        const factoriesAtLocation = [
+          { factoryId: '1', name: 'Factory 1', description: 'This is the first factory', location: { latitude: 1, longitude: 1 } },
+          { factoryId: '2', name: 'Factory 2', description: 'This is the second factory', location: { latitude: 1, longitude: 1 } },
+        ];
+
+        const newProps: PinProps = {
+          _key: 1234,
+          position: { lat: 1, lng: 1 },
+          factoriesAtLocation: factoriesAtLocation,
+          icon: icon 
+        };
+        
+        render(<MapPin {...newProps} />);
+        
+        const firstFactory = factoriesAtLocation[0];
+        expect(screen.getByTestId("popup")).toHaveTextContent(
+            `${firstFactory.name}${firstFactory.location.latitude.toFixed(2)}°, ${firstFactory.location.longitude.toFixed(2)}°${firstFactory.description}View Factory›‹Previous1Next›`,
+        );        
+        const nextButton = screen.getByText('Next');
+        fireEvent.click(nextButton);
+        
+        const secondFactory = factoriesAtLocation[1];
+        expect(screen.getByTestId("popup")).toHaveTextContent(
+            `${secondFactory.name}${secondFactory.location.latitude.toFixed(2)}°, ${secondFactory.location.longitude.toFixed(2)}°${secondFactory.description}View Factory›‹Previous2Next›`,
+        );    });
 
 });
