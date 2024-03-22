@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import SearchModeTray from "./searchbar/SearchModeTray";
-import ErrorMessage from "./searchbar/ErrorMessage";
+import SearchModeTray from "./SearchModeTray";
+import ErrorMessage from "./ErrorMessage";
 
 interface SearchProps {
     onSearch: (position: { lat: number; lon: number }) => void;
@@ -43,9 +43,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
             if (Array.isArray(response.data) && response.data.length > 0) {
                 const firstResult = response.data[0] as GeocodeResponse;
                 const { lat, lon } = firstResult;
-
-                console.log(`coords: ${lat}, ${lon}`);
-
+                
                 return { lat, lon };
             }
 
@@ -55,14 +53,14 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
         }
     };
 
-    const validCoordinates = (
+    const validateCoordinates = (
         inputLatitude: string,
         inputLongitude: string,
     ): { lat: number; lon: number } | undefined => {
         try {
             const lat = Number(inputLatitude);
             const lon = Number(inputLongitude);
-            console.log(`lat: ${lat}, lon: ${lon}`);
+
             if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180)
                 return { lat, lon };
 
@@ -76,10 +74,9 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        // Determine coordinates from either address or manual input
         const coordinates = isAddressSearchBarActive
             ? await getCoordinates(address)
-            : validCoordinates(latitude, longitude);
+            : validateCoordinates(latitude, longitude);
 
         if (coordinates) {
             setQueryMade(true);
@@ -117,7 +114,10 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
                             <input
                                 type="text"
                                 value={address}
-                                onChange={(e) => setAddress(e.target.value)}
+                                onChange={(e) => {
+                                    setAddress(e.target.value)
+                                    setInvalidAddress(false);
+                                }}
                                 placeholder="Enter factory address"
                                 className="rounded-l-full w-full pl-20 p-6 text-xl font-medium text-white placeholder-white dark:text-white bg-gradient-to-br from-MainBlue to-DarkBlue"
                             />
