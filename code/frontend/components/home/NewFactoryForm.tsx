@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { createFactory } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
 import ErrorMessage from "./searchbar/ErrorMessage";
 

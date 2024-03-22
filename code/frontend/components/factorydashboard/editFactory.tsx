@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Factory } from "@/app/types/types";
-import { updateFactory } from "@/app/api/factories/factoryAPI";
+// import { updateFactory } from "@/app/api/factories/factoryAPI";
 import Image from "next/image";
 import ErrorMessage from "../home/searchbar/ErrorMessage";
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { getAllFactories } from "@/app/api/factories/factoryAPI";
 import { Factory, Location } from "@/app/types/types";
 import Caret from "./table/Caret";
 
@@ -17,8 +16,8 @@ interface TableHeader {
 const FactoryTable = () => {
     const [facilities, setFacilities] = useState<Factory[]>([]);
     const [sort, setSort] = useState({ key: "name", direction: "" });
-    const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
     useEffect(() => {
+        const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
         const fetchFactories = async () => {
             try {
                 // const response = await getAllFactories();

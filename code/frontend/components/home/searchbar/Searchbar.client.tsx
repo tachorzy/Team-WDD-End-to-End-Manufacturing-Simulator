@@ -43,7 +43,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
             if (Array.isArray(response.data) && response.data.length > 0) {
                 const firstResult = response.data[0] as GeocodeResponse;
                 const { lat, lon } = firstResult;
-                
+
                 return { lat, lon };
             }
 
@@ -115,7 +115,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
                                 type="text"
                                 value={address}
                                 onChange={(e) => {
-                                    setAddress(e.target.value)
+                                    setAddress(e.target.value);
                                     setInvalidAddress(false);
                                 }}
                                 placeholder="Enter factory address"
