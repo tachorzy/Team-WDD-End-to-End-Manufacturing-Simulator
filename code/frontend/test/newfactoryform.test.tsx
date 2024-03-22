@@ -155,10 +155,12 @@ describe ("New Factory Form", () => {
     });
 
     test("logs error fetch error in console", () => {
-        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
-            ok: false,
-            statusText: "404",
-        }))
+        (global.fetch as jest.Mock).mockImplementationOnce(() => 
+            Promise.resolve({
+                ok: false,
+                statusText: "404",
+            }
+        ));
 
         const { getByText, getByPlaceholderText } = render(
             <NewFactoryForm
