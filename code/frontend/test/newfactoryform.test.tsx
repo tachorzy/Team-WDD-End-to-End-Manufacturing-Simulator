@@ -103,6 +103,29 @@ describe ("New Factory Form", () => {
         expect(nameInput).toHaveValue(factoryName);
         expect(descriptionInput).toHaveValue(factoryDescription); 
     });
+    
+    test("factory name textbox changes on input", () => {
+        const { getByPlaceholderText } = render(
+            <NewFactoryForm
+                latitude={latitude}
+                longitude={longitude} 
+                setQueryMade={setQueryMadeMock}
+                onFactorySubmit={onFactorySubmitMock}
+            />
+        );
+
+        const nameInput = getByPlaceholderText("Enter factory name");
+        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+
+        fireEvent.change(nameInput, {
+            target: {
+                value: factoryName
+            }
+        });
+
+        expect(nameInput).toHaveValue(factoryName);
+        expect(descriptionInput).toHaveValue(""); 
+    });
 
     test("displays error message on blank factory name", () => {
         const { getByPlaceholderText, getByText } = render(
