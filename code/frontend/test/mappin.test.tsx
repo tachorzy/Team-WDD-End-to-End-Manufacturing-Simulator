@@ -149,6 +149,11 @@ describe("MapPin component", () => {
         
         render(<MapPin {...newProps} />);
         
+        expect(screen.getByTestId('popup')).toHaveTextContent(factoriesAtLocation[0].name);
+
+        const nextButton = screen.getByText('Next');
+        fireEvent.click(nextButton);
+
         expect(screen.getByTestId('popup')).toHaveTextContent(factoriesAtLocation[1].name);
         
         const prevButton = screen.getByText('Previous');
@@ -157,5 +162,18 @@ describe("MapPin component", () => {
         expect(screen.getByTestId('popup')).toHaveTextContent(factoriesAtLocation[0].name);
     });
 
+    test('Next and Previous buttons are disabled appropriately', () => {
+        render(<MapPin {...props} />);
+      
+        const previousButton = screen.getByText('Previous');
+        expect(previousButton).toBeDisabled();
+      
+        const nextButton = screen.getByText('Next');
+        for (let i = 0; i < fakeFactories.length - 1; i++) {
+          fireEvent.click(nextButton);
+        }
+      
+        expect(nextButton).toBeDisabled();
+      });
 
 });
