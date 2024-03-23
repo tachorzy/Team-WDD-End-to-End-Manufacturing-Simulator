@@ -11,6 +11,7 @@ import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import axios from "axios";
 import "@testing-library/jest-dom";
+import Searchbar from "../components/home/searchbar/Searchbar.client";
 import SearchModeTray from "../components/home/searchbar/SearchModeTray";
 
 jest.mock("axios");
