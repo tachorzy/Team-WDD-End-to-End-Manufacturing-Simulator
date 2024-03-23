@@ -70,9 +70,9 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     const initialZoom = 4;
     const zoomInLevel = 15;
     const [factories, setFactories] = useState<Factory[]>([]);
-    const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
     useEffect(() => {
         const fetchFactories = async () => {
+            const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
             try {
                 const response = await fetch(`${BASE_URL}/factories`);
                 const data = (await response.json()) as Factory[];
@@ -96,10 +96,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
     }
 
     const totalFactories = factories.concat(positions);
-    const groupedFactories = groupFactoriesByLocation([
-        ...totalFactories,
-        ...positions,
-    ]);
+    const groupedFactories = groupFactoriesByLocation([...totalFactories]);
 
     return (
         <div className="z-10">
@@ -118,7 +115,9 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                         const [lat, lng] = key.split(",").map(Number);
                         const numOfSharedFacilities =
                             factoriesAtLocation.length;
-
+                        console.log(
+                            `numOfSharedFacilities: ${numOfSharedFacilities}`,
+                        );
                         return (
                             <MapPin
                                 _key={index}

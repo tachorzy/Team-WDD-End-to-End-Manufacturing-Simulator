@@ -6,7 +6,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import LandingPageTitle from "@/components/home/LandingPageTitle";
 import FactoryTable from "@/components/home/FactoryTable.client";
-import Searchbar from "@/components/home/Searchbar.client";
+import Searchbar from "@/components/home/searchbar/Searchbar.client";
 import Navbar from "@/components/Navbar/Navbar";
 import NewFactoryForm from "@/components/home/NewFactoryForm";
 import { Factory } from "@/app/types/types";
@@ -19,8 +19,7 @@ const Map = dynamic(() => import("@/components/home/Map.client"), {
 export default function Home() {
     const [sessionFactories, setSessionFactories] = useState<Factory[]>([]);
     const [isQueryMade, setQueryMade] = useState(false);
-    const [showFormModal, setShowFormModal] = useState(false);
-    // const [currentPosition, setCurrentPosition] = useState({lat: 0, lon: 0});
+
     const [tempPosition, setTempPosition] = useState<{
         lat: number;
         lon: number;
@@ -28,7 +27,6 @@ export default function Home() {
 
     const handleNewLocation = (newPosition: { lat: number; lon: number }) => {
         setTempPosition(newPosition);
-        setShowFormModal(true);
     };
 
     return (
