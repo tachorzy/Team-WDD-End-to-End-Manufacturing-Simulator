@@ -5,13 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import LandingPageTitle from "@/components/home/LandingPageTitle";
-import FactoryTable from "@/components/home/FactoryTable.client";
+import FactoryTable from "@/components/home/table/FactoryTable.client";
 import Searchbar from "@/components/home/searchbar/Searchbar.client";
 import Navbar from "@/components/Navbar/Navbar";
 import NewFactoryForm from "@/components/home/NewFactoryForm";
 import { Factory } from "@/app/types/types";
 
-const Map = dynamic(() => import("@/components/home/Map.client"), {
+const Map = dynamic(() => import("@/components/home/map/Map.client"), {
     loading: () => <p>A map is loading</p>,
     ssr: false,
 });
