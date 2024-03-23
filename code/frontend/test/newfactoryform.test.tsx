@@ -3,7 +3,7 @@
  */
 import "@testing-library/jest-dom";
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import NewFactoryForm from "../components/home/NewFactoryForm";
 
 global.fetch = jest.fn(() =>
