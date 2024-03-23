@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Factory, Location } from "@/app/types/types";
-import Caret from "./table/Caret";
+import Caret from "./Caret";
 
 interface Header {
     id: string;

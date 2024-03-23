@@ -9,7 +9,7 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
-import FactoryTable from "../components/home/FactoryTable.client";
+import FactoryTable from "../components/home/table/FactoryTable.client";
 import Caret from "../components/home/table/Caret";
 import * as api from "../app/api/factories/factoryAPI";
 

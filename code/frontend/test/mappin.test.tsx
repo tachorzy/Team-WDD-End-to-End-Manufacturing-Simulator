@@ -3,7 +3,7 @@ import L from "leaflet";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Factory } from "@/app/types/types";
 import MapPin, { PinProps } from "../components/home/map/MapPin";
-import { groupFactoriesByLocation } from "../components/home/Map.client";
+import { groupFactoriesByLocation } from "../components/home/map/Map.client";
 
 import "@testing-library/jest-dom";
 
