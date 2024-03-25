@@ -41,7 +41,6 @@ const fakeFactories = [
     // Add more fake factories as needed
 ];
 
-// Mocking the fetch function
 global.fetch = jest.fn().mockResolvedValue({
     json: () => Promise.resolve(fakeFactories),
 });
