@@ -4,9 +4,8 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
-import { getAllFactories } from "@/app/api/factories/factoryAPI";
 import { Factory } from "@/app/types/types";
-import MapPin from "./map/MapPin";
+import MapPin from "./MapPin";
 import "leaflet/dist/leaflet.css";
 
 interface MapProps {
@@ -54,13 +53,26 @@ const ChangeView = ({
     return null;
 };
 
+export function groupFactoriesByLocation(ungroupedFactories: Factory[]) {
+    const groupedFactories: { [key: string]: Factory[] } = {};
+    ungroupedFactories.forEach((factory) => {
+        const key = `${Number(factory.location.latitude).toFixed(2)},${Number(factory.location.longitude).toFixed(2)}`;
+        if (!groupedFactories[key]) {
+            groupedFactories[key] = [];
+        }
+        groupedFactories[key].push(factory);
+    });
+
+    return groupedFactories;
+}
+
 const MapComponent: React.FC<MapProps> = ({ positions }) => {
     const initialZoom = 4;
     const zoomInLevel = 15;
     const [factories, setFactories] = useState<Factory[]>([]);
-    const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
     useEffect(() => {
         const fetchFactories = async () => {
+            const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
             try {
                 const response = await fetch(`${BASE_URL}/factories`);
                 const data = (await response.json()) as Factory[];
@@ -83,24 +95,8 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
         );
     }
 
-    function groupFactoriesByLocation(ungroupedFactories: Factory[]) {
-        const groupedFactories: { [key: string]: Factory[] } = {};
-        ungroupedFactories.forEach((factory) => {
-            const key = `${Number(factory.location.latitude).toFixed(2)},${Number(factory.location.longitude).toFixed(2)}`;
-            if (!groupedFactories[key]) {
-                groupedFactories[key] = [];
-            }
-            groupedFactories[key].push(factory);
-        });
-
-        return groupedFactories;
-    }
-
     const totalFactories = factories.concat(positions);
-    const groupedFactories = groupFactoriesByLocation([
-        ...totalFactories,
-        ...positions,
-    ]);
+    const groupedFactories = groupFactoriesByLocation([...totalFactories]);
 
     return (
         <div className="z-10">
@@ -119,10 +115,12 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                         const [lat, lng] = key.split(",").map(Number);
                         const numOfSharedFacilities =
                             factoriesAtLocation.length;
-
+                        console.log(
+                            `numOfSharedFacilities: ${numOfSharedFacilities}`,
+                        );
                         return (
                             <MapPin
-                                key={index}
+                                _key={index}
                                 position={{ lat, lng }}
                                 factoriesAtLocation={factoriesAtLocation}
                                 icon={(() => {

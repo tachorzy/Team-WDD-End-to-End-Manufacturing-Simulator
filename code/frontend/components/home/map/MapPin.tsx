@@ -6,15 +6,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { Factory } from "@/app/types/types";
 
-interface PinProps {
-    key: number;
+export interface PinProps {
+    _key: number;
     position: { lat: number; lng: number };
     factoriesAtLocation: Factory[];
     icon: L.Icon;
 }
 
 const MapPin: React.FC<PinProps> = ({
-    key,
+    _key,
     position,
     factoriesAtLocation,
     icon,
@@ -37,7 +37,7 @@ const MapPin: React.FC<PinProps> = ({
     };
 
     return (
-        <Marker key={key} position={position} icon={icon}>
+        <Marker key={_key} position={position} icon={icon}>
             <Popup className="w-56">
                 <div className="w-full">
                     <h3 className="font-bold text-base text-slate-600">

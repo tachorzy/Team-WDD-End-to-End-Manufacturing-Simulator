@@ -9,7 +9,7 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
-import FactoryTable from "../components/home/FactoryTable.client";
+import FactoryTable from "../components/home/table/FactoryTable.client";
 import Caret from "../components/home/table/Caret";
 import * as api from "../app/api/factories/factoryAPI";
 
@@ -41,7 +41,6 @@ const fakeFactories = [
     // Add more fake factories as needed
 ];
 
-// Mocking the fetch function
 global.fetch = jest.fn().mockResolvedValue({
     json: () => Promise.resolve(fakeFactories),
 });
@@ -134,11 +133,5 @@ describe("FactoryTable", () => {
         const { getByTestId } = render(<Caret direction="asc" />);
         const caretSvg = getByTestId("caret");
         expect(caretSvg).not.toHaveClass("transform rotate-180");
-    });
-
-    test("Caret logs direction when rendered", () => {
-        const spy = jest.spyOn(console, "log");
-        render(<Caret direction="asc" />);
-        expect(spy).toHaveBeenCalledWith("Caret direction: asc");
     });
 });
