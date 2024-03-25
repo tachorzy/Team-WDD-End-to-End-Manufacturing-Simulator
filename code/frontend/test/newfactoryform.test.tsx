@@ -3,7 +3,7 @@
  */
 import "@testing-library/jest-dom";
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import NewFactoryForm from "../components/home/NewFactoryForm";
 
 global.fetch = jest.fn(() =>
@@ -173,40 +173,39 @@ describe("New Factory Form", () => {
         expect(descriptionTooLongError).toBeInTheDocument();
     });
 
-    test("logs error fetch error in console", () => {
+    test("should log an error in the console when fetch fails", async () => {
         (global.fetch as jest.Mock).mockImplementationOnce(() =>
-            Promise.resolve({
-                ok: false,
-                statusText: "404",
-            }),
+          Promise.reject(new Error('404')),
         );
-
+      
+        const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
+      
         const { getByText, getByPlaceholderText } = render(
-            <NewFactoryForm
-                latitude={latitude}
-                longitude={longitude}
-                setQueryMade={setQueryMadeMock}
-                onFactorySubmit={onFactorySubmitMock}
-            />,
+          <NewFactoryForm
+            latitude={latitude}
+            longitude={longitude}
+            setQueryMade={setQueryMadeMock}
+            onFactorySubmit={onFactorySubmitMock}
+          />,
         );
-
+      
         const nameInput = getByPlaceholderText("Enter factory name");
         const descriptionInput = getByPlaceholderText(
-            "Enter factory description (optional)",
+          "Enter factory description (optional)",
         );
-
+      
         fireEvent.change(nameInput, {
-            target: {
-                value: factoryName,
-            },
+          target: {
+            value: factoryName,
+          },
         });
         fireEvent.change(descriptionInput, {
-            target: {
-                value: factoryDescription,
-            },
+          target: {
+            value: factoryDescription,
+          },
         });
         fireEvent.click(getByText(/(Create)/));
-
-        expect(global.fetch).toHaveBeenCalled();
-    });
+      
+        await waitFor(() => expect(consoleErrorMock).toHaveBeenCalledWith("Failed to create factory:", new Error('404')));
+      });
 });
