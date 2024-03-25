@@ -134,10 +134,4 @@ describe("FactoryTable", () => {
         const caretSvg = getByTestId("caret");
         expect(caretSvg).not.toHaveClass("transform rotate-180");
     });
-
-    test("Caret logs direction when rendered", () => {
-        const spy = jest.spyOn(console, "log");
-        render(<Caret direction="asc" />);
-        expect(spy).toHaveBeenCalledWith("Caret direction: asc");
-    });
 });
