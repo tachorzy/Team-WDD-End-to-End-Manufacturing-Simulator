@@ -9,7 +9,6 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/google/uuid"
 )
@@ -19,8 +18,6 @@ func NewCreateFactoryHandler(db DynamoDBClient) *Handler {
 		DynamoDB: db,
 	}
 }
-
-var FactoryMarshalMap = attributevalue.MarshalMap
 
 func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var factory Factory
@@ -41,18 +38,6 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 	factory.FactoryID = uuid.NewString()
 	factory.DateCreated = time.Now().Format(time.RFC3339)
 
-	responseBody, err := json.Marshal(map[string]interface{}{
-		"message":   fmt.Sprintf("factoryId %s created successfully", factory.FactoryID),
-		"factoryId": factory.FactoryID,
-	})
-	if err != nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusInternalServerError,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Error marshalling response body: %s", err.Error()),
-		}, nil
-	}
-
 	av, err := FactoryMarshalMap(factory)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
@@ -72,6 +57,18 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,
 			Body:       fmt.Sprintf("Error putting item into DynamoDB: %s", err.Error()),
+		}, nil
+	}
+
+	responseBody, err := FactoryJSONMarshal(map[string]interface{}{
+		"message":   fmt.Sprintf("factoryId %s created successfully", factory.FactoryID),
+		"factoryId": factory.FactoryID,
+	})
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
+			Body:       fmt.Sprintf("Error marshalling response body: %s", err.Error()),
 		}, nil
 	}
 
