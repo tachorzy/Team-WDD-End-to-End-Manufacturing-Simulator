@@ -1,5 +1,4 @@
 const Caret = ({ direction }: { direction: string }) => {
-    console.log(`Caret direction: ${direction}`);
     return (
         <svg
             data-testid="caret"
