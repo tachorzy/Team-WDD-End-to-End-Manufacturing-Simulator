@@ -3,7 +3,7 @@
  */
 import "@testing-library/jest-dom";
 import React from "react";
-import { render, fireEvent, waitFor, act } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import NewFactoryForm from "../components/home/NewFactoryForm";
 
 describe ("New Factory Form", () => {
@@ -24,9 +24,9 @@ describe ("New Factory Form", () => {
                 json: () => Promise.resolve(
                     {
                         factoryId: "1",
-                        message: ""
-                    }
-                )
+                        message: "",
+                    },
+                ),
             })
         ) as jest.Mock;
       });
@@ -81,6 +81,97 @@ describe ("New Factory Form", () => {
         expect(button).not.toBeInTheDocument();
         expect(logo).not.toBeInTheDocument();
     });
+    
+    test("factory name textbox changes on input", () => {
+        const { getByPlaceholderText } = render(<NewFactoryForm {...props} />);
+
+        const nameInput = getByPlaceholderText("Enter factory name");
+        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+
+        fireEvent.change(nameInput, {
+            target: {
+                value: factoryName,
+            },
+        });
+
+        expect(nameInput).toHaveValue(factoryName);
+        expect(descriptionInput).toHaveValue(""); 
+    });
+
+    test("factory description textbox changes on input", () => {
+        const { getByPlaceholderText } = render( <NewFactoryForm {...props} />);
+
+        const nameInput = getByPlaceholderText("Enter factory name");
+        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+
+        fireEvent.change(descriptionInput, {
+            target: {
+                value: factoryDescription,
+            },
+        });
+
+        expect(nameInput).toHaveValue("");
+        expect(descriptionInput).toHaveValue(factoryDescription); 
+    });
+    
+    test("both factory name and description textboxes changes on input", () => {
+        const { getByPlaceholderText } = render(<NewFactoryForm {...props} />);
+
+        const nameInput = getByPlaceholderText("Enter factory name");
+        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+
+        fireEvent.change(nameInput, {
+            target: {
+                value: factoryName,
+            },
+        });
+        fireEvent.change(descriptionInput, {
+            target: {
+                value: factoryDescription,
+            },
+        });
+
+        expect(nameInput).toHaveValue(factoryName);
+        expect(descriptionInput).toHaveValue(factoryDescription); 
+    });
+
+    test("displays error message on blank factory name", () => {
+        const { getByPlaceholderText, getByText } = render( <NewFactoryForm {...props} /> );
+
+        const nameInput = getByPlaceholderText("Enter factory name");
+        const emptyName = "";
+
+        fireEvent.change(nameInput, {
+            target: {
+                value: emptyName,
+            },
+        });
+        fireEvent.click(getByText(/(Create)/));
+
+        const noNameError = getByText("Please provide a name for your new facility.");
+
+        expect(nameInput).toHaveValue(emptyName);
+        expect(noNameError).toBeInTheDocument();
+    });
+
+    test("displays error message when factory description is too long", () => {
+        const { getByPlaceholderText, getByText } = render(<NewFactoryForm {...props} />);
+
+        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+        const longDescription = "This description is longer than two hundred characters long, so it can not be used in the form. please try to have descriptions less than two hundred characters long, or it will not work in the form. thanks.";
+
+        fireEvent.change(descriptionInput, {
+            target: {
+                value: longDescription,
+            },
+        });
+        fireEvent.click(getByText(/(Create)/));
+
+        const descriptionTooLongError = getByText("Facility description must be no more than 200 characters.");
+
+        expect(descriptionInput).toHaveValue(longDescription);
+        expect(descriptionTooLongError).toBeInTheDocument();
+    });
 
     test("succesffuly creates a new factory", async () => {
         const setQueryMadeMock = jest.fn();
@@ -110,13 +201,13 @@ describe ("New Factory Form", () => {
         
         fireEvent.change(factoryInput, {
             target: {
-                value: factoryName
-            }
+                value: factoryName,
+            },
         });
         fireEvent.change(descriptionInput, {
             target: {
-                value: factoryDescription
-            }
+                value: factoryDescription,
+            },
         });
         fireEvent.click(button);
 
@@ -126,103 +217,12 @@ describe ("New Factory Form", () => {
         });
     });
     
-    test("factory name textbox changes on input", () => {
-        const { getByPlaceholderText } = render(<NewFactoryForm {...props} />);
-
-        const nameInput = getByPlaceholderText("Enter factory name");
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
-
-        fireEvent.change(nameInput, {
-            target: {
-                value: factoryName
-            }
-        });
-
-        expect(nameInput).toHaveValue(factoryName);
-        expect(descriptionInput).toHaveValue(""); 
-    });
-
-    test("factory description textbox changes on input", () => {
-        const { getByPlaceholderText } = render( <NewFactoryForm {...props} />);
-
-        const nameInput = getByPlaceholderText("Enter factory name");
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
-
-        fireEvent.change(descriptionInput, {
-            target: {
-                value: factoryDescription
-            }
-        });
-
-        expect(nameInput).toHaveValue("");
-        expect(descriptionInput).toHaveValue(factoryDescription); 
-    });
-    
-    test("both factory name and description textboxes changes on input", () => {
-        const { getByPlaceholderText } = render(<NewFactoryForm {...props} />);
-
-        const nameInput = getByPlaceholderText("Enter factory name");
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
-
-        fireEvent.change(nameInput, {
-            target: {
-                value: factoryName
-            }
-        });
-        fireEvent.change(descriptionInput, {
-            target: {
-                value: factoryDescription
-            }
-        });
-
-        expect(nameInput).toHaveValue(factoryName);
-        expect(descriptionInput).toHaveValue(factoryDescription); 
-    });
-
-    test("displays error message on blank factory name", () => {
-        const { getByPlaceholderText, getByText } = render( <NewFactoryForm {...props} /> );
-
-        const nameInput = getByPlaceholderText("Enter factory name");
-        const emptyName = "";
-
-        fireEvent.change(nameInput, {
-            target: {
-                value: emptyName
-            }
-        });
-        fireEvent.click(getByText(/(Create)/));
-
-        const noNameError = getByText("Please provide a name for your new facility.");
-
-        expect(nameInput).toHaveValue(emptyName);
-        expect(noNameError).toBeInTheDocument();
-    });
-
-    test("displays error message when factory description is too long", () => {
-        const { getByPlaceholderText, getByText } = render(<NewFactoryForm {...props} />);
-
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
-        const longDescription = "This description is longer than two hundred characters long, so it can not be used in the form. please try to have descriptions less than two hundred characters long, or it will not work in the form. thanks.";
-
-        fireEvent.change(descriptionInput, {
-            target: {
-                value: longDescription
-            }
-        });
-        fireEvent.click(getByText(/(Create)/));
-
-        const descriptionTooLongError = getByText("Facility description must be no more than 200 characters.");
-
-        expect(descriptionInput).toHaveValue(longDescription);
-        expect(descriptionTooLongError).toBeInTheDocument();
-    });
-
     test("logs fetch error in console", async () => {
         (global.fetch as jest.Mock).mockImplementationOnce(() => 
             Promise.resolve({
                 ok: false,
                 statusText: "404",
-            }
+            },
         ));        
         const consoleErrorMock = jest.spyOn(console, "error").mockImplementation(() => {});
 
@@ -233,13 +233,13 @@ describe ("New Factory Form", () => {
 
         fireEvent.change(nameInput, {
             target: {
-                value: factoryName
-            }
+                value: factoryName,
+            },
         });
         fireEvent.change(descriptionInput, {
             target: {
-                value: factoryDescription
-            }
+                value: factoryDescription,
+            },
         });
         fireEvent.click(getByText(/(Create)/))
 
