@@ -3,7 +3,6 @@ import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import UploadResultTray from "./UploadResultTray";
 
-
 interface DropFile extends File {
     path: string;
 }
@@ -60,7 +59,10 @@ const FileUploadContainer = () => {
                     </em>
                 </div>
             </div>
-            <UploadResultTray acceptedFileItems={acceptedFileItems} fileRejectionItems={fileRejectionItems}/>
+            <UploadResultTray
+                acceptedFileItems={acceptedFileItems}
+                fileRejectionItems={fileRejectionItems}
+            />
         </section>
     );
 };

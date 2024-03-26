@@ -1,10 +1,12 @@
-const UploadResultTray = (props : {acceptedFileItems: React.JSX.Element[], fileRejectionItems: React.JSX.Element[]}) => {
-    
+const UploadResultTray = (props: {
+    acceptedFileItems: React.JSX.Element[];
+    fileRejectionItems: React.JSX.Element[];
+}) => {
     const { acceptedFileItems, fileRejectionItems } = props;
- 
+
     return (
         <div className="mt-2">
-            {acceptedFileItems.length != 0 && (
+            {acceptedFileItems.length !== 0 && (
                 <span>
                     <h4 className="text-slate-700 font-medium text-sm">
                         Accepted files:
@@ -14,7 +16,7 @@ const UploadResultTray = (props : {acceptedFileItems: React.JSX.Element[], fileR
                     </ul>
                 </span>
             )}
-            {fileRejectionItems.length != 0 && (
+            {fileRejectionItems.length !== 0 && (
                 <span>
                     <h4 className="text-red-500 font-medium text-sm">
                         Rejected files:
@@ -25,7 +27,7 @@ const UploadResultTray = (props : {acceptedFileItems: React.JSX.Element[], fileR
                 </span>
             )}
         </div>
-    )
+    );
 };
 
 export default UploadResultTray;
