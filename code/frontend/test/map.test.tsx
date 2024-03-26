@@ -6,15 +6,9 @@ import { render } from "@testing-library/react";
 import MapComponent from "../components/home/map/Map.client";
 
 jest.mock("react-leaflet", () => ({
-    MapContainer: ({ children }: { children: React.ReactNode }) => (
-        <div data-testid="mapcontainer">{children}</div>
-    ),
-    TileLayer: ({ children }: { children: React.ReactNode }) => (
-        <div data-testid="tilelayer">{children}</div>
-    ),
-    // useMap: ({ children }: { children: React.ReactNode }) => (
-    //     <div data-testid="usemap">{children}</div>
-    // )
+    MapContainer: jest.fn(),
+    TileLayer: jest.fn(),
+    useMap: jest.fn()
 }));
 
 jest.mock("leaflet/dist/leaflet.css", () => {});
@@ -31,9 +25,8 @@ const mockFactories = [
     },
 ];
 
-
 describe ("MapCompenent", () => {
-    test("redners without error", () => {
+    test("renders without error", () => {
         render(<MapComponent positions={mockFactories}/>);
     });
 });
