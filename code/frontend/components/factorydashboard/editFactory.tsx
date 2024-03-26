@@ -77,11 +77,11 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                         alt="Close icon"
                     />
                 </button>
-                <h1 className="text-3xl font-semibold mb-4">
+                <h1 className="text-3xl font-semibold mb-4 text-gray-900">
                     Edit Factory Details
                 </h1>
                 <div className="mb-4">
-                    <label htmlFor="name" className="block mb-1">
+                    <label htmlFor="name" className="block mb-1 text-gray-500">
                         Factory Name:
                     </label>
                     <input
@@ -101,7 +101,7 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                     )}
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="description" className="block mb-1">
+                    <label htmlFor="description" className="block mb-1 text-gray-500">
                         Factory Description:
                     </label>
                     <textarea
