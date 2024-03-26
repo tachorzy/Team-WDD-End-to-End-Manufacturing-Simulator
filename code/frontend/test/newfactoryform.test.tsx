@@ -175,37 +175,44 @@ describe("New Factory Form", () => {
 
     test("should log an error in the console when fetch fails", async () => {
         (global.fetch as jest.Mock).mockImplementationOnce(() =>
-          Promise.reject(new Error('404')),
+            Promise.reject(new Error("404")),
         );
-      
-        const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
-      
+
+        const consoleErrorMock = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => {});
+
         const { getByText, getByPlaceholderText } = render(
-          <NewFactoryForm
-            latitude={latitude}
-            longitude={longitude}
-            setQueryMade={setQueryMadeMock}
-            onFactorySubmit={onFactorySubmitMock}
-          />,
+            <NewFactoryForm
+                latitude={latitude}
+                longitude={longitude}
+                setQueryMade={setQueryMadeMock}
+                onFactorySubmit={onFactorySubmitMock}
+            />,
         );
-      
+
         const nameInput = getByPlaceholderText("Enter factory name");
         const descriptionInput = getByPlaceholderText(
-          "Enter factory description (optional)",
+            "Enter factory description (optional)",
         );
-      
+
         fireEvent.change(nameInput, {
-          target: {
-            value: factoryName,
-          },
+            target: {
+                value: factoryName,
+            },
         });
         fireEvent.change(descriptionInput, {
-          target: {
-            value: factoryDescription,
-          },
+            target: {
+                value: factoryDescription,
+            },
         });
         fireEvent.click(getByText(/(Create)/));
-      
-        await waitFor(() => expect(consoleErrorMock).toHaveBeenCalledWith("Failed to create factory:", new Error('404')));
-      });
+
+        await waitFor(() =>
+            expect(consoleErrorMock).toHaveBeenCalledWith(
+                "Failed to create factory:",
+                new Error("404"),
+            ),
+        );
+    });
 });

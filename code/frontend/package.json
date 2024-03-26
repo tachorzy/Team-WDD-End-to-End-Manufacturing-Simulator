@@ -13,6 +13,7 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "@types/react-dropzone": "^5.1.0",
     "@types/react-simple-maps": "^3.0.4",
     "axios": "^1.6.7",
     "dotenv": "^16.4.3",

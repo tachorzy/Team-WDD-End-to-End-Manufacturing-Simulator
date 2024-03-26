@@ -24,7 +24,7 @@ const config: Config = {
                 Iris: "#7C91D5",
             },
             animation: {
-                'pulse-slow': 'pulse 3s linear infinite',
+                "pulse-slow": "pulse 3s linear infinite",
             },
         },
     },
