@@ -244,7 +244,6 @@ describe ("New Factory Form", () => {
         fireEvent.click(getByText(/(Create)/))
 
         await waitFor(() => {
-
             expect(consoleErrorMock).toHaveBeenCalledWith("Failed to create factory:", new Error("Failed to create factory: 404"))
         });
     });
