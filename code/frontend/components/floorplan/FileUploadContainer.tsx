@@ -1,11 +1,10 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
-import DropzoneFile from "react-dropzone";
 
-interface DropzoneFile extends File {
+interface DropFile extends File {
     path: string;
-  }
+}
 
 const FileUploadContainer = () => {
     const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
@@ -16,15 +15,15 @@ const FileUploadContainer = () => {
             },
         });
 
-    const acceptedFileItems = (acceptedFiles as DropzoneFile[]).map((file) => (
+    const acceptedFileItems = (acceptedFiles as DropFile[]).map((file) => (
         <li key={file.path}>
             {file.path} - {file.size} bytes
         </li>
     ));
 
     const fileRejectionItems = fileRejections.map(({ file, errors }) => (
-        <li key={(file as DropzoneFile).path}>
-            {(file as DropzoneFile).path} - {file.size} bytes
+        <li key={(file as DropFile).path}>
+            {(file as DropFile).path} - {file.size} bytes
             <ul>
                 {errors.map((e) => (
                     <li key={e.code}>{e.message}</li>
