@@ -90,7 +90,7 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                         name="name"
                         value={formData?.name || ""}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-indigo-500"
+                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-indigo-500 text-gray-900"
                         placeholder="Enter factory name"
                     />
                     {invalidName && (
@@ -109,7 +109,7 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                         name="description"
                         value={formData?.description || ""}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-indigo-500"
+                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-indigo-500 text-gray-900"
                         placeholder="Enter factory description (optional)"
                     />
                     {invalidDescription && (
