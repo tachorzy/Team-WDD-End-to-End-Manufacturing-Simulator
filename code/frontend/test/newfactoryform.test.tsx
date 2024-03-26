@@ -232,7 +232,6 @@ describe ("New Factory Form", () => {
     });
 
     test("logs fetch error in console", async () => {
-        (global.fetch as jest.Mock).mockClear();
         (global.fetch as jest.Mock).mockImplementationOnce(() => 
             Promise.resolve({
                 ok: false,
