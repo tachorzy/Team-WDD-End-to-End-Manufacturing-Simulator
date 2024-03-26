@@ -3,7 +3,7 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import EditFactoryForm from "../components/factorydashboard/editFactory";
 
@@ -19,8 +19,8 @@ global.fetch = jest.fn(() =>
     }),
 ) as jest.Mock;
 
-const onSavemock = jest.fn;
-const onClosemock = jest.fn;
+const onSaveMock = jest.fn();
+const onCloseMock = jest.fn();
 const mockFactory = {
     factoryId: "1",
     name: "Factory 1",
@@ -45,8 +45,8 @@ describe("Landing Page Component", () => {
         } = render(
             <EditFactoryForm
                 factory={mockFactory}
-                onClose={onClosemock}
-                onSave={onSavemock}
+                onClose={onCloseMock}
+                onSave={onSaveMock}
             />
         );
 
@@ -66,6 +66,21 @@ describe("Landing Page Component", () => {
 
 
     test("is closed when close icon clicked", () => {
-        
+       
+
+        const {
+            getByAltText,
+        } = render(
+            <EditFactoryForm
+                factory={mockFactory}
+                onClose={onCloseMock}
+                onSave={onSaveMock}
+            />
+        );
+      
+        const closeIcon = getByAltText("Close icon");
+        fireEvent.click(closeIcon);
+
+        expect(onCloseMock).toHaveBeenCalled();
     });
 });
