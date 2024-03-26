@@ -173,7 +173,7 @@ describe ("New Factory Form", () => {
         expect(descriptionTooLongError).toBeInTheDocument();
     });
 
-    test("succesffuly creates a new factory", async () => {
+    test("successfully creates a new factory", async () => {
         const setQueryMadeMock = jest.fn();
         const onFactorySubmitMock = jest.fn();
 
