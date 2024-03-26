@@ -5,7 +5,6 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import NewFactoryForm from "../components/home/NewFactoryForm";
-import MapComponent from "@/components/home/map/Map.client";
 
 describe ("New Factory Form", () => {
     const props = {
@@ -17,7 +16,6 @@ describe ("New Factory Form", () => {
     
     const factoryName = "TensorIoT Factory";
     const factoryDescription = "This is a factory used by TensorIoT in Texas";
-    const error = new Error("Failed to create factory: 404");
 
     beforeEach(() => {
         global.fetch = jest.fn(() => 
@@ -31,13 +29,15 @@ describe ("New Factory Form", () => {
                 )
             })
         ) as jest.Mock;
-        jest.spyOn(console, "error").mockImplementation(() => error)
       });
 
     afterEach(() => {
         (global.fetch as jest.Mock).mockClear();
-        (console.error as jest.Mock).mockClear();
     });
+
+    test("renders without crashing", () => {
+        render(<NewFactoryForm {...props}/>)
+    })
 
     test("renders and its compontents correctly", () => {
         const { getByText, getByAltText, getAllByAltText, getByPlaceholderText } = render(<NewFactoryForm {...props} />);
@@ -63,19 +63,30 @@ describe ("New Factory Form", () => {
         expect(logo).toBeInTheDocument();
     });
 
-    test("is invisble when close icon is clicked", () => {
-        const { getByAltText } = render( <NewFactoryForm {...props} /> );
-        
-        const closeIcon = getByAltText("close icon");
+    test("form is closed on click", () => {
+        const { getByText, getByAltText, getAllByAltText, getByPlaceholderText } = render(<NewFactoryForm {...props} />);
 
-        expect(closeIcon).toBeInTheDocument();
+        const header = getByText(/(Provide your factory details)/);
+        const closeIcon = getByAltText("close icon");
+        const factoryImages = getAllByAltText("maginify glass");
+        const factoryInput = getByPlaceholderText("Enter factory name");
+        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+        const button = getByText(/Create/);
+        const logo = getByAltText("tensor branding");
 
         fireEvent.click(closeIcon);
 
+        expect(header).not.toBeInTheDocument();
         expect(closeIcon).not.toBeInTheDocument();
+        expect(factoryImages[0]).not.toBeInTheDocument();
+        expect(factoryImages[1]).not.toBeInTheDocument();
+        expect(factoryInput).not.toBeInTheDocument();
+        expect(descriptionInput).not.toBeInTheDocument();
+        expect(button).not.toBeInTheDocument();
+        expect(logo).not.toBeInTheDocument();
     });
 
-    test("is invisble after completing form", async () => {
+    test("succesffuly creates a new factory", () => {
         const setQueryMadeMock = jest.fn();
         const onFactorySubmitMock = jest.fn();
 
@@ -96,25 +107,11 @@ describe ("New Factory Form", () => {
             onFactorySubmit: setQueryMadeMock,
         }
 
-        const { getByText, getByAltText, getAllByAltText, getByPlaceholderText } = render(<NewFactoryForm {...newprops} />);
+        const {  getByPlaceholderText, getByText } = render(<NewFactoryForm {...newprops} />);
 
-        const header = getByText(/(Provide your factory details)/);
-        const closeIcon = getByAltText("close icon");
-        const factoryImages = getAllByAltText("maginify glass");
         const factoryInput = getByPlaceholderText("Enter factory name");
         const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
         const button = getByText(/Create/);
-        const logo = getByAltText("tensor branding");
-
-        expect(header).toBeInTheDocument();
-        expect(closeIcon).toBeInTheDocument();
-        expect(factoryImages).toHaveLength(2);
-        expect(factoryImages[0]).toBeInTheDocument();
-        expect(factoryImages[1]).toBeInTheDocument();
-        expect(factoryInput).toBeInTheDocument();
-        expect(descriptionInput).toBeInTheDocument();
-        expect(button).toBeInTheDocument();
-        expect(logo).toBeInTheDocument();
         
         fireEvent.change(factoryInput, {
             target: {
@@ -128,16 +125,18 @@ describe ("New Factory Form", () => {
         });
         fireEvent.click(button);
 
-        await waitFor(() => {
-            expect(header).not.toBeInTheDocument();
-            expect(closeIcon).not.toBeInTheDocument();
-            expect(factoryImages[0]).not.toBeInTheDocument();
-            expect(factoryImages[1]).not.toBeInTheDocument();
-            expect(factoryInput).not.toBeInTheDocument();
-            expect(descriptionInput).not.toBeInTheDocument();
-            expect(button).not.toBeInTheDocument();
-            expect(logo).not.toBeInTheDocument();
-        });
+        expect(global.fetch).toHaveBeenCalled();
+        expect(global.fetch).toHaveBeenCalledWith(
+            "undefined/factories", 
+            {
+                "body": '{"name":"TensorIoT Factory","location":{"latitude":123.456,"longitude":567.89},"description":"This is a factory used by TensorIoT in Texas"}', 
+                "headers": 
+                {
+                    "Content-Type": "application/json"
+                }, 
+                "method": "POST"
+            }
+        );
     });
     
     test("factory name textbox changes on input", () => {
@@ -237,7 +236,8 @@ describe ("New Factory Form", () => {
                 ok: false,
                 statusText: "404",
             }
-        ));
+        ));        
+        const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
 
         const { getByText, getByPlaceholderText } = render(<NewFactoryForm {...props} />);
 
@@ -256,11 +256,9 @@ describe ("New Factory Form", () => {
         });
         fireEvent.click(getByText(/(Create)/))
 
-        expect(global.fetch).toHaveBeenCalled();
-
         await waitFor(() => {
-            expect(console.error).toHaveBeenCalled();
-            expect(console.error).toHaveBeenCalledWith("Failed to create factory:", error)
+            expect(consoleErrorMock).toHaveBeenCalled();
+            expect(consoleErrorMock).toHaveBeenCalledWith("Failed to create factory:", new Error("Failed to create factory: 404"))
         });
     });
 });
