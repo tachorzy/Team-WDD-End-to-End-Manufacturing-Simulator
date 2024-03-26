@@ -2,7 +2,7 @@
 
 import Header from "@/components/factorydashboard/header";
 import Navbar from "@/components/Navbar/Navbar";
-import FileUploadContainer from "@/components/floorplan/FileUploadContainer";
+import FileUploadContainer from "@/components/floorplan/uploadcontainer/FileUploadContainer";
 
 export default function FactoryDashboard() {
     return (

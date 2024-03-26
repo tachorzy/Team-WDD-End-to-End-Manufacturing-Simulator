@@ -1,6 +1,8 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
+import UploadResultTray from "./UploadResultTray";
+
 
 interface DropFile extends File {
     path: string;
@@ -12,6 +14,8 @@ const FileUploadContainer = () => {
             accept: {
                 "image/jpeg": [],
                 "image/png": [],
+                "image/svg": [],
+                // later add support for glb files.
             },
         });
 
@@ -33,7 +37,7 @@ const FileUploadContainer = () => {
     ));
 
     return (
-        <section className="w-full h-full items-center justify-center">
+        <section className="w-full h-full items-center justify-center gap-y-10">
             <div
                 {...getRootProps({ className: "dropzone" })}
                 className="group flex flex-col w-[62.5%] h-[30rem] p-10 gap-y-6 items-center justify-center border-MainBlue hover:border-LightBlue transition duration-700 ease-in border-dashed border-4 rounded-2xl cursor-pointer scale-[100.25%] shadow-sm"
@@ -56,12 +60,7 @@ const FileUploadContainer = () => {
                     </em>
                 </div>
             </div>
-            <div>
-                <h4 className="text-DarkBlue text-sm">Accepted files</h4>
-                <ul className="text-DarkBlue text-sm">{acceptedFileItems}</ul>
-                <h4 className="text-DarkBlue text-sm">Rejected files</h4>
-                <ul className="text-DarkBlue text-sm">{fileRejectionItems}</ul>
-            </div>
+            <UploadResultTray acceptedFileItems={acceptedFileItems} fileRejectionItems={fileRejectionItems}/>
         </section>
     );
 };
