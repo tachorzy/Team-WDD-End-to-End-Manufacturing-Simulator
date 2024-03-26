@@ -3,7 +3,7 @@
  */
 import "@testing-library/jest-dom";
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor, act } from "@testing-library/react";
 import NewFactoryForm from "../components/home/NewFactoryForm";
 
 describe ("New Factory Form", () => {
@@ -34,10 +34,6 @@ describe ("New Factory Form", () => {
     afterEach(() => {
         (global.fetch as jest.Mock).mockClear();
     });
-
-    test("renders without crashing", () => {
-        render(<NewFactoryForm {...props}/>)
-    })
 
     test("renders and its compontents correctly", () => {
         const { getByText, getByAltText, getAllByAltText, getByPlaceholderText } = render(<NewFactoryForm {...props} />);
@@ -86,25 +82,24 @@ describe ("New Factory Form", () => {
         expect(logo).not.toBeInTheDocument();
     });
 
-    test("succesffuly creates a new factory", () => {
+    test("succesffuly creates a new factory", async () => {
         const setQueryMadeMock = jest.fn();
         const onFactorySubmitMock = jest.fn();
-
-        onFactorySubmitMock.mockReturnValueOnce({
-            factoryId: "1",
-            name: factoryName,
-            description: factoryDescription,
-            location: { 
-                latitdue: 123.456, 
-                longitude: 567.89 },
-        });
-        setQueryMadeMock.mockReturnValueOnce(true);
 
         const newprops = {
             latitude: 123.456,
             longitude: 567.89,
             setQueryMade: setQueryMadeMock,
-            onFactorySubmit: setQueryMadeMock,
+            onFactorySubmit: onFactorySubmitMock,
+        }
+
+        const factorySubmitValue = {
+            factoryId: "1",
+            name: factoryName,
+            description: factoryDescription,
+            location: { 
+                latitude: 123.456, 
+                longitude: 567.89 },
         }
 
         const {  getByPlaceholderText, getByText } = render(<NewFactoryForm {...newprops} />);
@@ -125,18 +120,10 @@ describe ("New Factory Form", () => {
         });
         fireEvent.click(button);
 
-        expect(global.fetch).toHaveBeenCalled();
-        expect(global.fetch).toHaveBeenCalledWith(
-            "undefined/factories", 
-            {
-                "body": '{"name":"TensorIoT Factory","location":{"latitude":123.456,"longitude":567.89},"description":"This is a factory used by TensorIoT in Texas"}', 
-                "headers": 
-                {
-                    "Content-Type": "application/json"
-                }, 
-                "method": "POST"
-            }
-        );
+        await waitFor(() => {
+            expect(setQueryMadeMock).toHaveBeenCalledWith(false);
+            expect(onFactorySubmitMock).toHaveBeenCalledWith(factorySubmitValue);
+        });
     });
     
     test("factory name textbox changes on input", () => {
@@ -237,7 +224,7 @@ describe ("New Factory Form", () => {
                 statusText: "404",
             }
         ));        
-        const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
+        const consoleErrorMock = jest.spyOn(console, "error").mockImplementation(() => {});
 
         const { getByText, getByPlaceholderText } = render(<NewFactoryForm {...props} />);
 
@@ -257,7 +244,7 @@ describe ("New Factory Form", () => {
         fireEvent.click(getByText(/(Create)/))
 
         await waitFor(() => {
-            expect(consoleErrorMock).toHaveBeenCalled();
+
             expect(consoleErrorMock).toHaveBeenCalledWith("Failed to create factory:", new Error("Failed to create factory: 404"))
         });
     });
