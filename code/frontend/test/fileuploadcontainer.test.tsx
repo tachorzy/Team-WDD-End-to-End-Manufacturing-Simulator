@@ -189,7 +189,7 @@ describe('FileUploadContainer', () => {
         fireEvent(input as Element, dropEvent);
 
         expect(useDropzone).toHaveBeenCalled();
-        expect(getByText(/largefile.jpg - 10000000 bytes/)).toBeNull();
+        expect(getByText(/largefile.jpg - 10000000 bytes/)).not.toBeNull();
         expect(getByText(/File size exceeds the maximum allowed size/)).not.toBeNull();
     });
 

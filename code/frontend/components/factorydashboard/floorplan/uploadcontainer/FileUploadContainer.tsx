@@ -17,6 +17,7 @@ const FileUploadContainer = () => {
                 // later add support for glb files.
             },
             maxFiles: 1,
+            maxSize: 8000000,
         });
 
     const acceptedFileItems = (acceptedFiles as DropFile[]).map((file) => (
