@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import UploadResultTray from "./UploadResultTray";
@@ -8,6 +8,12 @@ interface DropFile extends File {
 }
 
 const FileUploadContainer = () => {
+    const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+    
+    const onDrop = useCallback((acceptedFiles: File[]) => {
+        setUploadedFile(acceptedFiles[0]);
+    }, []);
+
     const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
         useDropzone({
             accept: {
@@ -18,8 +24,9 @@ const FileUploadContainer = () => {
             },
             maxFiles: 1,
             maxSize: 8000000,
+            onDrop
         });
-
+        
     const acceptedFileItems = (acceptedFiles as DropFile[]).map((file) => (
         <li key={file.path}>
             {file.path} - {file.size} bytes
@@ -65,6 +72,7 @@ const FileUploadContainer = () => {
                 acceptedFileItems={acceptedFileItems}
                 fileRejectionItems={fileRejectionItems}
             />
+            {uploadedFile && <Image width={260} height={260} src={URL.createObjectURL(uploadedFile)} alt="Uploaded content" className="rounded-2xl my-6"/>}
         </section>
     );
 };
