@@ -16,6 +16,7 @@ const FileUploadContainer = () => {
                 "image/svg": [],
                 // later add support for glb files.
             },
+            maxFiles: 1,
         });
 
     const acceptedFileItems = (acceptedFiles as DropFile[]).map((file) => (

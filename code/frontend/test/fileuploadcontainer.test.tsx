@@ -76,33 +76,44 @@ describe('FileUploadContainer', () => {
             path: 'image.jpg',
             size: 5000,
             type: 'image/jpeg',
-        },
-        {
+        }];
+    
+        const mockRejectedFiles = [{
+        file: {
             path: 'image.png',
             size: 5000,
             type: 'image/png',
+        },
+        errors: [{
+                code: 'too-many-files',
+                message: 'You can only upload one file',
+            }],
         }];
 
         (useDropzone as jest.Mock).mockReturnValue({
             getRootProps: () => ({}),
             getInputProps: () => ({}),
             acceptedFiles: mockAcceptedFiles,
-            fileRejections: [],
+            fileRejections: mockRejectedFiles,
         });
 
         const { getByText } = render(<FileUploadContainer />);
         const input = getByText(/Click or drop your floor plan file here to upload./).parentElement;
         const dropEvent = createEvent.drop(input as Element);
         Object.defineProperty(dropEvent, 'dataTransfer', {
-          value: {
-            files: mockAcceptedFiles,
-          },
+            value: {
+              files: [...mockAcceptedFiles, ...mockRejectedFiles.map(rejection => rejection.file)],
+            },
         });
         fireEvent(input as Element, dropEvent);
 
         expect(useDropzone).toHaveBeenCalled();
         expect(getByText(/image.jpg - 5000 bytes/)).not.toBeNull();
-        expect(getByText(/image.png - 5000 bytes/)).toBeNull();
+        expect(getByText(/image.png - 5000 bytes/)).not.toBeNull();
+        expect(getByText(/You can only upload one file/)).not.toBeNull();
+
     })
+
+
 
 });
