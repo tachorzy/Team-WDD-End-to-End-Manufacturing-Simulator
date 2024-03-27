@@ -5,12 +5,15 @@ import FileUploadContainer from '../components/factorydashboard/floorplan/upload
   
 jest.mock('react-dropzone');
 
-describe('FileUploadContainer', () => {  
-    test('should accept valid files', () => {
+describe('FileUploadContainer', () => {
+    
+    const fileTypes = ['jpg', 'png', 'svg'];
+
+    test.each(fileTypes)('should accept valid files', (fileType) => {
         const mockAcceptedFiles = [{
-            path: 'image.jpg',
+            path: `image.${fileType}`,
             size: 5000,
-            type: 'image/jpeg',
+            type: `image/${fileType}`,
         }];
         
         (useDropzone as jest.Mock).mockReturnValue({
@@ -31,6 +34,6 @@ describe('FileUploadContainer', () => {
         fireEvent(input as Element, dropEvent);
     
         expect(useDropzone).toHaveBeenCalled();
-        expect(getByText(/image.jpg - 5000 bytes/)).not.toBeNull();
+        expect(getByText(new RegExp(`image.${fileType} - 5000 bytes`))).not.toBeNull();
     });
 });
