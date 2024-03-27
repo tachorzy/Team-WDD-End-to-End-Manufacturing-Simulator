@@ -70,4 +70,39 @@ describe('FileUploadContainer', () => {
         expect(useDropzone).toHaveBeenCalled();
         expect(getByText(/invalidfile.txt - 5000 bytes/)).not.toBeNull();
     });
+
+    test('should not accept multiple files', () => {
+        const mockAcceptedFiles = [{
+            path: 'image.jpg',
+            size: 5000,
+            type: 'image/jpeg',
+        },
+        {
+            path: 'image.png',
+            size: 5000,
+            type: 'image/png',
+        }];
+
+        (useDropzone as jest.Mock).mockReturnValue({
+            getRootProps: () => ({}),
+            getInputProps: () => ({}),
+            acceptedFiles: mockAcceptedFiles,
+            fileRejections: [],
+        });
+
+        const { getByText } = render(<FileUploadContainer />);
+        const input = getByText(/Click or drop your floor plan file here to upload./).parentElement;
+        const dropEvent = createEvent.drop(input as Element);
+        Object.defineProperty(dropEvent, 'dataTransfer', {
+          value: {
+            files: mockAcceptedFiles,
+          },
+        });
+        fireEvent(input as Element, dropEvent);
+
+        expect(useDropzone).toHaveBeenCalled();
+        expect(getByText(/image.jpg - 5000 bytes/)).not.toBeNull();
+        expect(getByText(/image.png - 5000 bytes/)).toBeNull();
+    })
+
 });
