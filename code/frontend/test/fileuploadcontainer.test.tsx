@@ -158,4 +158,39 @@ describe('FileUploadContainer', () => {
         expect(queryByText(/bytes/)).toBeNull();
       });
 
+      test('should reject files that exceed the maximum size', () => {
+        const mockRejectedFiles = [{
+            file: {
+                path: 'largefile.jpg',
+                size: 10000000,
+                type: 'text/plain',
+            },
+            errors: [{
+                code: 'file-too-large',
+                message: 'File size exceeds the maximum allowed size',
+            }],
+        }];
+
+        (useDropzone as jest.Mock).mockReturnValue({
+            getRootProps: () => ({}),
+            getInputProps: () => ({}),
+            acceptedFiles: [],
+            fileRejections: mockRejectedFiles,
+        });
+
+        const { getByText } = render(<FileUploadContainer />);
+        const input = getByText(/Click or drop your floor plan file here to upload./).parentElement;
+        const dropEvent = createEvent.drop(input as Element);
+        Object.defineProperty(dropEvent, 'dataTransfer', {
+          value: {
+            files: mockRejectedFiles,
+          },
+        });
+        fireEvent(input as Element, dropEvent);
+
+        expect(useDropzone).toHaveBeenCalled();
+        expect(getByText(/largefile.jpg - 10000000 bytes/)).toBeNull();
+        expect(getByText(/File size exceeds the maximum allowed size/)).not.toBeNull();
+    });
+
 });
