@@ -5,9 +5,9 @@ const UploadResultTray = (props: {
     const { acceptedFileItems, fileRejectionItems } = props;
 
     return (
-        <div className="mt-2">
+        <div>
             {acceptedFileItems.length !== 0 && (
-                <span>
+                <span className="text-center">
                     <h4 className="text-slate-700 font-medium text-sm">
                         Accepted files:
                     </h4>
@@ -17,7 +17,7 @@ const UploadResultTray = (props: {
                 </span>
             )}
             {fileRejectionItems.length !== 0 && (
-                <span>
+                <span className="text-center">
                     <h4 className="text-red-500 font-medium text-sm">
                         Rejected files:
                     </h4>

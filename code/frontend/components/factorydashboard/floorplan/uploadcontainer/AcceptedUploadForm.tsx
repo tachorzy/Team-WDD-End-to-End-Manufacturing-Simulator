@@ -20,7 +20,7 @@ const FileUploadContainer = (props: {
         <div className="w-full absolute h-full items-center justify-center m-auto">
             {isVisible && (
                 <>
-                    <div className="mx-[18.5rem] w-[36rem] min-h-[24rem] flex flex-col relative bg-white rounded-3xl shadow-xl z-50 px-4 items-center justify-center gap-y-6">
+                    <div className="mx-[18.5rem] w-[36rem] min-h-[27rem] flex flex-col relative bg-white rounded-3xl shadow-xl z-50 px-4 items-center justify-center gap-y-3">
                         <Image
                             src="/icons/navbar/close.svg"
                             onClick={() => {
@@ -38,13 +38,35 @@ const FileUploadContainer = (props: {
                                 height={260}
                                 src={URL.createObjectURL(uploadedFile)}
                                 alt="Uploaded content"
-                                className="select-none rounded-2xl my-6"
+                                className="select-none rounded-2xl"
                             />
                         )}
+                        <h1 className="text-black text-lg w-[49%] text-center font-semibold">Your floor plan is ready!</h1>
                         <UploadResultTray
                             acceptedFileItems={acceptedFileItems}
                             fileRejectionItems={fileRejectionItems}
                         />
+                        <div className="flex flex-row w-[47.5%] gap-x-4">
+                            <button 
+                                onClick={() => {
+                                    // set the uploaded file to the backend and render it.
+                                    setVisibility(false);
+                                    setUploadedFile(null)
+                                }}
+                                className="bg-gradient-to-r from-LightBlue to-MainBlue rounded-full w-1/2 h-8 font-semibold hover:scale-[101.5%] transition duration-500 ease-in-out"
+                            >
+                                Accept
+                            </button>
+                            <button 
+                                onClick={() => {
+                                    setVisibility(false);
+                                    setUploadedFile(null)
+                                }}          
+                                className="bg-gradient-to-r from-[#FC7978] to-[#E31D1C] rounded-full w-1/2 h-8 font-semibold hover:scale-[101.5%] transition duration-500 ease-in-out"
+                            >
+                                Deny
+                            </button>
+                        </div>
                     </div>
                     <span className="bg-black/70 fixed w-full h-full z-30 top-0 left-0" />
                 </>
