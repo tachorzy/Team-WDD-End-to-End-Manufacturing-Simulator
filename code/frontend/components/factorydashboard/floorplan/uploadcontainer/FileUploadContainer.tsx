@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import UploadResultTray from "./UploadResultTray";
+import AcceptedUploadForm from "./AcceptedUploadForm";
 
 interface DropFile extends File {
     path: string;
@@ -9,8 +10,9 @@ interface DropFile extends File {
 
 const FileUploadContainer = () => {
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-    
+
     const onDrop = useCallback((acceptedFiles: File[]) => {
+        // call API endpoint that sends the floor-plan to the backend
         setUploadedFile(acceptedFiles[0]);
     }, []);
 
@@ -24,9 +26,9 @@ const FileUploadContainer = () => {
             },
             maxFiles: 1,
             maxSize: 8000000,
-            onDrop
+            onDrop,
         });
-        
+
     const acceptedFileItems = (acceptedFiles as DropFile[]).map((file) => (
         <li key={file.path}>
             {file.path} - {file.size} bytes
@@ -45,7 +47,7 @@ const FileUploadContainer = () => {
     ));
 
     return (
-        <section className="w-full h-full items-center justify-center gap-y-10">
+        <section className="w-full h-full flex flex-col gap-y-10">
             <div
                 {...getRootProps({ className: "dropzone" })}
                 className="group flex flex-col w-[62.5%] h-[30rem] p-10 gap-y-6 items-center justify-center border-MainBlue hover:border-LightBlue transition duration-700 ease-in border-dashed border-4 rounded-2xl cursor-pointer scale-[100.25%] shadow-sm"
@@ -68,11 +70,16 @@ const FileUploadContainer = () => {
                     </em>
                 </div>
             </div>
-            <UploadResultTray
-                acceptedFileItems={acceptedFileItems}
-                fileRejectionItems={fileRejectionItems}
-            />
-            {uploadedFile && <Image width={260} height={260} src={URL.createObjectURL(uploadedFile)} alt="Uploaded content" className="rounded-2xl my-6"/>}
+            <div className="absolute items-center justify-center">
+                {uploadedFile && (
+                    <AcceptedUploadForm
+                        uploadedFile={uploadedFile}
+                        setUploadedFile={setUploadedFile}
+                        acceptedFileItems={acceptedFileItems}
+                        fileRejectionItems={fileRejectionItems}
+                    />
+                )}
+            </div>
         </section>
     );
 };
