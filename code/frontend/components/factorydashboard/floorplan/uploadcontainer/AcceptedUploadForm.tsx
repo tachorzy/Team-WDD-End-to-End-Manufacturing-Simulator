@@ -1,6 +1,5 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { FileRejection, useDropzone } from "react-dropzone";
 import UploadResultTray from "./UploadResultTray";
 
 const FileUploadContainer = (props: {

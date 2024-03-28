@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
-import UploadResultTray from "./UploadResultTray";
 import AcceptedUploadForm from "./AcceptedUploadForm";
 
 interface DropFile extends File {
