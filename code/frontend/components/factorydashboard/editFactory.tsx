@@ -101,7 +101,10 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                     )}
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="description" className="block mb-1 text-gray-500">
+                    <label
+                        htmlFor="description"
+                        className="block mb-1 text-gray-500"
+                    >
                         Factory Description:
                     </label>
                     <textarea

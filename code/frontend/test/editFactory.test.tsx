@@ -7,7 +7,6 @@ import { render, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import EditFactoryForm from "../components/factorydashboard/editFactory";
 
-
 global.fetch = jest.fn(() =>
     Promise.resolve({
         ok: true,
@@ -31,67 +30,55 @@ const mockFactory = {
     description: "",
 };
 
-const props = 
-    {
-        factory: mockFactory,
-        onClose: onCloseMock,
-        onSave:  onSaveMock
-    };
+const props = {
+    factory: mockFactory,
+    onClose: onCloseMock,
+    onSave: onSaveMock,
+};
 const factoryName = "TensorIoT Factory";
 const factoryDescription = "This is a factory used by TensorIoT in Texas";
 
 describe("Landing Page Component", () => {
-    
     beforeEach(() => {
         (global.fetch as jest.Mock).mockClear();
     });
-    
+
     test("renders and its compontents correctly ", () => {
-        const {
-            getByText,
-            getByAltText,
-            getByPlaceholderText,
-           
-        } = render(
-            <EditFactoryForm {...props} />
+        const { getByText, getByAltText, getByPlaceholderText } = render(
+            <EditFactoryForm {...props} />,
         );
 
         const header = getByText(/(Edit Factory Details)/);
         const closeIcon = getByAltText("Close icon");
-        const factoryName = getByPlaceholderText("Enter factory name");
-        const factoryDescription = getByPlaceholderText("Enter factory description (optional)");
+        const inputName = getByPlaceholderText("Enter factory name");
+        const inputDescription = getByPlaceholderText(
+            "Enter factory description (optional)",
+        );
         const button = getByText(/(Save Changes)/);
 
         expect(header).toBeInTheDocument();
         expect(closeIcon).toBeInTheDocument();
-        expect(factoryName).toBeInTheDocument();
-        expect(factoryDescription).toBeInTheDocument();
+        expect(inputName).toBeInTheDocument();
+        expect(inputDescription).toBeInTheDocument();
         expect(button).toBeInTheDocument();
-
     });
 
-
     test("is closed when close icon clicked", () => {
-       
+        const { getByAltText } = render(<EditFactoryForm {...props} />);
 
-        const {
-            getByAltText,
-        } = render(
-            <EditFactoryForm {...props} />
-        );
-      
         const closeIcon = getByAltText("Close icon");
         fireEvent.click(closeIcon);
 
         expect(onCloseMock).toHaveBeenCalled();
     });
 
-
     test("factory name textbox changes on input", () => {
         const { getByPlaceholderText } = render(<EditFactoryForm {...props} />);
 
         const nameInput = getByPlaceholderText("Enter factory name");
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+        const descriptionInput = getByPlaceholderText(
+            "Enter factory description (optional)",
+        );
 
         fireEvent.change(nameInput, {
             target: {
@@ -100,14 +87,16 @@ describe("Landing Page Component", () => {
         });
 
         expect(nameInput).toHaveValue(factoryName);
-        expect(descriptionInput).toHaveValue(""); 
+        expect(descriptionInput).toHaveValue("");
     });
 
     test("factory description textbox changes on input", () => {
         const { getByPlaceholderText } = render(<EditFactoryForm {...props} />);
 
         const nameInput = getByPlaceholderText("Enter factory name");
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+        const descriptionInput = getByPlaceholderText(
+            "Enter factory description (optional)",
+        );
 
         fireEvent.change(descriptionInput, {
             target: {
@@ -116,14 +105,16 @@ describe("Landing Page Component", () => {
         });
 
         expect(nameInput).toHaveValue("Factory 1");
-        expect(descriptionInput).toHaveValue(factoryDescription); 
+        expect(descriptionInput).toHaveValue(factoryDescription);
     });
 
     test("both factory name and description textboxes changes on input", () => {
         const { getByPlaceholderText } = render(<EditFactoryForm {...props} />);
 
         const nameInput = getByPlaceholderText("Enter factory name");
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
+        const descriptionInput = getByPlaceholderText(
+            "Enter factory description (optional)",
+        );
 
         fireEvent.change(nameInput, {
             target: {
@@ -137,11 +128,13 @@ describe("Landing Page Component", () => {
         });
 
         expect(nameInput).toHaveValue(factoryName);
-        expect(descriptionInput).toHaveValue(factoryDescription); 
+        expect(descriptionInput).toHaveValue(factoryDescription);
     });
 
     test("displays error message on blank factory name", () => {
-        const { getByPlaceholderText, getByText } = render( <EditFactoryForm {...props} /> );
+        const { getByPlaceholderText, getByText } = render(
+            <EditFactoryForm {...props} />,
+        );
 
         const nameInput = getByPlaceholderText("Enter factory name");
         const emptyName = "";
@@ -160,10 +153,15 @@ describe("Landing Page Component", () => {
     });
 
     test("displays error message when factory description is too long", () => {
-        const { getByPlaceholderText, getByText } = render(<EditFactoryForm {...props} />);
+        const { getByPlaceholderText, getByText } = render(
+            <EditFactoryForm {...props} />,
+        );
 
-        const descriptionInput = getByPlaceholderText("Enter factory description (optional)");
-        const longDescription = "This description is longer than two hundred characters long, so it can not be used in the form. please try to have descriptions less than two hundred characters long, or it will not work in the form. thanks.";
+        const descriptionInput = getByPlaceholderText(
+            "Enter factory description (optional)",
+        );
+        const longDescription =
+            "This description is longer than two hundred characters long, so it can not be used in the form. please try to have descriptions less than two hundred characters long, or it will not work in the form. thanks.";
 
         fireEvent.change(descriptionInput, {
             target: {
@@ -172,7 +170,9 @@ describe("Landing Page Component", () => {
         });
         fireEvent.click(getByText(/(Save Changes)/));
 
-        const descriptionTooLongError = getByText("Factory description must be no more than 200 characters.");
+        const descriptionTooLongError = getByText(
+            "Factory description must be no more than 200 characters.",
+        );
 
         expect(descriptionInput).toHaveValue(longDescription);
         expect(descriptionTooLongError).toBeInTheDocument();
