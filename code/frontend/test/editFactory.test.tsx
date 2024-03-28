@@ -18,8 +18,6 @@ global.fetch = jest.fn(() =>
     }),
 ) as jest.Mock;
 
-const onSaveMock = jest.fn();
-const onCloseMock = jest.fn();
 const mockFactory = {
     factoryId: "1",
     name: "Factory 1",
@@ -30,11 +28,13 @@ const mockFactory = {
     description: "",
 };
 
+const onCloseMock = jest.fn();
 const props = {
     factory: mockFactory,
     onClose: onCloseMock,
-    onSave: onSaveMock,
+    onSave: jest.fn(),
 };
+
 const factoryName = "TensorIoT Factory";
 const factoryDescription = "This is a factory used by TensorIoT in Texas";
 
@@ -176,5 +176,50 @@ describe("Landing Page Component", () => {
 
         expect(descriptionInput).toHaveValue(longDescription);
         expect(descriptionTooLongError).toBeInTheDocument();
+    });
+
+    test("successfully  edit factory", async () => {
+        const onSaveMock = jest.fn();
+        const onClosemockedMock = jest.fn();
+
+        const newProps = {
+            factory: mockFactory,
+            onClose: onClosemockedMock,
+            onSave: onSaveMock,
+        };
+
+        const { getByPlaceholderText, getByText } = render(
+            <EditFactoryForm {...newProps} />,
+        );
+
+        const nameInput = getByPlaceholderText("Enter factory name");
+        const descriptionInput = getByPlaceholderText(
+            "Enter factory description (optional)",
+        );
+
+        fireEvent.change(nameInput, {
+            target: {
+                value: factoryName,
+            },
+        });
+
+        fireEvent.change(descriptionInput, {
+            target: {
+                value: factoryDescription,
+            },
+        });
+
+        fireEvent.click(getByText(/(Save Changes)/));
+
+        console.log("onSaveMock calls:", onSaveMock.mock.calls);
+
+        await waitFor(() => {
+            expect(onSaveMock).toHaveBeenCalledWith({
+                factoryId: "1",
+                name: "TensorIoT Factory",
+                location: { latitude: 123.456, longitude: 456.789 },
+                description: "This is a factory used by TensorIoT in Texas",
+            });
+        });
     });
 });

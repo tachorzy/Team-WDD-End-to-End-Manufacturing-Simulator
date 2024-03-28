@@ -7,7 +7,7 @@ import ErrorMessage from "../home/searchbar/ErrorMessage";
 interface EditFactoryFormProps {
     factory: Factory | null;
     onClose: () => void;
-    onSave: () => void;
+    onSave: (formData: Partial<Factory>) => void;
 }
 
 const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
@@ -53,7 +53,8 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                     },
                     body: JSON.stringify(formData),
                 });
-                onSave();
+                console.log("Saving factory:", formData);
+                onSave(formData);
             } else {
                 console.error("Factory data is incomplete.");
             }
