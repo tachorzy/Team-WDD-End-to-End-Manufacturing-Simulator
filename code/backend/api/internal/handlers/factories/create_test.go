@@ -27,7 +27,7 @@ func TestHandleCreateFactoryRequest_BadJSON(t *testing.T) {
 	}
 
 	if response.StatusCode != http.StatusBadRequest {
-		t.Errorf("Expected StatusCode %d for bad JSON, got %d", http.StatusBadRequest, response.StatusCode)
+		t.Errorf("Expected status code %d for bad JSON, got %d", http.StatusBadRequest, response.StatusCode)
 	}
 }
 
@@ -56,7 +56,7 @@ func TestHandleCreateFactoryRequest_MarshalMapError(t *testing.T) {
 	}
 
 	if response.StatusCode != http.StatusInternalServerError {
-		t.Errorf("Expected StatusCode %d for marshalling factory to DynamoDB format, got %d", http.StatusInternalServerError, response.StatusCode)
+		t.Errorf("Expected status code %d for marshalling factory to DynamoDB format, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
 
@@ -81,7 +81,40 @@ func TestHandleCreateFactoryRequest_PutItemError(t *testing.T) {
 	}
 
 	if response.StatusCode != http.StatusInternalServerError {
-		t.Errorf("Expected StatusCode %d for DynamoDB put item error, got %d", http.StatusInternalServerError, response.StatusCode)
+		t.Errorf("Expected status code %d for DynamoDB put item error, got %d", http.StatusInternalServerError, response.StatusCode)
+	}
+}
+
+func TestHandleCreateFactoryRequest_JSONMarshalError(t *testing.T) {
+	mockDDBClient := &MockDynamoDBClient{
+		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+			return &dynamodb.PutItemOutput{}, nil
+		},
+	}
+
+	handler := NewCreateFactoryHandler(mockDDBClient)
+
+	request := events.APIGatewayProxyRequest{
+		Body: `{"name":"Test Factory","location":{"longitude":10,"latitude":20},"description":"Test Description"}`,
+	}
+
+	originalFactoryJSONMarshal := FactoryJSONMarshal
+
+	defer func() { FactoryJSONMarshal = originalFactoryJSONMarshal }()
+
+	FactoryJSONMarshal = func(v interface{}) ([]byte, error) {
+		return nil, errors.New("mock marshal error")
+	}
+
+	ctx := context.Background()
+	response, err := handler.HandleCreateFactoryRequest(ctx, request)
+
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d for marshalling factory in JSON format, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
 
@@ -106,6 +139,6 @@ func TestHandleCreateFactoryRequest_Success(t *testing.T) {
 	}
 
 	if response.StatusCode != http.StatusOK {
-		t.Errorf("Expected StatusCode %d for successful creation, got %d", http.StatusOK, response.StatusCode)
+		t.Errorf("Expected status code %d for successful creation, got %d", http.StatusOK, response.StatusCode)
 	}
 }
