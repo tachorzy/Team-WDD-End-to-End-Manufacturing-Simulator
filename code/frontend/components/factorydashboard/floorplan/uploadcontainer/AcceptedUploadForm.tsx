@@ -41,27 +41,31 @@ const FileUploadContainer = (props: {
                                 className="select-none rounded-2xl"
                             />
                         )}
-                        <h1 className="text-black text-lg w-[49%] text-center font-semibold">Your floor plan is ready!</h1>
+                        <h1 className="text-black text-lg w-[49%] text-center font-semibold">
+                            Your floor plan is ready!
+                        </h1>
                         <UploadResultTray
                             acceptedFileItems={acceptedFileItems}
                             fileRejectionItems={fileRejectionItems}
                         />
                         <div className="flex flex-row w-[47.5%] gap-x-4">
-                            <button 
+                            <button
+                                type="button"
                                 onClick={() => {
                                     // set the uploaded file to the backend and render it.
                                     setVisibility(false);
-                                    setUploadedFile(null)
+                                    setUploadedFile(null);
                                 }}
                                 className="bg-gradient-to-r from-LightBlue to-MainBlue rounded-full w-1/2 h-8 font-semibold hover:scale-[101.5%] transition duration-500 ease-in-out"
                             >
                                 Accept
                             </button>
-                            <button 
+                            <button
+                                type="button"
                                 onClick={() => {
                                     setVisibility(false);
-                                    setUploadedFile(null)
-                                }}          
+                                    setUploadedFile(null);
+                                }}
                                 className="bg-gradient-to-r from-[#FC7978] to-[#E31D1C] rounded-full w-1/2 h-8 font-semibold hover:scale-[101.5%] transition duration-500 ease-in-out"
                             >
                                 Deny
