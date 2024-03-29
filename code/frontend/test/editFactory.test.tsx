@@ -43,7 +43,7 @@ describe("Edit factory form ", () => {
         (global.fetch as jest.Mock).mockClear();
     });
 
-    test("renders and its compontents correctly ", () => {
+    test("should render and its compontents correctly ", () => {
         const { getByText, getByAltText, getByPlaceholderText } = render(
             <EditFactoryForm {...props} />,
         );
@@ -63,7 +63,7 @@ describe("Edit factory form ", () => {
         expect(button).toBeInTheDocument();
     });
 
-    test("is closed when close icon clicked", () => {
+    test("should be closed when close icon clicked", () => {
         const { getByAltText } = render(<EditFactoryForm {...props} />);
 
         const closeIcon = getByAltText("Close icon");
@@ -72,7 +72,7 @@ describe("Edit factory form ", () => {
         expect(onCloseMock).toHaveBeenCalled();
     });
 
-    test("factory name textbox changes on input", () => {
+    test("should change factory name textbox on input", () => {
         const { getByPlaceholderText } = render(<EditFactoryForm {...props} />);
 
         const nameInput = getByPlaceholderText("Enter factory name");
@@ -90,7 +90,7 @@ describe("Edit factory form ", () => {
         expect(descriptionInput).toHaveValue("");
     });
 
-    test("factory description textbox changes on input", () => {
+    test("should change factory description textbox on input", () => {
         const { getByPlaceholderText } = render(<EditFactoryForm {...props} />);
 
         const nameInput = getByPlaceholderText("Enter factory name");
