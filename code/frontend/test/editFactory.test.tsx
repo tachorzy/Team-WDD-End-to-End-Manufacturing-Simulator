@@ -131,6 +131,23 @@ describe("Landing Page Component", () => {
         expect(descriptionInput).toHaveValue(factoryDescription);
     });
 
+    test("displays error message on missing factory name", () => {
+        const { getByText, getByPlaceholderText } = render(
+            <EditFactoryForm {...props} />,
+        );
+
+        const nameInput = getByPlaceholderText("Enter factory name");
+        fireEvent.change(nameInput, {
+            target: {
+                value: null,
+            },
+        });
+        fireEvent.click(getByText(/(Save Changes)/));
+
+        const noNameError = getByText("Please provide a name for the factory.");
+        expect(noNameError).toBeInTheDocument();
+    });
+
     test("displays error message on blank factory name", () => {
         const { getByPlaceholderText, getByText } = render(
             <EditFactoryForm {...props} />,
@@ -144,7 +161,7 @@ describe("Landing Page Component", () => {
                 value: emptyName,
             },
         });
-        fireEvent.click(getByText(/(Save)/));
+        fireEvent.click(getByText(/(Save Changes)/));
 
         const noNameError = getByText("Please provide a name for the factory.");
 
@@ -211,8 +228,6 @@ describe("Landing Page Component", () => {
 
         fireEvent.click(getByText(/(Save Changes)/));
 
-        console.log("onSaveMock calls:", onSaveMock.mock.calls);
-
         await waitFor(() => {
             expect(onSaveMock).toHaveBeenCalledWith({
                 factoryId: "1",
@@ -220,6 +235,62 @@ describe("Landing Page Component", () => {
                 location: { latitude: 123.456, longitude: 456.789 },
                 description: "This is a factory used by TensorIoT in Texas",
             });
+        });
+    });
+
+    test("logs error when factory data is incomplete", async () => {
+        const consoleErrorMock = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => {});
+
+        // Simulate factory data being incomplete by not providing factoryId
+        const incompleteFactoryData = {
+            factoryId: "", // Incomplete data
+            name: "TensorIoT Factory",
+            location: { latitude: 123.456, longitude: 456.789 },
+            description: "This is a factory used by TensorIoT in Texas",
+        };
+
+        const { getByText } = render(
+            <EditFactoryForm
+                factory={incompleteFactoryData}
+                onClose={jest.fn()}
+                onSave={jest.fn()}
+            />,
+        );
+
+        fireEvent.click(getByText(/(Save Changes)/));
+
+        await waitFor(() => {
+            expect(consoleErrorMock).toHaveBeenCalledWith(
+                "Failed to update factory:",
+                new Error("Factory data is incomplete."),
+            );
+        });
+    });
+
+    test("logs error when factory data is incomplete is null", async () => {
+        const consoleErrorMock = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => {});
+
+        const incompleteFactoryData = null;
+
+        const { getByText } = render(
+            <EditFactoryForm
+                factory={incompleteFactoryData}
+                onClose={jest.fn()}
+                onSave={jest.fn()}
+            />,
+        );
+
+        fireEvent.click(getByText(/(Save Changes)/));
+
+        await waitFor(() => {
+            expect(consoleErrorMock).toHaveBeenCalledWith(
+                "Failed to update factory:",
+                new Error("Factory data is incomplete."),
+            );
         });
     });
 });
