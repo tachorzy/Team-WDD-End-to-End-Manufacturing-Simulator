@@ -7,7 +7,7 @@ import ErrorMessage from "../home/searchbar/ErrorMessage";
 interface EditFactoryFormProps {
     factory: Factory | null;
     onClose: () => void;
-    onSave: () => void;
+    onSave: (formData: Partial<Factory>) => void;
 }
 
 const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
@@ -53,9 +53,9 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                     },
                     body: JSON.stringify(formData),
                 });
-                onSave();
+                onSave(formData);
             } else {
-                console.error("Factory data is incomplete.");
+                throw new Error("Factory data is incomplete.");
             }
         } catch (error) {
             console.error("Failed to update factory:", error);
@@ -77,11 +77,11 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                         alt="Close icon"
                     />
                 </button>
-                <h1 className="text-3xl font-semibold mb-4">
+                <h1 className="text-3xl font-semibold mb-4 text-gray-900">
                     Edit Factory Details
                 </h1>
                 <div className="mb-4">
-                    <label htmlFor="name" className="block mb-1">
+                    <label htmlFor="name" className="block mb-1 text-gray-500">
                         Factory Name:
                     </label>
                     <input
@@ -90,7 +90,7 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                         name="name"
                         value={formData?.name || ""}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-indigo-500"
+                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-indigo-500 text-gray-900"
                         placeholder="Enter factory name"
                     />
                     {invalidName && (
@@ -101,7 +101,10 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                     )}
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="description" className="block mb-1">
+                    <label
+                        htmlFor="description"
+                        className="block mb-1 text-gray-500"
+                    >
                         Factory Description:
                     </label>
                     <textarea
@@ -109,7 +112,7 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                         name="description"
                         value={formData?.description || ""}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-indigo-500"
+                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-indigo-500 text-gray-900"
                         placeholder="Enter factory description (optional)"
                     />
                     {invalidDescription && (
