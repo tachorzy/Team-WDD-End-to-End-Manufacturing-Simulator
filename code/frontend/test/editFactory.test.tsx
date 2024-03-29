@@ -38,7 +38,7 @@ const props = {
 const factoryName = "TensorIoT Factory";
 const factoryDescription = "This is a factory used by TensorIoT in Texas";
 
-describe("Landing Page Component", () => {
+describe("Edit factory form ", () => {
     beforeEach(() => {
         (global.fetch as jest.Mock).mockClear();
     });
@@ -131,7 +131,7 @@ describe("Landing Page Component", () => {
         expect(descriptionInput).toHaveValue(factoryDescription);
     });
 
-    test("displays error message on missing factory name", () => {
+    test("displays error message when factory name is missing ", () => {
         const { getByText, getByPlaceholderText } = render(
             <EditFactoryForm {...props} />,
         );
@@ -148,7 +148,7 @@ describe("Landing Page Component", () => {
         expect(noNameError).toBeInTheDocument();
     });
 
-    test("displays error message on blank factory name", () => {
+    test("displays error message when given blank name", () => {
         const { getByPlaceholderText, getByText } = render(
             <EditFactoryForm {...props} />,
         );
@@ -195,7 +195,7 @@ describe("Landing Page Component", () => {
         expect(descriptionTooLongError).toBeInTheDocument();
     });
 
-    test("successfully  edit factory", async () => {
+    test("successfully edits factory", async () => {
         const onSaveMock = jest.fn();
         const onClosemockedMock = jest.fn();
 
@@ -269,7 +269,7 @@ describe("Landing Page Component", () => {
         });
     });
 
-    test("logs error when factory data is incomplete is null", async () => {
+    test("logs error when factory data is non-existent", async () => {
         const consoleErrorMock = jest
             .spyOn(console, "error")
             .mockImplementation(() => {});
