@@ -45,6 +45,7 @@ const FileUploadContainer = (props: {
                             Your floor plan is ready!
                         </h1>
                         <UploadResultTray
+                            data-testid="upload-result-tray"
                             acceptedFileItems={acceptedFileItems}
                             fileRejectionItems={fileRejectionItems}
                         />
