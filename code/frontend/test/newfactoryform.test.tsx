@@ -284,6 +284,7 @@ describe("New Factory Form", () => {
                 value: factoryDescription,
             },
         });
+      
         fireEvent.click(getByText(/(Create)/));
 
         await waitFor(() => {
