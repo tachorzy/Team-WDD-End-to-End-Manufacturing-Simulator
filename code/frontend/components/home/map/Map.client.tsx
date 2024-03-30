@@ -8,7 +8,7 @@ import { Factory } from "@/app/types/types";
 import MapPin from "./MapPin";
 import "leaflet/dist/leaflet.css";
 
-interface MapProps {
+export interface MapProps {
     positions: Factory[];
 }
 
@@ -33,7 +33,7 @@ const customIconMultipleFacilities = new L.Icon({
     popupAnchor: [0, -35],
 });
 
-const ChangeView = ({
+export const ChangeView = ({
     center,
     zoom,
 }: {
