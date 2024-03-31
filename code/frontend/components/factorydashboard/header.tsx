@@ -1,4 +1,5 @@
-import axios from "axios";
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { Factory } from "@/app/types/types";
 import { usePathname } from "next/navigation";
@@ -35,10 +36,33 @@ const Header: React.FC = () => {
         fetchFactory();
     }, [navigation]);
 
-    const latitude = Number(factory?.location.latitude).toFixed(2);
-    const longitude = Number(factory?.location.latitude).toFixed(2);
+    const latitude = Number(factory?.location.latitude)
+    const longitude = Number(factory?.location.longitude)
 
     // call reverse geocoding to find the location of the factory (city, region, country)
+    const [locationData, setLocationData] = useState(null);
+
+    useEffect(() => {
+        const fetchLocation = async () => {
+            try {
+                const response = await fetch(`https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=${process.env.NEXT_PUBLIC_GEOCODE_API_KEY}`);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch location: ${response.statusText}`);
+                }
+                const data = await response.json();
+                setLocationData(data);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+    
+        if (latitude && longitude) {
+            fetchLocation();
+        }
+    }, [latitude, longitude]);
+
+
+    console.log(locationData)
 
     return (
         <div className="lg:flex lg:items-center lg:justify-between">
@@ -47,7 +71,8 @@ const Header: React.FC = () => {
                     {factory ? factory.name : "Loading..."}
                 </h2>
                 <div className="mt-1 flex items-center text-sm font-light text-gray-500">
-                    {factory ? `${latitude}°, ${longitude}°` : "Loading..."}
+                    {/* {factory ? locationData : "Loading..."} */}
+                    {factory ? `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°` : "Loading..."}
                 </div>
                 <div className="mt-1 flex items-center text-sm text-gray-500">
                     {factory ? factory.description : "Loading..."}
