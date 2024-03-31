@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { createFloorplan } from "@/app/api/floorplan/floorplanAPI";
 import UploadResultTray from "./UploadResultTray";
 
 const FileUploadContainer = (props: {
@@ -15,6 +17,40 @@ const FileUploadContainer = (props: {
         fileRejectionItems,
     } = props;
     const [isVisible, setVisibility] = useState(true);
+    const navigation = usePathname();
+
+    // not sure how to fix the lint error im getting, using a temporary solution: https://github.com/mightyiam/eslint-config-love/issues/217
+    // eslint-disable-next-line @typescript-eslint/require-await
+    const handleAccept = async () => {
+        const factoryId = navigation.split("/")[2];
+        if (!uploadedFile || typeof factoryId !== "string") {
+            console.error("File or Factory ID is missing.");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+            console.log(factoryId);
+            console.log(uploadedFile);
+            const base64Image = reader.result?.toString().split(",")[1];
+            if (base64Image) {
+                try {
+                    await createFloorplan(base64Image, factoryId);
+                    console.log("Floor plan uploaded successfully.");
+                } catch (error) {
+                    console.error("Error uploading floor plan:", error);
+                }
+            } else {
+                console.error("Failed to convert the file to base64.");
+            }
+        };
+        reader.onerror = () =>
+            console.error("There was an error reading the file");
+        reader.readAsDataURL(uploadedFile);
+
+        setVisibility(false);
+        setUploadedFile(null);
+    };
 
     return (
         <div className="w-full absolute h-full items-center justify-center m-auto">
@@ -53,7 +89,7 @@ const FileUploadContainer = (props: {
                             <button
                                 type="button"
                                 onClick={() => {
-                                    // set the uploaded file to the backend and render it.
+                                    handleAccept();
                                     setVisibility(false);
                                     setUploadedFile(null);
                                 }}

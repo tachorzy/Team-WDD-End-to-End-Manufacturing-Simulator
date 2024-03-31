@@ -94,7 +94,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 		}, nil
 	}
 
-	floorplan.ImageRef = fmt.Sprintf("https://%s.s3.amazonaws.com/%s", "wingstopdrivenbucket", imageFileName)
+	floorplan.ImageData = fmt.Sprintf("https://%s.s3.amazonaws.com/%s", "wingstopdrivenbucket", imageFileName)
 
 	av, err := FloorPlanMarshalMap(floorplan)
 	if err != nil {

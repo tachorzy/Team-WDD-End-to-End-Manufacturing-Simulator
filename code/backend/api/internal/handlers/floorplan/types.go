@@ -12,7 +12,7 @@ type Floorplan struct {
 	FloorplanID string `json:"floorplanId" dynamodbav:"floorplanId"`
 	FactoryID   string `json:"factoryId" dynamodbav:"factoryId"`
 	DateCreated string `json:"dateCreated" dynamodbav:"Date Created"`
-	ImageRef    string `json:"ImageRef" dynamodbav:"ImageRef"`
+	ImageData   string `json:"imageData" dynamodbav:"imageData"`
 }
 
 type DynamoDBClient interface {

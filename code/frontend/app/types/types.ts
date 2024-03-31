@@ -14,3 +14,10 @@ export interface ApiResponse {
     multiValueHeaders: Record<string, string[]> | null;
     body: string;
 }
+
+export interface Floorplan {
+    floorplanId: string;
+    dateCreated: string;
+    imageData: string;
+    factoryId: string;
+}
