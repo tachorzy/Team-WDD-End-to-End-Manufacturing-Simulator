@@ -3,10 +3,13 @@
  */
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom"
-import MapComponent, {  MapProps, ChangeView } from "../components/home/map/Map.client";
+import "@testing-library/jest-dom";
 import L from "leaflet";
 import { Factory } from "@/app/types/types";
+import MapComponent, {
+    MapProps,
+    ChangeView,
+} from "../components/home/map/Map.client";
 
 jest.mock("react-leaflet", () => ({
     MapContainer: () => <div data-testid="mapcontainer">"Map Container"</div>,
@@ -20,7 +23,7 @@ jest.mock("leaflet");
 
 global.fetch = jest.fn();
 
-describe ("MapCompenent", () => {
+describe("MapCompenent", () => {
     const mockFactory: Factory[] = [
         {
             name: "New Factory",
@@ -37,14 +40,20 @@ describe ("MapCompenent", () => {
     });
 
     test("should render without error", async () => {
-        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
-            json: () => Promise.resolve({mockFactory})
-        }));
-        
-        const { getByTestId } = render(<MapComponent positions={mockFactory} />);
-    
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                json: () => Promise.resolve({ mockFactory }),
+            }),
+        );
+
+        const { getByTestId } = render(
+            <MapComponent positions={mockFactory} />,
+        );
+
         await waitFor(() => {
-            expect(getByTestId("mapcontainer")).toHaveTextContent("Map Container");
+            expect(getByTestId("mapcontainer")).toHaveTextContent(
+                "Map Container",
+            );
         });
     });
 
@@ -70,17 +79,23 @@ describe ("MapCompenent", () => {
             },
         ];
 
-        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
-            json: () => Promise.resolve({twoFakeFactories})
-        }));
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                json: () => Promise.resolve({ twoFakeFactories }),
+            }),
+        );
 
-        const { getByTestId, unmount } = render(<MapComponent positions={twoFakeFactories} />);
-    
-        await waitFor (() => {
-            expect(getByTestId("mapcontainer")).toHaveTextContent("Map Container");
+        const { getByTestId, unmount } = render(
+            <MapComponent positions={twoFakeFactories} />,
+        );
+
+        await waitFor(() => {
+            expect(getByTestId("mapcontainer")).toHaveTextContent(
+                "Map Container",
+            );
             unmount();
         });
-    }); 
+    });
 
     test("should render with three factories at the same location", async () => {
         const threeFakeFactories: Factory[] = [
@@ -113,17 +128,23 @@ describe ("MapCompenent", () => {
             },
         ];
 
-        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
-            json: () => Promise.resolve({threeFakeFactories})
-        }));
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                json: () => Promise.resolve({ threeFakeFactories }),
+            }),
+        );
 
-        const { getByTestId, unmount } = render(<MapComponent positions={threeFakeFactories} />);
-    
-        await waitFor (() => {
-            expect(getByTestId("mapcontainer")).toHaveTextContent("Map Container");
+        const { getByTestId, unmount } = render(
+            <MapComponent positions={threeFakeFactories} />,
+        );
+
+        await waitFor(() => {
+            expect(getByTestId("mapcontainer")).toHaveTextContent(
+                "Map Container",
+            );
             unmount();
         });
-    }); 
+    });
 
     test("should render with four factories at the same location", async () => {
         const fourFakeFactories: Factory[] = [
@@ -165,17 +186,23 @@ describe ("MapCompenent", () => {
             },
         ];
 
-        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
-            json: () => Promise.resolve({fourFakeFactories})
-        }));
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                json: () => Promise.resolve({ fourFakeFactories }),
+            }),
+        );
 
-        const { getByTestId, unmount } = render(<MapComponent positions={fourFakeFactories} />);
-    
-        await waitFor (() => {
-            expect(getByTestId("mapcontainer")).toHaveTextContent("Map Container");
+        const { getByTestId, unmount } = render(
+            <MapComponent positions={fourFakeFactories} />,
+        );
+
+        await waitFor(() => {
+            expect(getByTestId("mapcontainer")).toHaveTextContent(
+                "Map Container",
+            );
             unmount();
         });
-    }); 
+    });
 
     test("should render with two factories at the different locations", async () => {
         const twoDifferentFactories: Factory[] = [
@@ -199,17 +226,23 @@ describe ("MapCompenent", () => {
             },
         ];
 
-        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
-            json: () => Promise.resolve({twoDifferentFactories})
-        }));
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                json: () => Promise.resolve({ twoDifferentFactories }),
+            }),
+        );
 
-        const { getByTestId, unmount } = render(<MapComponent positions={twoDifferentFactories} />);
-    
-        await waitFor (() => {
-            expect(getByTestId("mapcontainer")).toHaveTextContent("Map Container");
+        const { getByTestId, unmount } = render(
+            <MapComponent positions={twoDifferentFactories} />,
+        );
+
+        await waitFor(() => {
+            expect(getByTestId("mapcontainer")).toHaveTextContent(
+                "Map Container",
+            );
             unmount();
         });
-    }); 
+    });
 
     test("should render with three factories at the different locations", async () => {
         const threeDifferentFactories: Factory[] = [
@@ -242,17 +275,23 @@ describe ("MapCompenent", () => {
             },
         ];
 
-        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
-            json: () => Promise.resolve({threeDifferentFactories})
-        }));
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                json: () => Promise.resolve({ threeDifferentFactories }),
+            }),
+        );
 
-        const { getByTestId, unmount } = render(<MapComponent positions={threeDifferentFactories} />);
-    
-        await waitFor (() => {
-            expect(getByTestId("mapcontainer")).toHaveTextContent("Map Container");
+        const { getByTestId, unmount } = render(
+            <MapComponent positions={threeDifferentFactories} />,
+        );
+
+        await waitFor(() => {
+            expect(getByTestId("mapcontainer")).toHaveTextContent(
+                "Map Container",
+            );
             unmount();
         });
-    }); 
+    });
 
     test("should render with one factory at a different location and two factories at the same", async () => {
         const oneDifferentTwoSame: Factory[] = [
@@ -285,17 +324,23 @@ describe ("MapCompenent", () => {
             },
         ];
 
-        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
-            json: () => Promise.resolve({oneDifferentTwoSame})
-        }));
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                json: () => Promise.resolve({ oneDifferentTwoSame }),
+            }),
+        );
 
-        const { getByTestId, unmount } = render(<MapComponent positions={oneDifferentTwoSame} />);
-    
-        await waitFor (() => {
-            expect(getByTestId("mapcontainer")).toHaveTextContent("Map Container");
+        const { getByTestId, unmount } = render(
+            <MapComponent positions={oneDifferentTwoSame} />,
+        );
+
+        await waitFor(() => {
+            expect(getByTestId("mapcontainer")).toHaveTextContent(
+                "Map Container",
+            );
             unmount();
         });
-    }); 
+    });
 
     test("should render with two factories at a different location and two factories at the same", async () => {
         const twoDifferentTwoSame: Factory[] = [
@@ -337,17 +382,23 @@ describe ("MapCompenent", () => {
             },
         ];
 
-        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.resolve({
-            json: () => Promise.resolve({twoDifferentTwoSame})
-        }));
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                json: () => Promise.resolve({ twoDifferentTwoSame }),
+            }),
+        );
 
-        const { getByTestId, unmount } = render(<MapComponent positions={twoDifferentTwoSame} />);
-    
-        await waitFor (() => {
-            expect(getByTestId("mapcontainer")).toHaveTextContent("Map Container");
+        const { getByTestId, unmount } = render(
+            <MapComponent positions={twoDifferentTwoSame} />,
+        );
+
+        await waitFor(() => {
+            expect(getByTestId("mapcontainer")).toHaveTextContent(
+                "Map Container",
+            );
             unmount();
         });
-    }); 
+    });
 
     test("ChangeView renders without error", () => {
         const ChangeViewprops = {
@@ -359,13 +410,20 @@ describe ("MapCompenent", () => {
     });
 
     test("should throw and log an error on fetch", async () => {
-        (global.fetch as jest.Mock).mockImplementationOnce(() => Promise.reject(new Error("404")));        
-        const consoleErrorMock = jest.spyOn(console, "error").mockImplementation(() => {});
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.reject(new Error("404")),
+        );
+        const consoleErrorMock = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => {});
 
         render(<MapComponent positions={mockFactory} />);
 
         await waitFor(() => {
-            expect(consoleErrorMock).toHaveBeenCalledWith("Error fetching factories:", new Error("404"));
+            expect(consoleErrorMock).toHaveBeenCalledWith(
+                "Error fetching factories:",
+                new Error("404"),
+            );
         });
-    })
+    });
 });

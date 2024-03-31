@@ -9,12 +9,15 @@ interface NavbarProps {
 }
 
 const FactoryPageNavbar = (props: NavbarProps) => {
-    const { pageId } = props;
+    const { pageId, factoryId } = props;
 
     const navbarLinks = [
         { label: "Home", link: "/" },
-        { label: "Factory Floor", link: `/factorydashboard/${props.factoryId}` },
-        { label: "Dashboard", link: `/factorydashboard/${props.factoryId}`},
+        {
+            label: "Factory Floor",
+            link: `/factorydashboard/${props.factoryId}`,
+        },
+        { label: "Dashboard", link: `/factorydashboard/${props.factoryId}` },
         { label: "Assets", link: "/" },
         { label: "Anomaly Detection", link: "/" },
     ];
@@ -27,7 +30,7 @@ const FactoryPageNavbar = (props: NavbarProps) => {
                     width={150}
                     height={150}
                     alt="brand"
-                    className="select-none mb-2 left-0"
+                    className="select-none mb-2"
                 />
                 <div className="flex flex-row gap-x-6">
                     <Link href="/">
@@ -39,7 +42,6 @@ const FactoryPageNavbar = (props: NavbarProps) => {
                     <SignUpButton />
                 </div>
             </div>
-            
 
             <div className="flex flex-row gap-x-16 mx-0.5">
                 {navbarLinks.map((navItem) => (
@@ -55,14 +57,9 @@ const FactoryPageNavbar = (props: NavbarProps) => {
                                 {navItem.label}
                                 {navItem.label !== pageId ? (
                                     <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 pt-0.5 bg-MainBlue" />
-                                )
-                                : 
-                                (
+                                ) : (
                                     <span className="block max-w-0 max-w-full transition-all duration-500 h-0.5 pt-0.5 bg-MainBlue" />
-                                )
-                                
-                            }
-
+                                )}
                             </h1>
                         </Link>
                     </div>
