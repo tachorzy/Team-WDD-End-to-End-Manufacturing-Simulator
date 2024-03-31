@@ -15,9 +15,9 @@ const FactoryPageNavbar = (props: NavbarProps) => {
         { label: "Home", link: "/" },
         {
             label: "Factory Floor",
-            link: `/factorydashboard/${props.factoryId}`,
+            link: `/factorydashboard/${factoryId}`,
         },
-        { label: "Dashboard", link: `/factorydashboard/${props.factoryId}` },
+        { label: "Dashboard", link: `/factorydashboard/${factoryId}` },
         { label: "Assets", link: "/" },
         { label: "Anomaly Detection", link: "/" },
     ];
