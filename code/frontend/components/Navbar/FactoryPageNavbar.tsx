@@ -23,8 +23,8 @@ const FactoryPageNavbar = (props: NavbarProps) => {
     ];
 
     return (
-        <div className="flex flex-col mt-2 border-b-2 border-solid border-[#C5C9D6] px-32 mb-1.5">
-            <div className="flex flex-row gap-x-[75%] items-center justify-center">
+        <div className="flex flex-col mt-2 border-b-2 border-solid border-[#C5C9D6] px-32 mb-1.5 mt-6">
+            <div className="flex flex-row gap-x-[75%] items-center justify-center mb-6">
                 <Image
                     src="/branding/TensorIoT-Logo-Black.svg"
                     width={150}
@@ -36,7 +36,7 @@ const FactoryPageNavbar = (props: NavbarProps) => {
                     <Link href="/">
                         <h1 className="group text-base font-medium text-[#494949]">
                             Login
-                            <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-16 pt-4 bg-MainBlue" />
+                            <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-MainBlue" />
                         </h1>
                     </Link>
                     <SignUpButton />
@@ -56,9 +56,9 @@ const FactoryPageNavbar = (props: NavbarProps) => {
                             >
                                 {navItem.label}
                                 {navItem.label !== pageId ? (
-                                    <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 pt-0.5 bg-MainBlue" />
+                                    <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 pt-[0.15rem] bg-MainBlue" />
                                 ) : (
-                                    <span className="block max-w-0 max-w-full transition-all duration-500 h-0.5 pt-0.5 bg-MainBlue" />
+                                    <span className="block max-w-0 max-w-full transition-all duration-500 h-0.5 pt-[0.15rem] bg-MainBlue" />
                                 )}
                             </h1>
                         </Link>
