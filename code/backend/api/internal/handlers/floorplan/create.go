@@ -32,7 +32,8 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 	}
 
 	var requestBody map[string]interface{}
-	if err := json.Unmarshal([]byte(request.Body), &requestBody); err != nil {
+	err := json.Unmarshal([]byte(request.Body), &requestBody)
+	if err != nil {
 		return events.APIGatewayProxyResponse{
 			Body:       fmt.Sprintf("Error parsing JSON body: %s", err.Error()),
 			StatusCode: http.StatusBadRequest,
@@ -56,7 +57,8 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 	}
 
 	var floorplan Floorplan
-	if err := json.Unmarshal(floorplanData, &floorplan); err != nil {
+	err = json.Unmarshal(floorplanData, &floorplan)
+	if err != nil {
 		return events.APIGatewayProxyResponse{}, fmt.Errorf("error unmarshalling floorplan data: %w", err)
 	}
 
