@@ -18,7 +18,7 @@ export default function FactoryDashboard() {
                     factoryId={factoryId}
                 />
                 <div className="px-32">
-                    <div className="flex flex-col items-center justify-center gap-y-5 mt-16 mx-auto overflow-hidden max-h-screen">
+                    <div className="flex flex-col gap-y-5 mt-8 mx-auto overflow-hidden max-h-screen">
                         <Header />
                         <FileUploadContainer />
                     </div>

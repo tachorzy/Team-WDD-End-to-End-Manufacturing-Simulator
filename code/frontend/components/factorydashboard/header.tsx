@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Factory } from "@/app/types/types";
 import { usePathname } from "next/navigation";
@@ -34,12 +35,20 @@ const Header: React.FC = () => {
         fetchFactory();
     }, [navigation]);
 
+    const latitude = Number(factory?.location.latitude).toFixed(2);
+    const longitude = Number(factory?.location.latitude).toFixed(2);
+
+    // call reverse geocoding to find the location of the factory (city, region, country)
+
     return (
         <div className="lg:flex lg:items-center lg:justify-between">
             <div className="min-w-0 flex-1">
                 <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
                     {factory ? factory.name : "Loading..."}
                 </h2>
+                <div className="mt-1 flex items-center text-sm font-light text-gray-500">
+                    {factory ? `${latitude}°, ${longitude}°` : "Loading..."}
+                </div>
                 <div className="mt-1 flex items-center text-sm text-gray-500">
                     {factory ? factory.description : "Loading..."}
                 </div>
