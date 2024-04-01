@@ -40,12 +40,14 @@ describe("Factory API", () => {
     };
 
     test("should return a factor using getFactory", async () => {
-        const mockResponse = mockFactory;
+        const mockResponse = JSON.stringify(mockFactory);
 
-        global.fetch = jest.fn().mockResolvedValueOnce({
-            ok: true,
-            json: () => mockResponse,
-        });
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                ok: true,
+                json: () => mockResponse,
+            }),
+        );
 
         const result = await api.getFactory("1");
 
@@ -56,10 +58,12 @@ describe("Factory API", () => {
     test("should return a new factor using createFactory", async () => {
         const mockResponse = mockFactory;
 
-        global.fetch = jest.fn().mockResolvedValueOnce({
-            ok: true,
-            json: () => mockResponse,
-        });
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                ok: true,
+                json: () => mockResponse,
+            }),
+        );
 
         const result = await api.createFactory(mockFactory as Factory); // Using 'as Factory' to suppress TypeScript error
 
@@ -70,10 +74,12 @@ describe("Factory API", () => {
     test("should return all factories using getAllFactories", async () => {
         const mockResponse = [mockFactory];
 
-        global.fetch = jest.fn().mockResolvedValueOnce({
-            ok: true,
-            json: () => mockResponse,
-        });
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                ok: true,
+                json: () => mockResponse,
+            }),
+        );
 
         const result = await api.getAllFactories();
 
@@ -88,10 +94,12 @@ describe("Factory API", () => {
         };
         const mockResponse = updatedFactory;
 
-        global.fetch = jest.fn().mockResolvedValueOnce({
-            ok: true,
-            json: () => mockResponse,
-        });
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                ok: true,
+                json: () => mockResponse,
+            }),
+        );
 
         const result = await api.updateFactory(updatedFactory as Factory); // Using 'as Factory' to suppress TypeScript error
 
