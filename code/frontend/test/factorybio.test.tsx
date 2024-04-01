@@ -37,6 +37,15 @@ describe("Factorybio Component", () => {
         );
     });
 
+    test("should display 'Loading...' when factory data is not yet available", async () => {
+        fetchMock.mockResponse(() => new Promise(resolve => {}));
+    
+        const { findAllByText } = render(<FactoryBio factoryId="123456789" />);
+    
+        const loadingElements = await findAllByText("Loading...");
+        expect(loadingElements).toBeTruthy();
+    });
+
     test("should display factory data", async () => {
         const mockFactory: Factory = {
             factoryId: "123456789",
