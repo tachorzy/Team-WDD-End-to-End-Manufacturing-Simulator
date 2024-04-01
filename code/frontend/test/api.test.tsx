@@ -10,7 +10,7 @@
 
 import "@testing-library/jest-dom";
 import { Factory } from "@/app/types/types";
-import * as api from "../app/api/factories/factoryAPI";
+import { requestOptions, getFactory, createFactory, getAllFactories, updateFactory } from "../app/api/factories/factoryAPI";
 
 const originalEnv = process.env;
 
@@ -40,7 +40,7 @@ describe("Factory API", () => {
     };
 
     test("should return a factor using getFactory", async () => {
-        const mockResponse = JSON.stringify(mockFactory);
+        const mockResponse = mockFactory;
 
         (global.fetch as jest.Mock).mockImplementationOnce(() =>
             Promise.resolve({
@@ -49,10 +49,13 @@ describe("Factory API", () => {
             }),
         );
 
-        const result = await api.getFactory("1");
+        const result = await getFactory("1");
 
+        expect(global.fetch).toHaveBeenCalledWith(
+            "undefined/factories?id=1", 
+            requestOptions
+        );
         expect(result).toEqual(mockResponse);
-        expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
     test("should return a new factor using createFactory", async () => {
@@ -65,10 +68,19 @@ describe("Factory API", () => {
             }),
         );
 
-        const result = await api.createFactory(mockFactory as Factory); // Using 'as Factory' to suppress TypeScript error
+        const result = await createFactory(mockFactory);
 
+        expect(global.fetch).toHaveBeenCalledWith(
+            "undefined/factories",
+            {
+                "body": JSON.stringify(mockFactory),
+                "headers": {
+                    "Content-Type": "application/json",
+                },
+                "method": "POST",
+            }
+        );
         expect(result).toEqual(mockResponse);
-        expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
     test("should return all factories using getAllFactories", async () => {
@@ -81,14 +93,17 @@ describe("Factory API", () => {
             }),
         );
 
-        const result = await api.getAllFactories();
+        const result = await getAllFactories();
 
+        expect(global.fetch).toHaveBeenCalledWith(
+            "undefined/factories", 
+            requestOptions
+        );
         expect(result).toEqual(mockResponse);
-        expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
     test("should update a factory using updateFactory", async () => {
-        const updatedFactory = {
+        const updatedFactory: Factory = {
             ...mockFactory,
             name: "Updated Factory",
         };
@@ -101,9 +116,18 @@ describe("Factory API", () => {
             }),
         );
 
-        const result = await api.updateFactory(updatedFactory as Factory); // Using 'as Factory' to suppress TypeScript error
+        const result = await updateFactory(updatedFactory);
 
+        expect(global.fetch).toHaveBeenCalledWith(
+            "undefined/factories",
+            {
+                "body": JSON.stringify(updatedFactory),
+                "headers": {
+                    "Content-Type": "application/json",
+                },
+                "method": "PUT",
+            }
+        );
         expect(result).toEqual(mockResponse);
-        expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 });

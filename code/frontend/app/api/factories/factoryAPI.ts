@@ -76,4 +76,4 @@ const updateFactory = async (factoryData: Factory): Promise<Factory> => {
     return (await response.json()) as Factory;
 };
 
-export { getFactory, createFactory, getAllFactories, updateFactory };
+export { requestOptions, getFactory, createFactory, getAllFactories, updateFactory };
