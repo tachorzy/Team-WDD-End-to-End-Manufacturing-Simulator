@@ -8,7 +8,7 @@ import { Factory } from "@/app/types/types";
 import MapPin from "./MapPin";
 import "leaflet/dist/leaflet.css";
 
-export interface MapProps {
+interface MapProps {
     positions: Factory[];
 }
 
