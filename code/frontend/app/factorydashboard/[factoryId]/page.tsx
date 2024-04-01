@@ -13,8 +13,10 @@ export default function FactoryDashboard() {
                     <Navbar pageId="Home" />
                     <div className="flex flex-col items-center justify-center gap-y-5 mt-16 mx-auto overflow-hidden max-h-screen">
                         <Header />
-                        <FileUploadContainer />
-                        <AssetInventory />
+                        <div className="flex justify-between w-full">
+                            <FileUploadContainer />
+                            <AssetInventory />
+                        </div>
                     </div>
                 </div>
             </div>

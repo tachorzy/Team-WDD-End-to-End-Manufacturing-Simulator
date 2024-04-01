@@ -75,25 +75,36 @@ describe("AssetInventory", () => {
         expect(noAssetsMessage).toBeInTheDocument();
     });
 
-    test("should add asset and render it in the list", () => {
-        const { getByPlaceholderText, getByText } = render(
-            <AssetInventory assets={[]} />,
-        );
+    test("should open AddAssetForm when 'Add Asset' button is clicked", () => {
+        const { getByText, getByPlaceholderText } = render(<AssetInventory />);
+        const addButton = getByText("Create Asset");
 
-        const idInput = getByPlaceholderText("Asset ID");
+        fireEvent.click(addButton);
+
         const nameInput = getByPlaceholderText("Name");
         const descriptionInput = getByPlaceholderText("Description");
-        const imageInput = getByPlaceholderText("Image URL");
-        const addButton = getByText("Add Asset");
 
-        fireEvent.change(idInput, { target: { value: "1" } });
+        expect(nameInput).toBeInTheDocument();
+        expect(descriptionInput).toBeInTheDocument();
+    });
+
+    test("should add new asset when 'Add Asset' button is clicked in AddAssetForm", () => {
+        const { getByText, getByPlaceholderText } = render(<AssetInventory />);
+        const createButton = getByText("Create Asset");
+
+        fireEvent.click(createButton);
+
+        const nameInput = getByPlaceholderText("Name");
+        const descriptionInput = getByPlaceholderText("Description");
+
+        const addAssetButton = getByText("Add Asset");
+
         fireEvent.change(nameInput, { target: { value: "New Asset" } });
         fireEvent.change(descriptionInput, {
             target: { value: "New Asset Description" },
         });
-        fireEvent.change(imageInput, { target: { value: "newimage.jpg" } });
 
-        fireEvent.click(addButton);
+        fireEvent.click(addAssetButton);
 
         const newAssetNameElement = getByText("Name: New Asset");
         const newAssetDescriptionElement = getByText(
