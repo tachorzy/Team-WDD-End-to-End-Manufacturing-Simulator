@@ -116,6 +116,7 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                             factoriesAtLocation.length;
                         return (
                             <MapPin
+                                key={index}
                                 _key={index}
                                 position={{ lat, lng }}
                                 factoriesAtLocation={factoriesAtLocation}
