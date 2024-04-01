@@ -36,7 +36,7 @@ describe("Factory API", () => {
             latitude: 123.456,
             longitude: 456.789,
         },
-        description: "none",
+        description: "This is factory 1",
     };
 
     test("should return a factor using getFactory", async () => {
