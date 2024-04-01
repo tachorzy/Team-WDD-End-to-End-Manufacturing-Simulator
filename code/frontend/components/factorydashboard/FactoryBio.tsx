@@ -90,16 +90,16 @@ const FactoryBio = (props: { factoryId: string }) => {
     return (
         <div className="lg:flex lg:items-center lg:justify-between">
             <div className="min-w-0 flex-1">
-                <div className="flex flex-row gap-x-4">
+                <div className="flex flex-row gap-x-3">
                     <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
                         {factory ? factory.name : "Loading..."}
                     </h2>
                     <button
                         type="button"
-                        className="opacity-[70%] inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        className="opacity-[75%] inline-flex items-center hover:scale-[101.5%] hover:rotate-[4deg] transform duration-500"
                         onClick={() => setShowEditForm(true)}
                     >
-                        Edit
+                        <Image src="/icons/edit.svg" width={30} height={30} alt="edit icon" className="select-none"/>
                     </button>
 
                     {showEditForm && (
