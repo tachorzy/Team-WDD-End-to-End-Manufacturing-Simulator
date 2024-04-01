@@ -22,15 +22,14 @@ interface LocationData {
     };
 }
 
-const FactoryBio: React.FC = () => {
-    const navigation = usePathname();
+const FactoryBio = (props: { factoryId: string }) => {
+    const { factoryId } = props;
     const [factory, setFactory] = useState<Factory | null>(null);
     const [showEditForm, setShowEditForm] = useState(false);
     const [locationData, setLocationData] = useState<LocationData | null>(null);
 
     useEffect(() => {
         const fetchFactory = async () => {
-            const factoryId = navigation.split("/")[2];
             if (factoryId) {
                 try {
                     const response = await fetch(
@@ -50,7 +49,7 @@ const FactoryBio: React.FC = () => {
         };
 
         fetchFactory();
-    }, [navigation]);
+    }, []);
 
     const latitude = Number(factory?.location.latitude);
     const longitude = Number(factory?.location.longitude);
