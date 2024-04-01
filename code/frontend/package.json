@@ -25,7 +25,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-leaflet": "^4.2.1",
-    "react-simple-maps": "^3.0.0",
+    "react-simple-maps": "^1.0.0",
     "react-type-animation": "^3.2.0"
   },
   "devDependencies": {

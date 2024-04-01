@@ -81,18 +81,26 @@ const Header: React.FC = () => {
 
     console.log(locationData);
 
+    const civilLocation = locationData?.address?.country !== undefined ? `${locationData?.address?.city}, ${locationData?.address?.state}, ${locationData?.address?.country} ` : "";
+    console.log(`country code is ${locationData?.address?.country_code}`)
+
     return (
         <div className="lg:flex lg:items-center lg:justify-between">
             <div className="min-w-0 flex-1">
                 <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
                     {factory ? factory.name : "Loading..."}
                 </h2>
-                <div className="mt-1 flex items-center text-sm font-light text-gray-500">
-                    {factory ? `${locationData?.address?.city}, ${locationData?.address?.state}, ${locationData?.address?.country} ` : "Loading..."}
-                    {factory
-                        ? `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`
-                        : "Loading..."}
+                <div className="flex flex-row gap-x-2">
+                    <div className="mt-1 flex items-center text-sm font-medium text-gray-500">
+                        {factory ? civilLocation : "Loading..."}
+                    </div>
+                    <div className="mt-1 flex items-center text-sm font-light text-gray-500">
+                        {factory
+                            ? `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`
+                            : "Loading..."}
+                    </div>
                 </div>
+
                 <div className="mt-1 flex items-center text-sm text-gray-500">
                     {factory ? factory.description : "Loading..."}
                 </div>
