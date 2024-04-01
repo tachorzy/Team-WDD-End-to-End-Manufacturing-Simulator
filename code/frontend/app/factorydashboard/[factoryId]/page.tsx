@@ -3,11 +3,8 @@
 import FactoryBio from "@/components/factorydashboard/FactoryBio";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
-<<<<<<< HEAD
 import AssetInventory from "@/components/factorydashboard/floormanager/AssetInventory";
-=======
 import { usePathname } from "next/navigation";
->>>>>>> main
 
 export default function FactoryDashboard() {
     // perhaps we can send the factoryId as a prop to the Header component.
@@ -22,19 +19,10 @@ export default function FactoryDashboard() {
                     factoryId={factoryId}
                 />
                 <div className="px-32">
-<<<<<<< HEAD
-                    <Navbar pageId="Home" />
-                    <div className="flex flex-col items-center justify-center gap-y-5 mt-16 mx-auto overflow-hidden max-h-screen">
-                        <Header />
-                        <div className="flex justify-between w-full">
-                            <FileUploadContainer />
-                            <AssetInventory />
-                        </div>
-=======
                     <div className="flex flex-col gap-y-5 mt-8 mx-auto overflow-hidden max-h-screen">
                         <FactoryBio factoryId={factoryId} />
                         <FileUploadContainer />
->>>>>>> main
+                        <AssetInventory />
                     </div>
                 </div>
             </div>
