@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "@/components/factorydashboard/header";
+import FactoryBio from "@/components/factorydashboard/FactoryBio";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
 import { usePathname } from "next/navigation";
@@ -19,7 +19,7 @@ export default function FactoryDashboard() {
                 />
                 <div className="px-32">
                     <div className="flex flex-col gap-y-5 mt-8 mx-auto overflow-hidden max-h-screen">
-                        <Header />
+                        <FactoryBio />
                         <FileUploadContainer />
                     </div>
                 </div>

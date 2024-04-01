@@ -22,7 +22,7 @@ interface LocationData {
     };
 }
 
-const Header: React.FC = () => {
+const FactoryBio: React.FC = () => {
     const navigation = usePathname();
     const [factory, setFactory] = useState<Factory | null>(null);
     const [showEditForm, setShowEditForm] = useState(false);
@@ -137,4 +137,4 @@ const Header: React.FC = () => {
     );
 };
 
-export default Header;
+export default FactoryBio;
