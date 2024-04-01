@@ -24,7 +24,7 @@ const FileUploadContainer = (props: {
             accept: {
                 "image/jpeg": [],
                 "image/png": [],
-                "image/svg": [],
+                "image/svg+xml": [],
                 // later add support for glb files.
             },
             maxFiles: 1,
