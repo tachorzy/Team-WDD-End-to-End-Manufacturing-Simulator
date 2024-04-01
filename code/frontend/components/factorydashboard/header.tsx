@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { Factory } from "@/app/types/types";
 import { usePathname } from "next/navigation";
-import EditFactoryForm from "./editFactory";
 import Image from "next/image";
+import EditFactoryForm from "./editFactory";
 
 const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
@@ -55,8 +55,6 @@ const Header: React.FC = () => {
     const latitude = Number(factory?.location.latitude);
     const longitude = Number(factory?.location.longitude);
 
-    // call reverse geocoding to find the location of the factory (city, region, country)
-
     useEffect(() => {
         const fetchLocation = async () => {
             try {
@@ -80,20 +78,15 @@ const Header: React.FC = () => {
         }
     }, [latitude, longitude]);
 
-    console.log(locationData);
+    const civilLocation =
+        `${locationData?.address?.city ? `${locationData?.address?.city}, ` : ""}` +
+        `${locationData?.address?.state ? `${locationData?.address?.state}, ` : ""}` +
+        `${locationData?.address?.country ? locationData?.address?.country : ""}`;
 
-    // const civilLocation = locationData?.address?.country !== undefined ? `${locationData?.address?.city}, ${locationData?.address?.state}, ${locationData?.address?.country} ` : "";
-    const civilLocation = 
-        `${locationData?.address?.city ? locationData?.address?.city + ', ' : ''}` +
-        `${locationData?.address?.state ? locationData?.address?.state + ', ' : ''}` +
-        `${locationData?.address?.country ? locationData?.address?.country : ''}`;
-    
-    
-    
-    console.log(`country code is ${locationData?.address?.country_code}`)
-
-    const locationIcon = locationData?.address?.country_code !== undefined ? `/flags/${locationData?.address?.country_code.toUpperCase()}.svg` : `/icons/globe.svg`;
-
+    const locationIcon =
+        locationData?.address?.country_code !== undefined
+            ? `/flags/${locationData?.address?.country_code.toUpperCase()}.svg`
+            : "/icons/globe.svg";
 
     return (
         <div className="lg:flex lg:items-center lg:justify-between">
@@ -103,7 +96,13 @@ const Header: React.FC = () => {
                 </h2>
                 <div className="flex flex-row gap-x-2">
                     <div className="mt-1 flex items-center text-sm font-medium text-gray-500 gap-x-1.5">
-                        <Image src={locationIcon} width={18} height={18} className="align-bottom" alt="flag icon"></Image>
+                        <Image
+                            src={locationIcon}
+                            width={18}
+                            height={18}
+                            className="align-bottom"
+                            alt="flag icon"
+                        />
                         {factory ? civilLocation : "Loading..."}
                     </div>
                     <div className="mt-1 flex items-center text-sm font-light text-gray-500">
@@ -120,7 +119,7 @@ const Header: React.FC = () => {
             <div className="mt-5 flex lg:mt-0 lg:ml-4">
                 <button
                     type="button"
-                    className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     onClick={() => setShowEditForm(true)}
                 >
                     Edit

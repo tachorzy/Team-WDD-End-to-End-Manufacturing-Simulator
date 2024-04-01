@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@types/react-dropzone": "^5.1.0",
-    "@types/react-simple-maps": "^3.0.4",
     "axios": "^1.6.7",
     "dotenv": "^16.4.3",
     "eslint-config-wesbos": "^4.0.1",
@@ -24,9 +23,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
-    "react-leaflet": "^4.2.1",
-    "react-simple-maps": "^1.0.0",
-    "react-type-animation": "^3.2.0"
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.3",
