@@ -90,9 +90,26 @@ const FactoryBio = (props: { factoryId: string }) => {
     return (
         <div className="lg:flex lg:items-center lg:justify-between">
             <div className="min-w-0 flex-1">
-                <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-                    {factory ? factory.name : "Loading..."}
-                </h2>
+                <div className="flex flex-row gap-x-4">
+                    <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                        {factory ? factory.name : "Loading..."}
+                    </h2>
+                    <button
+                        type="button"
+                        className="opacity-[70%] inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        onClick={() => setShowEditForm(true)}
+                    >
+                        Edit
+                    </button>
+
+                    {showEditForm && (
+                        <EditFactoryForm
+                            factory={factory}
+                            onClose={() => setShowEditForm(false)}
+                            onSave={() => setShowEditForm(false)}
+                        />
+                    )}
+                </div>
                 <div className="flex flex-row gap-x-2">
                     <div className="mt-1 flex items-center text-sm font-medium text-gray-500 gap-x-1.5">
                         <Image
@@ -114,23 +131,6 @@ const FactoryBio = (props: { factoryId: string }) => {
                 <div className="mt-1 flex items-center text-sm text-gray-500">
                     {factory ? factory.description : "Loading..."}
                 </div>
-            </div>
-            <div className="mt-5 flex lg:mt-0 lg:ml-4">
-                <button
-                    type="button"
-                    className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    onClick={() => setShowEditForm(true)}
-                >
-                    Edit
-                </button>
-
-                {showEditForm && (
-                    <EditFactoryForm
-                        factory={factory}
-                        onClose={() => setShowEditForm(false)}
-                        onSave={() => setShowEditForm(false)}
-                    />
-                )}
             </div>
         </div>
     );

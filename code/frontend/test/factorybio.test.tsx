@@ -311,5 +311,4 @@ describe("Factorybio Component", () => {
             expect(flagIcon).toBeInTheDocument();
         });
     });
-
 });
