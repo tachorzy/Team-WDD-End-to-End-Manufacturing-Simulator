@@ -12,29 +12,23 @@ import "@testing-library/jest-dom";
 import { Factory } from "@/app/types/types";
 import * as api from "../app/api/factories/factoryAPI";
 
-// Mocks
-const mockFetch = jest.fn();
 const originalEnv = process.env;
 
-beforeEach(() => {
-    jest.resetModules();
-
-    process.env = { ...originalEnv };
-});
-
-afterEach(() => {
-    process.env = originalEnv;
-});
-
-beforeEach(() => {
-    global.fetch = mockFetch;
-});
-
-afterEach(() => {
-    jest.clearAllMocks();
-});
-
 describe("Factory API", () => {
+    beforeEach(() => {    
+        jest.resetModules()
+        process.env = { 
+            ...originalEnv,
+            NEXT_PUBLIC_AWS_ENDPOINT: "https://example.com/api"
+        };
+        global.fetch = jest.fn();
+    });
+    
+    afterEach(() => {
+        process.env = originalEnv;
+        (global.fetch as jest.Mock).mockClear();
+    });
+
     const mockFactory = {
         factoryId: "1",
         name: "Factory 1",
@@ -46,8 +40,6 @@ describe("Factory API", () => {
     };
 
     test("getFactory function", async () => {
-        process.env.NEXT_PUBLIC_AWS_ENDPOINT = "https://example.com/api";
-
         const mockResponse = mockFactory;
 
         global.fetch = jest.fn().mockResolvedValueOnce({
