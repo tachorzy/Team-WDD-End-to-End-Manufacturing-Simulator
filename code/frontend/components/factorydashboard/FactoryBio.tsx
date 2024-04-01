@@ -82,7 +82,7 @@ const FactoryBio = (props: { factoryId: string }) => {
         `${locationData?.address?.state ? `${locationData?.address?.state}, ` : ""}` +
         `${locationData?.address?.country ? locationData?.address?.country : ""}`;
 
-    console.log(`FactoryBio: ${civilLocation}`)
+    console.log(`FactoryBio: ${civilLocation}`);
 
     const locationIcon =
         locationData?.address?.country_code !== undefined
