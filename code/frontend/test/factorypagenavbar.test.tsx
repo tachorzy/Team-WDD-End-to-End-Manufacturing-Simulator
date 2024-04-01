@@ -39,11 +39,11 @@ describe("FactoryPageNavBar", () => {
         expect(homeLink).toHaveClass("text-[#494949]");
 
         expect(homeLink).toHaveClass("text-[#494949] group text-base font-medium -mt-4");
-        expect(dashboardLink).toHaveClass("group text-lg font-medium");
-        expect(assetsLink).toHaveClass("group text-lg font-medium");
-        expect(anomalyDetectionLink).toHaveClass("group text-lg font-medium");
+        expect(dashboardLink).toHaveClass("text-[#494949] group text-base font-medium -mt-4");
+        expect(assetsLink).toHaveClass("text-[#494949] group text-base font-medium -mt-4");
+        expect(anomalyDetectionLink).toHaveClass("text-[#494949] group text-base font-medium -mt-4");
 
-        expect(loginLink).toHaveClass("group text-lg font-medium");
+        expect(loginLink).toHaveClass("group text-base font-medium text-[#494949]");
         expect(signUpButton).toHaveClass(
             "text-sm font-medium text-[#494949] py-0.5 px-2",
         );
