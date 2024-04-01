@@ -8,7 +8,7 @@ import { Factory } from "@/app/types/types";
 import MapPin from "./MapPin";
 import "leaflet/dist/leaflet.css";
 
-export interface MapProps {
+interface MapProps {
     positions: Factory[];
 }
 
@@ -76,7 +76,6 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
             try {
                 const response = await fetch(`${BASE_URL}/factories`);
                 const data = (await response.json()) as Factory[];
-                console.log(data);
                 setFactories(data);
             } catch (error) {
                 console.error("Error fetching factories:", error);
@@ -115,11 +114,9 @@ const MapComponent: React.FC<MapProps> = ({ positions }) => {
                         const [lat, lng] = key.split(",").map(Number);
                         const numOfSharedFacilities =
                             factoriesAtLocation.length;
-                        console.log(
-                            `numOfSharedFacilities: ${numOfSharedFacilities}`,
-                        );
                         return (
                             <MapPin
+                                key={index}
                                 _key={index}
                                 position={{ lat, lng }}
                                 factoriesAtLocation={factoriesAtLocation}
