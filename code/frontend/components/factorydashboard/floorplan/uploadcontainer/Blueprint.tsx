@@ -1,8 +1,6 @@
 import Image from "next/image";
 
-const UploadResultTray = (props: {
-    imageURL: string
-}) => {
+const UploadResultTray = (props: { imageURL: string }) => {
     const { imageURL } = props;
 
     return (

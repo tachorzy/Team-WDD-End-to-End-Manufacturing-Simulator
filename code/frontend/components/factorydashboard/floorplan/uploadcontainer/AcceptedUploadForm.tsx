@@ -9,12 +9,14 @@ const FileUploadContainer = (props: {
     setUploadedFile: React.Dispatch<React.SetStateAction<File | null>>;
     acceptedFileItems: React.JSX.Element[];
     fileRejectionItems: React.JSX.Element[];
+    setFloorPlanImage: React.Dispatch<React.SetStateAction<string | null>>;
 }) => {
     const {
         uploadedFile,
         setUploadedFile,
         acceptedFileItems,
         fileRejectionItems,
+        setFloorPlanImage,
     } = props;
     const [isVisible, setVisibility] = useState(true);
     const navigation = usePathname();
@@ -36,6 +38,7 @@ const FileUploadContainer = (props: {
             if (base64Image) {
                 try {
                     await createFloorplan(base64Image, factoryId);
+                    setFloorPlanImage(base64Image);
                     console.log("Floor plan uploaded successfully.");
                 } catch (error) {
                     console.error("Error uploading floor plan:", error);
