@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Factory } from "@/app/types/types";
 import { usePathname } from "next/navigation";
 import EditFactoryForm from "./editFactory";
+import Image from "next/image";
 
 const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
@@ -81,8 +82,18 @@ const Header: React.FC = () => {
 
     console.log(locationData);
 
-    const civilLocation = locationData?.address?.country !== undefined ? `${locationData?.address?.city}, ${locationData?.address?.state}, ${locationData?.address?.country} ` : "";
+    // const civilLocation = locationData?.address?.country !== undefined ? `${locationData?.address?.city}, ${locationData?.address?.state}, ${locationData?.address?.country} ` : "";
+    const civilLocation = 
+        `${locationData?.address?.city ? locationData?.address?.city + ', ' : ''}` +
+        `${locationData?.address?.state ? locationData?.address?.state + ', ' : ''}` +
+        `${locationData?.address?.country ? locationData?.address?.country : ''}`;
+    
+    
+    
     console.log(`country code is ${locationData?.address?.country_code}`)
+
+    const locationIcon = locationData?.address?.country_code !== undefined ? `/flags/${locationData?.address?.country_code.toUpperCase()}.svg` : `/icons/globe.svg`;
+
 
     return (
         <div className="lg:flex lg:items-center lg:justify-between">
@@ -91,7 +102,8 @@ const Header: React.FC = () => {
                     {factory ? factory.name : "Loading..."}
                 </h2>
                 <div className="flex flex-row gap-x-2">
-                    <div className="mt-1 flex items-center text-sm font-medium text-gray-500">
+                    <div className="mt-1 flex items-center text-sm font-medium text-gray-500 gap-x-1.5">
+                        <Image src={locationIcon} width={18} height={18} className="align-bottom" alt="flag icon"></Image>
                         {factory ? civilLocation : "Loading..."}
                     </div>
                     <div className="mt-1 flex items-center text-sm font-light text-gray-500">
