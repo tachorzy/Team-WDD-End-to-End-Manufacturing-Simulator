@@ -51,8 +51,8 @@ const FactoryBio = (props: { factoryId: string }) => {
         fetchFactory();
     }, []);
 
-    const latitude = Number(factory?.location.latitude);
-    const longitude = Number(factory?.location.longitude);
+    const latitude = Number(factory?.location?.latitude);
+    const longitude = Number(factory?.location?.longitude);
 
     useEffect(() => {
         const fetchLocation = async () => {
@@ -75,12 +75,14 @@ const FactoryBio = (props: { factoryId: string }) => {
         if (latitude && longitude) {
             fetchLocation();
         }
-    }, [latitude, longitude]);
+    });
 
     const civilLocation =
         `${locationData?.address?.city ? `${locationData?.address?.city}, ` : ""}` +
         `${locationData?.address?.state ? `${locationData?.address?.state}, ` : ""}` +
         `${locationData?.address?.country ? locationData?.address?.country : ""}`;
+
+    console.log(`FactoryBio: ${civilLocation}`)
 
     const locationIcon =
         locationData?.address?.country_code !== undefined
