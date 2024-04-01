@@ -9,7 +9,6 @@ import Navbar from "../components/Navbar/Navbar";
 
 describe("Navbar Component", () => {
     test("renders Navbar component with correct links and buttons", () => {
-        // Mock the useRouter hook from Next.js
         jest.mock("next/router", () => ({
             useRouter: () => ({
                 pathname: "/",
@@ -42,7 +41,7 @@ describe("Navbar Component", () => {
         expect(assetsLink).toHaveClass("group text-lg font-medium");
         expect(loginLink).toHaveClass("group text-lg font-medium");
         expect(signUpButton).toHaveClass(
-            "text-lg font-medium text-[#494949] py-1.5 px-2",
+            "text-sm font-medium text-[#494949] py-0.5 px-2",
         );
     });
 });
