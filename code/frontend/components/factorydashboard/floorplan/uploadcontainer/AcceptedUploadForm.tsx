@@ -4,19 +4,19 @@ import { usePathname } from "next/navigation";
 import { createFloorplan } from "@/app/api/floorplan/floorplanAPI";
 import UploadResultTray from "./UploadResultTray";
 
-const FileUploadContainer = (props: {
+const AcceptedUploadForm = (props: {
     uploadedFile: File;
     setUploadedFile: React.Dispatch<React.SetStateAction<File | null>>;
     acceptedFileItems: React.JSX.Element[];
     fileRejectionItems: React.JSX.Element[];
-    setFloorPlanImage: React.Dispatch<React.SetStateAction<string | null>>;
+    setFloorPlanFile: React.Dispatch<React.SetStateAction<File | null>>;
 }) => {
     const {
         uploadedFile,
         setUploadedFile,
         acceptedFileItems,
         fileRejectionItems,
-        setFloorPlanImage,
+        setFloorPlanFile,
     } = props;
     const [isVisible, setVisibility] = useState(true);
     const navigation = usePathname();
@@ -35,10 +35,10 @@ const FileUploadContainer = (props: {
             console.log(factoryId);
             console.log(uploadedFile);
             const base64Image = reader.result?.toString().split(",")[1];
+            console.log(`base64Image is ${base64Image}`)
             if (base64Image) {
                 try {
                     await createFloorplan(base64Image, factoryId);
-                    setFloorPlanImage(base64Image);
                     console.log("Floor plan uploaded successfully.");
                 } catch (error) {
                     console.error("Error uploading floor plan:", error);
@@ -46,6 +46,7 @@ const FileUploadContainer = (props: {
             } else {
                 console.error("Failed to convert the file to base64.");
             }
+            setFloorPlanFile(uploadedFile as File);
         };
         reader.onerror = () =>
             console.error("There was an error reading the file");
@@ -119,4 +120,4 @@ const FileUploadContainer = (props: {
     );
 };
 
-export default FileUploadContainer;
+export default AcceptedUploadForm;

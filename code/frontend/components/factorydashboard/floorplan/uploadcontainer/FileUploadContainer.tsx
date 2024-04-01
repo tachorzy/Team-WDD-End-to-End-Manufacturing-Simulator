@@ -8,11 +8,11 @@ interface DropFile extends File {
 }
 
 const FileUploadContainer = (props: {
-    setFloorPlanImage: React.Dispatch<React.SetStateAction<string | null>>;
+    setFloorPlanFile: React.Dispatch<React.SetStateAction<File | null>>;
 }) => {
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
-    const { setFloorPlanImage } = props;
+    const { setFloorPlanFile } = props;
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         // call API endpoint that sends the floor-plan to the backend
@@ -80,7 +80,7 @@ const FileUploadContainer = (props: {
                         setUploadedFile={setUploadedFile}
                         acceptedFileItems={acceptedFileItems}
                         fileRejectionItems={fileRejectionItems}
-                        setFloorPlanImage={setFloorPlanImage}
+                        setFloorPlanFile={setFloorPlanFile}
                     />
                 )}
             </div>

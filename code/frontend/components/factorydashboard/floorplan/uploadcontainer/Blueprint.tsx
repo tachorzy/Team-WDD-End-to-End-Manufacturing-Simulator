@@ -1,14 +1,16 @@
 import Image from "next/image";
 
-const UploadResultTray = (props: { imageURL: string }) => {
-    const { imageURL } = props;
+const Blueprint = (props: { imageFile: File }) => {
+    const { imageFile } = props;
+
+    const imageURL = URL.createObjectURL(imageFile);
 
     return (
         <div>
             <Image
                 src={imageURL}
-                width={200}
-                height={200}
+                width={800}
+                height={800}
                 alt="upload result tray"
                 className="select-none mb-2"
             />
@@ -16,4 +18,4 @@ const UploadResultTray = (props: { imageURL: string }) => {
     );
 };
 
-export default UploadResultTray;
+export default Blueprint;

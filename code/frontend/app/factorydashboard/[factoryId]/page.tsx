@@ -5,9 +5,10 @@ import FactoryBio from "@/components/factorydashboard/FactoryBio";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
 import { usePathname } from "next/navigation";
+import Blueprint from "@/components/factorydashboard/floorplan/uploadcontainer/Blueprint";
 
 export default function FactoryDashboard() {
-    const [floorPlanImage, setFloorPlanImage] = useState<string | null>(null);
+    const [floorPlanFile, setFloorPlanFile] = useState<File | null>(null);
     const navigation = usePathname();
     const factoryId = navigation.split("/")[2];
 
@@ -21,9 +22,14 @@ export default function FactoryDashboard() {
                 <div className="px-32">
                     <div className="flex flex-col gap-y-5 mt-8 mx-auto overflow-hidden max-h-screen">
                         <FactoryBio factoryId={factoryId} />
-                        <FileUploadContainer
-                            setFloorPlanImage={setFloorPlanImage}
-                        />
+                        {floorPlanFile !== null ? 
+                        (
+                            <Blueprint imageFile={floorPlanFile as File}/>
+                        )
+                        :
+                        ( <FileUploadContainer
+                            setFloorPlanFile={setFloorPlanFile}
+                        />)}
                     </div>
                 </div>
             </div>
