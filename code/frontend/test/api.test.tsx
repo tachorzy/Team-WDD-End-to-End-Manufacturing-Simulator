@@ -29,7 +29,7 @@ describe("Factory API", () => {
         (global.fetch as jest.Mock).mockClear();
     });
 
-    const mockFactory = {
+    const mockFactory: Factory = {
         factoryId: "1",
         name: "Factory 1",
         location: {
@@ -45,7 +45,7 @@ describe("Factory API", () => {
         global.fetch = jest.fn().mockResolvedValueOnce({
             ok: true,
             json: () => mockResponse,
-        } as unknown as Response);
+        });
 
         const result = await api.getFactory("1");
 
@@ -59,7 +59,7 @@ describe("Factory API", () => {
         global.fetch = jest.fn().mockResolvedValueOnce({
             ok: true,
             json: () => mockResponse,
-        } as unknown as Response);
+        });
 
         const result = await api.createFactory(mockFactory as Factory); // Using 'as Factory' to suppress TypeScript error
 
@@ -73,7 +73,7 @@ describe("Factory API", () => {
         global.fetch = jest.fn().mockResolvedValueOnce({
             ok: true,
             json: () => mockResponse,
-        } as unknown as Response);
+        });
 
         const result = await api.getAllFactories();
 
@@ -91,7 +91,7 @@ describe("Factory API", () => {
         global.fetch = jest.fn().mockResolvedValueOnce({
             ok: true,
             json: () => mockResponse,
-        } as unknown as Response);
+        });
 
         const result = await api.updateFactory(updatedFactory as Factory); // Using 'as Factory' to suppress TypeScript error
 
