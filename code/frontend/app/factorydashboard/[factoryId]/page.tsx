@@ -3,7 +3,7 @@
 import Header from "@/components/factorydashboard/header";
 import Navbar from "@/components/Navbar/Navbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
-import AssetItem from "@/components/factorydashboard/floormanager/AssetItem";
+import AssetInventory from "@/components/factorydashboard/floormanager/AssetInventory";
 
 export default function FactoryDashboard() {
     return (
@@ -14,14 +14,7 @@ export default function FactoryDashboard() {
                     <div className="flex flex-col items-center justify-center gap-y-5 mt-16 mx-auto overflow-hidden max-h-screen">
                         <Header />
                         <FileUploadContainer />
-                        <AssetItem
-                            asset={{
-                                id: "1",
-                                name: "Asset Name",
-                                description: "Asset Description",
-                                image: "asset_image.jpg",
-                            }}
-                        />
+                        <AssetInventory />
                     </div>
                 </div>
             </div>

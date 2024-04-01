@@ -12,7 +12,7 @@ interface AssetItemProps {
 }
 
 const AssetItem: React.FC<AssetItemProps> = ({ asset }) => (
-    <div className="asset-item bg-blue-500 text-white p-4 rounded-md">
+    <div className="asset-item bg-blue-500 text-white p-4 rounded-md m-2">
         {asset ? (
             <>
                 <p className="text-lg font-semibold">Name: {asset.name}</p>

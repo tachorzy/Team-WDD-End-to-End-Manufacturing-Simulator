@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import AssetInventory from "../components/factorydashboard/floormanager/AssetInventory";
 
@@ -61,10 +61,46 @@ describe("AssetInventory", () => {
         });
     });
 
-    test('should render No assets available when assets array is empty', () => {
+    test("should render No assets available when assets array is empty", () => {
         const { getByText } = render(<AssetInventory assets={[]} />);
         const noAssetsMessage = getByText("No assets available");
 
         expect(noAssetsMessage).toBeInTheDocument();
+    });
+
+    test("should render No assets available when assets prop is undefined", () => {
+        const { getByText } = render(<AssetInventory />);
+        const noAssetsMessage = getByText("No assets available");
+
+        expect(noAssetsMessage).toBeInTheDocument();
+    });
+
+    test("should add asset and render it in the list", () => {
+        const { getByPlaceholderText, getByText } = render(
+            <AssetInventory assets={[]} />,
+        );
+
+        const idInput = getByPlaceholderText("Asset ID");
+        const nameInput = getByPlaceholderText("Name");
+        const descriptionInput = getByPlaceholderText("Description");
+        const imageInput = getByPlaceholderText("Image URL");
+        const addButton = getByText("Add Asset");
+
+        fireEvent.change(idInput, { target: { value: "1" } });
+        fireEvent.change(nameInput, { target: { value: "New Asset" } });
+        fireEvent.change(descriptionInput, {
+            target: { value: "New Asset Description" },
+        });
+        fireEvent.change(imageInput, { target: { value: "newimage.jpg" } });
+
+        fireEvent.click(addButton);
+
+        const newAssetNameElement = getByText("Name: New Asset");
+        const newAssetDescriptionElement = getByText(
+            "Description: New Asset Description",
+        );
+
+        expect(newAssetNameElement).toBeInTheDocument();
+        expect(newAssetDescriptionElement).toBeInTheDocument();
     });
 });
