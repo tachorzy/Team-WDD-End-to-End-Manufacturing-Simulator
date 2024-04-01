@@ -234,4 +234,73 @@ describe("Factorybio Component", () => {
 
         expect(civilLocationElement).not.toBeInTheDocument();
     });
+
+    test("should display flag icon by ISO2 code of the facilities country", async () => {
+        const mockFactory = {
+            factoryId: "123456789",
+            name: "New Factory",
+            location: {
+                latitude: 44.0544393,
+                longitude: -123.0903921,
+            },
+            description: "This is a new factory",
+        };
+
+        const mockLocation = {
+            address: {
+                city: "Eugene",
+                country: "United States",
+                state: "Oregon",
+                country_code: "us",
+            },
+        };
+
+        fetchMock.mockResponseOnce(JSON.stringify(mockFactory));
+
+        fetchMock.mockResponseOnce(JSON.stringify(mockLocation));
+
+        const { getByAltText } = render(
+            <FactoryBio factoryId={mockFactory.factoryId} />,
+        );
+
+        await waitFor(() => {
+            const flagIcon = getByAltText(`flag icon ${mockLocation.address.country_code}`);
+            expect(flagIcon).toBeInTheDocument();
+        });
+    });
+
+    test("should display globe icon when a facility is not in a country", async () => {
+        const mockFactory = {
+            factoryId: "123456789",
+            name: "New Factory",
+            location: {
+                latitude: 82.8628,
+                longitude: 135.0000,
+            },
+            description: "This factory is super cold",
+        };
+
+        const mockLocation = {
+            address: {
+                city: undefined,
+                country: undefined,
+                state: undefined,
+                country_code: undefined,
+            },
+        };
+
+        fetchMock.mockResponseOnce(JSON.stringify(mockFactory));
+
+        fetchMock.mockResponseOnce(JSON.stringify(mockLocation));
+
+        const { getByAltText } = render(
+            <FactoryBio factoryId={mockFactory.factoryId} />,
+        );
+
+        await waitFor(() => {
+            const flagIcon = getByAltText(`globe icon`);
+            expect(flagIcon).toBeInTheDocument();
+        });
+    });
+
 });

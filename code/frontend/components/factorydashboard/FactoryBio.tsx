@@ -82,8 +82,6 @@ const FactoryBio = (props: { factoryId: string }) => {
         `${locationData?.address?.state ? `${locationData?.address?.state}, ` : ""}` +
         `${locationData?.address?.country ? locationData?.address?.country : ""}`;
 
-    console.log(`FactoryBio: ${civilLocation}`);
-
     const locationIcon =
         locationData?.address?.country_code !== undefined
             ? `/flags/${locationData?.address?.country_code.toUpperCase()}.svg`
@@ -102,7 +100,7 @@ const FactoryBio = (props: { factoryId: string }) => {
                             width={18}
                             height={18}
                             className="align-bottom"
-                            alt="flag icon"
+                            alt={locationIcon.endsWith("globe.svg") ? `globe icon` : `flag icon ${locationData?.address?.country_code}`}
                         />
                         {factory ? civilLocation : "Loading..."}
                     </div>
