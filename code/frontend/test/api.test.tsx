@@ -53,9 +53,7 @@ describe("Factory API", () => {
         expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
-    test("should return a created a factor using createFactory", async () => {
-        process.env.NEXT_PUBLIC_AWS_ENDPOINT = "https://example.com/api";
-
+    test("should return a new factor using createFactory", async () => {
         const mockResponse = mockFactory;
 
         global.fetch = jest.fn().mockResolvedValueOnce({
@@ -70,8 +68,6 @@ describe("Factory API", () => {
     });
 
     test("should return all factories using getAllFactories", async () => {
-        process.env.NEXT_PUBLIC_AWS_ENDPOINT = "https://example.com/api";
-
         const mockResponse = [mockFactory];
 
         global.fetch = jest.fn().mockResolvedValueOnce({
@@ -86,8 +82,6 @@ describe("Factory API", () => {
     });
 
     test("should update a factory using updateFactory", async () => {
-        process.env.NEXT_PUBLIC_AWS_ENDPOINT = "https://example.com/api";
-
         const updatedFactory = {
             ...mockFactory,
             name: "Updated Factory",
