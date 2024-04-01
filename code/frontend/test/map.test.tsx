@@ -6,10 +6,7 @@ import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import L from "leaflet";
 import { Factory } from "@/app/types/types";
-import MapComponent, {
-    MapProps,
-    ChangeView,
-} from "../components/home/map/Map.client";
+import MapComponent, { ChangeView } from "../components/home/map/Map.client";
 
 jest.mock("react-leaflet", () => ({
     MapContainer: () => <div data-testid="mapcontainer">"Map Container"</div>,
