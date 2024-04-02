@@ -15,7 +15,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/google/uuid"
 )
 
 func NewCreateFloorPlanHandler(db DynamoDBClient) *Handler {
@@ -62,7 +61,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 		return events.APIGatewayProxyResponse{}, fmt.Errorf("error unmarshalling floorplan data: %w", err)
 	}
 
-	floorplan.FloorplanID = uuid.NewString()
+	floorplan.FloorplanID = requestBody["factoryId"].(string)
 	floorplan.DateCreated = time.Now().Format(time.RFC3339)
 
 	decodedImageData, err := base64.StdEncoding.DecodeString(imageData)
@@ -111,6 +110,11 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 		TableName: aws.String("Floorplan"),
 		Item:      av,
 	})
+	responseBody, err := FloorPlanJSONMarshal(map[string]interface{}{
+		"message":   fmt.Sprintf("floorplanId %s created successfully", floorplan.FloorplanID),
+		"factoryId": floorplan.FloorplanID,
+	})
+
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -122,6 +126,6 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Headers:    headers,
-		Body:       fmt.Sprintf("Floorplan created successfully with image. ID: %s", floorplan.FloorplanID),
+		Body:       string(responseBody),
 	}, nil
 }
