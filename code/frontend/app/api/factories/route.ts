@@ -1,35 +1,22 @@
-import { BASE_URL } from "@/app/api/_utils/constants";
+import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 import { Factory } from "@/app/api/_utils/types";
-
-const options: RequestInit = {
-    headers: {
-        "Content-Type": "application/json",
-    },
-};
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
 
-    const factoryId = searchParams.get("id") || "";
+    const config: GetConfig = {
+        resource: "factories",
+    };
+
+    const factoryId = searchParams.get("id");
+    if (factoryId) {
+        config.params = {
+            id: factoryId,
+        };
+    }
 
     try {
-        const response = await fetch(
-            `${BASE_URL}/factories?id=${factoryId}`,
-            options,
-        );
-
-        if (!response.ok) {
-            return new Response(
-                JSON.stringify({
-                    success: false,
-                    error: {
-                        message: `Failed to fetch factory with ID ${factoryId}: ${response.statusText}`,
-                    },
-                }),
-            );
-        }
-
-        const data = (await response.json()) as Factory;
+        const data = await BackendConnector.get<Factory>(config);
 
         return new Response(
             JSON.stringify({
@@ -42,7 +29,6 @@ export async function GET(request: Request) {
         return new Response(
             JSON.stringify({
                 success: false,
-                error,
             }),
         );
     }
