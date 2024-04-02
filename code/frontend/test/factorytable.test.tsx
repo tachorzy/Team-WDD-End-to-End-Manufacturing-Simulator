@@ -3,7 +3,7 @@
  */
 import "@testing-library/jest-dom";
 import React from "react";
-import { fireEvent, getByRole, getByTestId, render, waitFor } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { Factory } from "@/app/types/types";
 import FactoryTable from "../components/home/table/FactoryTable.client";
 import Caret from "../components/home/table/Caret";
@@ -18,9 +18,9 @@ describe("FactoryTable", () => {
     beforeEach(() => {
         (global.fetch as jest.Mock).mockClear;
     });
-    
+
     const mockFactories: Factory[] = [
-       {
+        {
             factoryId: "1",
             name: "Factory 1",
             location: {
@@ -74,9 +74,9 @@ describe("FactoryTable", () => {
     });
 
     test.each([
-        [mockFactories.slice(0,1)],
-        [mockFactories.slice(0,2)],
-        [mockFactories.slice(0,3)],
+        [mockFactories.slice(0, 1)],
+        [mockFactories.slice(0, 2)],
+        [mockFactories.slice(0, 3)],
         [mockFactories],
     ])("should display the correct table values for %O", async (factories) => {
         const mockResponse = factories;
@@ -93,11 +93,15 @@ describe("FactoryTable", () => {
             const cells = getAllByRole("cell");
 
             expect(cells).toHaveLength(factories.length * 4);
-            
+
             factories.forEach((factory) => {
                 expect(getByText(factory.name)).toBeInTheDocument();
-                expect(getByText(factory.location.latitude.toString())).toBeInTheDocument();
-                expect(getByText(factory.location.longitude.toString())).toBeInTheDocument();
+                expect(
+                    getByText(factory.location.latitude.toString()),
+                ).toBeInTheDocument();
+                expect(
+                    getByText(factory.location.longitude.toString()),
+                ).toBeInTheDocument();
                 expect(getByText(factory.description)).toBeInTheDocument();
             });
         });
@@ -118,7 +122,7 @@ describe("FactoryTable", () => {
 
         (global.fetch as jest.Mock).mockImplementationOnce(() =>
             Promise.resolve({
-                json: () => (mockResponse),
+                json: () => mockResponse,
             }),
         );
 
@@ -129,10 +133,10 @@ describe("FactoryTable", () => {
 
             cells.forEach((cell) => {
                 expect(cell).toHaveTextContent("");
-            })
-        })
+            });
+        });
     });
-    
+
     test("should log an error on fetch", async () => {
         (global.fetch as jest.Mock).mockImplementationOnce(() =>
             Promise.reject(new Error("Error fetching factories:")),
@@ -140,16 +144,17 @@ describe("FactoryTable", () => {
 
         await waitFor(() => {
             expect(consoleErrorMock).toHaveBeenCalledWith(
-                "Error fetching factories:", 
-                TypeError("Cannot read properties of undefined (reading 'json')")
+                "Error fetching factories:",
+                TypeError(
+                    "Cannot read properties of undefined (reading 'json')",
+                ),
             );
         });
     });
 
-   
     test("should displays View all link and navigates correctly", () => {
         const { getByRole } = render(<FactoryTable />);
-        
+
         const viewAllLink = getByRole("link", { name: /View all/i });
 
         expect(viewAllLink).toBeInTheDocument();
@@ -164,23 +169,23 @@ describe("FactoryTable", () => {
         const caretSvgs = document.querySelectorAll("svg");
 
         expect(caretSvgs).toHaveLength(4);
-        caretSvgs.forEach((caretSvg) => 
-            expect(caretSvg).not.toHaveClass("transform rotate-180")
-        ); 
+        caretSvgs.forEach((caretSvg) =>
+            expect(caretSvg).not.toHaveClass("transform rotate-180"),
+        );
     });
 
     test("should display sorting arrow desc after second click", () => {
         const { getByText } = render(<FactoryTable />);
 
         fireEvent.click(getByText("Facility Name"));
-        fireEvent.click(getByText("Facility Name"))
+        fireEvent.click(getByText("Facility Name"));
 
         const caretSvgs = document.querySelectorAll("svg");
 
         expect(caretSvgs).toHaveLength(4);
-        caretSvgs.forEach((caretSvg) => 
-            expect(caretSvg).toHaveClass("transform rotate-180")
-        ); 
+        caretSvgs.forEach((caretSvg) =>
+            expect(caretSvg).toHaveClass("transform rotate-180"),
+        );
     });
 });
 
