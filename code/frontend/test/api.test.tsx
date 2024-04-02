@@ -1,13 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-
-/*
-    TODO: 
-            - Properly mock process.env.NEXT_PUBLIC_AWS_ENDPOINT within each function's test
-            - Include errors in testing to make sure they fail properly
-*/
-
 import "@testing-library/jest-dom";
 import { Factory } from "@/app/types/types";
 import { requestOptions, getFactory, createFactory, getAllFactories, updateFactory } from "../app/api/factories/factoryAPI";
