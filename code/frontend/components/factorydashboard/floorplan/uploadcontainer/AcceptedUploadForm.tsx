@@ -35,7 +35,7 @@ const AcceptedUploadForm = (props: {
             console.log(factoryId);
             console.log(uploadedFile);
             const base64Image = reader.result?.toString().split(",")[1];
-            console.log(`base64Image is ${base64Image}`)
+            console.log(`base64Image is ${base64Image}`);
             if (base64Image) {
                 try {
                     await createFloorplan(base64Image, factoryId);
@@ -46,7 +46,7 @@ const AcceptedUploadForm = (props: {
             } else {
                 console.error("Failed to convert the file to base64.");
             }
-            setFloorPlanFile(uploadedFile as File);
+            setFloorPlanFile(uploadedFile);
         };
         reader.onerror = () =>
             console.error("There was an error reading the file");
