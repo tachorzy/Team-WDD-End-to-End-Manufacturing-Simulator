@@ -10,6 +10,11 @@ export interface PostConfig {
     body: ReadableStream<Uint8Array> | null;
 }
 
+export interface PutConfig {
+    resource: string;
+    body: ReadableStream<Uint8Array> | null;
+}
+
 class Connector {
     private readonly baseURL: string;
 
@@ -45,6 +50,27 @@ class Connector {
         const url = new URL(`${this.baseURL}/${resource}`);
 
         const response = await fetch(url.toString(), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body,
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                `Fetch error: ${response.status} ${response.statusText}`,
+            );
+        }
+
+        return (await response.json()) as Promise<T>;
+    }
+
+    async put<T>({ resource, body }: PostConfig): Promise<T> {
+        const url = new URL(`${this.baseURL}/${resource}`);
+
+        const response = await fetch(url.toString(), {
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },

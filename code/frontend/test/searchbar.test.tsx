@@ -15,7 +15,7 @@ import Searchbar from "../components/home/searchbar/Searchbar.client";
 import SearchModeTray from "../components/home/searchbar/SearchModeTray";
 
 jest.mock("axios");
-jest.mock("@/app/api/factories/factoryAPI");
+// jest.mock("@/app/api/factories/factoryAPI");
 
 describe("Searchbar Component", () => {
     test("should render the Searchbar component", () => {

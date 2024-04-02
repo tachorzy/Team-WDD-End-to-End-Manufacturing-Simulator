@@ -2,6 +2,7 @@ import {
     BackendConnector,
     GetConfig,
     PostConfig,
+    PutConfig,
 } from "@/app/api/_utils/connector";
 import { Factory } from "@/app/api/_utils/types";
 
@@ -46,6 +47,31 @@ export async function GET(request: Request) {
 
     try {
         const data = await BackendConnector.get<Factory>(config);
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                data,
+            }),
+        );
+    } catch (error) {
+        console.error(error);
+        return new Response(
+            JSON.stringify({
+                success: false,
+            }),
+        );
+    }
+}
+
+export async function PUT(request: Request) {
+    const config: PutConfig = {
+        resource: "factories",
+        body: request.body,
+    };
+
+    try {
+        const data = await BackendConnector.put<Factory>(config);
 
         return new Response(
             JSON.stringify({
