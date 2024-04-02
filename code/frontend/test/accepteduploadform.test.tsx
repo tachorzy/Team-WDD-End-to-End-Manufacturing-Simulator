@@ -35,6 +35,7 @@ describe("AcceptedUploadForm", () => {
                 setUploadedFile={setUploadedFile}
                 acceptedFileItems={acceptedFileItems}
                 fileRejectionItems={fileRejectionItems}
+                setFloorPlanFile={jest.fn()}
             />,
         );
 
@@ -67,6 +68,7 @@ describe("AcceptedUploadForm", () => {
                 setUploadedFile={setUploadedFile}
                 acceptedFileItems={acceptedFileItems}
                 fileRejectionItems={fileRejectionItems}
+                setFloorPlanFile={jest.fn()}
             />,
         );
 
