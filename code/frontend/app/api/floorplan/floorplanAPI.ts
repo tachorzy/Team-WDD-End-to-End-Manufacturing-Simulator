@@ -28,3 +28,16 @@ export const createFloorplan = async (
         throw new Error("Failed to save floorplan");
     }
 };
+
+export const getFloorplan = async (id: string): Promise<Floorplan> => {
+    try {
+        const response = await fetch(`${BASE_URL}/floorplan/${id}`, requestOptions);
+        if (!response.ok) {
+            throw new Error(`Failed to get floorplan ${response.statusText}`);
+        }
+        return (await response.json()) as Floorplan;
+    } catch (error) {
+        console.error("Failed to get floorplan", error);
+        throw new Error("Failed to get floorplan");
+    }
+}
