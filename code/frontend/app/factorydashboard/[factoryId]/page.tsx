@@ -23,7 +23,6 @@ export default function FactoryDashboard() {
                 <div className="px-32">
                     <div className="flex flex-col gap-y-5 mt-8 mx-auto overflow-hidden max-h-screen">
                         <FactoryBio factoryId={factoryId} />
-
                         {floorPlanFile !== null ? (
                             <Blueprint imageFile={floorPlanFile} />
                         ) : (
@@ -33,6 +32,7 @@ export default function FactoryDashboard() {
                         )}
                     </div>
                 </div>
+                <AssetInventory />
             </div>
         </main>
     );
