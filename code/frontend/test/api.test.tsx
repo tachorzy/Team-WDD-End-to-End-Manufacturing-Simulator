@@ -9,7 +9,7 @@
 */
 
 import "@testing-library/jest-dom";
-import { Factory } from "@/app/types/types";
+import { Factory } from "@/app/api/_utils/types";
 import * as api from "../app/api/factories/factoryAPI";
 
 // Mocks

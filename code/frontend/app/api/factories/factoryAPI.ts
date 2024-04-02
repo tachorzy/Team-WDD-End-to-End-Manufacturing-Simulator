@@ -1,4 +1,4 @@
-import { Factory } from "@/app/types/types";
+import { Factory } from "@/app/api/_utils/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 

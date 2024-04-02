@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Factory, Location } from "@/app/types/types";
+import { Factory, Location } from "@/app/api/_utils/types";
 import Caret from "./Caret";
 
 interface Header {

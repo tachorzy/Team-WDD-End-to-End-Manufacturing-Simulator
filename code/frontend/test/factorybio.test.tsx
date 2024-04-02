@@ -1,6 +1,6 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
-import { Factory } from "@/app/types/types";
+import { Factory } from "@/app/api/_utils/types";
 import fetchMock from "jest-fetch-mock";
 import FactoryBio from "../components/factorydashboard/FactoryBio";
 import "@testing-library/jest-dom";
@@ -38,10 +38,10 @@ describe("Factorybio Component", () => {
     });
 
     test("should display 'Loading...' when factory data is not yet available", async () => {
-        fetchMock.mockResponse(() => new Promise(resolve => {}));
-    
+        fetchMock.mockResponse(() => new Promise((resolve) => {}));
+
         const { findAllByText } = render(<FactoryBio factoryId="123456789" />);
-    
+
         const loadingElements = await findAllByText("Loading...");
         expect(loadingElements).toBeTruthy();
     });
@@ -273,7 +273,9 @@ describe("Factorybio Component", () => {
         );
 
         await waitFor(() => {
-            const flagIcon = getByAltText(`flag icon ${mockLocation.address.country_code}`);
+            const flagIcon = getByAltText(
+                `flag icon ${mockLocation.address.country_code}`,
+            );
             expect(flagIcon).toBeInTheDocument();
         });
     });
@@ -284,7 +286,7 @@ describe("Factorybio Component", () => {
             name: "New Factory",
             location: {
                 latitude: 82.8628,
-                longitude: 135.0000,
+                longitude: 135.0,
             },
             description: "This factory is super cold",
         };
@@ -307,7 +309,7 @@ describe("Factorybio Component", () => {
         );
 
         await waitFor(() => {
-            const flagIcon = getByAltText(`globe icon`);
+            const flagIcon = getByAltText("globe icon");
             expect(flagIcon).toBeInTheDocument();
         });
     });

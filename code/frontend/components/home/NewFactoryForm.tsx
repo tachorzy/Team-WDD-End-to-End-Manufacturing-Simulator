@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Factory } from "@/app/types/types";
+import { Factory } from "@/app/api/_utils/types";
 import ErrorMessage from "./searchbar/ErrorMessage";
 
 interface CreateFactoryResponse {
