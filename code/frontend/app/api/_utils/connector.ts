@@ -5,6 +5,11 @@ export interface GetConfig {
     params?: Record<string, string>;
 }
 
+export interface PostConfig {
+    resource: string;
+    body: ReadableStream<Uint8Array> | null;
+}
+
 class Connector {
     private readonly baseURL: string;
 
@@ -33,7 +38,26 @@ class Connector {
             );
         }
 
-        return response.json() as Promise<T>;
+        return (await response.json()) as Promise<T>;
+    }
+
+    async post<T>({ resource, body }: PostConfig): Promise<T> {
+        const url = new URL(`${this.baseURL}/${resource}`);
+
+        const response = await fetch(url.toString(), {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body,
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                `Fetch error: ${response.status} ${response.statusText}`,
+            );
+        }
+
+        return (await response.json()) as Promise<T>;
     }
 }
 

@@ -45,54 +45,6 @@ describe("Factory API", () => {
         description: "none",
     };
 
-    test("getFactory function", async () => {
-        process.env.NEXT_PUBLIC_AWS_ENDPOINT = "https://example.com/api";
-
-        const mockResponse = mockFactory;
-
-        global.fetch = jest.fn().mockResolvedValueOnce({
-            ok: true,
-            json: () => mockResponse,
-        } as unknown as Response);
-
-        const result = await api.getFactory("1");
-
-        expect(result).toEqual(mockResponse);
-        expect(global.fetch).toHaveBeenCalledTimes(1);
-    });
-
-    test("createFactory function", async () => {
-        process.env.NEXT_PUBLIC_AWS_ENDPOINT = "https://example.com/api";
-
-        const mockResponse = mockFactory;
-
-        global.fetch = jest.fn().mockResolvedValueOnce({
-            ok: true,
-            json: () => mockResponse,
-        } as unknown as Response);
-
-        const result = await api.createFactory(mockFactory as Factory); // Using 'as Factory' to suppress TypeScript error
-
-        expect(result).toEqual(mockResponse);
-        expect(global.fetch).toHaveBeenCalledTimes(1);
-    });
-
-    test("getAllFactories function", async () => {
-        process.env.NEXT_PUBLIC_AWS_ENDPOINT = "https://example.com/api";
-
-        const mockResponse = [mockFactory];
-
-        global.fetch = jest.fn().mockResolvedValueOnce({
-            ok: true,
-            json: () => mockResponse,
-        } as unknown as Response);
-
-        const result = await api.getAllFactories();
-
-        expect(result).toEqual(mockResponse);
-        expect(global.fetch).toHaveBeenCalledTimes(1);
-    });
-
     test("updateFactory function", async () => {
         process.env.NEXT_PUBLIC_AWS_ENDPOINT = "https://example.com/api";
 

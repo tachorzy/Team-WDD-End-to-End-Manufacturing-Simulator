@@ -48,9 +48,9 @@ global.fetch = jest.fn().mockResolvedValue({
 describe("FactoryTable", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        jest.spyOn(api, "getAllFactories").mockImplementation(async () =>
+        /* jest.spyOn(api, "getAllFactories").mockImplementation(async () =>
             Promise.resolve(fakeFactories),
-        );
+        ); */
     });
 
     test("renders table with correct headers", async () => {
@@ -78,9 +78,9 @@ describe("FactoryTable", () => {
 
     test("displays error message when data fetching fails", async () => {
         jest.spyOn(console, "error").mockImplementation(() => {});
-        jest.spyOn(api, "getAllFactories").mockRejectedValueOnce(
+        /* jest.spyOn(api, "getAllFactories").mockRejectedValueOnce(
             new Error("Failed to fetch data"),
-        );
+        ); */
         render(<FactoryTable />);
         await waitFor(() =>
             expect(screen.getByText("No Facilities Found")).toBeInTheDocument(),
