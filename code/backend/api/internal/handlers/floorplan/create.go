@@ -110,10 +110,6 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 		TableName: aws.String("Floorplan"),
 		Item:      av,
 	})
-	responseBody, err := FloorPlanJSONMarshal(map[string]interface{}{
-		"message":   fmt.Sprintf("floorplanId %s created successfully", floorplan.FloorplanID),
-		"factoryId": floorplan.FloorplanID,
-	})
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{
@@ -122,6 +118,11 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 			Body:       fmt.Sprintf("Error inserting floorplan into DynamoDB: %s", err.Error()),
 		}, nil
 	}
+
+	responseBody, err := FloorPlanJSONMarshal(map[string]interface{}{
+		"message":   fmt.Sprintf("floorplanId %s created successfully", floorplan.FloorplanID),
+		"factoryId": floorplan.FloorplanID,
+	})
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
