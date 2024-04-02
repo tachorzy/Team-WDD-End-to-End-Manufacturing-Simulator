@@ -1,13 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import FactoryBio from "@/components/factorydashboard/FactoryBio";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
 import AssetInventory from "@/components/factorydashboard/floormanager/AssetInventory";
 import { usePathname } from "next/navigation";
+import Blueprint from "@/components/factorydashboard/floorplan/uploadcontainer/Blueprint";
 
 export default function FactoryDashboard() {
-    // perhaps we can send the factoryId as a prop to the Header component.
+    const [floorPlanFile, setFloorPlanFile] = useState<File | null>(null);
     const navigation = usePathname();
     const factoryId = navigation.split("/")[2];
 
@@ -21,8 +23,14 @@ export default function FactoryDashboard() {
                 <div className="px-32">
                     <div className="flex flex-col gap-y-5 mt-8 mx-auto overflow-hidden max-h-screen">
                         <FactoryBio factoryId={factoryId} />
-                        <FileUploadContainer />
-                        <AssetInventory />
+
+                        {floorPlanFile !== null ? (
+                            <Blueprint imageFile={floorPlanFile} />
+                        ) : (
+                            <FileUploadContainer
+                                setFloorPlanFile={setFloorPlanFile}
+                            />
+                        )}
                     </div>
                 </div>
             </div>
