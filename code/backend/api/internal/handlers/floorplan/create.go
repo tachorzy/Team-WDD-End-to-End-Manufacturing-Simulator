@@ -124,6 +124,14 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 		"factoryId": floorplan.FloorplanID,
 	})
 
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
+			Body:       fmt.Sprintf("Error marshalling response body: %s", err.Error()),
+		}, nil
+	}
+
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Headers:    headers,
