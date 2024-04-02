@@ -16,7 +16,7 @@ const consoleErrorMock = jest
 
 describe("FactoryTable", () => {
     beforeEach(() => {
-        (global.fetch as jest.Mock).mockClear;
+        (global.fetch as jest.Mock).mockClear();
     });
 
     const mockFactories: Factory[] = [
