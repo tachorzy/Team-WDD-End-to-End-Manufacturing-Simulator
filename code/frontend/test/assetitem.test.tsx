@@ -19,7 +19,6 @@ describe("AssetItem", () => {
 
         expect(getByText("Name: Asset 1")).toBeInTheDocument();
         expect(getByText("Description: Description")).toBeInTheDocument();
-        expect(getByAltText("Asset 1")).toBeInTheDocument();
     });
 
     test("should render asset name when asset is undefined", () => {

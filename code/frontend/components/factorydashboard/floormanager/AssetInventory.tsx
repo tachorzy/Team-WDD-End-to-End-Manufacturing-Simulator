@@ -1,49 +1,28 @@
 import React, { useState } from "react";
+import { Asset } from "@/app/types/types";
 import AssetItem from "./AssetItem";
-import AddAssetForm from "./AddAssetForm";
-
-interface Asset {
-    id: string;
-    name: string;
-    description: string;
-    image: string;
-}
 
 interface AssetInventoryProps {
     assets?: Asset[];
 }
 
 const AssetInventory: React.FC<AssetInventoryProps> = ({ assets }) => {
-    const [assetList, setAssetList] = useState<Asset[]>(assets || []); // Initialize with empty array if assets prop is undefined
-    const [showAddAssetForm, setShowAddAssetForm] = useState(false);
-
-    const handleAddAsset = (newAsset: Asset) => {
-        setAssetList([...assetList, newAsset]);
-    };
+    const [assetList] = useState<Asset[]>(assets || []);
 
     return (
-        <div className="asset-inventory bg-blue-500 text-white p-4 rounded-md text-lg w-2/3 ">
-            <h2 className="">Asset Inventory</h2>
+        <div className="asset-inventory  text-white p-4 rounded-md text-lg grid grid-cols-2 gap-4">
+            <h2 className="col-span-2 text-black">
+                Asset Inventory{" "}
+                <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-MainBlue" />
+            </h2>
+
             {assetList.length > 0 ? (
                 assetList.map((asset) => (
                     <AssetItem key={asset.id} asset={asset} />
                 ))
             ) : (
-                <p>No assets available</p>
+                <p className="col-span-3 text-black">No assets available</p>
             )}
-            {showAddAssetForm && (
-                <AddAssetForm
-                    onAdd={handleAddAsset}
-                    onClose={() => setShowAddAssetForm(false)}
-                />
-            )}
-            <button
-                type="button"
-                className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                onClick={() => setShowAddAssetForm(true)}
-            >
-                Create Asset
-            </button>
         </div>
     );
 };

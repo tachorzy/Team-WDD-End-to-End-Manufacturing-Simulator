@@ -7,6 +7,7 @@ import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadc
 import AssetInventory from "@/components/factorydashboard/floormanager/AssetInventory";
 import { usePathname } from "next/navigation";
 import Blueprint from "@/components/factorydashboard/floorplan/uploadcontainer/Blueprint";
+import FloorManager from "@/components/factorydashboard/floormanager/FloorManager";
 
 export default function FactoryDashboard() {
     const [floorPlanFile, setFloorPlanFile] = useState<File | null>(null);
@@ -23,16 +24,18 @@ export default function FactoryDashboard() {
                 <div className="px-32">
                     <div className="flex flex-col gap-y-5 mt-8 mx-auto overflow-hidden max-h-screen">
                         <FactoryBio factoryId={factoryId} />
-                        {floorPlanFile !== null ? (
-                            <Blueprint imageFile={floorPlanFile} />
-                        ) : (
-                            <FileUploadContainer
-                                setFloorPlanFile={setFloorPlanFile}
-                            />
-                        )}
+                        <div className="flex flex-row  gap-0">
+                            {floorPlanFile !== null ? (
+                                <Blueprint imageFile={floorPlanFile} />
+                            ) : (
+                                <FileUploadContainer
+                                    setFloorPlanFile={setFloorPlanFile}
+                                />
+                            )}
+                            <FloorManager />
+                        </div>
                     </div>
                 </div>
-                <AssetInventory />
             </div>
         </main>
     );
