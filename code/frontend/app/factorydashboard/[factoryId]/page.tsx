@@ -15,19 +15,19 @@ export default function FactoryDashboard() {
     const navigation = usePathname();
     const factoryId = navigation.split("/")[2];
 
-  useEffect(() => {
-    const fetchFloorplan = async () => {
-        const floorplan = await getFloorplan(factoryId);
-        if (floorplan && floorplan.imageData) {
-            const response = await fetch(floorplan.imageData);
-            const blob = await response.blob();
-            const file = new File([blob], "floorplan", { type: blob.type });
-            setFloorPlanFile(file);
-        }
-    };
+    useEffect(() => {
+        const fetchFloorplan = async () => {
+            const floorplan = await getFloorplan(factoryId);
+            if (floorplan && floorplan.imageData) {
+                const response = await fetch(floorplan.imageData);
+                const blob = await response.blob();
+                const file = new File([blob], "floorplan", { type: blob.type });
+                setFloorPlanFile(file);
+            }
+        };
 
-    fetchFloorplan();
-}, [factoryId]);
+        fetchFloorplan();
+    }, [factoryId]);
 
     return (
         <main className="flex flex-col bg-[#FAFAFA] min-h-screen mx-auto smooth-scroll">

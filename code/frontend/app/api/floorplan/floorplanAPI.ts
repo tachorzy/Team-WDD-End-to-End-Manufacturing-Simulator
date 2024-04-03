@@ -43,6 +43,5 @@ export const getFloorplan = async (id: string): Promise<Floorplan | null> => {
     } catch (error) {
         console.error("Failed to get floorplan", error);
         throw new Error("Failed to get floorplan");
-    
     }
-}
+};
