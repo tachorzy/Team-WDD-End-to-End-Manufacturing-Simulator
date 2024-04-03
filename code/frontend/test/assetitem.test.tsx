@@ -13,7 +13,7 @@ describe("AssetItem", () => {
             name: "Asset 1",
             description: "Description",
             image: "test.jpg",
-            factoryId:"1"
+            factoryId: "1",
         };
 
         const { getByText, getByAltText } = render(<AssetItem asset={asset} />);

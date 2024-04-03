@@ -14,14 +14,14 @@ describe("AssetInventory", () => {
                 name: "Asset 1",
                 description: "Description 1",
                 image: "image1.jpg",
-                factoryId:"1"
+                factoryId: "1",
             },
             {
                 id: "2",
                 name: "Asset 2",
                 description: "Description 2",
                 image: "image2.jpg",
-                factoryId:"2"
+                factoryId: "2",
             },
         ];
 
@@ -38,14 +38,14 @@ describe("AssetInventory", () => {
                 name: "Asset 1",
                 description: "Description 1",
                 image: "image1.jpg",
-                factoryId:"1"
+                factoryId: "1",
             },
             {
                 id: "2",
                 name: "Asset 2",
                 description: "Description 2",
                 image: "image2.jpg",
-                factoryId:"1"
+                factoryId: "1",
             },
         ];
 
