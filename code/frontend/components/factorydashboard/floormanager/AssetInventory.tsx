@@ -1,26 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Asset } from "@/app/types/types";
 import AssetItem from "./AssetItem";
 
 interface AssetInventoryProps {
     assets?: Asset[];
+    setSelectedAsset: React.Dispatch<React.SetStateAction<Asset | null>>;
+    selectedAsset: Asset | null;
 }
 
-const AssetInventory: React.FC<AssetInventoryProps> = ({ assets = [] }) => (
-    <div className="asset-inventory  text-white p-4 rounded-md text-lg grid grid-cols-2 gap-4">
-        <h2 className="col-span-2 text-black">
-            Asset Inventory{" "}
-            <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-MainBlue" />
-        </h2>
+const AssetInventory: React.FC<AssetInventoryProps> = ({
+    assets = [],
+    setSelectedAsset,
+    selectedAsset,
+}) => {
+  
 
-        {assets.length > 0 ? (
-            assets.map((asset) => (
-                <AssetItem key={asset.assetId} asset={asset} />
-            ))
-        ) : (
-            <p className="col-span-3 text-black">No assets available</p>
-        )}
-    </div>
-);
-
-export default AssetInventory;
+   
+    return (
+        <div className="asset-inventory relative z-10 w-full h-[55%] overflow-y-scroll text-white text-lg flex flex-row flex-wrap border-2 border-[#D7D9DF] border-solid">
+            {assets.length > 0 ? (
+                assets.map((asset) => (
+                    <AssetItem
+                        key={asset.assetId}
+                        asset={asset}
+                        setSelectedAsset={setSelectedAsset}
+                        selectedAsset={selectedAsset}
+                    />
+                ))
+            ) : (
+                <p className="col-span-3 text-black opacity-[25%] p-2 pl-2.5">
+                    No assets found.
+                </p>
+            )}
+        </div>
+    );
+};
+ export default  AssetInventory;

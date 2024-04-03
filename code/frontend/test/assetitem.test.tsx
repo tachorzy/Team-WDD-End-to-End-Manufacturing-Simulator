@@ -4,27 +4,66 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
+import { Asset } from "@/app/types/types";
 import AssetItem from "../components/factorydashboard/floormanager/AssetItem";
 // code\frontend\components\factorydashboard\floormanager\AssetItem.tsx
 describe("AssetItem", () => {
     test("should render correctly with valid asset", () => {
-        const asset = {
-            id: "1",
-            name: "Asset 1",
-            description: "Description",
-            image: "test.jpg",
-            factoryId:"1"
-        };
+        const assets: Asset[] = [
+            {
+                assetId: "1",
+                name: "Asset 1",
+                description: "Description 1",
+                image: "/image1.jpg",
+                factoryId:"1"
+            },
+            {
+                assetId: "2",
+                name: "Asset 2",
+                description: "Description 2",
+                image: "/image2.jpg",
+                factoryId:"2"
+            },
+        ];
 
-        const { getByText, getByAltText } = render(<AssetItem asset={asset} />);
+        const { getByAltText } = render(
+            <AssetItem
+                asset={assets[0]}
+                setSelectedAsset={jest.fn()}
+                selectedAsset={null}
+            />,
+        );
 
-        expect(getByText("Name: Asset 1")).toBeInTheDocument();
-        expect(getByText("Description: Description")).toBeInTheDocument();
+        expect(
+            getByAltText(`${assets[0].name} Asset Image`),
+        ).toBeInTheDocument();
     });
 
-    test("should render asset name when asset is undefined", () => {
-        const { getByText } = render(<AssetItem />);
+    test("should render placeholder asset image when no image is provided", () => {
+        const assets: Asset[] = [
+            {
+                assetId: "1",
+                name: "Asset 1",
+                description: "Description 1",
+                image: "",
+                factoryId:"1"
+            },
+        ];
 
-        expect(getByText("No asset data available")).toBeInTheDocument();
+        const { getByAltText } = render(
+            <AssetItem
+                asset={assets[0]}
+                setSelectedAsset={jest.fn()}
+                selectedAsset={null}
+            />,
+        );
+
+        const assetImage = getByAltText(
+            `${assets[0].name} Asset Image`,
+        ) as HTMLImageElement;
+        expect(assetImage.src).toBe(
+            "http://localhost/icons/floorplan/placeholder-asset.svg",
+        );
+        expect(assetImage).toBeInTheDocument();
     });
 });
