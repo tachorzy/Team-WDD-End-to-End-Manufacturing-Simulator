@@ -6,9 +6,11 @@ import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
 import AssetInventory from "@/components/factorydashboard/floormanager/AssetInventory";
 import { usePathname } from "next/navigation";
-import Blueprint from "@/components/factorydashboard/floorplan/uploadcontainer/Blueprint";
+import Blueprint from "@/components/factorydashboard/floorplan/blueprint/Blueprint";
+import AssetMarker from "@/components/factorydashboard/floorplan/blueprint/AssetMarker";
 import FloorManager from "@/components/factorydashboard/floormanager/FloorManager";
 import { getFloorplan } from "@/app/api/floorplan/floorplanAPI";
+
 
 export default function FactoryDashboard() {
     const [floorPlanFile, setFloorPlanFile] = useState<File | null>(null);
