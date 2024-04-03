@@ -6,7 +6,7 @@ import Image from "next/image";
 import SearchModeTray from "./SearchModeTray";
 import ErrorMessage from "./ErrorMessage";
 
-interface SearchProps {
+export interface SearchProps {
     onSearch: (position: { lat: number; lon: number }) => void;
     setQueryMade: React.Dispatch<React.SetStateAction<boolean>>;
 }

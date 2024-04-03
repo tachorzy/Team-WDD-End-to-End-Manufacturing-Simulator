@@ -2,37 +2,39 @@
  * @jest-environment jsdom
  */
 
-/*
-  TODO:
-    Searchbar should handle address search correctly using global.fetch instead of axios
-*/
 
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import axios from "axios";
 import "@testing-library/jest-dom";
-import Searchbar from "../components/home/searchbar/Searchbar.client";
+import Searchbar, { SearchProps } from "../components/home/searchbar/Searchbar.client";
 import SearchModeTray from "../components/home/searchbar/SearchModeTray";
 
 jest.mock("axios");
-jest.mock("@/app/api/factories/factoryAPI");
 
-describe("Searchbar Component", () => {
-    test("should render the Searchbar component", () => {
+const onSearchMock = jest.fn();
+
+const setQueryMadeMock = jest.fn();
+
+const props: SearchProps = {
+    onSearch: onSearchMock,
+    setQueryMade: setQueryMadeMock,
+};
+
+describe("Searchbar", () => {
+    test("should render with deafult values without error", () => {
         const { getByText } = render(
-            <Searchbar onSearch={() => {}} setQueryMade={() => {}} />,
+            <Searchbar {...props} />,
         );
 
         expect(getByText("Create facility")).toBeInTheDocument();
     });
 
     test("should handle coordinates search correctly", async () => {
-        const onSearchMock = jest.fn();
         const { getByText, getByPlaceholderText } = render(
-            <Searchbar onSearch={onSearchMock} setQueryMade={() => {}} />,
+            <Searchbar {...props} />,
         );
 
-        // Switch to coordinates search
         fireEvent.click(getByText("Coordinates"));
 
         const searchButton = getByText("Create facility");
@@ -53,7 +55,7 @@ describe("Searchbar Component", () => {
 
     test("should display error for invalid coordinates", async () => {
         const { getByText, getByPlaceholderText } = render(
-            <Searchbar onSearch={() => {}} setQueryMade={() => {}} />,
+            <Searchbar {...props} />,
         );
 
         // Switch to coordinates search
@@ -74,7 +76,36 @@ describe("Searchbar Component", () => {
         });
     });
 
-    // Test cases for SearchModeTray
+    test("should handle address search correctly", async () => {
+        (axios.get as jest.Mock).mockResolvedValue({
+            data: [
+                {
+                    lat: 40.7128,
+                    lon: -74.006,
+                },
+            ],
+        });
+
+        const { getByText, getByPlaceholderText } = render(
+            <Searchbar {...props} />,
+        );
+
+        const searchButton = getByText("Create facility");
+        const addressInput = getByPlaceholderText("Enter factory address");
+
+        fireEvent.change(addressInput, { target: { value: "123 Main St" } });
+        fireEvent.click(searchButton);
+
+        await waitFor(() => {
+            expect(onSearchMock).toHaveBeenCalledWith({
+                lat: 40.7128,
+                lon: -74.006,
+            });
+        });
+    });
+});
+
+describe("Search Mode Tray", () => {
     test("should switch to address search mode when Address button is clicked", () => {
         const { getByText } = render(
             <SearchModeTray
@@ -100,33 +131,4 @@ describe("Searchbar Component", () => {
 
         fireEvent.click(getByText("Coordinates"));
     });
-
-    test("should handle address search correctly", async () => {
-        const onSearchMock = jest.fn();
-        (axios.get as jest.Mock).mockResolvedValue({
-            data: [
-                {
-                    lat: 40.7128,
-                    lon: -74.006,
-                },
-            ],
-        });
-
-        const { getByText, getByPlaceholderText } = render(
-            <Searchbar onSearch={onSearchMock} setQueryMade={() => {}} />,
-        );
-
-        const searchButton = getByText("Create facility");
-        const addressInput = getByPlaceholderText("Enter factory address");
-
-        fireEvent.change(addressInput, { target: { value: "123 Main St" } });
-        fireEvent.click(searchButton);
-
-        await waitFor(() => {
-            expect(onSearchMock).toHaveBeenCalledWith({
-                lat: 40.7128,
-                lon: -74.006,
-            });
-        });
-    });
-});
+})
