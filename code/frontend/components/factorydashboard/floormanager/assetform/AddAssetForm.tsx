@@ -99,17 +99,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({ onClose, onAdd }) => {
                         )}
                     </div>
                 </div>
-                {/* <label htmlFor="name" className="block mb-1 text-gray-500">
-                Image URL:
-        </label>
-        <input
-            type="text"
-            name="image"
-            placeholder="Image URL"
-            value={formData.image}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-indigo-500 text-gray-900"
-            onChange={handleInputChange}
-        /> */}
+
                 <div>
                     <button
                         type="button"

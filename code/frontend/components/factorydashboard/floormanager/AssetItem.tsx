@@ -20,11 +20,11 @@ const AssetItem: React.FC<AssetItemProps> = ({
     >
         {asset ? (
             <Image
-                src={asset.image as string}
+                src={asset.image ? asset.image as string : `/icons/floorplan/placeholder-asset.svg`}
                 width={90}
                 height={90}
                 alt={`${asset.name} Asset Image`}
-                className="self-center"
+                className="self-center justify-center"
             />
         ) : (
             <p>No asset data available</p>

@@ -3,12 +3,16 @@
  */
 import "@testing-library/jest-dom";
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, queryByAltText } from "@testing-library/react";
 import FloorManager from "../components/factorydashboard/floormanager/FloorManager";
+import AddAssetForm from "../components/factorydashboard/floormanager/assetform/AddAssetForm";
+
 
 describe("FloorManager ", () => {
-    test("should open AddAssetForm when 'Create Asset' button is clicked", () => {
+    test("should open AddAssetForm when 'Create Asset' button is clicked", () => {        
+        
         const { getByText, getByPlaceholderText } = render(<FloorManager setAssetMarkers={jest.fn()}/>);
+
         const addButton = getByText("Add Asset");
 
         fireEvent.click(addButton);
@@ -20,14 +24,27 @@ describe("FloorManager ", () => {
         expect(descriptionInput).toBeInTheDocument();
     });
 
-    test("should add new asset when 'Add Asset' button is clicked in AddAssetForm", () => {
-        const { getByText, getByPlaceholderText, queryByText } = render(
-            <FloorManager setAssetMarkers={jest.fn()}/>,
-        );
-        const addButton = getByText("Add Asset");
-        fireEvent.click(addButton);
+    jest.mock('react-dropzone', () => ({
+        useDropzone: () => ({
+          getRootProps: () => ({}),
+          getInputProps: () => ({}),
+          isDragActive: false,
+          isDragAccept: false,
+          isDragReject: false,
+        }),
+      }));
 
+    test("should add new asset to FloorManager when AddAssetForm is filled out.", async () => {
+        const handleAdd = jest.fn()
+        
+        const { getByText, getByPlaceholderText } = render(
+            <AddAssetForm onAdd={handleAdd} onClose={jest.fn()}/>,
+        );
+        
+        const file = new File(['(⌐□_□)'], 'testAssetImage.png', { type: 'image/png' });
+      
         const nameInput = getByPlaceholderText("Name");
+
         const descriptionInput = getByPlaceholderText("Description");
         const createAssetButton = getByText("Create Asset");
 
@@ -38,10 +55,11 @@ describe("FloorManager ", () => {
 
         fireEvent.click(createAssetButton);
 
-        // After creating, it should hide the AddAssetForm
-        expect(queryByText("Name: New Asset")).toBeInTheDocument();
-        expect(
-            queryByText("Description: New Asset Description"),
-        ).toBeInTheDocument();
+        expect(handleAdd).toHaveBeenCalledWith({
+            name: "New Asset",
+            description: "New Asset Description",
+            id: "",
+            image: "",
+        });
     });
 });

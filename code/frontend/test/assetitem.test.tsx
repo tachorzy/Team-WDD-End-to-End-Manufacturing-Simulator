@@ -14,40 +14,35 @@ describe("AssetItem", () => {
                 id: "1",
                 name: "Asset 1",
                 description: "Description 1",
-                image: "image1.jpg",
+                image: "/image1.jpg",
             },
             {
                 id: "2",
                 name: "Asset 2",
                 description: "Description 2",
-                image: "image2.jpg",
+                image: "/image2.jpg",
             },
         ];
 
         const { getByText, getByAltText } = render(<AssetItem asset={assets[0]} setSelectedAsset={jest.fn()} selectedAsset={null}/>);
-
-        expect(getByText("Name: Asset 1")).toBeInTheDocument();
-        expect(getByText("Description: Description")).toBeInTheDocument();
+        
+        expect(getByAltText(`${assets[0].name} Asset Image`)).toBeInTheDocument();
     });
 
-    test("should render asset name when asset is undefined", () => {
+    test("should render placeholder asset image when no image is provided", () => {
         const assets: Asset[] = [
             {
-                id: "1",
-                name: "Asset 1",
-                description: "Description 1",
-                image: "image1.jpg",
-            },
-            {
-                id: "2",
-                name: "Asset 2",
-                description: "Description 2",
-                image: "image2.jpg",
+                    id: "1",
+                    name: "Asset 1",
+                    description: "Description 1",
+                    image: "",
             },
         ];
 
-        const { getByText } = render(<AssetItem asset={assets[0]} setSelectedAsset={jest.fn()} selectedAsset={null}/>);
+        const { getByAltText } = render(<AssetItem asset={assets[0]} setSelectedAsset={jest.fn()} selectedAsset={null}/>);
 
-        expect(getByText("No asset data available")).toBeInTheDocument();
+        const assetImage = getByAltText(`${assets[0].name} Asset Image`) as HTMLImageElement;
+        expect(assetImage.src).toBe('http://localhost/icons/floorplan/placeholder-asset.svg');
+        expect(assetImage).toBeInTheDocument();
     });
 });
