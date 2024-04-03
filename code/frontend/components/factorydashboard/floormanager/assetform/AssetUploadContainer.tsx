@@ -15,20 +15,23 @@ const FileUploadContainer = (props: {
 
     const { setAssetImageFile, setFormData } = props;
 
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        // call API endpoint that sends the floor-plan to the backend
-        setUploadedFile(acceptedFiles[0]);
-        setAssetImageFile(acceptedFiles[0]);
-        const file = acceptedFiles[0]; // assuming only one file is uploaded
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setFormData((prevData) => ({
-                ...prevData,
-                image: reader.result as string, // assuming reader.result contains the base64 string of the image
-            }));
-        };
-        reader.readAsDataURL(file);
-    }, [setFormData, setAssetImageFile]);
+    const onDrop = useCallback(
+        (acceptedFiles: File[]) => {
+            // call API endpoint that sends the floor-plan to the backend
+            setUploadedFile(acceptedFiles[0]);
+            setAssetImageFile(acceptedFiles[0]);
+            const file = acceptedFiles[0]; // assuming only one file is uploaded
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData((prevData) => ({
+                    ...prevData,
+                    image: reader.result as string, // assuming reader.result contains the base64 string of the image
+                }));
+            };
+            reader.readAsDataURL(file);
+        },
+        [setFormData, setAssetImageFile],
+    );
 
     const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
         useDropzone({

@@ -79,11 +79,24 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({ onClose, onAdd }) => {
                 </div>
                 <div className="flex flex-row gap-x-0 w-full my-2">
                     <div className="w-80 h-48 ">
-                        <AssetUploadContainer setAssetImageFile={setAssetImageFile} setFormData={setFormData}/>
+                        <AssetUploadContainer
+                            setAssetImageFile={setAssetImageFile}
+                            setFormData={setFormData}
+                        />
                     </div>
                     <div className="absolute flex flex-col justify-center items-center right-0">
-                        <h1 className="text-sm font-medium text-center mr-16">Asset Image Preview:</h1>
-                        {assetImageFile && <Image src={URL.createObjectURL(assetImageFile)} width={120} height={120} className="relative right-0 mr-20 mt-12" alt="Asset" />}
+                        <h1 className="text-sm font-medium text-center mr-16">
+                            Asset Image Preview:
+                        </h1>
+                        {assetImageFile && (
+                            <Image
+                                src={URL.createObjectURL(assetImageFile)}
+                                width={120}
+                                height={120}
+                                className="relative right-0 mr-20 mt-12"
+                                alt="Asset"
+                            />
+                        )}
                     </div>
                 </div>
                 {/* <label htmlFor="name" className="block mb-1 text-gray-500">
