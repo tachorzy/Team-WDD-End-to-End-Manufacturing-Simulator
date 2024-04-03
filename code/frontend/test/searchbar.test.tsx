@@ -47,6 +47,34 @@ describe("Searchbar", () => {
         expect(getByAltText("maginify glass")).toBeInTheDocument();
     });
 
+    test("should handle address search correctly", async () => {
+        (axios.get as jest.Mock).mockResolvedValue({
+            data: [
+                {
+                    lat: 40.7128,
+                    lon: -74.006,
+                },
+            ],
+        });
+
+        const { getByText, getByPlaceholderText } = render(
+            <Searchbar {...props} />,
+        );
+
+        const searchButton = getByText("Create facility");
+        const addressInput = getByPlaceholderText("Enter factory address");
+
+        fireEvent.change(addressInput, { target: { value: "123 Main St" } });
+        fireEvent.click(searchButton);
+
+        await waitFor(() => {
+            expect(onSearchMock).toHaveBeenCalledWith({
+                lat: 40.7128,
+                lon: -74.006,
+            });
+        });
+    });
+
     test("should handle coordinates search correctly", async () => {
         const { getByText, getByPlaceholderText } = render(
             <Searchbar {...props} />,
@@ -90,34 +118,6 @@ describe("Searchbar", () => {
             expect(
                 getByText(/Invalid latitude or longitude/),
             ).toBeInTheDocument();
-        });
-    });
-
-    test("should handle address search correctly", async () => {
-        (axios.get as jest.Mock).mockResolvedValue({
-            data: [
-                {
-                    lat: 40.7128,
-                    lon: -74.006,
-                },
-            ],
-        });
-
-        const { getByText, getByPlaceholderText } = render(
-            <Searchbar {...props} />,
-        );
-
-        const searchButton = getByText("Create facility");
-        const addressInput = getByPlaceholderText("Enter factory address");
-
-        fireEvent.change(addressInput, { target: { value: "123 Main St" } });
-        fireEvent.click(searchButton);
-
-        await waitFor(() => {
-            expect(onSearchMock).toHaveBeenCalledWith({
-                lat: 40.7128,
-                lon: -74.006,
-            });
         });
     });
 });
