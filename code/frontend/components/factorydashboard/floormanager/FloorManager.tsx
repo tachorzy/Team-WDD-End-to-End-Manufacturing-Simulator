@@ -15,7 +15,7 @@ const FloorManager: React.FC = () => {
     };
 
     return (
-        <div className="floor-manager items-center w-[37.5%] min-h-[30rem] flex flex-col gap-y-1 py-6 text-black bg-white rounded-xl p-1 px-3 m-2 shadow-sm ring-2 ring-inset ring-gray-300">
+        <div className="floor-manager items-center w-[37.5%] min-h-[30rem] flex flex-col gap-y-1 py-6 text-black bg-white rounded-xl p-1 px-3 shadow-sm ring-2 ring-inset ring-gray-300">
             <div className="flex items-center justify-center gap-x-3 align-bottom">
                 <Image
                     src="/icons/floorplan/blueprintIcon.svg"

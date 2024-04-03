@@ -40,7 +40,7 @@ export default function FactoryDashboard() {
                 <div className="px-32">
                     <div className="flex flex-col gap-y-5 mt-8 mx-auto overflow-hidden max-h-screen">
                         <FactoryBio factoryId={factoryId} />
-                        <div className="flex flex-row  gap-0">
+                        <div className="flex flex-row  gap-x-12">
                             {floorPlanFile !== null ? (
                                 <Blueprint imageFile={floorPlanFile} />
                             ) : (
