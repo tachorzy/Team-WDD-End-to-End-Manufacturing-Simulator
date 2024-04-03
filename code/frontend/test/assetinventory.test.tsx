@@ -23,18 +23,18 @@ describe("AssetInventory", () => {
     test("should render list of assets", () => {
         const assets: Asset[] = [
             {
-                id: "1",
+                assetId: "1",
                 name: "Asset 1",
                 description: "Description 1",
-                image: "/image1.jpg",
-                factoryId:"1"
+                image: "image1.jpg",
+                factoryId: "1",
             },
             {
-                id: "2",
+                assetId: "2",
                 name: "Asset 2",
                 description: "Description 2",
-                image: "/image2.jpg",
-                factoryId:"1"
+                image: "image2.jpg",
+                factoryId: "1",
             },
         ];
 

@@ -9,22 +9,13 @@ import AssetItem from "../components/factorydashboard/floormanager/AssetItem";
 // code\frontend\components\factorydashboard\floormanager\AssetItem.tsx
 describe("AssetItem", () => {
     test("should render correctly with valid asset", () => {
-        const assets: Asset[] = [
-            {
-                assetId: "1",
-                name: "Asset 1",
-                description: "Description 1",
-                image: "/image1.jpg",
-                factoryId:"1"
-            },
-            {
-                assetId: "2",
-                name: "Asset 2",
-                description: "Description 2",
-                image: "/image2.jpg",
-                factoryId:"2"
-            },
-        ];
+        const asset = {
+            id: "1",
+            name: "Asset 1",
+            description: "Description",
+            image: "test.jpg",
+            factoryId: "1",
+        };
 
         const { getByAltText } = render(
             <AssetItem
