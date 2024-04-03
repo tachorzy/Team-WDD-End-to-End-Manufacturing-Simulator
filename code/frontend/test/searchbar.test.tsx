@@ -82,6 +82,37 @@ describe("Searchbar", () => {
         });
     });
 
+    test("should display error message on invalid address", async () => {
+        const responseData = "Could not find address";
+        const address = "-99 Invalid Address Blvd";
+        
+        (axios.get as jest.Mock).mockResolvedValue({data: responseData});
+
+        const { getByText, getByPlaceholderText, getByAltText } = render(
+            <Searchbar {...props} />,
+        );
+
+        const addressInput = getByPlaceholderText("Enter factory address");
+        const searchButton = getByText("Create facility");
+
+        fireEvent.change(addressInput, {target: {value: address}});
+        fireEvent.click(searchButton);
+
+        await waitFor(() => {
+            expect(axios.get).toHaveBeenCalledWith(
+                "https://geocode.maps.co/search", 
+                {
+                    "params": {
+                        "api_key": undefined, 
+                        "q": address
+                    }
+                }
+            );
+            expect(getByText("We couldn't find the address that you're looking for. Please try again.")).toBeInTheDocument();
+            expect(getByAltText("error pin")).toBeInTheDocument();
+        });
+    });
+
     test("should handle coordinates search correctly", async () => {
         const { getByText, getByPlaceholderText } = render(
             <Searchbar {...props} />,
