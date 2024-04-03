@@ -15,12 +15,6 @@ const AssetItem: React.FC<AssetItemProps> = ({ asset, setSelectedAsset }) => (
     >
         {asset ? (
             <>
-                {/* <p className="text-xs text-[#494949] font-semibold  break-words">
-                    Name: {asset.name}
-                </p>
-                <p className="mt-2 text-[#494949] text-xs break-words">
-                    Description: {asset.description}
-                </p> */}
                 <Image
                     src={asset.image as string}
                     width={90}

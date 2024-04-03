@@ -7,7 +7,7 @@ interface AssetBioProps {
 }
 
 const AssetBio: React.FC<AssetBioProps> = ({ asset }) => (
-    <div>
+    <div className="self-start mt-4">
         {asset && ( 
             <div className="flex flex-row gap-x-4">
                 <Image
@@ -17,11 +17,11 @@ const AssetBio: React.FC<AssetBioProps> = ({ asset }) => (
                     alt="Asset Image"
                     className="self-center"
                 />
-                <div className="flex flex-col">
-                    <p className="text-xs text-[#494949] font-semibold  break-words">
-                        Name: {asset.name}
+                <div className="flex flex-col gap-y-1">
+                    <p className="text-DarkBlue font-semibold break-words">
+                        {asset.name}
                     </p>
-                    <p className="mt-2 text-[#494949] text-xs break-words">
+                    <p className="text-[#494949] text-xs break-words">
                         Description: {asset.description}
                     </p>
                 </div>
