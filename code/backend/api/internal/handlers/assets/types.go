@@ -20,7 +20,7 @@ type Asset struct {
 	FloorplanCoords *floorplanCoords `json:"floorplanCoords,omitempty" dynamodbav:"floorplanCoords"`
 	ModelID         *string          `json:"modelId,omitempty" dynamobdav:"modelId"`
 	FloorplanID     *string          `json:"floorplanId,omitempty" dynamobdav:"floorplanId"`
-	DateCreated     string           `json:"dateCreated" dynamodbav:"Date Created"`
+	DateCreated     string           `json:"dateCreated" dynamodbav:"dateCreated"`
 }
 
 type DynamoDBClient interface {
