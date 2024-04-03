@@ -177,7 +177,12 @@ describe("Searchbar", () => {
     });
 
     test("should display error on invalid coordinates", async () => {
-        const { getByText, getByPlaceholderText } = render(
+        const coords = {
+            lat: 1000,
+            lon: 2000,
+        }
+        
+        const { getByText, getByPlaceholderText, getByAltText } = render(
             <Searchbar {...props} />,
         );
 
@@ -188,14 +193,17 @@ describe("Searchbar", () => {
         const latitudeInput = getByPlaceholderText("Enter latitude");
         const longitudeInput = getByPlaceholderText("Enter longitude");
 
-        fireEvent.change(latitudeInput, { target: { value: "1000" } });
-        fireEvent.change(longitudeInput, { target: { value: "2000" } });
+        fireEvent.change(latitudeInput, { target: { value: coords.lat } });
+        fireEvent.change(longitudeInput, { target: { value: coords.lon } });
         fireEvent.click(searchButton);
 
         await waitFor(() => {
             expect(
-                getByText(/Invalid latitude or longitude/),
+                getByText("Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°."),
             ).toBeInTheDocument();
+            expect(getByAltText("error pin")).toBeInTheDocument();
+            expect(onSearchMock).not.toHaveBeenCalled();
+            expect(setQueryMadeMock).not.toHaveBeenCalled();
         });
     });
 });
@@ -205,9 +213,9 @@ describe("Search Mode Tray", () => {
         const { getByText } = render(
             <SearchModeTray
                 isAddressSearchBarActive
-                setIsAddressSearchBarActive={() => {}}
-                setInvalidCoords={() => {}}
-                setInvalidAddress={() => {}}
+                setIsAddressSearchBarActive={jest.fn()}
+                setInvalidCoords={jest.fn()}
+                setInvalidAddress={jest.fn()}
             />,
         );
 
@@ -218,9 +226,9 @@ describe("Search Mode Tray", () => {
         const { getByText } = render(
             <SearchModeTray
                 isAddressSearchBarActive
-                setIsAddressSearchBarActive={() => {}}
-                setInvalidCoords={() => {}}
-                setInvalidAddress={() => {}}
+                setIsAddressSearchBarActive={jest.fn()}
+                setInvalidCoords={jest.fn()}
+                setInvalidAddress={jest.fn()}
             />,
         );
 
