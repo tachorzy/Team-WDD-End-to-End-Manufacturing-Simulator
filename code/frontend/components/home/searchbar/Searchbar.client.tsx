@@ -65,7 +65,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
                 return { lat, lon };
 
             setInvalidCoords(true);
-            return undefined;
+            throw new Error("Invalid coordinates");
         } catch (error) {
             return undefined;
         }

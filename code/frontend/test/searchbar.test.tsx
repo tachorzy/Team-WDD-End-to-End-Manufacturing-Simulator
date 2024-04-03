@@ -4,13 +4,14 @@
 
 
 import React from "react";
-import { render, fireEvent, waitFor, getByTestId, getByAltText } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import axios from "axios";
 import "@testing-library/jest-dom";
 import Searchbar, { SearchProps } from "../components/home/searchbar/Searchbar.client";
 import SearchModeTray from "../components/home/searchbar/SearchModeTray";
 
 jest.mock("axios");
+
 const mockAxios = axios as jest.Mocked<typeof axios>;
 
 const onSearchMock = jest.fn();
@@ -120,10 +121,9 @@ describe("Searchbar", () => {
     });
 
     test("should catch error on axios.get", async () => {
-        const errorMessage = new Error("Failed getting coordinates")
         const address = "404 Error Rd";
         
-        mockAxios.get.mockRejectedValue(errorMessage);
+        mockAxios.get.mockRejectedValue(new Error("Failed getting coordinates"));
 
         const { getByText, getByPlaceholderText } = render(
             <Searchbar {...props} />,
@@ -166,8 +166,8 @@ describe("Searchbar", () => {
         const latitudeInput = getByPlaceholderText("Enter latitude");
         const longitudeInput = getByPlaceholderText("Enter longitude");
 
-        fireEvent.change(latitudeInput, {target: { value: coords.lat}});
-        fireEvent.change(longitudeInput, {target: { value: coords.lon}});
+        fireEvent.change(latitudeInput, {target: { value: coords.lat.toString()}});
+        fireEvent.change(longitudeInput, {target: { value: coords.lon.toString()}});
         fireEvent.click(searchButton);
 
         await waitFor(() => {
@@ -186,15 +186,14 @@ describe("Searchbar", () => {
             <Searchbar {...props} />,
         );
 
-        // Switch to coordinates search
         fireEvent.click(getByText("Coordinates"));
 
         const searchButton = getByText("Create facility");
         const latitudeInput = getByPlaceholderText("Enter latitude");
         const longitudeInput = getByPlaceholderText("Enter longitude");
 
-        fireEvent.change(latitudeInput, { target: { value: coords.lat } });
-        fireEvent.change(longitudeInput, { target: { value: coords.lon } });
+        fireEvent.change(latitudeInput, {target: {value: coords.lat.toString()}});
+        fireEvent.change(longitudeInput, {target: {value: coords.lon.toString()}});
         fireEvent.click(searchButton);
 
         await waitFor(() => {
