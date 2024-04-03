@@ -5,7 +5,7 @@ const AssetMarker = () => {
 
     return (
         <Draggable>
-            <div className="absolute top-0 left-0 z-10">
+            <div className="absolute top-0 left-0 z-10 drop-shadow-md">
                 <Image
                     src="/icons/floorplan/asset-marker.svg"
                     width={30}

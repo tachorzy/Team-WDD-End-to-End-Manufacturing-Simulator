@@ -7,7 +7,7 @@ const Blueprint = (props: { imageFile: File }) => {
     const imageURL = URL.createObjectURL(imageFile);
 
     return (
-        <div className="sticky overflow-hidden max-h-min w-[55%]">
+        <div className="sticky overflow-hidden max-h-min w-[55%] border-2 border-MainBlue">
             <AssetMarker></AssetMarker>
             <Image
                 src={imageURL}
