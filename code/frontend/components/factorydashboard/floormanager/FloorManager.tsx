@@ -14,21 +14,21 @@ const FloorManager: React.FC = () => {
     };
 
     return (
-        <div className="floor-manager  w-full h-full flex flex-col gap-y-10 text-black bg-white rounded-xl  w-[37rem] h-[30rem] p-4 m-2 shadow-sm ring-2 ring-inset ring-gray-300">
-            <div className="flex items-center justify-center gap-x-3">
+        <div className="floor-manager items-center justify-center w-[37.5%] min-h-[30rem] flex flex-col gap-y-10 text-black bg-white rounded-xl p-1 m-2 shadow-sm ring-2 ring-inset ring-gray-300">
+            <div className="flex items-center justify-center gap-x-3 align-bottom">
                 <Image
-                    src="/branding/Tensor-Cube.svg"
-                    width={50}
-                    height={50}
+                    src="/icons/floorplan/blueprintIcon.svg"
+                    width={40}
+                    height={40}
                     alt="brand"
                     className=""
                 />
-                <h2 className="text-3xl font-bold">Floor Manager</h2>
+                <h2 className="text-2xl font-bold">Floor Manager</h2>
             </div>
 
             <button
                 type="button"
-                className="w-[10rem] h-[4rem] flex-row items-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                className="w-24 h-8 flex-row items-center rounded-xl bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                 onClick={() => setShowAddAssetForm(true)}
             >
                 Add Asset
