@@ -114,10 +114,12 @@ describe("Searchbar", () => {
             );
             expect(getByText("We couldn't find the address that you're looking for. Please try again.")).toBeInTheDocument();
             expect(getByAltText("error pin")).toBeInTheDocument();
+            expect(onSearchMock).not.toHaveBeenCalled();
+            expect(setQueryMadeMock).not.toHaveBeenCalled();
         });
     });
 
-    test("should log error on axios.get", async () => {
+    test("should catch error on axios.get", async () => {
         const errorMessage = new Error("Failed getting coordinates")
         const address = "404 Error Rd";
         
@@ -149,6 +151,11 @@ describe("Searchbar", () => {
     });
 
     test("should handle coordinates search correctly", async () => {
+        const coords = {
+            lat: 12.345,
+            lon: 67.89,
+        }
+        
         const { getByText, getByPlaceholderText } = render(
             <Searchbar {...props} />,
         );
@@ -159,19 +166,17 @@ describe("Searchbar", () => {
         const latitudeInput = getByPlaceholderText("Enter latitude");
         const longitudeInput = getByPlaceholderText("Enter longitude");
 
-        fireEvent.change(latitudeInput, { target: { value: "12.345" } });
-        fireEvent.change(longitudeInput, { target: { value: "67.89" } });
+        fireEvent.change(latitudeInput, {target: { value: coords.lat}});
+        fireEvent.change(longitudeInput, {target: { value: coords.lon}});
         fireEvent.click(searchButton);
 
         await waitFor(() => {
-            expect(onSearchMock).toHaveBeenCalledWith({
-                lat: 12.345,
-                lon: 67.89,
-            });
+            expect(onSearchMock).toHaveBeenCalledWith(coords);
+            expect(setQueryMadeMock).toHaveBeenCalledWith(true);
         });
     });
 
-    test("should display error for invalid coordinates", async () => {
+    test("should display error on invalid coordinates", async () => {
         const { getByText, getByPlaceholderText } = render(
             <Searchbar {...props} />,
         );
