@@ -14,8 +14,9 @@ const InventoryNavBar = () => {
 
     return (
         <div className="flex self-start flex-row gap-x-3">
-            {navbarLinks.map((navItem) => (
+            {navbarLinks.map((navItem, id) => (
                 <button
+                    key={id}
                     type="button"
                     onClick={() => setActiveNavItem(navItem.label)}
                     className={`${

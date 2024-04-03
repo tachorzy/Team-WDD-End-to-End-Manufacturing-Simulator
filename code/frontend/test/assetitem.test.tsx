@@ -4,26 +4,51 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
+import { Asset } from "@/app/types/types";
 import AssetItem from "../components/factorydashboard/floormanager/AssetItem";
-// code\frontend\components\factorydashboard\floormanager\AssetItem.tsx
+
 describe("AssetItem", () => {
     test("should render correctly with valid asset", () => {
-        const asset = {
-            id: "1",
+        const asset: Asset = {
+            assetId: "1",
             name: "Asset 1",
             description: "Description",
-            image: "test.jpg",
+            image: "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927", //for some reason it doesnt pass in github when we use image/test,jpg or test.jpg so a temp solution is usign a real image url
+            factoryId: "1",
         };
 
-        const { getByText, getByAltText } = render(<AssetItem asset={asset} />);
+        const { getByAltText } = render(
+            <AssetItem
+                asset={asset}
+                setSelectedAsset={jest.fn()}
+                selectedAsset={null}
+            />,
+        );
 
-        expect(getByText("Name: Asset 1")).toBeInTheDocument();
-        expect(getByText("Description: Description")).toBeInTheDocument();
+        expect(
+            getByAltText(`${asset.name} Asset Image`), 
+        ).toBeInTheDocument();
     });
 
-    test("should render asset name when asset is undefined", () => {
-        const { getByText } = render(<AssetItem />);
+    test("should render placeholder asset image when no image is provided", () => {
+        const asset: Asset = {
+            assetId: "1",
+            name: "Asset 1",
+            description: "Description 1",
+            image: "",
+            factoryId: "1",
+        };
 
-        expect(getByText("No asset data available")).toBeInTheDocument();
+        const { getByAltText } = render(
+            <AssetItem
+                asset={asset} 
+                setSelectedAsset={jest.fn()}
+                selectedAsset={null}
+            />,
+        );
+
+        const assetImage = getByAltText(`${asset.name} Asset Image`) as HTMLImageElement;
+        expect(assetImage.src).toContain("placeholder-asset.svg");
+        expect(assetImage).toBeInTheDocument();
     });
 });

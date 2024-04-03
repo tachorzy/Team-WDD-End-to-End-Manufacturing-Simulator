@@ -12,6 +12,7 @@ import {
     updateFactory,
 } from "../app/api/factories/factoryAPI";
 
+
 global.fetch = jest.fn();
 
 const consoleErrorMock = jest
