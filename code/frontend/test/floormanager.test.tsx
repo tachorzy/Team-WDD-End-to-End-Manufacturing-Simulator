@@ -58,6 +58,7 @@ describe("FloorManager ", () => {
             description: "New Asset Description",
             id: "",
             image: "",
+            factoryId: "1",
         });
     });
 });
