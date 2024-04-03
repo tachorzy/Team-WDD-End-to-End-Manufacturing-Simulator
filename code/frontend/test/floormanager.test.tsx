@@ -56,7 +56,7 @@ describe("FloorManager ", () => {
         expect(handleAdd).toHaveBeenCalledWith({
             name: "New Asset",
             description: "New Asset Description",
-            id: "",
+            assetId: "",
             image: "",
             factoryId: "1",
         });

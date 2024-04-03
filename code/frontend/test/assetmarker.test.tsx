@@ -11,7 +11,7 @@ import AssetMarker from "../components/factorydashboard/floorplan/blueprint/Asse
 describe("AssetMarker Component", () => {
     test("should have a label with the name of the asset", () => {
         const mockAsset: Asset = {
-            id: "1",
+            assetId: "1",
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
@@ -28,10 +28,11 @@ describe("AssetMarker Component", () => {
 
     test("should render the correct marker image", () => {
         const mockAsset: Asset = {
-            id: "1",
+            assetId: "1",
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
+            factoryId: "1"
         };
 
         const { getByAltText } = render(<AssetMarker asset={mockAsset} />);
@@ -44,10 +45,11 @@ describe("AssetMarker Component", () => {
 
     test("should be draggable", () => {
         const mockAsset: Asset = {
-            id: "1",
+            assetId: "1",
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
+            factoryId: "1"
         };
 
         const { getByText } = render(<AssetMarker asset={mockAsset} />);

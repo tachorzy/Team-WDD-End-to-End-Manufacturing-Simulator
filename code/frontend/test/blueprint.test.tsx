@@ -15,10 +15,11 @@ describe("Blueprint Component", () => {
     });
     test("should render an image as a floorplan", () => {
         const mockAsset: Asset = {
-            id: "1",
+            assetId: "1",
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
+            factoryId: "1"
         };
 
         const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", {
@@ -40,10 +41,11 @@ describe("Blueprint Component", () => {
 
     test("should render with the correct CSS classes", () => {
         const mockAsset: Asset = {
-            id: "1",
+            assetId: "1",
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
+            factoryId: "1"
         };
 
         const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", {
