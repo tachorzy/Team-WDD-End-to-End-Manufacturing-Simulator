@@ -3,8 +3,14 @@
  */
 import "@testing-library/jest-dom";
 import { Factory } from "@/app/types/types";
-import { requestOptions, getFactory, createFactory, getAllFactories, updateFactory } from "../app/api/factories/factoryAPI";
 import { waitFor } from "@testing-library/react";
+import {
+    requestOptions,
+    getFactory,
+    createFactory,
+    getAllFactories,
+    updateFactory,
+} from "../app/api/factories/factoryAPI";
 
 global.fetch = jest.fn();
 
@@ -13,7 +19,7 @@ const consoleErrorMock = jest
     .mockImplementation(() => {});
 
 describe("Factory API", () => {
-    beforeEach(() => {    
+    beforeEach(() => {
         (global.fetch as jest.Mock).mockClear();
     });
 
@@ -69,8 +75,8 @@ describe("Factory API", () => {
         const result = await getFactory("1");
 
         expect(global.fetch).toHaveBeenCalledWith(
-            "undefined/factories?id=1", 
-            requestOptions
+            "undefined/factories?id=1",
+            requestOptions,
         );
         expect(result).toEqual(mockResponse);
     });
@@ -87,9 +93,9 @@ describe("Factory API", () => {
             await getFactory("1");
         }).rejects.toThrow("Failed to fetch factory with ID 1");
 
-        await waitFor(() =>{
+        await waitFor(() => {
             expect(consoleErrorMock).toHaveBeenCalledWith(
-                "Failed to fetch factory with ID 1:", 
+                "Failed to fetch factory with ID 1:",
                 new Error("Failed to fetch factory with ID 1: 404"),
             );
         });
@@ -107,16 +113,13 @@ describe("Factory API", () => {
 
         const result = await createFactory(mockFactories[0]);
 
-        expect(global.fetch).toHaveBeenCalledWith(
-            "undefined/factories",
-            {
-                "body": JSON.stringify(mockFactories[0]),
-                "headers": {
-                    "Content-Type": "application/json",
-                },
-                "method": "POST",
-            }
-        );
+        expect(global.fetch).toHaveBeenCalledWith("undefined/factories", {
+            body: JSON.stringify(mockFactories[0]),
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+        });
         expect(result).toEqual(mockResponse);
     });
 
@@ -132,9 +135,9 @@ describe("Factory API", () => {
             await createFactory(mockFactories[0]);
         }).rejects.toThrow("Failed to add new factory");
 
-        await waitFor(() =>{
+        await waitFor(() => {
             expect(consoleErrorMock).toHaveBeenCalledWith(
-                "Failed to add new factory:", 
+                "Failed to add new factory:",
                 new Error("Failed to add new factory: 404"),
             );
         });
@@ -153,15 +156,19 @@ describe("Factory API", () => {
         const result = await getAllFactories();
 
         expect(global.fetch).toHaveBeenCalledWith(
-            "undefined/factories", 
-            requestOptions
+            "undefined/factories",
+            requestOptions,
         );
         expect(result).toHaveLength(2);
         expect(result).toEqual(mockResponse);
     });
 
     test("should fetch and return three factories using getAllFactories", async () => {
-        const mockResponse = [mockFactories[0], mockFactories[1], mockFactories[2]];
+        const mockResponse = [
+            mockFactories[0],
+            mockFactories[1],
+            mockFactories[2],
+        ];
 
         (global.fetch as jest.Mock).mockImplementationOnce(() =>
             Promise.resolve({
@@ -173,8 +180,8 @@ describe("Factory API", () => {
         const result = await getAllFactories();
 
         expect(global.fetch).toHaveBeenCalledWith(
-            "undefined/factories", 
-            requestOptions
+            "undefined/factories",
+            requestOptions,
         );
         expect(result).toHaveLength(3);
         expect(result).toEqual(mockResponse);
@@ -193,8 +200,8 @@ describe("Factory API", () => {
         const result = await getAllFactories();
 
         expect(global.fetch).toHaveBeenCalledWith(
-            "undefined/factories", 
-            requestOptions
+            "undefined/factories",
+            requestOptions,
         );
         expect(result).toHaveLength(4);
         expect(result).toEqual(mockResponse);
@@ -212,9 +219,9 @@ describe("Factory API", () => {
             await getAllFactories();
         }).rejects.toThrow("Failed to fetch all factories.");
 
-        await waitFor(() =>{
+        await waitFor(() => {
             expect(consoleErrorMock).toHaveBeenCalledWith(
-                "Failed to fetch all factories: ", 
+                "Failed to fetch all factories: ",
                 new Error("Failed to fetch all factories: 404"),
             );
         });
@@ -236,16 +243,13 @@ describe("Factory API", () => {
 
         const result = await updateFactory(updatedFactory);
 
-        expect(global.fetch).toHaveBeenCalledWith(
-            "undefined/factories",
-            {
-                "body": JSON.stringify(updatedFactory),
-                "headers": {
-                    "Content-Type": "application/json",
-                },
-                "method": "PUT",
-            }
-        );
+        expect(global.fetch).toHaveBeenCalledWith("undefined/factories", {
+            body: JSON.stringify(updatedFactory),
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: "PUT",
+        });
         expect(result).toEqual(mockResponse);
     });
 
@@ -261,9 +265,9 @@ describe("Factory API", () => {
             await updateFactory(mockFactories[0]);
         }).rejects.toThrow("Failed to update factory.");
 
-        await waitFor(() =>{
+        await waitFor(() => {
             expect(consoleErrorMock).toHaveBeenCalledWith(
-                "Failed to update factory: ", 
+                "Failed to update factory: ",
                 new Error("Failed to update factory: 404"),
             );
         });

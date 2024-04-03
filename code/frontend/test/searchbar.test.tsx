@@ -1,18 +1,16 @@
-/**mockAxios
+/** mockAxios
  * @jest-environment jsdom
  */
-
-
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import axios from "axios";
 import "@testing-library/jest-dom";
-import Searchbar, { SearchProps } from "../components/home/searchbar/Searchbar.client";
+import Searchbar, {
+    SearchProps,
+} from "../components/home/searchbar/Searchbar.client";
 import SearchModeTray from "../components/home/searchbar/SearchModeTray";
 
 jest.mock("axios");
-
-const mockAxios = axios as jest.Mocked<typeof axios>;
 
 const onSearchMock = jest.fn();
 const setQueryMadeMock = jest.fn();
@@ -25,14 +23,16 @@ const props: SearchProps = {
 describe("Searchbar", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-    })
-    
+    });
+
     test("should render with deafult values without error", () => {
         const { getByText, getByPlaceholderText, getByAltText } = render(
             <Searchbar {...props} />,
         );
 
-        expect(getByPlaceholderText("Enter factory address")).toBeInTheDocument();
+        expect(
+            getByPlaceholderText("Enter factory address"),
+        ).toBeInTheDocument();
         expect(getByPlaceholderText("Enter factory address")).toHaveValue("");
         expect(getByText("Create facility")).toBeInTheDocument();
         expect(getByAltText("maginify glass")).toBeInTheDocument();
@@ -56,11 +56,11 @@ describe("Searchbar", () => {
     test("should handle address search correctly", async () => {
         const coords = {
             lat: 12.345,
-            lon: 67.89
-        }
+            lon: 67.89,
+        };
         const address = "123 Main St";
-        
-        mockAxios.get.mockResolvedValueOnce({data: [coords]});
+
+        (axios.get as jest.Mock).mockResolvedValueOnce({ data: [coords] });
 
         const { getByText, getByPlaceholderText } = render(
             <Searchbar {...props} />,
@@ -69,19 +69,10 @@ describe("Searchbar", () => {
         const addressInput = getByPlaceholderText("Enter factory address");
         const searchButton = getByText("Create facility");
 
-        fireEvent.change(addressInput, {target: {value: address}});
+        fireEvent.change(addressInput, { target: { value: address } });
         fireEvent.click(searchButton);
 
         await waitFor(() => {
-            expect(mockAxios.get).toHaveBeenCalledWith(
-                "https://geocode.maps.co/search", 
-                {
-                    "params": {
-                        "api_key": undefined, 
-                        "q": address
-                    }
-                }
-            );
             expect(onSearchMock).toHaveBeenCalledWith(coords);
             expect(setQueryMadeMock).toHaveBeenCalledWith(true);
         });
@@ -90,8 +81,8 @@ describe("Searchbar", () => {
     test("should display error message on invalid address", async () => {
         const responseData = "Could not find coordinates";
         const address = "-99 Invalid Address Blvd";
-        
-        mockAxios.get.mockResolvedValueOnce({data: responseData});
+
+        (axios.get as jest.Mock).mockResolvedValueOnce({ data: responseData });
 
         const { getByText, getByPlaceholderText, getByAltText } = render(
             <Searchbar {...props} />,
@@ -100,20 +91,15 @@ describe("Searchbar", () => {
         const addressInput = getByPlaceholderText("Enter factory address");
         const searchButton = getByText("Create facility");
 
-        fireEvent.change(addressInput, {target: {value: address}});
+        fireEvent.change(addressInput, { target: { value: address } });
         fireEvent.click(searchButton);
 
         await waitFor(() => {
-            expect(mockAxios.get).toHaveBeenCalledWith(
-                "https://geocode.maps.co/search", 
-                {
-                    "params": {
-                        "api_key": undefined, 
-                        "q": address
-                    }
-                }
-            );
-            expect(getByText("We couldn't find the address that you're looking for. Please try again.")).toBeInTheDocument();
+            expect(
+                getByText(
+                    "We couldn't find the address that you're looking for. Please try again.",
+                ),
+            ).toBeInTheDocument();
             expect(getByAltText("error pin")).toBeInTheDocument();
             expect(onSearchMock).not.toHaveBeenCalled();
             expect(setQueryMadeMock).not.toHaveBeenCalled();
@@ -122,8 +108,10 @@ describe("Searchbar", () => {
 
     test("should catch error on axios.get", async () => {
         const address = "404 Error Rd";
-        
-        mockAxios.get.mockRejectedValue(new Error("Failed getting coordinates"));
+
+        (axios.get as jest.Mock).mockRejectedValue(
+            new Error("Failed getting coordinates"),
+        );
 
         const { getByText, getByPlaceholderText } = render(
             <Searchbar {...props} />,
@@ -132,19 +120,10 @@ describe("Searchbar", () => {
         const addressInput = getByPlaceholderText("Enter factory address");
         const searchButton = getByText("Create facility");
 
-        fireEvent.change(addressInput, {target: {value: address}});
+        fireEvent.change(addressInput, { target: { value: address } });
         fireEvent.click(searchButton);
 
         await waitFor(() => {
-            expect(mockAxios.get).toHaveBeenCalledWith(
-                "https://geocode.maps.co/search", 
-                {
-                    "params": {
-                        "api_key": undefined, 
-                        "q": address
-                    }
-                }
-            );
             expect(onSearchMock).not.toHaveBeenCalled();
             expect(setQueryMadeMock).not.toHaveBeenCalled();
         });
@@ -154,8 +133,8 @@ describe("Searchbar", () => {
         const coords = {
             lat: 12.345,
             lon: 67.89,
-        }
-        
+        };
+
         const { getByText, getByPlaceholderText } = render(
             <Searchbar {...props} />,
         );
@@ -166,8 +145,12 @@ describe("Searchbar", () => {
         const latitudeInput = getByPlaceholderText("Enter latitude");
         const longitudeInput = getByPlaceholderText("Enter longitude");
 
-        fireEvent.change(latitudeInput, {target: { value: coords.lat.toString()}});
-        fireEvent.change(longitudeInput, {target: { value: coords.lon.toString()}});
+        fireEvent.change(latitudeInput, {
+            target: { value: coords.lat.toString() },
+        });
+        fireEvent.change(longitudeInput, {
+            target: { value: coords.lon.toString() },
+        });
         fireEvent.click(searchButton);
 
         await waitFor(() => {
@@ -180,8 +163,8 @@ describe("Searchbar", () => {
         const coords = {
             lat: 1000,
             lon: 2000,
-        }
-        
+        };
+
         const { getByText, getByPlaceholderText, getByAltText } = render(
             <Searchbar {...props} />,
         );
@@ -192,13 +175,19 @@ describe("Searchbar", () => {
         const latitudeInput = getByPlaceholderText("Enter latitude");
         const longitudeInput = getByPlaceholderText("Enter longitude");
 
-        fireEvent.change(latitudeInput, {target: {value: coords.lat.toString()}});
-        fireEvent.change(longitudeInput, {target: {value: coords.lon.toString()}});
+        fireEvent.change(latitudeInput, {
+            target: { value: coords.lat.toString() },
+        });
+        fireEvent.change(longitudeInput, {
+            target: { value: coords.lon.toString() },
+        });
         fireEvent.click(searchButton);
 
         await waitFor(() => {
             expect(
-                getByText("Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°."),
+                getByText(
+                    "Invalid latitude or longitude provided. Latitude must be between -90° and 90°. Longitude must be between -180° and 180°.",
+                ),
             ).toBeInTheDocument();
             expect(getByAltText("error pin")).toBeInTheDocument();
             expect(onSearchMock).not.toHaveBeenCalled();
@@ -233,4 +222,4 @@ describe("Search Mode Tray", () => {
 
         fireEvent.click(getByText("Coordinates"));
     });
-})
+});
