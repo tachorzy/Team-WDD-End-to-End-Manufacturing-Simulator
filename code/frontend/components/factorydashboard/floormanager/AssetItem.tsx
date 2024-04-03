@@ -7,13 +7,13 @@ interface AssetItemProps {
 }
 
 const AssetItem: React.FC<AssetItemProps> = ({ asset }) => (
-    <div className="asset-item bg-blue-400 text-white p-4 rounded-md m-2">
+    <div className="asset-item w-[5.25rem] h-[5.25rem] cursor-pointer bg-[#D9D9D9] opacity-[25%] border-2 border-[#767676] border-solid text-white p-0.5 rounded-sm m-2 text-[#494949]">
         {asset ? (
             <>
-                <p className="text-lg font-semibold  break-words">
+                <p className="text-xs text-[#494949] font-semibold  break-words">
                     Name: {asset.name}
                 </p>
-                <p className="mt-2  break-words">
+                <p className="mt-2 text-[#494949] text-xs break-words">
                     Description: {asset.description}
                 </p>
                 {/* <img
