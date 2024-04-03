@@ -49,7 +49,7 @@ export default function FactoryDashboard() {
                                     setFloorPlanFile={setFloorPlanFile}
                                 />
                             )}
-                            <FloorManager />
+                            <FloorManager factoryId={factoryId}/>
                         </div>
                     </div>
                 </div>

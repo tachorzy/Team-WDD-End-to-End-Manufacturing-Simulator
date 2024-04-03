@@ -6,8 +6,7 @@ interface AssetInventoryProps {
     assets?: Asset[];
 }
 
-const AssetInventory: React.FC<AssetInventoryProps> = ({ assets }) => {
-    const [assetList] = useState<Asset[]>(assets || []);
+const AssetInventory: React.FC<AssetInventoryProps> = ({ assets = []}) => {
 
     return (
         <div className="asset-inventory  text-white p-4 rounded-md text-lg grid grid-cols-2 gap-4">
@@ -16,8 +15,8 @@ const AssetInventory: React.FC<AssetInventoryProps> = ({ assets }) => {
                 <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-MainBlue" />
             </h2>
 
-            {assetList.length > 0 ? (
-                assetList.map((asset) => (
+            {assets.length > 0 ? (
+                assets.map((asset) => (
                     <AssetItem key={asset.id} asset={asset} />
                 ))
             ) : (
