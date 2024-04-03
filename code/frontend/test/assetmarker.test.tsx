@@ -15,6 +15,7 @@ describe("AssetMarker Component", () => {
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
+            factoryId:"1",
         };
 
         render(<AssetMarker asset={mockAsset} />);
