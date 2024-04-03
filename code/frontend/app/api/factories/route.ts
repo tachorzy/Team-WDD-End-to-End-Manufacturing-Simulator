@@ -7,9 +7,11 @@ import {
 import { Factory } from "@/app/api/_utils/types";
 
 export async function POST(request: Request) {
-    const config: PostConfig = {
+    const payload = (await request.json()) as Factory;
+
+    const config: PostConfig<Factory> = {
         resource: "factories",
-        body: request.body,
+        payload,
     };
 
     try {
@@ -65,18 +67,19 @@ export async function GET(request: Request) {
 }
 
 export async function PUT(request: Request) {
-    const config: PutConfig = {
+    const payload = (await request.json()) as Factory;
+
+    const config: PutConfig<Factory> = {
         resource: "factories",
-        body: request.body,
+        payload,
     };
 
     try {
-        const data = await BackendConnector.put<Factory>(config);
+        await BackendConnector.put(config);
 
         return new Response(
             JSON.stringify({
                 success: true,
-                data,
             }),
         );
     } catch (error) {

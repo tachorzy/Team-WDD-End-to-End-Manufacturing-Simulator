@@ -3,13 +3,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Factory } from "@/app/api/_utils/types";
+import { NextServerConnector, PostConfig } from "@/app/api/_utils/connector";
 import ErrorMessage from "./searchbar/ErrorMessage";
-
-interface CreateFactoryResponse {
-    factoryId: string;
-    message: string;
-}
-const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
 const NewFactoryForm = (props: {
     latitude: number;
@@ -43,22 +38,14 @@ const NewFactoryForm = (props: {
         };
 
         try {
-            const response = await fetch(`${BASE_URL}/factories`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newFactory),
-            });
+            const config: PostConfig<Factory> = {
+                resource: "factories",
+                payload: newFactory,
+            };
 
-            if (!response.ok) {
-                throw new Error(
-                    `Failed to create factory: ${response.statusText}`,
-                );
-            }
-            const responseData =
-                (await response.json()) as CreateFactoryResponse;
-            const { factoryId } = responseData;
+            const data = await NextServerConnector.post<Factory>(config);
+
+            const { factoryId } = data;
             onFactorySubmit({
                 factoryId,
                 name: factoryName,

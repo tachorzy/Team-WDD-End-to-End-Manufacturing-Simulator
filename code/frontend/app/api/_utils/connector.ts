@@ -1,18 +1,21 @@
-import { BASE_URL } from "@/app/api/_utils/constants";
+import {
+    BASE_BACKEND_API_URL,
+    BASE_NEXT_API_URL,
+} from "@/app/api/_utils/constants";
 
 export interface GetConfig {
     resource: string;
     params?: Record<string, string>;
 }
 
-export interface PostConfig {
+export interface PostConfig<T> {
     resource: string;
-    body: ReadableStream<Uint8Array> | null;
+    payload: T;
 }
 
-export interface PutConfig {
+export interface PutConfig<T> {
     resource: string;
-    body: ReadableStream<Uint8Array> | null;
+    payload: T;
 }
 
 class Connector {
@@ -46,7 +49,7 @@ class Connector {
         return (await response.json()) as Promise<T>;
     }
 
-    async post<T>({ resource, body }: PostConfig): Promise<T> {
+    async post<T>({ resource, payload }: PostConfig<T>): Promise<T> {
         const url = new URL(`${this.baseURL}/${resource}`);
 
         const response = await fetch(url.toString(), {
@@ -54,7 +57,7 @@ class Connector {
             headers: {
                 "Content-Type": "application/json",
             },
-            body,
+            body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
@@ -66,7 +69,7 @@ class Connector {
         return (await response.json()) as Promise<T>;
     }
 
-    async put<T>({ resource, body }: PostConfig): Promise<T> {
+    async put<T>({ resource, payload }: PutConfig<T>): Promise<void> {
         const url = new URL(`${this.baseURL}/${resource}`);
 
         const response = await fetch(url.toString(), {
@@ -74,7 +77,7 @@ class Connector {
             headers: {
                 "Content-Type": "application/json",
             },
-            body,
+            body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
@@ -82,9 +85,8 @@ class Connector {
                 `Fetch error: ${response.status} ${response.statusText}`,
             );
         }
-
-        return (await response.json()) as Promise<T>;
     }
 }
 
-export const BackendConnector = new Connector(BASE_URL);
+export const BackendConnector = new Connector(BASE_BACKEND_API_URL);
+export const NextServerConnector = new Connector(BASE_NEXT_API_URL);
