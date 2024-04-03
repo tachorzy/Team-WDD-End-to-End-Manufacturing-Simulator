@@ -18,6 +18,7 @@ const AssetMarker: React.FC<AssetMarkerProps> = (props) => {
                     width={30}
                     height={30}
                     alt="asset marker icon"
+                    onDragStart={(e) => e.preventDefault()}
                     className="select-none hover:cursor-grabbing"
                 />
                 <p className="shadow-md text-xs group-hover:visible invisible text-center self-center">{asset?.name}</p>
