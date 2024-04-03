@@ -14,7 +14,9 @@ describe("FileUploadContainer", () => {
             fileRejections: [],
         });
 
-        const { getByText } = render(<FileUploadContainer />);
+        const { getByText } = render(
+            <FileUploadContainer setFloorPlanFile={jest.fn()} />,
+        );
 
         const input = getByText(
             /Click or drop your floor plan file here to upload./,

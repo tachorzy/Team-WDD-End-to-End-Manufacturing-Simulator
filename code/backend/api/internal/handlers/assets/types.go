@@ -15,11 +15,11 @@ type floorplanCoords struct {
 
 type Asset struct {
 	AssetID         string           `json:"assetId" dynamodbav:"assetId"`
-	FactoryID       *string          `json:"factoryId,omitempty" dynamobdav:"factoryId"`
+	FactoryID       *string          `json:"factoryId,omitempty" dynamodbav:"factoryId"`
 	Name            *string          `json:"name,omitempty" dynamodbav:"name"`
 	FloorplanCoords *floorplanCoords `json:"floorplanCoords,omitempty" dynamodbav:"floorplanCoords"`
-	ModelID         *string          `json:"modelId,omitempty" dynamobdav:"modelId"`
-	FloorplanID     *string          `json:"floorplanId,omitempty" dynamobdav:"floorplanId"`
+	ModelID         *string          `json:"modelId,omitempty" dynamodbav:"modelId"`
+	FloorplanID     *string          `json:"floorplanId,omitempty" dynamodbav:"floorplanId"`
 	DateCreated     string           `json:"dateCreated" dynamodbav:"dateCreated"`
 }
 
@@ -29,6 +29,7 @@ type DynamoDBClient interface {
 	PutItem(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error)
 	Scan(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error)
 	UpdateItem(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error)
+	Query(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error)
 }
 
 type Handler struct {

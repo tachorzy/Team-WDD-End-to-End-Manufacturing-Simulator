@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { Factory } from "@/app/types/types";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
 import EditFactoryForm from "./editFactory";
 
@@ -49,7 +48,7 @@ const FactoryBio = (props: { factoryId: string }) => {
         };
 
         fetchFactory();
-    }, []);
+    }, [factoryId]);
 
     const latitude = Number(factory?.location?.latitude);
     const longitude = Number(factory?.location?.longitude);
@@ -99,7 +98,13 @@ const FactoryBio = (props: { factoryId: string }) => {
                         className="opacity-[75%] inline-flex items-center hover:scale-[101.5%] hover:rotate-[4deg] transform duration-500"
                         onClick={() => setShowEditForm(true)}
                     >
-                        <Image src="/icons/edit.svg" width={30} height={30} alt="edit icon" className="select-none"/>
+                        <Image
+                            src="/icons/edit.svg"
+                            width={30}
+                            height={30}
+                            alt="edit icon"
+                            className="select-none"
+                        />
                     </button>
 
                     {showEditForm && (
@@ -117,7 +122,11 @@ const FactoryBio = (props: { factoryId: string }) => {
                             width={18}
                             height={18}
                             className="align-bottom"
-                            alt={locationIcon.endsWith("globe.svg") ? `globe icon` : `flag icon ${locationData?.address?.country_code}`}
+                            alt={
+                                locationIcon.endsWith("globe.svg")
+                                    ? "globe icon"
+                                    : `flag icon ${locationData?.address?.country_code}`
+                            }
                         />
                         {factory ? civilLocation : "Loading..."}
                     </div>
