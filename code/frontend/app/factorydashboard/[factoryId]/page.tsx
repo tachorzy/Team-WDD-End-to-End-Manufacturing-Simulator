@@ -6,6 +6,7 @@ import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
 import { usePathname } from "next/navigation";
 import Blueprint from "@/components/factorydashboard/floorplan/uploadcontainer/Blueprint";
+import AssetMarker from "@/components/factorydashboard/floorplan/uploadcontainer/AssetMarker";
 
 export default function FactoryDashboard() {
     const [floorPlanFile, setFloorPlanFile] = useState<File | null>(null);
