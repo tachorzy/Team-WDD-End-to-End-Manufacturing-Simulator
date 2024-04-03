@@ -4,7 +4,7 @@
 
 
 import React from "react";
-import { render, fireEvent, waitFor, getByTestId } from "@testing-library/react";
+import { render, fireEvent, waitFor, getByTestId, getByAltText } from "@testing-library/react";
 import axios from "axios";
 import "@testing-library/jest-dom";
 import Searchbar, { SearchProps } from "../components/home/searchbar/Searchbar.client";
@@ -48,30 +48,37 @@ describe("Searchbar", () => {
     });
 
     test("should handle address search correctly", async () => {
-        (axios.get as jest.Mock).mockResolvedValue({
-            data: [
-                {
-                    lat: 40.7128,
-                    lon: -74.006,
-                },
-            ],
-        });
+        const coords = {
+            lat: 12.345,
+            lon: 67.89
+        }
+        const responseData = [coords];
+        const address = "123 Main St";
+        
+        (axios.get as jest.Mock).mockResolvedValue({data: responseData});
 
         const { getByText, getByPlaceholderText } = render(
             <Searchbar {...props} />,
         );
 
-        const searchButton = getByText("Create facility");
         const addressInput = getByPlaceholderText("Enter factory address");
+        const searchButton = getByText("Create facility");
 
-        fireEvent.change(addressInput, { target: { value: "123 Main St" } });
+        fireEvent.change(addressInput, {target: {value: address}});
         fireEvent.click(searchButton);
 
         await waitFor(() => {
-            expect(onSearchMock).toHaveBeenCalledWith({
-                lat: 40.7128,
-                lon: -74.006,
-            });
+            expect(axios.get).toHaveBeenCalledWith(
+                "https://geocode.maps.co/search", 
+                {
+                    "params": {
+                        "api_key": undefined, 
+                        "q": address
+                    }
+                }
+            );
+            expect(onSearchMock).toHaveBeenCalledWith(coords);
+            expect(setQueryMadeMock).toHaveBeenCalledWith(true);
         });
     });
 
