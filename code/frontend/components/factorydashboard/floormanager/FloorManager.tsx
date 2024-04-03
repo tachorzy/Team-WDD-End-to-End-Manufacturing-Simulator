@@ -5,8 +5,15 @@ import AssetInventory from "./AssetInventory";
 import AddAssetForm from "./assetform/AddAssetForm";
 import InventoryNavBar from "./InventoryNavBar";
 import AssetBio from "./AssetBio";
+import AssetMarker from "../floorplan/blueprint/AssetMarker";
+interface FloorManagerProps {
+    setAssetMarkers: React.Dispatch<React.SetStateAction<JSX.Element[]>>;
+}
 
-const FloorManager: React.FC = () => {
+
+const FloorManager: React.FC<FloorManagerProps> = (props) => {
+    const { setAssetMarkers } = props;
+    
     // State to manage list of assets
     const [assets, setAssets] = useState<Asset[]>([]);
     const [showAddAssetForm, setShowAddAssetForm] = useState(false);
@@ -37,14 +44,31 @@ const FloorManager: React.FC = () => {
                     onClose={() => setShowAddAssetForm(false)}
                 />
             )}
-            <div className="border-b-2 border-gray-100 w-full self-start">
+            <div className="flex flex-row border-b-2 border-gray-100 w-full self-start gap-x-4">
                 <button
                     type="button"
-                    className="w-24 h-8 flex-row self-start my-1.5 items-center rounded-xl bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    className="w-32 h-8 flex-row self-start my-1.5 items-center rounded-xl bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     onClick={() => setShowAddAssetForm(true)}
                 >
-                    Add Asset
+                    Create Asset
                 </button>
+                {selectedAsset && (
+                    <button
+                        type="button"
+                        className="w-32 h-8 flex-row self-start my-1.5 items-center rounded-xl bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        onClick={() => {
+                            setAssetMarkers((prevMarkers: JSX.Element[]) => [
+                                ...prevMarkers,
+                                <AssetMarker asset={selectedAsset} />,
+                            ]);
+                        }}
+                    >
+                        Place Asset
+                    </button>
+                )}
+
+
+
             </div>
             <AssetBio asset={selectedAsset as Asset}></AssetBio>
         </div>

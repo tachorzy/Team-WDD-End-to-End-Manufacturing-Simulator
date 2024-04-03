@@ -4,15 +4,14 @@ import { useEffect, useState } from "react";
 import FactoryBio from "@/components/factorydashboard/FactoryBio";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
-import AssetInventory from "@/components/factorydashboard/floormanager/AssetInventory";
 import { usePathname } from "next/navigation";
 import Blueprint from "@/components/factorydashboard/floorplan/blueprint/Blueprint";
-import AssetMarker from "@/components/factorydashboard/floorplan/blueprint/AssetMarker";
 import FloorManager from "@/components/factorydashboard/floormanager/FloorManager";
 import { getFloorplan } from "@/app/api/floorplan/floorplanAPI";
 
 export default function FactoryDashboard() {
     const [floorPlanFile, setFloorPlanFile] = useState<File | null>(null);
+    const [assetMarkers, setAssetMarkers] = useState<JSX.Element[]>([]);
     const navigation = usePathname();
     const factoryId = navigation.split("/")[2];
 
@@ -42,13 +41,13 @@ export default function FactoryDashboard() {
                         <FactoryBio factoryId={factoryId} />
                         <div className="flex flex-row  gap-x-12">
                             {floorPlanFile !== null ? (
-                                <Blueprint imageFile={floorPlanFile} />
+                                <Blueprint imageFile={floorPlanFile} assetMarkers={assetMarkers} />
                             ) : (
                                 <FileUploadContainer
                                     setFloorPlanFile={setFloorPlanFile}
                                 />
                             )}
-                            <FloorManager />
+                            <FloorManager setAssetMarkers={setAssetMarkers}/>
                         </div>
                     </div>
                 </div>
