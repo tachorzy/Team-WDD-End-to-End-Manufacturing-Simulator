@@ -73,10 +73,16 @@ const updateFactory = async (factoryData: Factory): Promise<Factory> => {
             throw new Error(`Failed to update factory: ${response.statusText}`);
         }
         return (await response.json()) as Factory;
-    }  catch (error) {
+    } catch (error) {
         console.error("Failed to update factory: ", error);
         throw new Error("Failed to update factory.");
     }
 };
 
-export { requestOptions, getFactory, createFactory, getAllFactories, updateFactory };
+export {
+    requestOptions,
+    getFactory,
+    createFactory,
+    getAllFactories,
+    updateFactory,
+};

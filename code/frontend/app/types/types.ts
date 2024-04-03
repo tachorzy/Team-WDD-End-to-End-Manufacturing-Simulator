@@ -21,3 +21,10 @@ export interface Floorplan {
     imageData: string;
     factoryId: string;
 }
+
+export interface Asset {
+    id: string;
+    name: string;
+    description: string;
+    image?: string;
+}
