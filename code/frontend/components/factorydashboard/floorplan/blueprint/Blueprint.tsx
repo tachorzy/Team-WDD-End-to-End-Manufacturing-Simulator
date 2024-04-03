@@ -8,7 +8,7 @@ const Blueprint = (props: { imageFile: File }) => {
 
     return (
         <div className="sticky overflow-hidden max-h-min w-[55%] border-2 border-MainBlue">
-            <AssetMarker></AssetMarker>
+            <AssetMarker />
             <Image
                 src={imageURL}
                 width={775}

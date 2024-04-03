@@ -11,7 +11,6 @@ import AssetMarker from "@/components/factorydashboard/floorplan/blueprint/Asset
 import FloorManager from "@/components/factorydashboard/floormanager/FloorManager";
 import { getFloorplan } from "@/app/api/floorplan/floorplanAPI";
 
-
 export default function FactoryDashboard() {
     const [floorPlanFile, setFloorPlanFile] = useState<File | null>(null);
     const navigation = usePathname();

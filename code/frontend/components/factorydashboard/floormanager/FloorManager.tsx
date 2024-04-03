@@ -3,6 +3,7 @@ import { Asset } from "@/app/types/types";
 import Image from "next/image";
 import AssetInventory from "./AssetInventory";
 import AddAssetForm from "./AddAssetForm";
+import InventoryNavBar from "./InventoryNavBar";
 
 const FloorManager: React.FC = () => {
     // State to manage list of assets
@@ -23,7 +24,7 @@ const FloorManager: React.FC = () => {
                     alt="brand"
                     className=""
                 />
-                    <h2 className="text-xl font-semibold">Floor Manager</h2>
+                <h2 className="text-xl font-semibold">Floor Manager</h2>
                 <button
                     type="button"
                     className="w-24 h-8 flex-row items-center rounded-xl bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
@@ -32,12 +33,7 @@ const FloorManager: React.FC = () => {
                     Add Asset
                 </button>
             </div>
-            <div className="flex self-start flex-row text-MainBlue cursor-pointer font-semibold text-xs mt-1.5">
-                <div className="group">
-                CNC Assets
-                <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 pt-[0.2rem] bg-MainBlue -mb-1.5 z-50 relative" />
-                </div>
-            </div>
+            <InventoryNavBar />
             {!showAddAssetForm && <AssetInventory assets={assets} />}
 
             {showAddAssetForm && (

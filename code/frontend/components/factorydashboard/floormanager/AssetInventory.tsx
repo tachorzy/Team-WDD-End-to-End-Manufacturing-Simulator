@@ -16,7 +16,9 @@ const AssetInventory: React.FC<AssetInventoryProps> = ({ assets }) => {
                     <AssetItem key={asset.id} asset={asset} />
                 ))
             ) : (
-                <p className="col-span-3 text-black opacity-[10%]">No assets available</p>
+                <p className="col-span-3 text-black opacity-[10%]">
+                    No assets available
+                </p>
             )}
         </div>
     );
