@@ -8,7 +8,7 @@ interface AssetBioProps {
 
 const AssetBio: React.FC<AssetBioProps> = ({ asset }) => (
     <div className="self-start mt-4">
-        {asset && ( 
+        {asset && (
             <div className="flex flex-row gap-x-4">
                 <Image
                     src={asset.image as string}

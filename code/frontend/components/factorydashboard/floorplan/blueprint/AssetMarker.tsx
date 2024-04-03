@@ -6,7 +6,6 @@ interface AssetMarkerProps {
     asset: Asset;
 }
 
-
 const AssetMarker: React.FC<AssetMarkerProps> = (props) => {
     const { asset } = props;
 
@@ -21,9 +20,12 @@ const AssetMarker: React.FC<AssetMarkerProps> = (props) => {
                     onDragStart={(e) => e.preventDefault()}
                     className="select-none hover:cursor-grabbing"
                 />
-                <p className="shadow-md text-xs group-hover:visible invisible text-center self-center bg-opacity-[40%] px-1 py-0.5 rounded-sm bg-gray-800 my-1">{asset?.name}</p>
+                <p className="shadow-md text-xs group-hover:visible invisible text-center self-center bg-opacity-[40%] px-1 py-0.5 font-medium rounded-sm bg-gray-800 my-1">
+                    {asset?.name}
+                </p>
             </div>
         </Draggable>
-)};
+    );
+};
 
 export default AssetMarker;

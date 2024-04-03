@@ -1,8 +1,8 @@
 import Image from "next/image";
 import AssetMarker from "./AssetMarker";
 
-const Blueprint = (props: { imageFile: File, assetMarkers: JSX.Element[] }) => {
-    const { imageFile } = props;
+const Blueprint = (props: { imageFile: File; assetMarkers: JSX.Element[] }) => {
+    const { imageFile, assetMarkers } = props;
 
     const imageURL = URL.createObjectURL(imageFile);
 
@@ -16,7 +16,7 @@ const Blueprint = (props: { imageFile: File, assetMarkers: JSX.Element[] }) => {
                 alt="upload result tray"
                 className="select-none z-0"
             />
-            {props.assetMarkers.map((marker) => marker)}
+            {assetMarkers.map((marker) => marker)}
         </div>
     );
 };

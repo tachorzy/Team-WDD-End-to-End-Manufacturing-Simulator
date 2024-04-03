@@ -41,13 +41,16 @@ export default function FactoryDashboard() {
                         <FactoryBio factoryId={factoryId} />
                         <div className="flex flex-row  gap-x-12">
                             {floorPlanFile !== null ? (
-                                <Blueprint imageFile={floorPlanFile} assetMarkers={assetMarkers} />
+                                <Blueprint
+                                    imageFile={floorPlanFile}
+                                    assetMarkers={assetMarkers}
+                                />
                             ) : (
                                 <FileUploadContainer
                                     setFloorPlanFile={setFloorPlanFile}
                                 />
                             )}
-                            <FloorManager setAssetMarkers={setAssetMarkers}/>
+                            <FloorManager setAssetMarkers={setAssetMarkers} />
                         </div>
                     </div>
                 </div>

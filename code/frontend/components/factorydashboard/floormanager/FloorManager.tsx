@@ -6,14 +6,14 @@ import AddAssetForm from "./assetform/AddAssetForm";
 import InventoryNavBar from "./InventoryNavBar";
 import AssetBio from "./AssetBio";
 import AssetMarker from "../floorplan/blueprint/AssetMarker";
+
 interface FloorManagerProps {
     setAssetMarkers: React.Dispatch<React.SetStateAction<JSX.Element[]>>;
 }
 
-
 const FloorManager: React.FC<FloorManagerProps> = (props) => {
     const { setAssetMarkers } = props;
-    
+
     // State to manage list of assets
     const [assets, setAssets] = useState<Asset[]>([]);
     const [showAddAssetForm, setShowAddAssetForm] = useState(false);
@@ -36,7 +36,13 @@ const FloorManager: React.FC<FloorManagerProps> = (props) => {
                 <h2 className="text-xl font-semibold">Floor Manager</h2>
             </div>
             <InventoryNavBar />
-            {!showAddAssetForm && <AssetInventory assets={assets} setSelectedAsset={setSelectedAsset} selectedAsset={selectedAsset} />}
+            {!showAddAssetForm && (
+                <AssetInventory
+                    assets={assets}
+                    setSelectedAsset={setSelectedAsset}
+                    selectedAsset={selectedAsset}
+                />
+            )}
 
             {showAddAssetForm && (
                 <AddAssetForm
@@ -66,11 +72,8 @@ const FloorManager: React.FC<FloorManagerProps> = (props) => {
                         Place Asset
                     </button>
                 )}
-
-
-
             </div>
-            <AssetBio asset={selectedAsset as Asset}></AssetBio>
+            <AssetBio asset={selectedAsset as Asset} />
         </div>
     );
 };
