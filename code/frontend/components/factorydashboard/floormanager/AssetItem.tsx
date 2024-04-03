@@ -20,7 +20,11 @@ const AssetItem: React.FC<AssetItemProps> = ({
     >
         {asset ? (
             <Image
-                src={asset.image ? asset.image as string : `/icons/floorplan/placeholder-asset.svg`}
+                src={
+                    asset.image
+                        ? asset.image
+                        : "/icons/floorplan/placeholder-asset.svg"
+                }
                 width={90}
                 height={90}
                 alt={`${asset.name} Asset Image`}

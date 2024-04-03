@@ -7,11 +7,11 @@ import { render, fireEvent, queryByAltText } from "@testing-library/react";
 import FloorManager from "../components/factorydashboard/floormanager/FloorManager";
 import AddAssetForm from "../components/factorydashboard/floormanager/assetform/AddAssetForm";
 
-
 describe("FloorManager ", () => {
-    test("should open AddAssetForm when 'Create Asset' button is clicked", () => {        
-        
-        const { getByText, getByPlaceholderText } = render(<FloorManager setAssetMarkers={jest.fn()}/>);
+    test("should open AddAssetForm when 'Create Asset' button is clicked", () => {
+        const { getByText, getByPlaceholderText } = render(
+            <FloorManager setAssetMarkers={jest.fn()} />,
+        );
 
         const addButton = getByText("Add Asset");
 
@@ -24,25 +24,27 @@ describe("FloorManager ", () => {
         expect(descriptionInput).toBeInTheDocument();
     });
 
-    jest.mock('react-dropzone', () => ({
+    jest.mock("react-dropzone", () => ({
         useDropzone: () => ({
-          getRootProps: () => ({}),
-          getInputProps: () => ({}),
-          isDragActive: false,
-          isDragAccept: false,
-          isDragReject: false,
+            getRootProps: () => ({}),
+            getInputProps: () => ({}),
+            isDragActive: false,
+            isDragAccept: false,
+            isDragReject: false,
         }),
-      }));
+    }));
 
-    test("should add new asset to FloorManager when AddAssetForm is filled out.", async () => {
-        const handleAdd = jest.fn()
-        
+    test("should add new asset to FloorManager when AddAssetForm is filled out.", () => {
+        const handleAdd = jest.fn();
+
         const { getByText, getByPlaceholderText } = render(
-            <AddAssetForm onAdd={handleAdd} onClose={jest.fn()}/>,
+            <AddAssetForm onAdd={handleAdd} onClose={jest.fn()} />,
         );
-        
-        const file = new File(['(⌐□_□)'], 'testAssetImage.png', { type: 'image/png' });
-      
+
+        const file = new File(["(⌐□_□)"], "testAssetImage.png", {
+            type: "image/png",
+        });
+
         const nameInput = getByPlaceholderText("Name");
 
         const descriptionInput = getByPlaceholderText("Description");
