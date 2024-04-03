@@ -10,12 +10,7 @@ const AssetInventory: React.FC<AssetInventoryProps> = ({ assets }) => {
     const [assetList] = useState<Asset[]>(assets || []);
 
     return (
-        <div className="asset-inventory text-white rounded-md text-lg grid grid-cols-4 gap-x-2">
-            {/* <h2 className="col-span-2 text-black">
-                Asset Inventory{" "}
-                <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-MainBlue" />
-            </h2> */}
-
+        <div className="asset-inventory relative z-10 w-full h-[55%] overflow-y-scroll text-white text-lg flex flex-row flex-wrap border-2 border-[#D7D9DF] border-solid">
             {assetList.length > 0 ? (
                 assetList.map((asset) => (
                     <AssetItem key={asset.id} asset={asset} />

@@ -14,25 +14,30 @@ const FloorManager: React.FC = () => {
     };
 
     return (
-        <div className="floor-manager items-center justify-center w-[37.5%] min-h-[30rem] flex flex-col gap-y-10 text-black bg-white rounded-xl p-1 m-2 shadow-sm ring-2 ring-inset ring-gray-300">
+        <div className="floor-manager items-center w-[37.5%] min-h-[30rem] flex flex-col gap-y-1 py-6 text-black bg-white rounded-xl p-1 px-3 m-2 shadow-sm ring-2 ring-inset ring-gray-300">
             <div className="flex items-center justify-center gap-x-3 align-bottom">
                 <Image
                     src="/icons/floorplan/blueprintIcon.svg"
-                    width={40}
-                    height={40}
+                    width={30}
+                    height={30}
                     alt="brand"
                     className=""
                 />
-                <h2 className="text-2xl font-bold">Floor Manager</h2>
+                    <h2 className="text-xl font-semibold">Floor Manager</h2>
+                <button
+                    type="button"
+                    className="w-24 h-8 flex-row items-center rounded-xl bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    onClick={() => setShowAddAssetForm(true)}
+                >
+                    Add Asset
+                </button>
             </div>
-
-            <button
-                type="button"
-                className="w-24 h-8 flex-row items-center rounded-xl bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                onClick={() => setShowAddAssetForm(true)}
-            >
-                Add Asset
-            </button>
+            <div className="flex self-start flex-row text-MainBlue cursor-pointer font-semibold text-xs mt-1.5">
+                <div className="group">
+                CNC Assets
+                <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 pt-[0.2rem] bg-MainBlue -mb-1.5 z-50 relative" />
+                </div>
+            </div>
             {!showAddAssetForm && <AssetInventory assets={assets} />}
 
             {showAddAssetForm && (
