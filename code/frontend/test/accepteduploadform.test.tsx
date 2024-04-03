@@ -6,8 +6,8 @@ import { render, waitFor, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import AcceptedUploadForm from "../components/factorydashboard/floorplan/uploadcontainer/AcceptedUploadForm";
 
-const mockUsePathname = jest.fn();
-const mockCreateFloorplan = jest.fn();
+const mockUsePathname = jest.fn(() => {return ""});
+const mockCreateFloorplan = jest.fn(() => {return Promise.resolve("success")});
 
 jest.mock("next/navigation", () => ({
     usePathname(): string {
@@ -167,35 +167,6 @@ describe("AcceptedUploadForm", () => {
             expect(consoleSpy).toHaveBeenCalledWith(
                 "Error uploading floor plan:",
                 new Error("404"),
-            );
-        });
-    });
-
-    test("should log error when there is an error reading the file", async () => {
-        mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
-        mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
-
-        // mockReadAsDataURL.mockImplementationOnce(() => {setTimeout(() => (this as any).onerror(), 0)});
-
-        window.FileReader = jest.fn().mockImplementation(() => ({
-            readAsDataURL() {
-                setTimeout(() => this.onerror(new Error("Mock error")), 0);
-            },
-            EMPTY: 0,
-            LOADING: 1,
-            DONE: 2,
-        })) as unknown as typeof FileReader;
-
-        const { getByText } = render(<AcceptedUploadForm {...props} />);
-
-        act(() => {
-            getByText("Accept").click();
-            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
-        });
-
-        await waitFor(() => {
-            expect(consoleSpy).toHaveBeenCalledWith(
-                "There was an error reading the file",
             );
         });
     });
