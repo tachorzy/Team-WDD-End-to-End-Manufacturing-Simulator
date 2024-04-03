@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -20,11 +22,13 @@ const AcceptedUploadForm = (props: {
     } = props;
     const [isVisible, setVisibility] = useState(true);
     const navigation = usePathname();
+    // console.log(navigation);
 
     // not sure how to fix the lint error im getting, using a temporary solution: https://github.com/mightyiam/eslint-config-love/issues/217
     // eslint-disable-next-line @typescript-eslint/require-await
     const handleAccept = async () => {
         const factoryId = navigation.split("/")[2];
+        // console.log(factoryId);
         if (!uploadedFile || typeof factoryId !== "string") {
             console.error("File or Factory ID is missing.");
             return;
@@ -32,14 +36,13 @@ const AcceptedUploadForm = (props: {
 
         const reader = new FileReader();
         reader.onloadend = async () => {
-            console.log(factoryId);
-            console.log(uploadedFile);
+            // console.log(uploadedFile);
             const base64Image = reader.result?.toString().split(",")[1];
-            console.log(`base64Image is ${base64Image}`);
+            // console.log(`base64Image is ${base64Image}`);
             if (base64Image) {
                 try {
                     await createFloorplan(base64Image, factoryId);
-                    console.log("Floor plan uploaded successfully.");
+                    // console.log("Floor plan uploaded successfully.");
                 } catch (error) {
                     console.error("Error uploading floor plan:", error);
                 }
@@ -85,7 +88,6 @@ const AcceptedUploadForm = (props: {
                             Your floor plan is ready!
                         </h1>
                         <UploadResultTray
-                            data-testid="upload-result-tray"
                             acceptedFileItems={acceptedFileItems}
                             fileRejectionItems={fileRejectionItems}
                         />
