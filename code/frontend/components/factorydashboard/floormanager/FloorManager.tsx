@@ -29,7 +29,7 @@ const FloorManager: React.FC = () => {
                 <h2 className="text-xl font-semibold">Floor Manager</h2>
             </div>
             <InventoryNavBar />
-            {!showAddAssetForm && <AssetInventory assets={assets} />}
+            {!showAddAssetForm && <AssetInventory assets={assets} setSelectedAsset={setSelectedAsset} />}
 
             {showAddAssetForm && (
                 <AddAssetForm
