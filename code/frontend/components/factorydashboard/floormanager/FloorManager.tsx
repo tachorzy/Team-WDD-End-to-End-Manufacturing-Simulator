@@ -4,6 +4,7 @@ import Image from "next/image";
 import AssetInventory from "./AssetInventory";
 import AddAssetForm from "./assetform/AddAssetForm";
 import InventoryNavBar from "./InventoryNavBar";
+import AssetBio from "./AssetBio";
 
 const FloorManager: React.FC = () => {
     // State to manage list of assets
@@ -45,7 +46,7 @@ const FloorManager: React.FC = () => {
                     Add Asset
                 </button>
             </div>
-
+            <AssetBio asset={selectedAsset as Asset}></AssetBio>
         </div>
     );
 };
