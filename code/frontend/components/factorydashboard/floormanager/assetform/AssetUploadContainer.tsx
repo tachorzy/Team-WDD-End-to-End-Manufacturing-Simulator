@@ -17,7 +17,7 @@ const FileUploadContainer = (props: {
 
     const onDrop = useCallback(
         (acceptedFiles: File[]) => {
-            // call API endpoint that sends the floor-plan to the backend
+            // call API endpoint that sends the asset image to the backend
             setUploadedFile(acceptedFiles[0]);
             setAssetImageFile(acceptedFiles[0]);
             const file = acceptedFiles[0]; // assuming only one file is uploaded
