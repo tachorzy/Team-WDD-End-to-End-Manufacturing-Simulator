@@ -1,5 +1,5 @@
 import Image from "next/image";
-import AssetMarker from "./AssetMarker";
+import React from "react";
 
 const Blueprint = (props: { imageFile: File; assetMarkers: JSX.Element[] }) => {
     const { imageFile, assetMarkers } = props;
@@ -13,10 +13,10 @@ const Blueprint = (props: { imageFile: File; assetMarkers: JSX.Element[] }) => {
                 width={775}
                 height={775}
                 quality={100}
-                alt="upload result tray"
+                alt="floorplan"
                 className="select-none z-0"
             />
-            {assetMarkers.map((marker) => marker)}
+            {assetMarkers.map((marker, index) => React.cloneElement(marker, { key: index }))}
         </div>
     );
 };
