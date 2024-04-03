@@ -1,11 +1,7 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { Asset } from "@/app/types/types";
-
-interface DropFile extends File {
-    path: string;
-}
 
 const FileUploadContainer = (props: {
     setAssetImageFile: React.Dispatch<React.SetStateAction<File | null>>;
@@ -30,18 +26,17 @@ const FileUploadContainer = (props: {
         [setFormData, setAssetImageFile],
     );
 
-    const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
-        useDropzone({
-            accept: {
-                "image/jpeg": [],
-                "image/png": [],
-                "image/svg+xml": [],
-                // later add support for glb files.
-            },
-            maxFiles: 1,
-            maxSize: 8000000,
-            onDrop,
-        });
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: {
+            "image/jpeg": [],
+            "image/png": [],
+            "image/svg+xml": [],
+            // later add support for glb files.
+        },
+        maxFiles: 1,
+        maxSize: 8000000,
+        onDrop,
+    });
 
     return (
         <section className="w-full h-full flex flex-col gap-y-5">
