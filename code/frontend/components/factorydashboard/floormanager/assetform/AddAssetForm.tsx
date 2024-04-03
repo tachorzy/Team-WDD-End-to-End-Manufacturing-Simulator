@@ -75,6 +75,10 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({ onClose, onAdd }) => {
                         onChange={handleInputChange}
                     />
                 </div>
+                <div>
+
+                    
+                </div>
                 {/* <label htmlFor="name" className="block mb-1 text-gray-500">
                 Image URL:
         </label>

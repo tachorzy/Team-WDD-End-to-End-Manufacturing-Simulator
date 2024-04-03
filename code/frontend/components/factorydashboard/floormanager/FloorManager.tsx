@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Asset } from "@/app/types/types";
 import Image from "next/image";
 import AssetInventory from "./AssetInventory";
-import AddAssetForm from "./AddAssetForm";
+import AddAssetForm from "./assetform/AddAssetForm";
 import InventoryNavBar from "./InventoryNavBar";
 
 const FloorManager: React.FC = () => {
