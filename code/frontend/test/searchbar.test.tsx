@@ -4,7 +4,7 @@
 
 
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor, getByTestId } from "@testing-library/react";
 import axios from "axios";
 import "@testing-library/jest-dom";
 import Searchbar, { SearchProps } from "../components/home/searchbar/Searchbar.client";
@@ -28,6 +28,21 @@ describe("Searchbar", () => {
 
         expect(getByPlaceholderText("Enter factory address")).toBeInTheDocument();
         expect(getByPlaceholderText("Enter factory address")).toHaveValue("");
+        expect(getByText("Create facility")).toBeInTheDocument();
+        expect(getByAltText("maginify glass")).toBeInTheDocument();
+    });
+
+    test("should render with coordinates mode wihtout error", () => {
+        const { getByText, getByPlaceholderText, getByAltText } = render(
+            <Searchbar {...props} />,
+        );
+
+        fireEvent.click(getByText("Coordinates"));
+
+        expect(getByPlaceholderText("Enter latitude")).toBeInTheDocument();
+        expect(getByPlaceholderText("Enter latitude")).toHaveValue("");
+        expect(getByPlaceholderText("Enter longitude")).toBeInTheDocument();
+        expect(getByPlaceholderText("Enter longitude")).toHaveValue("");
         expect(getByText("Create facility")).toBeInTheDocument();
         expect(getByAltText("maginify glass")).toBeInTheDocument();
     });
