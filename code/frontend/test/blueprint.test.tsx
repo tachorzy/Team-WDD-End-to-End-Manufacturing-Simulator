@@ -3,10 +3,10 @@
  */
 
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Blueprint from "../components/factorydashboard/floorplan/blueprint/Blueprint";
 import { Asset } from "@/app/types/types";
+import Blueprint from "../components/factorydashboard/floorplan/blueprint/Blueprint";
 import AssetMarker from "../components/factorydashboard/floorplan/blueprint/AssetMarker";
 
 describe("Blueprint Component", () => {
@@ -21,14 +21,17 @@ describe("Blueprint Component", () => {
             image: "/image1.jpg",
         };
 
-
-        const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", { type: "image/jpg" }); 
+        const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", {
+            type: "image/jpg",
+        });
 
         const mockAssetMarkers: JSX.Element[] = [
-            <AssetMarker asset={mockAsset} />
-        ]
+            <AssetMarker asset={mockAsset} />,
+        ];
 
-        render(<Blueprint imageFile={mockFile} assetMarkers={mockAssetMarkers} />);
+        render(
+            <Blueprint imageFile={mockFile} assetMarkers={mockAssetMarkers} />,
+        );
 
         const floorplan = screen.getByAltText("floorplan") as HTMLImageElement;
         expect(floorplan).toBeInTheDocument();
@@ -43,16 +46,19 @@ describe("Blueprint Component", () => {
             image: "/image1.jpg",
         };
 
-        const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", { type: "image/jpg" }); 
+        const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", {
+            type: "image/jpg",
+        });
 
         const mockAssetMarkers: JSX.Element[] = [
-            <AssetMarker asset={mockAsset} />
-        ]
+            <AssetMarker asset={mockAsset} />,
+        ];
 
-        const { container } = render(<Blueprint imageFile={mockFile} assetMarkers={mockAssetMarkers} />);
-        expect(container.firstChild).toHaveClass("sticky overflow-hidden h-min w-[55%]")
-
+        const { container } = render(
+            <Blueprint imageFile={mockFile} assetMarkers={mockAssetMarkers} />,
+        );
+        expect(container.firstChild).toHaveClass(
+            "sticky overflow-hidden h-min w-[55%]",
+        );
     });
-
-
 });

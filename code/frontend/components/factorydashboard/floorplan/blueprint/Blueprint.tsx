@@ -16,7 +16,9 @@ const Blueprint = (props: { imageFile: File; assetMarkers: JSX.Element[] }) => {
                 alt="floorplan"
                 className="select-none z-0"
             />
-            {assetMarkers.map((marker, index) => React.cloneElement(marker, { key: index }))}
+            {assetMarkers.map((marker, index) =>
+                React.cloneElement(marker, { key: index }),
+            )}
         </div>
     );
 };

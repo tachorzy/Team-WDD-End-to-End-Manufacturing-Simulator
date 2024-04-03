@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { Factory } from "@/app/types/types";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
 import EditFactoryForm from "./editFactory";
 
@@ -49,7 +48,7 @@ const FactoryBio = (props: { factoryId: string }) => {
         };
 
         fetchFactory();
-    }, []);
+    }, [factoryId]);
 
     const latitude = Number(factory?.location?.latitude);
     const longitude = Number(factory?.location?.longitude);

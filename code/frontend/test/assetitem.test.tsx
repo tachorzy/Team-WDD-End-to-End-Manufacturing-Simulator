@@ -24,7 +24,7 @@ describe("AssetItem", () => {
             },
         ];
 
-        const { getByText, getByAltText } = render(
+        const { getByAltText } = render(
             <AssetItem
                 asset={assets[0]}
                 setSelectedAsset={jest.fn()}

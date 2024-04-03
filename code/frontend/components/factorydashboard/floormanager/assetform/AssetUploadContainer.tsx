@@ -11,14 +11,11 @@ const FileUploadContainer = (props: {
     setAssetImageFile: React.Dispatch<React.SetStateAction<File | null>>;
     setFormData: React.Dispatch<React.SetStateAction<Asset>>;
 }) => {
-    const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-
     const { setAssetImageFile, setFormData } = props;
 
     const onDrop = useCallback(
         (acceptedFiles: File[]) => {
             // call API endpoint that sends the asset image to the backend
-            setUploadedFile(acceptedFiles[0]);
             setAssetImageFile(acceptedFiles[0]);
             const file = acceptedFiles[0]; // assuming only one file is uploaded
             const reader = new FileReader();
@@ -45,23 +42,6 @@ const FileUploadContainer = (props: {
             maxSize: 8000000,
             onDrop,
         });
-
-    const acceptedFileItems = (acceptedFiles as DropFile[]).map((file) => (
-        <li key={file.path}>
-            {file.path} - {file.size} bytes
-        </li>
-    ));
-
-    const fileRejectionItems = fileRejections.map(({ file, errors }) => (
-        <li key={(file as DropFile).path}>
-            {(file as DropFile).path} - {file.size} bytes
-            <ul>
-                {errors.map((e) => (
-                    <li key={e.code}>{e.message}</li>
-                ))}
-            </ul>
-        </li>
-    ));
 
     return (
         <section className="w-full h-full flex flex-col gap-y-5">
