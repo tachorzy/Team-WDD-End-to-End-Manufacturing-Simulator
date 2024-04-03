@@ -64,6 +64,13 @@ func (h Handler) HandleCreateAssetRequest(ctx context.Context, request events.AP
 		"message": fmt.Sprintf("floorplanId %s created successfully", asset.AssetID),
 		"assetId": asset.AssetID,
 	})
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
+			Body:       fmt.Sprintf("Error marshalling response body: %s", err.Error()),
+		}, nil
+	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,

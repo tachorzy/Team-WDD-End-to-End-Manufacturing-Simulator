@@ -14,10 +14,13 @@ export const createAsset = async (asset: Asset) => {
         method: "POST",
         body: JSON.stringify(asset),
     });
-    return await response.json() as Asset;
-}
+    return (await response.json()) as Asset;
+};
 
 export const getAssetsForFactory = async (factoryId: string) => {
-    const response = await fetch(`${BASE_URL}/assets?factoryId=${factoryId}`, requestOptions);
-    return await response.json() as Asset[];
-}
+    const response = await fetch(
+        `${BASE_URL}/assets?factoryId=${factoryId}`,
+        requestOptions,
+    );
+    return (await response.json()) as Asset[];
+};

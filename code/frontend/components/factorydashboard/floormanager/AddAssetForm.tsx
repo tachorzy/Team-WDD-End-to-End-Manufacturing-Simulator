@@ -2,19 +2,24 @@ import React, { useState } from "react";
 import { Asset } from "@/app/types/types";
 import Image from "next/image";
 import { createAsset } from "@/app/api/assets/assetAPI";
+
 interface AddAssetFormProps {
     onClose: () => void;
     onAdd: (newAsset: Asset) => void;
-    factoryId:string;
+    factoryId: string;
 }
 
-const AddAssetForm: React.FC<AddAssetFormProps> = ({ onClose, onAdd,factoryId}) => {
+const AddAssetForm: React.FC<AddAssetFormProps> = ({
+    onClose,
+    onAdd,
+    factoryId,
+}) => {
     const [formData, setFormData] = useState<Asset>({
         assetId: "",
         name: "",
         description: "",
         image: "",
-        factoryId:factoryId,
+        factoryId,
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,21 +31,14 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({ onClose, onAdd,factoryId}) 
     };
 
     const handleAddAsset = async () => {
-         //next steps: adding input validation..maybe
-        try{
+        // next steps: adding input validation..maybe
+        try {
             await createAsset(formData);
             onClose();
-        }
-        catch(error){   
+        } catch (error) {
             console.error("Failed to add asset", error);
         }
-        
-
     };
-
-   
-       
-  
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
