@@ -29,11 +29,11 @@ describe("Blueprint Component", () => {
             <AssetMarker asset={mockAsset} />,
         ];
 
-        render(
+       const { getByAltText } = render(
             <Blueprint imageFile={mockFile} assetMarkers={mockAssetMarkers} />,
         );
 
-        const floorplan = screen.getByAltText("floorplan") as HTMLImageElement;
+        const floorplan = getByAltText("floorplan") as HTMLImageElement;
         expect(floorplan).toBeInTheDocument();
         expect(floorplan.src).toBeDefined();
     });
