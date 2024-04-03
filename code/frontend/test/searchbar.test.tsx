@@ -13,7 +13,6 @@ import SearchModeTray from "../components/home/searchbar/SearchModeTray";
 jest.mock("axios");
 
 const onSearchMock = jest.fn();
-
 const setQueryMadeMock = jest.fn();
 
 const props: SearchProps = {
@@ -23,11 +22,14 @@ const props: SearchProps = {
 
 describe("Searchbar", () => {
     test("should render with deafult values without error", () => {
-        const { getByText } = render(
+        const { getByText, getByPlaceholderText, getByAltText } = render(
             <Searchbar {...props} />,
         );
 
+        expect(getByPlaceholderText("Enter factory address")).toBeInTheDocument();
+        expect(getByPlaceholderText("Enter factory address")).toHaveValue("");
         expect(getByText("Create facility")).toBeInTheDocument();
+        expect(getByAltText("maginify glass")).toBeInTheDocument();
     });
 
     test("should handle coordinates search correctly", async () => {
@@ -41,14 +43,14 @@ describe("Searchbar", () => {
         const latitudeInput = getByPlaceholderText("Enter latitude");
         const longitudeInput = getByPlaceholderText("Enter longitude");
 
-        fireEvent.change(latitudeInput, { target: { value: "40.7128" } });
-        fireEvent.change(longitudeInput, { target: { value: "-74.006" } });
+        fireEvent.change(latitudeInput, { target: { value: "12.345" } });
+        fireEvent.change(longitudeInput, { target: { value: "67.89" } });
         fireEvent.click(searchButton);
 
         await waitFor(() => {
             expect(onSearchMock).toHaveBeenCalledWith({
-                lat: 40.7128,
-                lon: -74.006,
+                lat: 12.345,
+                lon: 67.89,
             });
         });
     });
