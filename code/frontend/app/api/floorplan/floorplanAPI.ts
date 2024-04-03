@@ -29,15 +29,20 @@ export const createFloorplan = async (
     }
 };
 
-export const getFloorplan = async (id: string): Promise<Floorplan> => {
+export const getFloorplan = async (id: string): Promise<Floorplan | null> => {
     try {
-        const response = await fetch(`${BASE_URL}/floorplan/${id}`, requestOptions);
+        const response = await fetch(`${BASE_URL}/floorplan/?id=${id}`);
         if (!response.ok) {
-            throw new Error(`Failed to get floorplan ${response.statusText}`);
+            if (response.status === 404) {
+                console.log(`No floorplan found for factory ID ${id}`);
+                return null;
+            }
+            throw new Error(`Failed to get floorplan: ${response.statusText}`);
         }
         return (await response.json()) as Floorplan;
     } catch (error) {
         console.error("Failed to get floorplan", error);
         throw new Error("Failed to get floorplan");
+    
     }
 }

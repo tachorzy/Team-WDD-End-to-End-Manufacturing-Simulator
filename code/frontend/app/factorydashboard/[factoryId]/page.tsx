@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FactoryBio from "@/components/factorydashboard/FactoryBio";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
@@ -8,11 +8,26 @@ import AssetInventory from "@/components/factorydashboard/floormanager/AssetInve
 import { usePathname } from "next/navigation";
 import Blueprint from "@/components/factorydashboard/floorplan/uploadcontainer/Blueprint";
 import FloorManager from "@/components/factorydashboard/floormanager/FloorManager";
+import { getFloorplan } from "@/app/api/floorplan/floorplanAPI";
 
 export default function FactoryDashboard() {
     const [floorPlanFile, setFloorPlanFile] = useState<File | null>(null);
     const navigation = usePathname();
     const factoryId = navigation.split("/")[2];
+
+  useEffect(() => {
+    const fetchFloorplan = async () => {
+        const floorplan = await getFloorplan(factoryId);
+        if (floorplan && floorplan.imageData) {
+            const response = await fetch(floorplan.imageData);
+            const blob = await response.blob();
+            const file = new File([blob], "floorplan", { type: blob.type });
+            setFloorPlanFile(file);
+        }
+    };
+
+    fetchFloorplan();
+}, [factoryId]);
 
     return (
         <main className="flex flex-col bg-[#FAFAFA] min-h-screen mx-auto smooth-scroll">
