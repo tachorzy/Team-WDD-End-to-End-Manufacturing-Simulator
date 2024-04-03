@@ -23,7 +23,7 @@ const AssetItem: React.FC<AssetItemProps> = ({
                 src={asset.image as string}
                 width={90}
                 height={90}
-                alt="Asset Image"
+                alt={`${asset.name} Asset Image`}
                 className="self-center"
             />
         ) : (

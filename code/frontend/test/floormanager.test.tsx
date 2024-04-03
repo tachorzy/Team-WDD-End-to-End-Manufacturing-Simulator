@@ -9,7 +9,7 @@ import FloorManager from "../components/factorydashboard/floormanager/FloorManag
 describe("FloorManager ", () => {
     test("should open AddAssetForm when 'Create Asset' button is clicked", () => {
         const { getByText, getByPlaceholderText } = render(<FloorManager setAssetMarkers={jest.fn()}/>);
-        const addButton = getByText("Create Asset");
+        const addButton = getByText("Add Asset");
 
         fireEvent.click(addButton);
 
@@ -24,7 +24,7 @@ describe("FloorManager ", () => {
         const { getByText, getByPlaceholderText, queryByText } = render(
             <FloorManager setAssetMarkers={jest.fn()}/>,
         );
-        const addButton = getByText("Create Asset");
+        const addButton = getByText("Add Asset");
         fireEvent.click(addButton);
 
         const nameInput = getByPlaceholderText("Name");

@@ -40,10 +40,11 @@ describe("AssetInventory", () => {
         const { getAllByAltText } = render(<AssetInventory assets={assets} setSelectedAsset={jest.fn()} selectedAsset={null}/>);
 
         assets.forEach((asset) => {
-            const assetImage = getAllByAltText(`${asset.name} Asset mage`);
-        );
-
-            expect(assetImage).toBeInTheDocument();
+            const assetImages = getAllByAltText(`${asset.name} Asset Image`);
+            // expect(assetImage).toBeInTheDocument();
+            assetImages.forEach((image) => {
+                expect(image).toBeInTheDocument();
+            });
         });
     });
 

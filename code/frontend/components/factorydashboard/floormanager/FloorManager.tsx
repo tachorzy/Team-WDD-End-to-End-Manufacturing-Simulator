@@ -56,7 +56,7 @@ const FloorManager: React.FC<FloorManagerProps> = (props) => {
                     className="w-32 h-8 flex-row self-start my-1.5 items-center rounded-xl bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     onClick={() => setShowAddAssetForm(true)}
                 >
-                    Create Asset
+                    Add Asset
                 </button>
                 {selectedAsset && (
                     <button
