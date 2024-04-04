@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
-import { Asset } from "@/app/types/types";
+import { Asset } from "@/app/api/_utils/types";
 
 const FileUploadContainer = (props: {
     setAssetImageFile: React.Dispatch<React.SetStateAction<File | null>>;

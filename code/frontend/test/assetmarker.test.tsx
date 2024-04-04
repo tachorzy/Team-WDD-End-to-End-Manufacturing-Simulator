@@ -5,7 +5,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Asset } from "@/app/types/types";
+import { Asset } from "@/app/api/_utils/types";
 import AssetMarker from "../components/factorydashboard/floorplan/blueprint/AssetMarker";
 
 describe("AssetMarker Component", () => {
@@ -15,7 +15,7 @@ describe("AssetMarker Component", () => {
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
-            factoryId:"1",
+            factoryId: "1",
         };
 
         render(<AssetMarker asset={mockAsset} />);
@@ -33,7 +33,7 @@ describe("AssetMarker Component", () => {
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
-            factoryId: "1"
+            factoryId: "1",
         };
 
         const { getByAltText } = render(<AssetMarker asset={mockAsset} />);
@@ -50,7 +50,7 @@ describe("AssetMarker Component", () => {
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
-            factoryId: "1"
+            factoryId: "1",
         };
 
         const { getByText } = render(<AssetMarker asset={mockAsset} />);
