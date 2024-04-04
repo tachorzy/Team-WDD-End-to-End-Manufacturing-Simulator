@@ -64,8 +64,8 @@ export default function Home() {
                             <h1 className="mx-24 mb-0.5 text-DarkBlue text-3xl font-semibold">
                                 Recent Factories
                             </h1>
-                            <FactoryTable />
                             <Map positions={sessionFactories} />
+                            <FactoryTable />
                         </div>
                     </div>
                 </div>

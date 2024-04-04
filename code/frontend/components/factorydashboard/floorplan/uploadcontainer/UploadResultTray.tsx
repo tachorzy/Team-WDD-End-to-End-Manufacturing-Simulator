@@ -5,7 +5,7 @@ const UploadResultTray = (props: {
     const { acceptedFileItems, fileRejectionItems } = props;
 
     return (
-        <div>
+        <div data-testid="upload-result-tray">
             {acceptedFileItems.length !== 0 && (
                 <span className="text-center">
                     <h4 className="text-slate-700 font-medium text-sm">

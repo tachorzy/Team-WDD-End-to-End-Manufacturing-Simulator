@@ -1,28 +1,34 @@
+"use client";
+
 import React, { useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { createFloorplan } from "@/app/api/floorplan/floorplanAPI";
 import UploadResultTray from "./UploadResultTray";
 
-const FileUploadContainer = (props: {
+const AcceptedUploadForm = (props: {
     uploadedFile: File;
     setUploadedFile: React.Dispatch<React.SetStateAction<File | null>>;
     acceptedFileItems: React.JSX.Element[];
     fileRejectionItems: React.JSX.Element[];
+    setFloorPlanFile: React.Dispatch<React.SetStateAction<File | null>>;
 }) => {
     const {
         uploadedFile,
         setUploadedFile,
         acceptedFileItems,
         fileRejectionItems,
+        setFloorPlanFile,
     } = props;
     const [isVisible, setVisibility] = useState(true);
     const navigation = usePathname();
+    // console.log(navigation);
 
     // not sure how to fix the lint error im getting, using a temporary solution: https://github.com/mightyiam/eslint-config-love/issues/217
     // eslint-disable-next-line @typescript-eslint/require-await
     const handleAccept = async () => {
         const factoryId = navigation.split("/")[2];
+        // console.log(factoryId);
         if (!uploadedFile || typeof factoryId !== "string") {
             console.error("File or Factory ID is missing.");
             return;
@@ -30,19 +36,20 @@ const FileUploadContainer = (props: {
 
         const reader = new FileReader();
         reader.onloadend = async () => {
-            console.log(factoryId);
-            console.log(uploadedFile);
+            // console.log(uploadedFile);
             const base64Image = reader.result?.toString().split(",")[1];
+            // console.log(`base64Image is ${base64Image}`);
             if (base64Image) {
                 try {
                     await createFloorplan(base64Image, factoryId);
-                    console.log("Floor plan uploaded successfully.");
+                    // console.log("Floor plan uploaded successfully.");
                 } catch (error) {
                     console.error("Error uploading floor plan:", error);
                 }
             } else {
                 console.error("Failed to convert the file to base64.");
             }
+            setFloorPlanFile(uploadedFile);
         };
         reader.onerror = () =>
             console.error("There was an error reading the file");
@@ -81,7 +88,6 @@ const FileUploadContainer = (props: {
                             Your floor plan is ready!
                         </h1>
                         <UploadResultTray
-                            data-testid="upload-result-tray"
                             acceptedFileItems={acceptedFileItems}
                             fileRejectionItems={fileRejectionItems}
                         />
@@ -116,4 +122,4 @@ const FileUploadContainer = (props: {
     );
 };
 
-export default FileUploadContainer;
+export default AcceptedUploadForm;

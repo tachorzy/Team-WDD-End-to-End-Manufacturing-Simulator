@@ -7,8 +7,12 @@ interface DropFile extends File {
     path: string;
 }
 
-const FileUploadContainer = () => {
+const FileUploadContainer = (props: {
+    setFloorPlanFile: React.Dispatch<React.SetStateAction<File | null>>;
+}) => {
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
+    const { setFloorPlanFile } = props;
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         // call API endpoint that sends the floor-plan to the backend
@@ -20,7 +24,7 @@ const FileUploadContainer = () => {
             accept: {
                 "image/jpeg": [],
                 "image/png": [],
-                "image/svg": [],
+                "image/svg+xml": [],
                 // later add support for glb files.
             },
             maxFiles: 1,
@@ -76,6 +80,7 @@ const FileUploadContainer = () => {
                         setUploadedFile={setUploadedFile}
                         acceptedFileItems={acceptedFileItems}
                         fileRejectionItems={fileRejectionItems}
+                        setFloorPlanFile={setFloorPlanFile}
                     />
                 )}
             </div>
