@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Factory, Location } from "@/app/api/_utils/types";
+import {
+    BackendConnector,
+    GetConfig,
+    NextServerConnector,
+} from "@/app/api/_utils/connector";
 import Caret from "./Caret";
 
 interface Header {
@@ -17,13 +22,15 @@ const FactoryTable = () => {
     const [facilities, setFacilities] = useState<Factory[]>([]);
     const [sort, setSort] = useState({ key: "name", direction: "" });
     useEffect(() => {
-        const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
         const fetchFactories = async () => {
             try {
-                // const response = await getAllFactories();
-                const body = await fetch(`${BASE_URL}/factories`);
-                const response = (await body.json()) as Factory[];
-                setFacilities(response);
+                const config: GetConfig = {
+                    resource: "factories",
+                };
+
+                const data = await NextServerConnector.get<Factory[]>(config);
+
+                setFacilities(data);
             } catch (error) {
                 console.error("Error fetching factories:", error);
             }

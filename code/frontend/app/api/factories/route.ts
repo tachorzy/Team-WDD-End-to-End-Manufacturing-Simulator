@@ -36,19 +36,16 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
 
+    const factoryId = searchParams.get("id");
     const config: GetConfig = {
         resource: "factories",
+        params: factoryId ? { id: factoryId } : undefined,
     };
 
-    const factoryId = searchParams.get("id");
-    if (factoryId) {
-        config.params = {
-            id: factoryId,
-        };
-    }
-
     try {
-        const data = await BackendConnector.get<Factory>(config);
+        const data = factoryId
+            ? await BackendConnector.get<Factory>(config)
+            : await BackendConnector.get<Factory[]>(config);
 
         return new Response(
             JSON.stringify({
@@ -75,7 +72,7 @@ export async function PUT(request: Request) {
     };
 
     try {
-        await BackendConnector.put(config);
+        await BackendConnector.put<Factory>(config);
 
         return new Response(
             JSON.stringify({

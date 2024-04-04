@@ -5,10 +5,15 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { Factory } from "@/app/api/_utils/types";
+import { NextServerConnector, GetConfig } from "@/app/api/_utils/connector";
 import FactoryTable from "../components/home/table/FactoryTable.client";
 import Caret from "../components/home/table/Caret";
 
-global.fetch = jest.fn();
+jest.mock("@/app/api/_utils/connector", () => ({
+    NextServerConnector: {
+        get: jest.fn(),
+    },
+}));
 
 const consoleErrorMock = jest
     .spyOn(console, "error")
@@ -16,7 +21,7 @@ const consoleErrorMock = jest
 
 describe("FactoryTable", () => {
     beforeEach(() => {
-        (global.fetch as jest.Mock).mockClear();
+        (NextServerConnector.get as jest.Mock).mockClear();
     });
 
     const mockFactories: Factory[] = [
@@ -81,10 +86,8 @@ describe("FactoryTable", () => {
     ])("should display the correct table values for %O", async (factories) => {
         const mockResponse = factories;
 
-        (global.fetch as jest.Mock).mockImplementationOnce(() =>
-            Promise.resolve({
-                json: () => mockResponse,
-            }),
+        (NextServerConnector.get as jest.Mock).mockImplementationOnce(
+            ({ resource, params }: GetConfig) => mockResponse,
         );
 
         const { getByText, getAllByRole } = render(<FactoryTable />);
@@ -120,10 +123,8 @@ describe("FactoryTable", () => {
             },
         ];
 
-        (global.fetch as jest.Mock).mockImplementationOnce(() =>
-            Promise.resolve({
-                json: () => mockResponse,
-            }),
+        (NextServerConnector.get as jest.Mock).mockImplementationOnce(
+            ({ resource, params }: GetConfig) => mockResponse,
         );
 
         const { getAllByRole } = render(<FactoryTable />);
@@ -138,17 +139,16 @@ describe("FactoryTable", () => {
     });
 
     test("should log an error on fetch", async () => {
-        (global.fetch as jest.Mock).mockImplementationOnce(() =>
-            Promise.reject(new Error("Error fetching factories:")),
+        (NextServerConnector.get as jest.Mock).mockImplementationOnce(
+            ({ resource, params }: GetConfig) => {
+                throw new Error("Fetch error");
+            },
         );
 
+        render(<FactoryTable />);
+
         await waitFor(() => {
-            expect(consoleErrorMock).toHaveBeenCalledWith(
-                "Error fetching factories:",
-                TypeError(
-                    "Cannot read properties of undefined (reading 'json')",
-                ),
-            );
+            expect(consoleErrorMock).toHaveBeenCalled();
         });
     });
 
