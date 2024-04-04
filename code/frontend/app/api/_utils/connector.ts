@@ -41,9 +41,7 @@ class Connector {
         });
 
         if (!response.ok) {
-            throw new Error(
-                `Fetch error: ${response.status} ${response.statusText}`,
-            );
+            throw new Error(`Fetch error: ${response.statusText}`);
         }
 
         return (await response.json()) as Promise<T>;
@@ -61,9 +59,7 @@ class Connector {
         });
 
         if (!response.ok) {
-            throw new Error(
-                `Fetch error: ${response.status} ${response.statusText}`,
-            );
+            throw new Error(`Fetch error: ${response.statusText}`);
         }
 
         return (await response.json()) as Promise<T>;
@@ -81,9 +77,7 @@ class Connector {
         });
 
         if (!response.ok) {
-            throw new Error(
-                `Fetch error: ${response.status} ${response.statusText}`,
-            );
+            throw new Error(`Fetch error: ${response.statusText}`);
         }
     }
 }

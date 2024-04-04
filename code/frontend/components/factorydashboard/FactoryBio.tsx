@@ -3,9 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { Factory } from "@/app/api/_utils/types";
 import Image from "next/image";
+import { GetConfig, NextServerConnector } from "@/app/api/_utils/connector";
 import EditFactoryForm from "./editFactory";
-
-const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
 interface LocationData {
     address: {
@@ -31,16 +30,16 @@ const FactoryBio = (props: { factoryId: string }) => {
         const fetchFactory = async () => {
             if (factoryId) {
                 try {
-                    const response = await fetch(
-                        `${BASE_URL}/factories?id=${factoryId}`,
-                    );
-                    if (!response.ok) {
-                        throw new Error(
-                            `Failed to fetch factory with ID ${factoryId}: ${response.statusText}`,
-                        );
-                    }
-                    const factoryData = (await response.json()) as Factory;
-                    setFactory(factoryData);
+                    const config: GetConfig = {
+                        resource: "factories",
+                        params: {
+                            id: factoryId,
+                        },
+                    };
+
+                    const data = await NextServerConnector.get<Factory>(config);
+
+                    setFactory(data);
                 } catch (error) {
                     console.error("Error fetching factory:", error);
                 }
@@ -54,6 +53,7 @@ const FactoryBio = (props: { factoryId: string }) => {
     const longitude = Number(factory?.location?.longitude);
 
     useEffect(() => {
+        // TODO: move to next/server api
         const fetchLocation = async () => {
             try {
                 const response = await fetch(
