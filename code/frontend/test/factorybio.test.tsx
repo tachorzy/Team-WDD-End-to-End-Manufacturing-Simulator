@@ -38,7 +38,7 @@ describe("Factorybio Component", () => {
     });
 
     test("should display 'Loading...' when factory data is not yet available", async () => {
-        fetchMock.mockResponse(() => new Promise((resolve) => {}));
+        fetchMock.mockResponse(() => new Promise(() => {}));
 
         const { findAllByText } = render(<FactoryBio factoryId="123456789" />);
 

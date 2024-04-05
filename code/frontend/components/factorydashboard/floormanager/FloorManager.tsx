@@ -26,11 +26,10 @@ const FloorManager: React.FC<FloorManagerProps> = ({
         const fetchAssets = async () => {
             console.log(factoryId);
             const data = await getAssetsForFactory(factoryId);
-            console.log(assets);
             setAssets(data);
         };
         fetchAssets();
-    }, [factoryId, assets]);
+    }, [factoryId]);
 
     // Function to add new asset to the list
     const handleAddAsset = (newAsset: Asset) => {

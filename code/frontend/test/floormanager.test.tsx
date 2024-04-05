@@ -28,7 +28,7 @@ describe("FloorManager", () => {
         ]);
 
         // in the backend i accidentally put "floorplanId when its supposed to be assetId in the message, my bad chile
-        (assetAPI.createAsset as jest.Mock).mockImplementation((asset) =>
+        (assetAPI.createAsset as jest.Mock).mockImplementation(() =>
             Promise.resolve({
                 assetId: "mockGeneratedAssetId",
                 message:

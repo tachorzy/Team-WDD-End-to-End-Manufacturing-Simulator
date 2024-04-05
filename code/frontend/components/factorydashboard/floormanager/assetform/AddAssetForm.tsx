@@ -35,7 +35,8 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
     const handleAddAsset = async () => {
         // next steps: adding input validation..maybe
         try {
-            await createAsset(formData);
+            const asset = await createAsset(formData);
+            onAdd(asset);
             onClose();
         } catch (error) {
             console.error("Failed to add asset", error);
