@@ -17,12 +17,7 @@ export async function POST(request: Request) {
     try {
         const data = await BackendConnector.post<Factory>(config);
 
-        return new Response(
-            JSON.stringify({
-                success: true,
-                data,
-            }),
-        );
+        return new Response(JSON.stringify(data));
     } catch (error) {
         console.error(error);
         return new Response(
@@ -47,12 +42,7 @@ export async function GET(request: Request) {
             ? await BackendConnector.get<Factory>(config)
             : await BackendConnector.get<Factory[]>(config);
 
-        return new Response(
-            JSON.stringify({
-                success: true,
-                data,
-            }),
-        );
+        return new Response(JSON.stringify(data));
     } catch (error) {
         console.error(error);
         return new Response(
