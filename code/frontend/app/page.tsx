@@ -61,10 +61,10 @@ export default function Home() {
                             />
                         </span>
                         <div className="w-full rounded-full mb-4">
+                            <Map positions={sessionFactories} />
                             <h1 className="mx-24 mb-0.5 text-DarkBlue text-3xl font-semibold">
                                 Recent Factories
                             </h1>
-                            <Map positions={sessionFactories} />
                             <FactoryTable />
                         </div>
                     </div>
