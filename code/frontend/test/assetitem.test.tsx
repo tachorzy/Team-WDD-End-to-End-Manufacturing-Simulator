@@ -13,7 +13,7 @@ describe("AssetItem", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description",
-            image: "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927", //for some reason it doesnt pass in github when we use image/test,jpg or test.jpg so a temp solution is usign a real image url
+            image: "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927", // for some reason it doesnt pass in github when we use image/test,jpg or test.jpg so a temp solution is usign a real image url
             factoryId: "1",
         };
 
@@ -25,9 +25,7 @@ describe("AssetItem", () => {
             />,
         );
 
-        expect(
-            getByAltText(`${asset.name} Asset Image`), 
-        ).toBeInTheDocument();
+        expect(getByAltText(`${asset.name} Asset Image`)).toBeInTheDocument();
     });
 
     test("should render placeholder asset image when no image is provided", () => {
@@ -41,13 +39,15 @@ describe("AssetItem", () => {
 
         const { getByAltText } = render(
             <AssetItem
-                asset={asset} 
+                asset={asset}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
             />,
         );
 
-        const assetImage = getByAltText(`${asset.name} Asset Image`) as HTMLImageElement;
+        const assetImage = getByAltText(
+            `${asset.name} Asset Image`,
+        ) as HTMLImageElement;
         expect(assetImage.src).toContain("placeholder-asset.svg");
         expect(assetImage).toBeInTheDocument();
     });

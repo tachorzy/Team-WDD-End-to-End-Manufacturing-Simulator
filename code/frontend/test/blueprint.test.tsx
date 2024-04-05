@@ -19,7 +19,7 @@ describe("Blueprint Component", () => {
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
-            factoryId: "1"
+            factoryId: "1",
         };
 
         const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", {
@@ -30,7 +30,7 @@ describe("Blueprint Component", () => {
             <AssetMarker asset={mockAsset} />,
         ];
 
-       const { getByAltText } = render(
+        const { getByAltText } = render(
             <Blueprint imageFile={mockFile} assetMarkers={mockAssetMarkers} />,
         );
 
@@ -45,7 +45,7 @@ describe("Blueprint Component", () => {
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
-            factoryId: "1"
+            factoryId: "1",
         };
 
         const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", {

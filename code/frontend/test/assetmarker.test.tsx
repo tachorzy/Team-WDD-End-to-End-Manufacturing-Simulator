@@ -15,7 +15,7 @@ describe("AssetMarker Component", () => {
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
-            factoryId:"1",
+            factoryId: "1",
         };
 
         render(<AssetMarker asset={mockAsset} />);
@@ -33,7 +33,7 @@ describe("AssetMarker Component", () => {
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
-            factoryId: "1"
+            factoryId: "1",
         };
 
         const { getByAltText } = render(<AssetMarker asset={mockAsset} />);
@@ -50,7 +50,7 @@ describe("AssetMarker Component", () => {
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
-            factoryId: "1"
+            factoryId: "1",
         };
 
         const { getByText } = render(<AssetMarker asset={mockAsset} />);

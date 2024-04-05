@@ -13,11 +13,10 @@ interface FloorManagerProps {
     factoryId: string;
 }
 
-
-
-const FloorManager: React.FC<FloorManagerProps> = ({ setAssetMarkers, factoryId })  => {
-   
-
+const FloorManager: React.FC<FloorManagerProps> = ({
+    setAssetMarkers,
+    factoryId,
+}) => {
     // State to manage list of assets
     const [assets, setAssets] = useState<Asset[]>([]);
     const [showAddAssetForm, setShowAddAssetForm] = useState(false);
@@ -31,7 +30,7 @@ const FloorManager: React.FC<FloorManagerProps> = ({ setAssetMarkers, factoryId 
             setAssets(data);
         };
         fetchAssets();
-    }, [factoryId]);
+    }, [factoryId, assets]);
 
     // Function to add new asset to the list
     const handleAddAsset = (newAsset: Asset) => {

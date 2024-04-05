@@ -50,7 +50,10 @@ export default function FactoryDashboard() {
                                     setFloorPlanFile={setFloorPlanFile}
                                 />
                             )}
-                            <FloorManager  setAssetMarkers={setAssetMarkers} factoryId={factoryId} />
+                            <FloorManager
+                                setAssetMarkers={setAssetMarkers}
+                                factoryId={factoryId}
+                            />
                         </div>
                     </div>
                 </div>
