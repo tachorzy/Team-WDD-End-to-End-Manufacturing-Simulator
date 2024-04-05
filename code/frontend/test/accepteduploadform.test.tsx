@@ -6,8 +6,8 @@ import { render, waitFor, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import AcceptedUploadForm from "../components/factorydashboard/floorplan/uploadcontainer/AcceptedUploadForm";
 
-const mockUsePathname = jest.fn(() => {return ""});
-const mockCreateFloorplan = jest.fn(() => {return Promise.resolve("success")});
+const mockUsePathname = jest.fn(() => "");
+const mockCreateFloorplan = jest.fn(() => Promise.resolve("success"));
 
 jest.mock("next/navigation", () => ({
     usePathname(): string {

@@ -5,7 +5,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Asset } from "@/app/types/types";
+import { Asset } from "@/app/api/_utils/types";
 import Blueprint from "../components/factorydashboard/floorplan/blueprint/Blueprint";
 import AssetMarker from "../components/factorydashboard/floorplan/blueprint/AssetMarker";
 
@@ -19,7 +19,7 @@ describe("Blueprint Component", () => {
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
-            factoryId: "1"
+            factoryId: "1",
         };
 
         const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", {
@@ -30,7 +30,7 @@ describe("Blueprint Component", () => {
             <AssetMarker asset={mockAsset} />,
         ];
 
-       const { getByAltText } = render(
+        const { getByAltText } = render(
             <Blueprint imageFile={mockFile} assetMarkers={mockAssetMarkers} />,
         );
 
@@ -45,7 +45,7 @@ describe("Blueprint Component", () => {
             name: "Asset 1",
             description: "Description 1",
             image: "/image1.jpg",
-            factoryId: "1"
+            factoryId: "1",
         };
 
         const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", {

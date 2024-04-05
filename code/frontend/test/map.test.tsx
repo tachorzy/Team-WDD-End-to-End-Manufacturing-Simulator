@@ -5,7 +5,7 @@ import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import L from "leaflet";
-import { Factory } from "@/app/types/types";
+import { Factory } from "@/app/api/_utils/types";
 
 import MapComponent, { ChangeView } from "../components/home/map/Map.client";
 

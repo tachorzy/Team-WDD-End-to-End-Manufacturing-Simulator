@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
-import { Factory } from "@/app/types/types";
+import { Factory } from "@/app/api/_utils/types";
 import MapPin from "./MapPin";
 import "leaflet/dist/leaflet.css";
 

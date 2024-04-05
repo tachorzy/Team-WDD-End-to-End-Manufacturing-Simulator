@@ -116,6 +116,5 @@ describe("FileUploadContainer", () => {
             expect(AcceptedUploadForm).not.toHaveBeenCalled();
             expect(setFloorPlanFileMock).not.toHaveBeenCalled();
         });
-        
     });
 });

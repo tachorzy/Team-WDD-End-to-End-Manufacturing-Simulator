@@ -1,4 +1,4 @@
-import { Floorplan } from "@/app/types/types";
+import { Floorplan } from "@/app/api/_utils/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 
