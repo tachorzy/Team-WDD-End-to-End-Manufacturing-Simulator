@@ -1,4 +1,4 @@
-import { 
+import {
     BackendConnector,
     GetConfig,
     PostConfig,
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
 
     const floorplanId = searchParams.get("id");
-    
+
     const config: GetConfig = {
         resource: "floorplan",
         params: floorplanId ? { id: floorplanId } : undefined,

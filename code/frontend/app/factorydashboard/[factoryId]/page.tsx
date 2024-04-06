@@ -7,7 +7,6 @@ import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadc
 import { usePathname } from "next/navigation";
 import Blueprint from "@/components/factorydashboard/floorplan/blueprint/Blueprint";
 import FloorManager from "@/components/factorydashboard/floormanager/FloorManager";
-// import { getFloorplan } from "@/app/api/floorplan/floorplanAPI";
 import { GetConfig, NextServerConnector } from "@/app/api/_utils/connector";
 import { Floorplan } from "@/app/api/_utils/types";
 
@@ -19,9 +18,8 @@ export default function FactoryDashboard() {
 
     useEffect(() => {
         const fetchFloorplan = async () => {
-
-            if(factoryId) {
-                try { 
+            if (factoryId) {
+                try {
                     const config: GetConfig = {
                         resource: "floorplan",
                         params: {
@@ -30,15 +28,18 @@ export default function FactoryDashboard() {
                     };
 
                     const data = await NextServerConnector.get(config);
-                    const floorplan = data as Floorplan
-                    
-                    if(floorplan && floorplan.imageData) {
-                        const blob = await fetch(floorplan.imageData).then((res) => res.blob());
-                        const file = new File([blob], "floorplan", { type: blob.type });
+                    const floorplan = data as Floorplan;
+
+                    if (floorplan && floorplan.imageData) {
+                        const blob = await fetch(floorplan.imageData).then(
+                            (res) => res.blob(),
+                        );
+                        const file = new File([blob], "floorplan", {
+                            type: blob.type,
+                        });
                         setFloorPlanFile(file);
                     }
-                }
-                catch (error) {
+                } catch (error) {
                     console.error("Error fetching floorplan:", error);
                 }
             }
