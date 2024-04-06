@@ -42,14 +42,6 @@ export default function FactoryDashboard() {
                     console.error("Error fetching floorplan:", error);
                 }
             }
-        
-            // const floorplan = await getFloorplan(factoryId);
-            // if (floorplan && floorplan.imageData) {
-            //     const response = await fetch(floorplan.imageData);
-            //     const blob = await response.blob();
-            //     const file = new File([blob], "floorplan", { type: blob.type });
-            //     setFloorPlanFile(file);
-            // }
         };
 
         fetchFloorplan();
