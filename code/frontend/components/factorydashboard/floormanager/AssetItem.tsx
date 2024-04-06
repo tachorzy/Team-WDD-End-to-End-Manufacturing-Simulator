@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect,useState}from "react";
 import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
 
@@ -12,7 +12,25 @@ const AssetItem: React.FC<AssetItemProps> = ({
     asset,
     setSelectedAsset,
     selectedAsset,
-}) => (
+}) => {
+    const [imageSrc, setImageSrc] = useState('');
+
+    useEffect(() => {
+        const loadImageData = async () => {
+            if (asset && asset.imageData) {
+                    const response = await fetch(asset.imageData);
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    setImageSrc(url);
+            } else {
+                setImageSrc('/icons/floorplan/placeholder-asset.svg');
+            }
+        };
+
+        loadImageData();
+    }, [asset]);
+
+    return(
     <button
         type="button"
         onClick={() => setSelectedAsset(asset as Asset)}
@@ -20,11 +38,7 @@ const AssetItem: React.FC<AssetItemProps> = ({
     >
         {asset ? (
             <Image
-                src={
-                    asset.image
-                        ? asset.image
-                        : "/icons/floorplan/placeholder-asset.svg"
-                }
+                src={imageSrc}
                 width={90}
                 height={90}
                 alt={`${asset.name} Asset Image`}
@@ -35,5 +49,5 @@ const AssetItem: React.FC<AssetItemProps> = ({
         )}
     </button>
 );
-
+        };
 export default AssetItem;

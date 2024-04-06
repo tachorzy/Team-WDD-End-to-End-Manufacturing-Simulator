@@ -26,14 +26,14 @@ describe("AssetInventory", () => {
                 assetId: "1",
                 name: "Asset 1",
                 description: "Description 1",
-                image: "/image1.jpg",
+                imageData: "/image1.jpg",
                 factoryId: "1",
             },
             {
                 assetId: "2",
                 name: "Asset 2",
                 description: "Description 2",
-                image: "/image2.jpg",
+                imageData: "/image2.jpg",
                 factoryId: "1",
             },
         ];

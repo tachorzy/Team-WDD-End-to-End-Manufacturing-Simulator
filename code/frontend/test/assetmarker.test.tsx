@@ -32,7 +32,7 @@ describe("AssetMarker Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            image: "/image1.jpg",
+            imageData: "/image1.jpg",
             factoryId: "1",
         };
 
@@ -49,7 +49,7 @@ describe("AssetMarker Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            image: "/image1.jpg",
+            imageData: "/image1.jpg",
             factoryId: "1",
         };
 

@@ -13,7 +13,7 @@ describe("AssetItem", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description",
-            image: "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927", // for some reason it doesnt pass in github when we use image/test,jpg or test.jpg so a temp solution is usign a real image url
+            imageData: "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927", // for some reason it doesnt pass in github when we use image/test,jpg or test.jpg so a temp solution is usign a real image url
             factoryId: "1",
         };
 
@@ -33,7 +33,7 @@ describe("AssetItem", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            image: "",
+            imageData: "",
             factoryId: "1",
         };
 

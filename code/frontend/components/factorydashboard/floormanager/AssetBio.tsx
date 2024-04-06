@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
 
@@ -6,12 +6,31 @@ interface AssetBioProps {
     asset?: Asset | undefined;
 }
 
-const AssetBio: React.FC<AssetBioProps> = ({ asset }) => (
+const AssetBio: React.FC<AssetBioProps> = ({ asset }) => {
+    const [imageSrc, setImageSrc] = useState('');
+
+    useEffect(() => {
+        const loadImageData = async () => {
+            if (asset && asset.imageData) {
+                    const response = await fetch(asset.imageData);
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    setImageSrc(url);
+            } else {
+                setImageSrc('/icons/floorplan/placeholder-asset.svg');
+            }
+        };
+
+        loadImageData();
+    }, [asset]);
+
+    
+   return (
     <div className="self-start mt-4">
         {asset && (
             <div className="flex flex-row gap-x-4">
                 <Image
-                    src={asset.image as string}
+                    src={imageSrc}
                     width={90}
                     height={90}
                     alt="Asset Image"
@@ -29,5 +48,6 @@ const AssetBio: React.FC<AssetBioProps> = ({ asset }) => (
         )}
     </div>
 );
+};
 
 export default AssetBio;

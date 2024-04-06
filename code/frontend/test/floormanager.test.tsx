@@ -22,7 +22,7 @@ describe("FloorManager", () => {
                 assetId: "mockAssetId1",
                 name: "Mock Asset 1",
                 description: "Mock Description 1",
-                image: "mockImage1.jpg",
+                imageData: "mockImage1.jpg",
                 factoryId: "1",
             },
         ]);

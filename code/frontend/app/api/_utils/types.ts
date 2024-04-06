@@ -26,6 +26,6 @@ export interface Asset {
     assetId?: string;
     name: string;
     description: string;
-    image?: string;
+    imageData?: string;
     factoryId: string;
 }

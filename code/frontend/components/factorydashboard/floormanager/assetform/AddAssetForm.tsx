@@ -19,7 +19,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
         assetId: "",
         name: "",
         description: "",
-        image: "",
+        imageData: "",
         factoryId,
     });
     const [assetImageFile, setAssetImageFile] = useState<File | null>(null);
