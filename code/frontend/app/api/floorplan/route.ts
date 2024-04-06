@@ -2,7 +2,6 @@ import {
     BackendConnector,
     GetConfig,
     PostConfig,
-    PutConfig,
 } from "@/app/api/_utils/connector";
 import { Floorplan } from "@/app/api/_utils/types";
 

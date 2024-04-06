@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import UploadResultTray from "./UploadResultTray";
 import { PostConfig, NextServerConnector } from "@/app/api/_utils/connector";
 import { Floorplan } from "@/app/api/_utils/types";
+import UploadResultTray from "./UploadResultTray";
 
 const AcceptedUploadForm = (props: {
     uploadedFile: File;
@@ -40,16 +40,17 @@ const AcceptedUploadForm = (props: {
             const base64Image = reader.result?.toString().split(",")[1];
             if (base64Image) {
                 try {
-                   const config: PostConfig<Floorplan> = { 
-                          resource: "floorplan",
-                          payload: {
-                            factoryId: factoryId,
+                    const config: PostConfig<Floorplan> = {
+                        resource: "floorplan",
+                        payload: {
+                            factoryId,
                             dateCreated: new Date().toISOString(),
-                            floorplanId: factoryId, //change it later
+                            floorplanId: factoryId, // change it later
                             imageData: base64Image,
-                          },
-                    }
-                    const data = await NextServerConnector.post<Floorplan>(config);
+                        },
+                    };
+                    const data =
+                        await NextServerConnector.post<Floorplan>(config);
                 } catch (error) {
                     console.error("Error uploading floor plan:", error);
                 }
