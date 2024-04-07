@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import React from "react";
-import { Asset } from "@/app/types/types";
-=======
-import React, { useState, useEffect } from "react";
 import { Asset } from "@/app/api/_utils/types";
->>>>>>> 15bab2f89ede7c3224d489c195b35708b8d7f867
 import AssetItem from "./AssetItem";
 
 interface AssetInventoryProps {

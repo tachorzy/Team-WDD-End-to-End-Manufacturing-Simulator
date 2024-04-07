@@ -87,7 +87,11 @@ describe("FactoryTable", () => {
         const mockResponse = factories;
 
         (NextServerConnector.get as jest.Mock).mockImplementationOnce(
-            ({ resource, params }: GetConfig) => mockResponse,
+            ({ resource }: GetConfig) => {
+                if (resource === "factories") {
+                    return mockResponse;
+                }
+            },
         );
 
         const { getByText, getAllByRole } = render(<FactoryTable />);
@@ -124,7 +128,11 @@ describe("FactoryTable", () => {
         ];
 
         (NextServerConnector.get as jest.Mock).mockImplementationOnce(
-            ({ resource, params }: GetConfig) => mockResponse,
+            ({ resource }: GetConfig) => {
+                if (resource === "factories") {
+                    return mockResponse;
+                }
+            },
         );
 
         const { getAllByRole } = render(<FactoryTable />);
@@ -140,8 +148,15 @@ describe("FactoryTable", () => {
 
     test("should log an error on fetch", async () => {
         (NextServerConnector.get as jest.Mock).mockImplementationOnce(
-            ({ resource, params }: GetConfig) => {
-                throw new Error("Fetch error");
+            (
+                { resource, params }: GetConfig = {
+                    resource: "factories",
+                    params: {},
+                },
+            ) => {
+                throw new Error(
+                    `Fetch error. Resource: ${resource}, Params: ${JSON.stringify(params)}`,
+                );
             },
         );
 
