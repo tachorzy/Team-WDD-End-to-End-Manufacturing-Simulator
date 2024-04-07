@@ -14,7 +14,7 @@ describe("AssetMarker Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            image: "/image1.jpg",
+            imageData: "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
             factoryId: "1",
         };
 
@@ -32,7 +32,7 @@ describe("AssetMarker Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData: "/image1.jpg",
+            imageData: "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
             factoryId: "1",
         };
 
@@ -49,7 +49,7 @@ describe("AssetMarker Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData: "/image1.jpg",
+            imageData: "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
             factoryId: "1",
         };
 

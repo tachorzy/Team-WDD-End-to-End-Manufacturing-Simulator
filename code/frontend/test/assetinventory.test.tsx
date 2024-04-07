@@ -1,12 +1,22 @@
 /**
  * @jest-environment jsdom
  */
+import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import fetchMock from 'jest-fetch-mock';
 import { Asset } from "@/app/api/_utils/types";
 import AssetInventory from "../components/factorydashboard/floormanager/AssetInventory";
 import InventoryNavBar from "../components/factorydashboard/floormanager/InventoryNavBar";
+
+fetchMock.enableMocks();
+
+beforeEach(() => {
+    global.URL.createObjectURL = jest.fn();
+    fetchMock.resetMocks();
+    const mockBase64Image = 'data:image/jpeg;base64,' + btoa('fake-image-data');
+    fetchMock.mockResponseOnce(JSON.stringify({ src: mockBase64Image }));
+});
 
 describe("AssetInventory", () => {
     test("should have asset inventory navbar", () => {
@@ -26,14 +36,14 @@ describe("AssetInventory", () => {
                 assetId: "1",
                 name: "Asset 1",
                 description: "Description 1",
-                imageData: "/image1.jpg",
+                imageData: "image1.jpg",
                 factoryId: "1",
             },
             {
                 assetId: "2",
                 name: "Asset 2",
                 description: "Description 2",
-                imageData: "/image2.jpg",
+                imageData: "image2.jpg",
                 factoryId: "1",
             },
         ];
