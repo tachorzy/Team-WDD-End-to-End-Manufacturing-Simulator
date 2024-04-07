@@ -60,7 +60,7 @@ func (h *AssetHandler) HandleCreateAssetRequest(ctx context.Context, request eve
 		"message":   "Asset created successfully",
 		"assetId":   asset.AssetID,
 		"imageData": asset.ImageData,
-		"modelUrl":  *asset.ModelUrl,
+		"modelUrl":  *asset.ModelURL,
 	})
 	if err != nil {
 		return apiResponse(http.StatusInternalServerError, "Error marshalling response body: "+err.Error(), headers), nil
@@ -79,11 +79,11 @@ func processAssetFiles(ctx context.Context, asset *Asset, s3Client *s3.Client) e
 		asset.ImageData = fmt.Sprintf("https://%s.s3.amazonaws.com/assets/%s.jpg", "wingstopdrivenbucket", asset.AssetID)
 	}
 
-	if asset.ModelUrl != nil && *asset.ModelUrl != "" {
-		if err := uploadToS3(ctx, *asset.ModelUrl, fmt.Sprintf("models/%s.glb", asset.AssetID), "model/gltf-binary", uploader); err != nil {
+	if asset.ModelURL != nil && *asset.ModelURL != "" {
+		if err := uploadToS3(ctx, *asset.ModelURL, fmt.Sprintf("models/%s.glb", asset.AssetID), "model/gltf-binary", uploader); err != nil {
 			return fmt.Errorf("Failed to upload model: %w", err)
 		}
-		*asset.ModelUrl = fmt.Sprintf("https://%s.s3.amazonaws.com/models/%s.glb", "wingstopdrivenbucket", asset.AssetID)
+		*asset.ModelURL = fmt.Sprintf("https://%s.s3.amazonaws.com/models/%s.glb", "wingstopdrivenbucket", asset.AssetID)
 	}
 
 	return nil
