@@ -26,7 +26,6 @@ const FloorManager: React.FC<FloorManagerProps> = ({
         const fetchAssets = async () => {
             console.log(factoryId);
             const data = await getAssetsForFactory(factoryId);
-            console.log(assets);
             setAssets(data);
         };
         fetchAssets();

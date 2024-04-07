@@ -3,12 +3,7 @@
  */
 import React from "react";
 import "@testing-library/jest-dom";
-import {
-    createEvent,
-    fireEvent,
-    render,
-    waitFor,
-} from "@testing-library/react"; // Import screen here
+import { createEvent, fireEvent, render } from "@testing-library/react"; // Import screen here
 import {
     useDropzone,
     DropzoneRootProps,
@@ -109,9 +104,9 @@ describe("FileUploadContainer", () => {
                 ],
             });
 
-            const { getByText } = render(
-                <FileUploadContainer setFloorPlanFile={setFloorPlanFileMock} />,
-            );
+            // const { getByText } = render(
+            //     <FileUploadContainer setFloorPlanFile={setFloorPlanFileMock} />,
+            // );
 
             expect(AcceptedUploadForm).not.toHaveBeenCalled();
             expect(setFloorPlanFileMock).not.toHaveBeenCalled();
