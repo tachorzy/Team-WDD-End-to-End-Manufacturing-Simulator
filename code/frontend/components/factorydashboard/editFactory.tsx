@@ -53,7 +53,12 @@ const EditFactoryForm: React.FC<EditFactoryFormProps> = ({
                     },
                     body: JSON.stringify(formData),
                 });
-                onSave(formData);
+
+                if (!response.ok) {
+                    throw new Error("Failed to update factory.");
+                } else {
+                    onSave(formData);
+                }
             } else {
                 throw new Error("Factory data is incomplete.");
             }
