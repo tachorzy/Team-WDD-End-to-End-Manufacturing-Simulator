@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Asset } from "@/app/types/types";
 import Image from "next/image";
 import { createAsset } from "@/app/api/assets/assetAPI";
+import { Asset } from "@/app/api/_utils/types";
 import AssetUploadContainer from "./AssetUploadContainer";
 
 interface AddAssetFormProps {

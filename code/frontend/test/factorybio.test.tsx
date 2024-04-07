@@ -1,6 +1,6 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
-import { Factory } from "@/app/types/types";
+import { Factory } from "@/app/api/_utils/types";
 import fetchMock from "jest-fetch-mock";
 import FactoryBio from "../components/factorydashboard/FactoryBio";
 import "@testing-library/jest-dom";

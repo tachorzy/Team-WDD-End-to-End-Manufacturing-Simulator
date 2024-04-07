@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Asset } from "@/app/types/types";
 import Image from "next/image";
 import { getAssetsForFactory } from "@/app/api/assets/assetAPI";
+import { Asset } from "@/app/api/_utils/types";
 import AssetInventory from "./AssetInventory";
 import AddAssetForm from "./assetform/AddAssetForm";
 import InventoryNavBar from "./InventoryNavBar";

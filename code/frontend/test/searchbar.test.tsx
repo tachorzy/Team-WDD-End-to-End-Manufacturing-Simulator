@@ -11,6 +11,7 @@ import Searchbar, {
 import SearchModeTray from "../components/home/searchbar/SearchModeTray";
 
 jest.mock("axios");
+// jest.mock("@/app/api/factories/factoryAPI");
 
 const onSearchMock = jest.fn();
 const setQueryMadeMock = jest.fn();

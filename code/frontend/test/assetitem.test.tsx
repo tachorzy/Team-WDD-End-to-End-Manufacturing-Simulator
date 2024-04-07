@@ -4,7 +4,7 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
-import { Asset } from "@/app/types/types";
+import { Asset } from "@/app/api/_utils/types";
 import AssetItem from "../components/factorydashboard/floormanager/AssetItem";
 
 describe("AssetItem", () => {

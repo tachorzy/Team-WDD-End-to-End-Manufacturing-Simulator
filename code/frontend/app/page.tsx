@@ -9,7 +9,7 @@ import FactoryTable from "@/components/home/table/FactoryTable.client";
 import Searchbar from "@/components/home/searchbar/Searchbar.client";
 import Navbar from "@/components/Navbar/Navbar";
 import NewFactoryForm from "@/components/home/NewFactoryForm";
-import { Factory } from "@/app/types/types";
+import { Factory } from "@/app/api/_utils/types";
 
 const Map = dynamic(() => import("@/components/home/map/Map.client"), {
     loading: () => <p>A map is loading</p>,

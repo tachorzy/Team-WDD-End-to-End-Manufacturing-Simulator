@@ -5,7 +5,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Asset } from "@/app/types/types";
+import { Asset } from "@/app/api/_utils/types";
 import Blueprint from "../components/factorydashboard/floorplan/blueprint/Blueprint";
 import AssetMarker from "../components/factorydashboard/floorplan/blueprint/AssetMarker";
 

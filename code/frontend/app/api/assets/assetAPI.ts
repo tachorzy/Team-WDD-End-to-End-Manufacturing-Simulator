@@ -1,4 +1,4 @@
-import { Asset } from "@/app/types/types";
+import { Asset } from "@/app/api/_utils/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_AWS_ENDPOINT;
 

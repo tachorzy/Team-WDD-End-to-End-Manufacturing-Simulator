@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Asset } from "@/app/types/types";
+import { Asset } from "@/app/api/_utils/types";
 
 interface AssetBioProps {
     asset?: Asset | undefined;

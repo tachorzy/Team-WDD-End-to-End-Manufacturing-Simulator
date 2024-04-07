@@ -5,7 +5,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Asset } from "@/app/types/types";
+import { Asset } from "@/app/api/_utils/types";
 import AssetMarker from "../components/factorydashboard/floorplan/blueprint/AssetMarker";
 
 describe("AssetMarker Component", () => {

@@ -33,6 +33,7 @@ const Searchbar: React.FC<SearchProps> = ({ onSearch, setQueryMade }) => {
         inputAddress: string,
     ): Promise<{ lat: number; lon: number } | undefined> => {
         try {
+            // TODO: migrate to next/server api
             const response = await axios.get("https://geocode.maps.co/search", {
                 params: {
                     q: inputAddress,

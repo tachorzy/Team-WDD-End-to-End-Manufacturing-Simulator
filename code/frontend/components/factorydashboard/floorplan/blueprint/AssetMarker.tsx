@@ -1,6 +1,6 @@
-import { Asset } from "@/app/types/types";
 import Image from "next/image";
 import Draggable from "react-draggable";
+import { Asset } from "@/app/api/_utils/types";
 
 interface AssetMarkerProps {
     asset: Asset;

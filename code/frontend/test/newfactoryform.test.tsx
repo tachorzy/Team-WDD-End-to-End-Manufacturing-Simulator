@@ -290,7 +290,7 @@ describe("New Factory Form", () => {
         await waitFor(() => {
             expect(consoleErrorMock).toHaveBeenCalledWith(
                 "Failed to create factory:",
-                new Error("Failed to create factory: 404"),
+                new Error("Fetch error: 404"),
             );
         });
     });

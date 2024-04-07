@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Marker, Popup } from "react-leaflet";
 import Link from "next/link";
 import Image from "next/image";
-import { Factory } from "@/app/types/types";
+import { Factory } from "@/app/api/_utils/types";
 
 export interface PinProps {
     _key: number;

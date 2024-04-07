@@ -4,7 +4,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Asset } from "@/app/types/types";
+import { Asset } from "@/app/api/_utils/types";
 import AssetInventory from "../components/factorydashboard/floormanager/AssetInventory";
 import InventoryNavBar from "../components/factorydashboard/floormanager/InventoryNavBar";
 
