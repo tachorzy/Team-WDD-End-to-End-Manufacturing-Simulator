@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { randomUUID } from "crypto";
+import AddedModelCharacteristic from "./AddedModelCharacteristic";
 
 // interface CreateModelFormProps {
 //     onClose: () => void;
@@ -10,6 +10,10 @@ import { randomUUID } from "crypto";
 const CreateModelForm: React.FC = () => {
 
     const modelId = self.crypto.randomUUID().substring(0, 8);
+
+
+    const [attributes, setAttributes] = useState([  { attribute: "", value: "" } ]);
+    const [properties, setProperties] = useState([ { property: "", unit: "" } ]);
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
@@ -33,7 +37,6 @@ const CreateModelForm: React.FC = () => {
                                 />
                                 <h2 className="text-lg font-medium text-[#494949] mt-3">{`- ${modelId}`}</h2>
                             </div>
-
                         </div>
                     </section>
 
@@ -62,6 +65,7 @@ const CreateModelForm: React.FC = () => {
                                     />
                                 </div>
                             </div>
+                            <AddedModelCharacteristic characteristic="Attribute"></AddedModelCharacteristic>
                         </div>
 
                         <div className="flex flex-col gap-y-3 w-1/2">
@@ -83,11 +87,12 @@ const CreateModelForm: React.FC = () => {
                                         Units
                                     </h2>
                                     <input
-                                        className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-1/2"
+                                        className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                         placeholder="e.g. °C"
                                     />
                                 </div>
                             </div>
+                            <AddedModelCharacteristic characteristic="Property"></AddedModelCharacteristic>
                         </div>
                     </section>
 
