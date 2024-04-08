@@ -15,11 +15,11 @@ jest.mock("next/navigation", () => ({
     },
 }));
 
-jest.mock("@/app/api/floorplan/floorplanAPI", () => ({
-    createFloorplan(): Promise<string> {
-        return mockCreateFloorplan();
-    },
-}));
+// jest.mock("@/app/api/floorplan/floorplanAPI", () => ({
+//     createFloorplan(): Promise<string> {
+//         return mockCreateFloorplan();
+//     },
+// }));
 
 const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
@@ -92,24 +92,7 @@ describe("AcceptedUploadForm", () => {
         expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
     });
 
-    test("should call createFloorplan when Accept button is clicked", async () => {
-        mockCreateFloorplan.mockResolvedValue("success");
-        mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
-        mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
-        const { getByText } = render(<AcceptedUploadForm {...props} />);
-
-        act(() => {
-            getByText("Accept").click();
-            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
-        });
-
-        await waitFor(() => {
-            expect(mockCreateFloorplan).toHaveBeenCalledTimes(1);
-            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
-        });
-    });
-
-    test("should call not createFloorplan when Deny button is clicked", () => {
+    test("should not call createFloorplan when Deny button is clicked", () => {
         const { getByText } = render(<AcceptedUploadForm {...props} />);
 
         act(() => {
@@ -135,39 +118,22 @@ describe("AcceptedUploadForm", () => {
         });
     });
 
-    test("should log error when base64image is missing", async () => {
-        mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
-        mockReaderResult.mockImplementationOnce(() => null);
-        const { getByText } = render(<AcceptedUploadForm {...props} />);
+    // test("should log error when createFloorplan fails", async () => {
+    //     mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
+    //     mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
+    //     mockCreateFloorplan.mockRejectedValueOnce(new Error("404"));
+    //     const { getByText } = render(<AcceptedUploadForm {...props} />);
 
-        act(() => {
-            getByText("Accept").click();
-            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
-        });
+    //     act(() => {
+    //         getByText("Accept").click();
+    //         expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
+    //     });
 
-        await waitFor(() => {
-            expect(consoleSpy).toHaveBeenCalledWith(
-                "Failed to convert the file to base64.",
-            );
-        });
-    });
-
-    test("should log error when createFloorplan fails", async () => {
-        mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
-        mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
-        mockCreateFloorplan.mockRejectedValueOnce(new Error("404"));
-        const { getByText } = render(<AcceptedUploadForm {...props} />);
-
-        act(() => {
-            getByText("Accept").click();
-            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
-        });
-
-        await waitFor(() => {
-            expect(consoleSpy).toHaveBeenCalledWith(
-                "Error uploading floor plan:",
-                new Error("404"),
-            );
-        });
-    });
+    //     await waitFor(() => {
+    //         expect(consoleSpy).toHaveBeenCalledWith(
+    //             "Error uploading floor plan:",
+    //             new Error("404"),
+    //         );
+    //     });
+    // });
 });

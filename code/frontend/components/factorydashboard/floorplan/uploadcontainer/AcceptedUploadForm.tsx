@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { createFloorplan } from "@/app/api/floorplan/floorplanAPI";
+import { PostConfig, NextServerConnector } from "@/app/api/_utils/connector";
+import { Floorplan } from "@/app/api/_utils/types";
 import UploadResultTray from "./UploadResultTray";
 
 const AcceptedUploadForm = (props: {
@@ -36,13 +37,20 @@ const AcceptedUploadForm = (props: {
 
         const reader = new FileReader();
         reader.onloadend = async () => {
-            // console.log(uploadedFile);
             const base64Image = reader.result?.toString().split(",")[1];
-            // console.log(`base64Image is ${base64Image}`);
             if (base64Image) {
                 try {
-                    await createFloorplan(base64Image, factoryId);
-                    // console.log("Floor plan uploaded successfully.");
+                    const config: PostConfig<Floorplan> = {
+                        resource: "floorplan",
+                        payload: {
+                            factoryId,
+                            dateCreated: new Date().toISOString(),
+                            floorplanId: factoryId, // change it later
+                            imageData: base64Image,
+                        },
+                    };
+                    const data =
+                        await NextServerConnector.post<Floorplan>(config);
                 } catch (error) {
                     console.error("Error uploading floor plan:", error);
                 }
