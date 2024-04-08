@@ -3,11 +3,14 @@
 import FactoryPageNavbar from "@/components/navbar/FactoryPageNavbar";
 import CreateModelForm from "@/components/models/CreateModelForm";
 
-export default function assetModels({ params }: { params: { factoryId: string } }) {
+export default function assetModels({
+    params,
+}: {
+    params: { factoryId: string };
+}) {
+    const { factoryId } = params;
 
-    const factoryId = params.factoryId;
-
-    console.log(`factoryId: ${factoryId}`)
+    console.log(`factoryId: ${factoryId}`);
 
     return (
         <main className="flex flex-col bg-[#FAFAFA] min-h-screen mx-auto smooth-scroll">
