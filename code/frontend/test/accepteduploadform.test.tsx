@@ -22,24 +22,6 @@ jest.mock("@/app/api/_utils/connector", () => ({
     },
 }));
 
-global.FileReader = jest.fn(() => ({
-    readAsDataURL: function () {
-      this.onloadend();
-    },
-    result: 'data:image/jpg;base64,somebase64data',
-    EMPTY: 0,
-    LOADING: 1,
-    DONE: 2,
-    onload: jest.fn(),
-    onerror: jest.fn(),
-    onloadend: jest.fn(),
-    onloadstart: jest.fn(),
-    onprogress: jest.fn(),
-    onabort: jest.fn(),
-    readyState: 2,
-    error: null,
-  }));
-
 const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
 const mockSetUploadedFile = jest.fn();
