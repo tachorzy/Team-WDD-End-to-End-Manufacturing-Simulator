@@ -5,7 +5,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import FactoryPageNavbar from "../components/Navbar/FactoryPageNavbar";
+import FactoryPageNavbar from "../components/navbar/FactoryPageNavbar";
 
 describe("FactoryPageNavBar", () => {
     test("renders Navbar component with correct links and buttons", () => {

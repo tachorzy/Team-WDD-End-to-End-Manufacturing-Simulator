@@ -6,8 +6,8 @@ import React from "react";
 import { render } from "@testing-library/react";
 import fetchMock from "jest-fetch-mock";
 import { Asset } from "@/app/api/_utils/types";
-import AssetInventory from "../components/factorydashboard/floormanager/AssetInventory";
-import InventoryNavBar from "../components/factorydashboard/floormanager/InventoryNavBar";
+import AssetInventory from "../components/factorydashboard/floormanager/inventory/AssetInventory";
+import InventoryNavBar from "../components/factorydashboard/floormanager/inventory/InventoryNavBar";
 
 fetchMock.enableMocks();
 
