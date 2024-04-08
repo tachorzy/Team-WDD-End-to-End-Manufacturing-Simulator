@@ -151,23 +151,43 @@ describe("AcceptedUploadForm", () => {
             );
         });
     });
-    
-    // test("should log error when createFloorplan fails", async () => {
-    //     mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
-    //     mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
-    //     mockCreateFloorplan.mockRejectedValueOnce(new Error("404"));
-    //     const { getByText } = render(<AcceptedUploadForm {...props} />);
 
-    //     act(() => {
-    //         getByText("Accept").click();
-    //         expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
-    //     });
+    test("should log error when failed to convert file to base64", async () => {
+        mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
+        mockReaderResult.mockImplementationOnce(() => "somedata,");
+        const { getByText } = render(<AcceptedUploadForm {...props} />);
 
-    //     await waitFor(() => {
-    //         expect(consoleSpy).toHaveBeenCalledWith(
-    //             "Error uploading floor plan:",
-    //             new Error("404"),
-    //         );
-    //     });
-    // });
+        act(() => {
+            getByText("Accept").click();
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
+        });
+
+        await waitFor(() => {
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "Failed to convert the file to base64.",
+            );
+        });
+    });
+
+    test("should log error when createFloorplan fails", async () => {
+        mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
+        mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
+        (NextServerConnector.post as jest.Mock).mockRejectedValueOnce(
+            new Error("Fetch error: 404")
+        );
+
+        const { getByText } = render(<AcceptedUploadForm {...props} />);
+
+        act(() => {
+            getByText("Accept").click();
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
+        });
+
+        await waitFor(() => {
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "Error uploading floor plan:",
+                new Error("Fetch error: 404"),
+            );
+        });
+    });
 });
