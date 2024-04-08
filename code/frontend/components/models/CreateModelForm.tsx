@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import AddedModelCharacteristic from "./AddedModelCharacteristic";
 
@@ -8,18 +8,18 @@ import AddedModelCharacteristic from "./AddedModelCharacteristic";
 // }
 
 const CreateModelForm: React.FC = () => {
+    const modelId = "2024-04-08-9780";
 
-    const modelId = self.crypto.randomUUID().substring(0, 8);
-
-
-    const [attributes, setAttributes] = useState([  { attribute: "", value: "" } ]);
-    const [properties, setProperties] = useState([ { property: "", unit: "" } ]);
+    const [attributes, setAttributes] = useState([
+        { attribute: "", value: "" },
+    ]);
+    const [properties, setProperties] = useState([{ property: "", unit: "" }]);
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
             <div className="relative w-10/12 h-3/4 bg-white rounded-xl shadow-lg p-8 px-10">
                 <h1 className="text-3xl font-semibold mb-4 text-gray-900">
-                        Create Your Asset Model
+                    Create Your Asset Model
                 </h1>
                 <div className="flex flex-row gap-x-32 mt-6">
                     <section className="flex flex-col gap-y-3 min-w-max">
@@ -65,7 +65,10 @@ const CreateModelForm: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            <AddedModelCharacteristic characteristic="Attribute"></AddedModelCharacteristic>
+                            <AddedModelCharacteristic
+                                characteristic="Attribute"
+                                setCharacteristic={setAttributes}
+                            />
                         </div>
 
                         <div className="flex flex-col gap-y-3 w-1/2">
@@ -92,10 +95,12 @@ const CreateModelForm: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            <AddedModelCharacteristic characteristic="Property"></AddedModelCharacteristic>
+                            <AddedModelCharacteristic
+                                characteristic="Property"
+                                setCharacteristic={setProperties}
+                            />
                         </div>
                     </section>
-
                 </div>
             </div>
         </div>
