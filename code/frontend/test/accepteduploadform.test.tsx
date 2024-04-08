@@ -26,6 +26,11 @@ const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
 const mockSetUploadedFile = jest.fn();
 const mockSetFloorPlanFile = jest.fn();
+const mockReaderResult = jest.spyOn(
+    global.FileReader.prototype,
+    "result",
+    "get",
+);
 
 //meow :3
 const props = {
@@ -49,6 +54,12 @@ describe("AcceptedUploadForm", () => {
         (global.URL.createObjectURL as jest.Mock) = jest.fn(
             () => "/mock-object-url",
         );
+        jest.useFakeTimers();
+        jest.setSystemTime(new Date('2024-01-01'));
+    });
+
+    afterAll(() => {
+        jest.useRealTimers();
     });
 
     test("should render with no errors", () => {
@@ -88,19 +99,17 @@ describe("AcceptedUploadForm", () => {
 
     test("should call createFloorplan when Accept button is clicked", async () => {
         mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
-        (NextServerConnector.post as jest.Mock).mockImplementationOnce(
-            (
-                { resource, payload }: PostConfig<Floorplan> = {
-                    resource: "floorplan",
-                    payload: {
-                        factoryId: "1",
-                        dateCreated: "2024-04-2012:34:56:78.969Z",
-                        floorplanId: "1",
-                        imageData: "base64Image",
-                    },
-                }
-            ) => {}
-        )      
+        mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
+
+        const mockConfig: PostConfig<Floorplan> = {
+            resource: "floorplan",
+            payload: {
+                factoryId: "1",
+                dateCreated: "2024-01-01T00:00:00.100Z",
+                floorplanId: "1",
+                imageData: "base64Image",
+            },
+        };
 
         const { getByText } = render(<AcceptedUploadForm {...props} />);
 
@@ -110,7 +119,7 @@ describe("AcceptedUploadForm", () => {
         });
 
         await waitFor(() => {
-            expect(NextServerConnector.post).toHaveBeenCalledWith("");
+            expect(NextServerConnector.post).toHaveBeenCalledWith(mockConfig);
             expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
         });
     });
@@ -142,7 +151,7 @@ describe("AcceptedUploadForm", () => {
             );
         });
     });
-
+    
     // test("should log error when createFloorplan fails", async () => {
     //     mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
     //     mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
