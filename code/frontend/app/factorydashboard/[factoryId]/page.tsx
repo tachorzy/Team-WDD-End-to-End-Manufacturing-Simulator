@@ -1,20 +1,21 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import FactoryBio from "@/components/factorydashboard/FactoryBio";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
-import { usePathname } from "next/navigation";
 import Blueprint from "@/components/factorydashboard/floorplan/blueprint/Blueprint";
 import FloorManager from "@/components/factorydashboard/floormanager/FloorManager";
 import { GetConfig, NextServerConnector } from "@/app/api/_utils/connector";
 import { Floorplan } from "@/app/api/_utils/types";
 
-export default function FactoryDashboard() {
+export default function FactoryDashboard({
+    params,
+}: {
+    params: { factoryId: string };
+}) {
     const [floorPlanFile, setFloorPlanFile] = useState<File | null>(null);
     const [assetMarkers, setAssetMarkers] = useState<JSX.Element[]>([]);
-    const navigation = usePathname();
-    const factoryId = navigation.split("/")[2];
+    const { factoryId } = params;
 
     useEffect(() => {
         const fetchFloorplan = async () => {
