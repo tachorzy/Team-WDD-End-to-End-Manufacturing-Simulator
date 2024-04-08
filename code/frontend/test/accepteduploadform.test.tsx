@@ -202,28 +202,17 @@ describe("AcceptedUploadForm", () => {
 
         interface MockFileReader {
             readAsDataURL: () => void;
-            EMPTY: number;
-            LOADING: number;
-            DONE: number;
-            onerror: (error: ErrorEvent) => void;
+            onerror: (error: Error) => void;
         }
 
         window.FileReader = jest.fn().mockImplementation(() => {
             const mockFileReader: MockFileReader = {
                 readAsDataURL() {
                     setTimeout(
-                        () =>
-                            mockFileReader.onerror(
-                                new ErrorEvent("error", {
-                                    error: new Error("Mock error"),
-                                }),
-                            ),
+                        () => mockFileReader.onerror(new Error("Mock error")),
                         0,
                     );
                 },
-                EMPTY: 0,
-                LOADING: 1,
-                DONE: 2,
                 onerror: () => {},
             };
             return mockFileReader;
