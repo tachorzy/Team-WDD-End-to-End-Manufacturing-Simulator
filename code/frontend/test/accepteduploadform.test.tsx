@@ -30,7 +30,6 @@ const mockReaderResult = jest.spyOn(
     "get",
 );
 
-// meow :3
 const props = {
     uploadedFile: new File(["blobpart"], "image.jpg", { type: "image.jpg" }),
     setUploadedFile: mockSetUploadedFile,
