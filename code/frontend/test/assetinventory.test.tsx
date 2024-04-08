@@ -5,8 +5,8 @@ import React from "react";
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Asset } from "@/app/api/_utils/types";
-import AssetInventory from "../components/factorydashboard/floormanager/AssetInventory";
-import InventoryNavBar from "../components/factorydashboard/floormanager/InventoryNavBar";
+import AssetInventory from "../components/factorydashboard/floormanager/inventory/AssetInventory";
+import InventoryNavBar from "../components/factorydashboard/floormanager/inventory/InventoryNavBar";
 
 describe("AssetInventory", () => {
     test("should have asset inventory navbar", () => {
