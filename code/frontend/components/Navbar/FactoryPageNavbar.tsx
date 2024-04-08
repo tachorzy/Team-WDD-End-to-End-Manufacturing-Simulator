@@ -3,12 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SignUpButton from "./SignUpButton";
 
-interface NavbarProps {
-    pageId: string;
-    factoryId: string;
-}
-
-const FactoryPageNavbar = (props: NavbarProps) => {
+const FactoryPageNavbar = (props: { pageId: string, factoryId: string}) => {
     const { pageId, factoryId } = props;
 
     const navbarLinks = [
@@ -18,7 +13,7 @@ const FactoryPageNavbar = (props: NavbarProps) => {
             link: `/factorydashboard/${factoryId}`,
         },
         { label: "Dashboard", link: `/factorydashboard/${factoryId}` },
-        { label: "Assets", link: "/" },
+        { label: "Asset Models", link: `/factorydashboard/${factoryId}/assetmodels`},
         { label: "Anomaly Detection", link: "/" },
     ];
 
