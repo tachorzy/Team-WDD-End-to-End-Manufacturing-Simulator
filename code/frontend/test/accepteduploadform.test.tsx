@@ -4,10 +4,11 @@
 import React from "react";
 import { render, waitFor, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import { NextServerConnector, PostConfig } from "@/app/api/_utils/connector";
 import AcceptedUploadForm from "../components/factorydashboard/floorplan/uploadcontainer/AcceptedUploadForm";
+import { Floorplan } from "@/app/api/_utils/types";
 
 const mockUsePathname = jest.fn(() => "");
-const mockCreateFloorplan = jest.fn(() => Promise.resolve("success"));
 
 jest.mock("next/navigation", () => ({
     usePathname(): string {
@@ -15,22 +16,36 @@ jest.mock("next/navigation", () => ({
     },
 }));
 
-// jest.mock("@/app/api/floorplan/floorplanAPI", () => ({
-//     createFloorplan(): Promise<string> {
-//         return mockCreateFloorplan();
-//     },
-// }));
+jest.mock("@/app/api/_utils/connector", () => ({
+    NextServerConnector: {
+        post: jest.fn(),
+    },
+}));
+
+global.FileReader = jest.fn(() => ({
+    readAsDataURL: function () {
+      this.onloadend();
+    },
+    result: 'data:image/jpg;base64,somebase64data',
+    EMPTY: 0,
+    LOADING: 1,
+    DONE: 2,
+    onload: jest.fn(),
+    onerror: jest.fn(),
+    onloadend: jest.fn(),
+    onloadstart: jest.fn(),
+    onprogress: jest.fn(),
+    onabort: jest.fn(),
+    readyState: 2,
+    error: null,
+  }));
 
 const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
 const mockSetUploadedFile = jest.fn();
 const mockSetFloorPlanFile = jest.fn();
-const mockReaderResult = jest.spyOn(
-    global.FileReader.prototype,
-    "result",
-    "get",
-);
 
+//meow :3
 const props = {
     uploadedFile: new File(["blobpart"], "image.jpg", { type: "image.jpg" }),
     setUploadedFile: mockSetUploadedFile,
@@ -48,13 +63,10 @@ const props = {
 
 describe("AcceptedUploadForm", () => {
     beforeEach(() => {
+        jest.clearAllMocks();
         (global.URL.createObjectURL as jest.Mock) = jest.fn(
             () => "/mock-object-url",
         );
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
     });
 
     test("should render with no errors", () => {
@@ -92,23 +104,54 @@ describe("AcceptedUploadForm", () => {
         expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
     });
 
-    test("should not call createFloorplan when Deny button is clicked", () => {
+    test("should call createFloorplan when Accept button is clicked", async () => {
+        mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
+        (NextServerConnector.post as jest.Mock).mockImplementationOnce(
+            (
+                { resource, payload }: PostConfig<Floorplan> = {
+                    resource: "floorplan",
+                    payload: {
+                        factoryId: "1",
+                        dateCreated: "2024-04-2012:34:56:78.969Z",
+                        floorplanId: "1",
+                        imageData: "base64Image",
+                    },
+                }
+            ) => {}
+        )      
+
+        const { getByText } = render(<AcceptedUploadForm {...props} />);
+
+        act(() => {
+            getByText("Accept").click();
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
+        });
+
+        await waitFor(() => {
+            expect(NextServerConnector.post).toHaveBeenCalledWith("");
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
+        });
+    });
+
+    test("should not call createFloorplan when Deny button is clicked", () => {        
         const { getByText } = render(<AcceptedUploadForm {...props} />);
 
         act(() => {
             getByText("Deny").click();
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
         });
 
-        expect(mockCreateFloorplan).not.toHaveBeenCalled();
+        expect(NextServerConnector.post).not.toHaveBeenCalled();
         expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
     });
 
-    test("should log error when factoryID is missing", async () => {
+    test("should log error when factoryID or File is missing", async () => {
         mockUsePathname.mockReturnValueOnce("some-path/some-path");
         const { getByText } = render(<AcceptedUploadForm {...props} />);
 
         act(() => {
             getByText("Accept").click();
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
         });
 
         await waitFor(() => {
