@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"time"
 	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -54,7 +55,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 	}
 
 	delete(requestBody, "imageData")
-	floorplanData, err := FloorPlanJSONMarshal(requestBody)
+	floorplanData, err := wrappers.JSONMarshal(requestBody)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, fmt.Errorf("error re-preparing floorplan data: %w", err)
 	}
@@ -123,7 +124,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 		}, nil
 	}
 
-	responseBody, err := FloorPlanJSONMarshal(map[string]interface{}{
+	responseBody, err := wrappers.JSONMarshal(map[string]interface{}{
 		"message":   fmt.Sprintf("floorplanId %s created successfully", floorplan.FloorplanID),
 		"factoryId": floorplan.FloorplanID,
 	})

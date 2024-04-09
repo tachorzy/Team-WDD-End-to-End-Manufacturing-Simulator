@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"net/http"
 	"testing"
+	"wdd/api/internal/wrappers"
 )
 
 func TestHandleReadFactoryRequest_WithoutId_ScanError(t *testing.T) {
@@ -82,11 +83,11 @@ func TestHandleReadFactoryRequest_WithoutId_JSONMarshalError(t *testing.T) {
 	}
 	handler := NewReadFactoryHandler(mockDDBClient)
 
-	originalFactoryJSONMarshal := FactoryJSONMarshal
+	originalFactoryJSONMarshal := wrappers.JSONMarshal
 
-	defer func() { FactoryJSONMarshal = originalFactoryJSONMarshal }()
+	defer func() { wrappers.JSONMarshal = originalFactoryJSONMarshal }()
 
-	FactoryJSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
@@ -229,11 +230,11 @@ func TestHandleReadFactoryRequest_WithId_JSONMarshalError(t *testing.T) {
 	}
 	handler := NewReadFactoryHandler(mockDDBClient)
 
-	originalFactoryJSONMarshal := FactoryJSONMarshal
+	originalFactoryJSONMarshal := wrappers.JSONMarshal
 
-	defer func() { FactoryJSONMarshal = originalFactoryJSONMarshal }()
+	defer func() { wrappers.JSONMarshal = originalFactoryJSONMarshal }()
 
-	FactoryJSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 

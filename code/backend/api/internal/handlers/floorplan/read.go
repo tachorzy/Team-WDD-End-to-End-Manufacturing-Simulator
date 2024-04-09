@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -48,7 +49,7 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 			}, nil
 		}
 
-		floorplansJSON, err := FloorPlanJSONMarshal(floorplans)
+		floorplansJSON, err := wrappers.JSONMarshal(floorplans)
 		if err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
@@ -99,7 +100,7 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	floorplanJSON, err := FloorPlanJSONMarshal(floorplan)
+	floorplanJSON, err := wrappers.JSONMarshal(floorplan)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -48,7 +49,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 			}, nil
 		}
 
-		factoriesJSON, err := FactoryJSONMarshal(factories)
+		factoriesJSON, err := wrappers.JSONMarshal(factories)
 		if err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
@@ -99,7 +100,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 		}, nil
 	}
 
-	factoryJSON, err := FactoryJSONMarshal(factory)
+	factoryJSON, err := wrappers.JSONMarshal(factory)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

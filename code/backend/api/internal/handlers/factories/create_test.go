@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"net/http"
 	"testing"
+	"wdd/api/internal/wrappers"
 )
 
 func TestHandleCreateFactoryRequest_BadJSON(t *testing.T) {
@@ -98,11 +99,11 @@ func TestHandleCreateFactoryRequest_JSONMarshalError(t *testing.T) {
 		Body: `{"name":"Test Factory","location":{"longitude":10,"latitude":20},"description":"Test Description"}`,
 	}
 
-	originalFactoryJSONMarshal := FactoryJSONMarshal
+	originalFactoryJSONMarshal := wrappers.JSONMarshal
 
-	defer func() { FactoryJSONMarshal = originalFactoryJSONMarshal }()
+	defer func() { wrappers.JSONMarshal = originalFactoryJSONMarshal }()
 
-	FactoryJSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 

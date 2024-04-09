@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/google/uuid"
-	"wdd/api/internal/types"
 )
 
 func NewCreateFactoryHandler(db types.DynamoDBClient) *Handler {
@@ -61,7 +62,7 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	responseBody, err := FactoryJSONMarshal(map[string]interface{}{
+	responseBody, err := wrappers.JSONMarshal(map[string]interface{}{
 		"message":   fmt.Sprintf("factoryId %s created successfully", factory.FactoryID),
 		"factoryId": factory.FactoryID,
 	})
