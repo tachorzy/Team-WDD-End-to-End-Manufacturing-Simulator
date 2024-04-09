@@ -5,15 +5,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"wdd/api/internal/types"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewUpdateAssetHandler(db DynamoDBClient) *Handler {
+func NewUpdateAssetHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -38,8 +39,8 @@ func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.AP
 		}, nil
 	}
 
-	key := map[string]types.AttributeValue{
-		"assetId": &types.AttributeValueMemberS{Value: asset.AssetID},
+	key := map[string]ddbtypes.AttributeValue{
+		"assetId": &ddbtypes.AttributeValueMemberS{Value: asset.AssetID},
 	}
 
 	var updateBuilder expression.UpdateBuilder

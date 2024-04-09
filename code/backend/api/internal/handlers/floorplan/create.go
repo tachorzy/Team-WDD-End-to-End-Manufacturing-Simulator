@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+	"wdd/api/internal/types"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -17,7 +18,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func NewCreateFloorPlanHandler(db DynamoDBClient) *Handler {
+func NewCreateFloorPlanHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -110,7 +111,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 	}
 
 	_, err = h.DynamoDB.PutItem(ctx, &dynamodb.PutItemInput{
-		TableName: aws.String("Floorplan"),
+		TableName: aws.String(TABLENAME),
 		Item:      av,
 	})
 

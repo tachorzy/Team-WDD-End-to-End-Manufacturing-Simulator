@@ -4,14 +4,15 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"wdd/api/internal/types"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewReadFloorPlanHandler(db DynamoDBClient) *Handler {
+func NewReadFloorPlanHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -27,7 +28,7 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 
 	if floorplanID == "" {
 		input := &dynamodb.ScanInput{
-			TableName: aws.String("Floorplan"),
+			TableName: aws.String(TABLENAME),
 		}
 		result, err := h.DynamoDB.Scan(ctx, input)
 		if err != nil {
@@ -63,8 +64,8 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	key := map[string]types.AttributeValue{
-		"floorplanId": &types.AttributeValueMemberS{Value: floorplanID},
+	key := map[string]ddbtypes.AttributeValue{
+		"floorplanId": &ddbtypes.AttributeValueMemberS{Value: floorplanID},
 	}
 
 	input := &dynamodb.GetItemInput{
