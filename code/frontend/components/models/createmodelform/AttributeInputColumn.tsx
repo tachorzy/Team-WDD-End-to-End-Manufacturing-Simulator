@@ -27,7 +27,7 @@ const AttributeInputColumn = (props: {
                             </h2>
                             <input
                                 className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
-                                placeholder="e.g. Model Name"
+                                placeholder="e.g. CNC 1"
                             />
                         </div>
                     </div>
