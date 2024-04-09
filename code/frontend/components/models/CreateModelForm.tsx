@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import AddedModelCharacteristic from "./AddedModelCharacteristic";
-
+import AddAttributeButton from "./AddAttributeButton";
+import AddPropertyButton from "./AddPropertyButton";
 // interface CreateModelFormProps {
 //     onClose: () => void;
 //     onSave: (formData: Partial<Factory>) => void;
@@ -65,10 +65,7 @@ const CreateModelForm: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            <AddedModelCharacteristic
-                                characteristic="Attribute"
-                                setCharacteristic={setAttributes}
-                            />
+                            <AddAttributeButton setAttributes={setAttributes} />
                         </div>
 
                         <div className="flex flex-col gap-y-3 w-1/2">
@@ -95,10 +92,7 @@ const CreateModelForm: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            <AddedModelCharacteristic
-                                characteristic="Property"
-                                setCharacteristic={setProperties}
-                            />
+                            <AddPropertyButton setProperties={setProperties} />
                         </div>
                     </section>
                 </div>
