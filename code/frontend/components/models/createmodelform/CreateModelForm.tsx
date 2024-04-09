@@ -5,7 +5,6 @@ import PropertyInputColumn from "./PropertyInputColumn";
 import AddAttributeButton from "./AddAttributeButton";
 import AddPropertyButton from "./AddPropertyButton";
 
-
 // interface CreateModelFormProps {
 //     onClose: () => void;
 //     onSave: (formData: Partial<Factory>) => void;
@@ -36,6 +35,7 @@ const CreateModelForm: React.FC = () => {
                             </h2>
                             <div className="flex flex-row gap-x-1">
                                 <input
+                                    id="modelIDInput"
                                     className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-[6.25rem]"
                                     placeholder="e.g. CNC"
                                 />
