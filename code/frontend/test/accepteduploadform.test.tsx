@@ -4,22 +4,21 @@
 import React from "react";
 import { render, waitFor, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import { NextServerConnector, PostConfig } from "@/app/api/_utils/connector";
+import { Floorplan } from "@/app/api/_utils/types";
 import AcceptedUploadForm from "../components/factorydashboard/floorplan/uploadcontainer/AcceptedUploadForm";
 
 const mockUsePathname = jest.fn(() => "");
-const mockCreateFloorplan = jest.fn(() => Promise.resolve("success"));
 
 jest.mock("next/navigation", () => ({
-    usePathname(): string {
-        return mockUsePathname();
-    },
+    usePathname: () => mockUsePathname(),
 }));
 
-// jest.mock("@/app/api/floorplan/floorplanAPI", () => ({
-//     createFloorplan(): Promise<string> {
-//         return mockCreateFloorplan();
-//     },
-// }));
+jest.mock("@/app/api/_utils/connector", () => ({
+    NextServerConnector: {
+        post: jest.fn(),
+    },
+}));
 
 const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
@@ -48,13 +47,16 @@ const props = {
 
 describe("AcceptedUploadForm", () => {
     beforeEach(() => {
+        jest.clearAllMocks();
         (global.URL.createObjectURL as jest.Mock) = jest.fn(
             () => "/mock-object-url",
         );
+        jest.useFakeTimers();
+        jest.setSystemTime(new Date("2024-01-01"));
     });
 
-    afterEach(() => {
-        jest.clearAllMocks();
+    afterAll(() => {
+        jest.useRealTimers();
     });
 
     test("should render with no errors", () => {
@@ -92,23 +94,59 @@ describe("AcceptedUploadForm", () => {
         expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
     });
 
+    test("should call createFloorplan when Accept button is clicked", async () => {
+        mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
+        mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
+        const mockPost = (
+            NextServerConnector.post as jest.Mock
+        ).mockResolvedValue({});
+
+        const mockConfig: PostConfig<Floorplan> = {
+            resource: "floorplan",
+            payload: {
+                factoryId: "1",
+                dateCreated: "2024-01-01T00:00:00.100Z",
+                floorplanId: "1",
+                imageData: "base64Image",
+            },
+        };
+
+        const { getByText } = render(<AcceptedUploadForm {...props} />);
+
+        act(() => {
+            getByText("Accept").click();
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
+        });
+
+        await waitFor(() => {
+            expect(mockPost).toHaveBeenCalledWith(mockConfig);
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
+        });
+    });
+
     test("should not call createFloorplan when Deny button is clicked", () => {
+        const mockPost = (
+            NextServerConnector.post as jest.Mock
+        ).mockResolvedValue({});
+
         const { getByText } = render(<AcceptedUploadForm {...props} />);
 
         act(() => {
             getByText("Deny").click();
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
         });
 
-        expect(mockCreateFloorplan).not.toHaveBeenCalled();
+        expect(mockPost).not.toHaveBeenCalled();
         expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
     });
 
-    test("should log error when factoryID is missing", async () => {
+    test("should log error when factoryID or File is missing", async () => {
         mockUsePathname.mockReturnValueOnce("some-path/some-path");
         const { getByText } = render(<AcceptedUploadForm {...props} />);
 
         act(() => {
             getByText("Accept").click();
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
         });
 
         await waitFor(() => {
@@ -118,22 +156,78 @@ describe("AcceptedUploadForm", () => {
         });
     });
 
-    // test("should log error when createFloorplan fails", async () => {
-    //     mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
-    //     mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
-    //     mockCreateFloorplan.mockRejectedValueOnce(new Error("404"));
-    //     const { getByText } = render(<AcceptedUploadForm {...props} />);
+    test("should log error when failed to convert file to base64", async () => {
+        mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
+        mockReaderResult.mockImplementationOnce(() => null);
+        const { getByText } = render(<AcceptedUploadForm {...props} />);
 
-    //     act(() => {
-    //         getByText("Accept").click();
-    //         expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
-    //     });
+        act(() => {
+            getByText("Accept").click();
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
+        });
 
-    //     await waitFor(() => {
-    //         expect(consoleSpy).toHaveBeenCalledWith(
-    //             "Error uploading floor plan:",
-    //             new Error("404"),
-    //         );
-    //     });
-    // });
+        await waitFor(() => {
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "Failed to convert the file to base64.",
+            );
+        });
+    });
+
+    test("should log error when createFloorplan fails", async () => {
+        mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
+        mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
+        (NextServerConnector.post as jest.Mock).mockRejectedValueOnce(
+            new Error("Fetch error: 404"),
+        );
+
+        const { getByText } = render(<AcceptedUploadForm {...props} />);
+
+        act(() => {
+            getByText("Accept").click();
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
+        });
+
+        await waitFor(() => {
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "Error uploading floor plan:",
+                new Error("Fetch error: 404"),
+            );
+        });
+    });
+
+    test("should log error when there is an error reading the file", async () => {
+        mockUsePathname.mockReturnValueOnce("some-path/some-path/1");
+        mockReaderResult.mockImplementationOnce(() => "some-data,base64Image");
+
+        interface MockFileReader {
+            readAsDataURL: () => void;
+            onerror: (error: Error) => void;
+        }
+
+        window.FileReader = jest.fn().mockImplementation(() => {
+            const mockFileReader: MockFileReader = {
+                readAsDataURL() {
+                    setTimeout(
+                        () => mockFileReader.onerror(new Error("Mock error")),
+                        0,
+                    );
+                },
+                onerror: () => {},
+            };
+            return mockFileReader;
+        }) as unknown as typeof FileReader;
+
+        const { getByText } = render(<AcceptedUploadForm {...props} />);
+
+        act(() => {
+            getByText("Accept").click();
+            expect(mockSetUploadedFile).toHaveBeenCalledWith(null);
+        });
+
+        await waitFor(() => {
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "There was an error reading the file",
+            );
+        });
+    });
 });

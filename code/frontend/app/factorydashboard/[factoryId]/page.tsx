@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import FactoryBio from "@/components/factorydashboard/FactoryBio";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
