@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+	"wdd/api/internal/types"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -32,7 +33,7 @@ func NewCreateAssetHandler(db *dynamodb.Client, s3Client *s3.Client) *AssetHandl
 func (h *AssetHandler) HandleCreateAssetRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	headers := getDefaultHeaders()
 
-	var asset Asset
+	var asset types.Asset
 	if err := json.Unmarshal([]byte(request.Body), &asset); err != nil {
 		return apiResponse(http.StatusBadRequest, "Error parsing JSON body: "+err.Error(), headers), nil
 	}
@@ -64,7 +65,7 @@ func (h *AssetHandler) HandleCreateAssetRequest(ctx context.Context, request eve
 	return apiResponse(http.StatusOK, string(responseBody), headers), nil
 }
 
-func processAssetFiles(ctx context.Context, asset *Asset, s3Client *s3.Client) error {
+func processAssetFiles(ctx context.Context, asset *types.Asset, s3Client *s3.Client) error {
 	uploader := manager.NewUploader(s3Client)
 
 	if asset.ImageData != "" {

@@ -25,7 +25,7 @@ var UpdateExpressionBuilder = func(update expression.UpdateBuilder) (expression.
 }
 
 func (h Handler) HandleUpdateFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var factory Factory
+	var factory types.Factory
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",
 		"Content-Type":                "application/json",

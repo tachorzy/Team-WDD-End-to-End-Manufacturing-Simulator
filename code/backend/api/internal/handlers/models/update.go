@@ -25,7 +25,7 @@ var UpdateExpressionBuilder = func(update expression.UpdateBuilder) (expression.
 }
 
 func (h Handler) HandleUpdateModelRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var model Model
+	var model types.Model
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",
 		"Content-Type":                "application/json",

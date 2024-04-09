@@ -21,7 +21,7 @@ func NewCreateFactoryHandler(db types.DynamoDBClient) *Handler {
 }
 
 func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var factory Factory
+	var factory types.Factory
 
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",

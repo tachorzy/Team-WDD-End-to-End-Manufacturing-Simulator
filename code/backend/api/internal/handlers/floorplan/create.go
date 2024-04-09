@@ -59,7 +59,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 		return events.APIGatewayProxyResponse{}, fmt.Errorf("error re-preparing floorplan data: %w", err)
 	}
 
-	var floorplan Floorplan
+	var floorplan types.Floorplan
 	err = json.Unmarshal(floorplanData, &floorplan)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, fmt.Errorf("error unmarshalling floorplan data: %w", err)

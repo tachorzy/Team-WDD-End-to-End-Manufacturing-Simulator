@@ -53,7 +53,7 @@ func (h Handler) HandleReadAssetsByFactoryRequest(ctx context.Context, request e
 		}, nil
 	}
 
-	var assets []Asset
+	var assets []types.Asset
 	err = AssetUnmarshalListOfMaps(result.Items, &assets)
 	if err != nil {
 		return events.APIGatewayProxyResponse{

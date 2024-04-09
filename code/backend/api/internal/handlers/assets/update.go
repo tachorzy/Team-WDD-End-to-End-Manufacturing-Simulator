@@ -25,7 +25,7 @@ var UpdateExpressionBuilder = func(update expression.UpdateBuilder) (expression.
 }
 
 func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var asset Asset
+	var asset types.Asset
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",
 		"Content-Type":                "application/json",

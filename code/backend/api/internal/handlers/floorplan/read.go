@@ -39,7 +39,7 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 			}, nil
 		}
 
-		var floorplans []Floorplan
+		var floorplans []types.Floorplan
 		if err = FloorPlanUnmarshalListOfMaps(result.Items, &floorplans); err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
@@ -90,7 +90,7 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	var floorplan Floorplan
+	var floorplan types.Floorplan
 	if err = FloorPlanUnmarshalMap(result.Item, &floorplan); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
