@@ -1,6 +1,6 @@
 "use client";
 
-import FactoryPageNavbar from "@/components/navbar/FactoryPageNavbar";
+import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import CreateModelForm from "@/components/models/CreateModelForm";
 
 export default function assetModels({

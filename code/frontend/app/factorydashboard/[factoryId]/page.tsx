@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import FactoryBio from "@/components/factorydashboard/FactoryBio";
-import FactoryPageNavbar from "@/components/navbar/FactoryPageNavbar";
+import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
 import { usePathname } from "next/navigation";
 import Blueprint from "@/components/factorydashboard/floorplan/blueprint/Blueprint";
