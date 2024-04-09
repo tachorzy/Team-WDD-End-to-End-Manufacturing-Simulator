@@ -21,7 +21,7 @@ const CreateModelForm: React.FC = () => {
                 <h1 className="text-3xl font-semibold mb-4 text-gray-900">
                     Create Your Asset Model
                 </h1>
-                <div className="flex flex-row gap-x-32 mt-6">
+                <div className="flex flex-row gap-x-16 mt-6">
                     <section className="flex flex-col gap-y-3 min-w-max">
                         <h1 className="text-2xl font-semibold text-gray-900">
                             Model ID
@@ -41,56 +41,67 @@ const CreateModelForm: React.FC = () => {
                     </section>
 
                     <section className="flex flex-row gap-y-3 gap-x-4">
-                        <div className="flex flex-col gap-y-3 w-1/2">
-                            <h1 className="text-2xl font-semibold text-gray-900">
-                                Attributes
-                            </h1>
-                            <div className="flex flex-row items-start">
-                                <div className="flex flex-col">
-                                    <h2 className="text-sm font-medium text-[#494949]">
-                                        Attribute 1
-                                    </h2>
-                                    <input
-                                        className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
-                                        placeholder="e.g. Model Name"
-                                    />
-                                </div>
-                                <div className="flex flex-col">
-                                    <h2 className="text-sm font-medium text-[#494949]">
-                                        Value
-                                    </h2>
-                                    <input
-                                        className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
-                                        placeholder="e.g. Model Name"
-                                    />
-                                </div>
+                        <div className="flex flex-col w-1/2 gap-y-3">
+                            <div className="flex flex-col gap-y-3 max-h-96 overflow-y-scroll">
+                                <h1 className="text-2xl font-semibold text-gray-900">
+                                            Attributes
+                                </h1>
+                                {attributes.map((attribute, index) => (
+                                    <div>
+                                        <div className="flex flex-row items-start">
+                                            <div className="flex flex-col">
+                                                <h2 className="text-sm font-medium text-[#494949]">
+                                                    {`Attribute ${index+1}`}
+                                                </h2>
+                                                <input
+                                                    className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
+                                                    placeholder="e.g. Model Name"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <h2 className="text-sm font-medium text-[#494949]">
+                                                    Value
+                                                </h2>
+                                                <input
+                                                    className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
+                                                    placeholder="e.g. Model Name"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                             <AddAttributeButton setAttributes={setAttributes} />
                         </div>
-
-                        <div className="flex flex-col gap-y-3 w-1/2">
-                            <h1 className="text-2xl font-semibold text-gray-900">
-                                Properties
-                            </h1>
-                            <div className="flex flex-row items-start">
-                                <div className="flex flex-col">
-                                    <h2 className="text-sm font-medium text-[#494949]">
-                                        Property 1
-                                    </h2>
-                                    <input
-                                        className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
-                                        placeholder="e.g. Temperature"
-                                    />
-                                </div>
-                                <div className="flex flex-col">
-                                    <h2 className="text-sm font-medium text-[#494949]">
-                                        Units
-                                    </h2>
-                                    <input
-                                        className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
-                                        placeholder="e.g. °C"
-                                    />
-                                </div>
+                        <div className="flex flex-col w-1/2 gap-y-3">
+                            <div className="flex flex-col gap-y-3 max-h-96 overflow-y-scroll">
+                                <h1 className="text-2xl font-semibold text-gray-900">
+                                    Properties
+                                </h1>
+                                {properties.map((property, index) => (
+                                    <div className="flex flex-col gap-y-3">
+                                        <div className="flex flex-row items-start">
+                                            <div className="flex flex-col">
+                                                <h2 className="text-sm font-medium text-[#494949]">
+                                                    {`Property ${index+1}`}
+                                                </h2>
+                                                <input
+                                                    className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
+                                                    placeholder="e.g. Temperature"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <h2 className="text-sm font-medium text-[#494949]">
+                                                    Units
+                                                </h2>
+                                                <input
+                                                    className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
+                                                    placeholder="e.g. °C"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                             <AddPropertyButton setProperties={setProperties} />
                         </div>
