@@ -1,7 +1,9 @@
 import CreateModelForm from "@/components/models/createmodelform/CreateModelForm";
 import AttributeInputColumn from "@/components/models/createmodelform/AttributeInputColumn";
 import PropertyInputColumn from "@/components/models/createmodelform/PropertyInputColumn";
-import { render } from "@testing-library/react";
+import AddAttributeButton from "@/components/models/createmodelform/AddAttributeButton";
+import AddPropertyButton from "@/components/models/createmodelform/AddPropertyButton";
+import { render, waitFor } from "@testing-library/react";
 import '@testing-library/jest-dom';
 
 describe("CreateModelForm", () => {
@@ -50,30 +52,34 @@ describe("CreateModelForm", () => {
         expect(unitsInput).toBeInTheDocument();
     });
 
-    test("should add new attribute input field when Add Attribute button is clicked", () => {
-        const { getByText } = render(<AttributeInputColumn attributes={[{ attribute: "", value: "" }]} />);
+    test("should add new attribute input field when Add Attribute button is clicked", async () => {
+        const { getByText } = render(<CreateModelForm/>);
         const addAttributeButton = getByText("Add Attribute");
 
         addAttributeButton.click();
+        const attributeHeader = getByText("Attribute 1");
 
-        const attributeHeader = getByText("Attribute 2");
-        const valueInput = getByText("Value");
-
-        expect(attributeHeader).toBeInTheDocument();
-        expect(valueInput).toBeInTheDocument();
+        await waitFor(() => {
+            const attributeHeader2 = getByText("Attribute 2");
+                    
+            expect(attributeHeader).toBeInTheDocument();
+            expect(attributeHeader2).toBeInTheDocument();
+        });
     });
 
-    test("should add new property input field when Add Property button is clicked", () => {
-        const { getByText } = render(<PropertyInputColumn properties={[{ property: "", unit: "" }]} />);
+    test("should add new property input field when Add Property button is clicked", async () => {
+        const { getByText } = render(<CreateModelForm/>);
         const addPropertyButton = getByText("Add Property");
-
         addPropertyButton.click();
 
-        const propertyHeader = getByText("Property 2");
-        const unitsInput = getByText("Units");
+        const propertyHeader = getByText("Property 1");
 
-        expect(propertyHeader).toBeInTheDocument();
-        expect(unitsInput).toBeInTheDocument();
+        await waitFor(() => {
+            const propertyHeader2 = getByText("Property 2");
+
+            expect(propertyHeader).toBeInTheDocument();
+            expect(propertyHeader2).toBeInTheDocument();
+        });
     });
     
 });
