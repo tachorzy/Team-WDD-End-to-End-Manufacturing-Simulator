@@ -56,12 +56,7 @@ func (h *AssetHandler) HandleCreateAssetRequest(ctx context.Context, request eve
 		return apiResponse(http.StatusInternalServerError, "Error putting item into DynamoDB: "+err.Error(), headers), nil
 	}
 
-	responseBody, err := AssetJSONMarshal(map[string]interface{}{
-		"message":   "Asset created successfully",
-		"assetId":   asset.AssetID,
-		"imageData": asset.ImageData,
-		"modelUrl":  *asset.ModelURL,
-	})
+	responseBody, err := json.Marshal(asset)
 	if err != nil {
 		return apiResponse(http.StatusInternalServerError, "Error marshalling response body: "+err.Error(), headers), nil
 	}

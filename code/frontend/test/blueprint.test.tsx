@@ -18,7 +18,8 @@ describe("Blueprint Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData: "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
+            imageData:
+                "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
             factoryId: "1",
         };
 
@@ -44,7 +45,8 @@ describe("Blueprint Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData: "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
+            imageData:
+                "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
             factoryId: "1",
         };
 

@@ -4,15 +4,15 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
-import fetchMock from 'jest-fetch-mock';
+import fetchMock from "jest-fetch-mock";
 import { Asset } from "@/app/api/_utils/types";
 import AssetItem from "../components/factorydashboard/floormanager/AssetItem";
 
 describe("AssetItem", () => {
     beforeEach(() => {
         global.URL.createObjectURL = jest.fn();
-        const mockImageData = new Blob([''], { type: 'image/jpeg' });
-        const mockBase64Data = 'data:image/jpeg;base64,';
+        const mockImageData = new Blob([""], { type: "image/jpeg" });
+        const mockBase64Data = "data:image/jpeg;base64,";
         fetchMock.mockResponseOnce(() => Promise.resolve(mockBase64Data));
     });
 
@@ -21,7 +21,8 @@ describe("AssetItem", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description",
-            imageData: "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927", // for some reason it doesnt pass in github when we use image/test.jpg so a temp solution is using a real image url
+            imageData:
+                "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927", // for some reason it doesnt pass in github when we use image/test.jpg so a temp solution is using a real image url
             factoryId: "1",
         };
 
