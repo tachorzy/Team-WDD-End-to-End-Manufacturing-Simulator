@@ -11,9 +11,10 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/google/uuid"
+	"wdd/api/internal/types"
 )
 
-func NewCreateFactoryHandler(db DynamoDBClient) *Handler {
+func NewCreateFactoryHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}

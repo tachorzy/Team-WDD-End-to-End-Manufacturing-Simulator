@@ -8,10 +8,11 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"wdd/api/internal/types"
 )
 
-func NewReadFactoryHandler(db DynamoDBClient) *Handler {
+func NewReadFactoryHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -63,8 +64,8 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 		}, nil
 	}
 
-	key := map[string]types.AttributeValue{
-		"factoryId": &types.AttributeValueMemberS{Value: factoryID},
+	key := map[string]ddbtypes.AttributeValue{
+		"factoryId": &ddbtypes.AttributeValueMemberS{Value: factoryID},
 	}
 
 	input := &dynamodb.GetItemInput{

@@ -5,15 +5,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"wdd/api/internal/types"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewUpdateFactoryHandler(db DynamoDBClient) *Handler {
+func NewUpdateFactoryHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -38,8 +39,8 @@ func (h Handler) HandleUpdateFactoryRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	key := map[string]types.AttributeValue{
-		"factoryId": &types.AttributeValueMemberS{Value: factory.FactoryID},
+	key := map[string]ddbtypes.AttributeValue{
+		"factoryId": &ddbtypes.AttributeValueMemberS{Value: factory.FactoryID},
 	}
 
 	var updateBuilder expression.UpdateBuilder
