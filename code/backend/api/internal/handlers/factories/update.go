@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -18,10 +19,6 @@ func NewUpdateFactoryHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
-}
-
-var UpdateExpressionBuilder = func(update expression.UpdateBuilder) (expression.Expression, error) {
-	return expression.NewBuilder().WithUpdate(update).Build()
 }
 
 func (h Handler) HandleUpdateFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -59,7 +56,7 @@ func (h Handler) HandleUpdateFactoryRequest(ctx context.Context, request events.
 		}
 	}
 
-	expr, err := UpdateExpressionBuilder(updateBuilder)
+	expr, err := wrappers.UpdateExpressionBuilder(updateBuilder)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

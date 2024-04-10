@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
+	"wdd/api/internal/wrappers"
 )
 
 func TestHandleUpdateFactoryRequest_BadJSON(t *testing.T) {
@@ -37,11 +38,11 @@ func TestHandleUpdateFactoryRequest_UpdateExpressionBuilderError(t *testing.T) {
 
 	handler := NewUpdateFactoryHandler(mockDDBClient)
 
-	originalUpdateExpressionBuilder := UpdateExpressionBuilder
+	originalUpdateExpressionBuilder := wrappers.UpdateExpressionBuilder
 
-	defer func() { UpdateExpressionBuilder = originalUpdateExpressionBuilder }()
+	defer func() { wrappers.UpdateExpressionBuilder = originalUpdateExpressionBuilder }()
 
-	UpdateExpressionBuilder = func(expression.UpdateBuilder) (expression.Expression, error) {
+	wrappers.UpdateExpressionBuilder = func(expression.UpdateBuilder) (expression.Expression, error) {
 		return expression.Expression{}, errors.New("update expression error")
 	}
 
