@@ -19,19 +19,14 @@ import (
 	"github.com/google/uuid"
 )
 
-type AssetHandler struct {
-	DynamoDB *dynamodb.Client
-	S3Client *s3.Client
-}
-
-func NewCreateAssetHandler(db *dynamodb.Client, s3Client *s3.Client) *AssetHandler {
-	return &AssetHandler{
+func NewCreateAssetHandler(db *dynamodb.Client, s3Client *s3.Client) *Handler {
+	return &Handler{
 		DynamoDB: db,
 		S3Client: s3Client,
 	}
 }
 
-func (h *AssetHandler) HandleCreateAssetRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (h Handler) HandleCreateAssetRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	headers := getDefaultHeaders()
 
 	var asset types.Asset
