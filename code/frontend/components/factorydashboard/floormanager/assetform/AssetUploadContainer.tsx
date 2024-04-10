@@ -16,10 +16,13 @@ const FileUploadContainer = (props: {
             const file = acceptedFiles[0]; // assuming only one file is uploaded
             const reader = new FileReader();
             reader.onloadend = () => {
+                const base64String = reader.result?.toString().split(",")[1];
+                console.log(base64String);
                 setFormData((prevData) => ({
                     ...prevData,
-                    image: reader.result as string, // assuming reader.result contains the base64 string of the image
+                    imageData: base64String as string, // assuming reader.result contains the base64 string of the image
                 }));
+               
             };
             reader.readAsDataURL(file);
         },

@@ -21,6 +21,10 @@ type Asset struct {
 	ModelID         *string          `json:"modelId,omitempty" dynamodbav:"modelId"`
 	FloorplanID     *string          `json:"floorplanId,omitempty" dynamodbav:"floorplanId"`
 	DateCreated     string           `json:"dateCreated" dynamodbav:"dateCreated"`
+	ImageData       string           `json:"imageData" dynamodbav:"imageData"`
+	ModelURL        *string          `json:"modelUrl,omitempty" dynamodbav:"modelUrl"`
+	Type            *string          `json:"type,omitempty" dynamodbav:"type"`
+	Description     *string          `json:"description,omitempty" dynamodbav:"description"`
 }
 
 type DynamoDBClient interface {
