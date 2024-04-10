@@ -102,7 +102,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 
 	floorplan.ImageData = fmt.Sprintf("https://%s.s3.amazonaws.com/%s", "wingstopdrivenbucket", imageFileName)
 
-	av, err := FloorPlanMarshalMap(floorplan)
+	av, err := wrappers.MarshalMap(floorplan)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

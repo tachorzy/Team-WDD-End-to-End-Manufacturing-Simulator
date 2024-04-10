@@ -37,11 +37,11 @@ func TestHandleCreateFactoryRequest_MarshalMapError(t *testing.T) {
 
 	handler := NewCreateFactoryHandler(mockDDBClient)
 
-	originalMarshalMap := FactoryMarshalMap
+	originalMarshalMap := wrappers.MarshalMap
 
-	defer func() { FactoryMarshalMap = originalMarshalMap }()
+	defer func() { wrappers.MarshalMap = originalMarshalMap }()
 
-	FactoryMarshalMap = func(interface{}) (map[string]types.AttributeValue, error) {
+	wrappers.MarshalMap = func(interface{}) (map[string]types.AttributeValue, error) {
 		return nil, errors.New("mock error")
 	}
 

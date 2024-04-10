@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"time"
 	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -45,7 +46,7 @@ func (h *AssetHandler) HandleCreateAssetRequest(ctx context.Context, request eve
 		return apiResponse(http.StatusInternalServerError, err.Error(), headers), nil
 	}
 
-	av, err := AssetMarshalMap(asset)
+	av, err := wrappers.MarshalMap(asset)
 	if err != nil {
 		return apiResponse(http.StatusInternalServerError, "Error marshalling asset: "+err.Error(), headers), nil
 	}

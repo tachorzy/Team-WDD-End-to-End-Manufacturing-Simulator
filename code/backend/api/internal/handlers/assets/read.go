@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -54,7 +55,7 @@ func (h Handler) HandleReadAssetsByFactoryRequest(ctx context.Context, request e
 	}
 
 	var assets []types.Asset
-	err = AssetUnmarshalListOfMaps(result.Items, &assets)
+	err = wrappers.UnmarshalListOfMaps(result.Items, &assets)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

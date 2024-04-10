@@ -47,11 +47,11 @@ func TestHandleReadFactoryRequest_WithoutId_UnmarshalListOfMapsError(t *testing.
 	}
 	handler := NewReadFactoryHandler(mockDDBClient)
 
-	originalUnmarshalListOfMaps := FactoryUnmarshalListOfMaps
+	originalUnmarshalListOfMaps := wrappers.UnmarshalListOfMaps
 
-	defer func() { FactoryUnmarshalListOfMaps = originalUnmarshalListOfMaps }()
+	defer func() { wrappers.UnmarshalListOfMaps = originalUnmarshalListOfMaps }()
 
-	FactoryUnmarshalListOfMaps = func([]map[string]types.AttributeValue, interface{}) error {
+	wrappers.UnmarshalListOfMaps = func([]map[string]types.AttributeValue, interface{}) error {
 		return errors.New("mock error")
 	}
 
@@ -194,11 +194,11 @@ func TestHandleReadFactoryRequest_WithId_UnmarshalMapError(t *testing.T) {
 	}
 	handler := NewReadFactoryHandler(mockDDBClient)
 
-	originalFactoryUnmarshalMap := FactoryUnmarshalMap
+	originalFactoryUnmarshalMap := wrappers.UnmarshalMap
 
-	defer func() { FactoryUnmarshalMap = originalFactoryUnmarshalMap }()
+	defer func() { wrappers.UnmarshalMap = originalFactoryUnmarshalMap }()
 
-	FactoryUnmarshalMap = func(map[string]types.AttributeValue, interface{}) error {
+	wrappers.UnmarshalMap = func(map[string]types.AttributeValue, interface{}) error {
 		return errors.New("mock error")
 	}
 

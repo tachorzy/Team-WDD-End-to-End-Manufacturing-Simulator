@@ -41,7 +41,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 		}
 
 		var factories []types.Factory
-		if err = FactoryUnmarshalListOfMaps(result.Items, &factories); err != nil {
+		if err = wrappers.UnmarshalListOfMaps(result.Items, &factories); err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
 				Headers:    headers,
@@ -92,7 +92,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 	}
 
 	var factory types.Factory
-	if err = FactoryUnmarshalMap(result.Item, &factory); err != nil {
+	if err = wrappers.UnmarshalMap(result.Item, &factory); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,

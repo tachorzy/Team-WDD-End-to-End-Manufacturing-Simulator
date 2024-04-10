@@ -40,7 +40,7 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 	factory.FactoryID = uuid.NewString()
 	factory.DateCreated = time.Now().Format(time.RFC3339)
 
-	av, err := FactoryMarshalMap(factory)
+	av, err := wrappers.MarshalMap(factory)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
