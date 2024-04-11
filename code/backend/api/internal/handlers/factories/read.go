@@ -4,14 +4,16 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"wdd/api/internal/types"
 )
 
-func NewReadFactoryHandler(db DynamoDBClient) *Handler {
+func NewReadFactoryHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -38,8 +40,8 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 			}, nil
 		}
 
-		var factories []Factory
-		if err = FactoryUnmarshalListOfMaps(result.Items, &factories); err != nil {
+		var factories []types.Factory
+		if err = wrappers.UnmarshalListOfMaps(result.Items, &factories); err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
 				Headers:    headers,
@@ -47,7 +49,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 			}, nil
 		}
 
-		factoriesJSON, err := FactoryJSONMarshal(factories)
+		factoriesJSON, err := wrappers.JSONMarshal(factories)
 		if err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
@@ -63,8 +65,8 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 		}, nil
 	}
 
-	key := map[string]types.AttributeValue{
-		"factoryId": &types.AttributeValueMemberS{Value: factoryID},
+	key := map[string]ddbtypes.AttributeValue{
+		"factoryId": &ddbtypes.AttributeValueMemberS{Value: factoryID},
 	}
 
 	input := &dynamodb.GetItemInput{
@@ -89,8 +91,8 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 		}, nil
 	}
 
-	var factory Factory
-	if err = FactoryUnmarshalMap(result.Item, &factory); err != nil {
+	var factory types.Factory
+	if err = wrappers.UnmarshalMap(result.Item, &factory); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,
@@ -98,7 +100,7 @@ func (h Handler) HandleReadFactoryRequest(ctx context.Context, request events.AP
 		}, nil
 	}
 
-	factoryJSON, err := FactoryJSONMarshal(factory)
+	factoryJSON, err := wrappers.JSONMarshal(factory)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

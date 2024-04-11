@@ -8,10 +8,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"net/http"
 	"testing"
+	"wdd/api/internal/mocks"
+	"wdd/api/internal/wrappers"
 )
 
 func TestHandleReadFactoryRequest_WithoutId_ScanError(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
@@ -32,7 +34,7 @@ func TestHandleReadFactoryRequest_WithoutId_ScanError(t *testing.T) {
 }
 
 func TestHandleReadFactoryRequest_WithoutId_UnmarshalListOfMapsError(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			items := []map[string]types.AttributeValue{
 				{
@@ -46,11 +48,11 @@ func TestHandleReadFactoryRequest_WithoutId_UnmarshalListOfMapsError(t *testing.
 	}
 	handler := NewReadFactoryHandler(mockDDBClient)
 
-	originalUnmarshalListOfMaps := FactoryUnmarshalListOfMaps
+	originalUnmarshalListOfMaps := wrappers.UnmarshalListOfMaps
 
-	defer func() { FactoryUnmarshalListOfMaps = originalUnmarshalListOfMaps }()
+	defer func() { wrappers.UnmarshalListOfMaps = originalUnmarshalListOfMaps }()
 
-	FactoryUnmarshalListOfMaps = func([]map[string]types.AttributeValue, interface{}) error {
+	wrappers.UnmarshalListOfMaps = func([]map[string]types.AttributeValue, interface{}) error {
 		return errors.New("mock error")
 	}
 
@@ -68,7 +70,7 @@ func TestHandleReadFactoryRequest_WithoutId_UnmarshalListOfMapsError(t *testing.
 }
 
 func TestHandleReadFactoryRequest_WithoutId_JSONMarshalError(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			items := []map[string]types.AttributeValue{
 				{
@@ -82,11 +84,11 @@ func TestHandleReadFactoryRequest_WithoutId_JSONMarshalError(t *testing.T) {
 	}
 	handler := NewReadFactoryHandler(mockDDBClient)
 
-	originalFactoryJSONMarshal := FactoryJSONMarshal
+	originalFactoryJSONMarshal := wrappers.JSONMarshal
 
-	defer func() { FactoryJSONMarshal = originalFactoryJSONMarshal }()
+	defer func() { wrappers.JSONMarshal = originalFactoryJSONMarshal }()
 
-	FactoryJSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
@@ -104,7 +106,7 @@ func TestHandleReadFactoryRequest_WithoutId_JSONMarshalError(t *testing.T) {
 }
 
 func TestHandleReadFactoryRequest_WithoutId_Success(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			items := []map[string]types.AttributeValue{
 				{
@@ -132,7 +134,7 @@ func TestHandleReadFactoryRequest_WithoutId_Success(t *testing.T) {
 }
 
 func TestHandleReadFactoryRequest_WithId_GetItemError(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
@@ -155,7 +157,7 @@ func TestHandleReadFactoryRequest_WithId_GetItemError(t *testing.T) {
 }
 
 func TestHandleReadFactoryRequest_WithId_ItemNotFound(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			return &dynamodb.GetItemOutput{
 				Item: nil,
@@ -181,7 +183,7 @@ func TestHandleReadFactoryRequest_WithId_ItemNotFound(t *testing.T) {
 }
 
 func TestHandleReadFactoryRequest_WithId_UnmarshalMapError(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			item := map[string]types.AttributeValue{
 				"factoryId":   &types.AttributeValueMemberS{Value: "1"},
@@ -193,11 +195,11 @@ func TestHandleReadFactoryRequest_WithId_UnmarshalMapError(t *testing.T) {
 	}
 	handler := NewReadFactoryHandler(mockDDBClient)
 
-	originalFactoryUnmarshalMap := FactoryUnmarshalMap
+	originalFactoryUnmarshalMap := wrappers.UnmarshalMap
 
-	defer func() { FactoryUnmarshalMap = originalFactoryUnmarshalMap }()
+	defer func() { wrappers.UnmarshalMap = originalFactoryUnmarshalMap }()
 
-	FactoryUnmarshalMap = func(map[string]types.AttributeValue, interface{}) error {
+	wrappers.UnmarshalMap = func(map[string]types.AttributeValue, interface{}) error {
 		return errors.New("mock error")
 	}
 
@@ -217,7 +219,7 @@ func TestHandleReadFactoryRequest_WithId_UnmarshalMapError(t *testing.T) {
 }
 
 func TestHandleReadFactoryRequest_WithId_JSONMarshalError(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			item := map[string]types.AttributeValue{
 				"factoryId":   &types.AttributeValueMemberS{Value: "1"},
@@ -229,11 +231,11 @@ func TestHandleReadFactoryRequest_WithId_JSONMarshalError(t *testing.T) {
 	}
 	handler := NewReadFactoryHandler(mockDDBClient)
 
-	originalFactoryJSONMarshal := FactoryJSONMarshal
+	originalFactoryJSONMarshal := wrappers.JSONMarshal
 
-	defer func() { FactoryJSONMarshal = originalFactoryJSONMarshal }()
+	defer func() { wrappers.JSONMarshal = originalFactoryJSONMarshal }()
 
-	FactoryJSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
@@ -253,7 +255,7 @@ func TestHandleReadFactoryRequest_WithId_JSONMarshalError(t *testing.T) {
 }
 
 func TestHandleReadFactoryRequest_WithId_Success(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			item := map[string]types.AttributeValue{
 				"factoryId":   &types.AttributeValueMemberS{Value: "1"},

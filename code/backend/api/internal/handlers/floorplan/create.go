@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -17,7 +19,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func NewCreateFloorPlanHandler(db DynamoDBClient) *Handler {
+func NewCreateFloorPlanHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -53,12 +55,12 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 	}
 
 	delete(requestBody, "imageData")
-	floorplanData, err := FloorPlanJSONMarshal(requestBody)
+	floorplanData, err := wrappers.JSONMarshal(requestBody)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, fmt.Errorf("error re-preparing floorplan data: %w", err)
 	}
 
-	var floorplan Floorplan
+	var floorplan types.Floorplan
 	err = json.Unmarshal(floorplanData, &floorplan)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, fmt.Errorf("error unmarshalling floorplan data: %w", err)
@@ -100,7 +102,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 
 	floorplan.ImageData = fmt.Sprintf("https://%s.s3.amazonaws.com/%s", "wingstopdrivenbucket", imageFileName)
 
-	av, err := FloorPlanMarshalMap(floorplan)
+	av, err := wrappers.MarshalMap(floorplan)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -110,7 +112,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 	}
 
 	_, err = h.DynamoDB.PutItem(ctx, &dynamodb.PutItemInput{
-		TableName: aws.String("Floorplan"),
+		TableName: aws.String(TABLENAME),
 		Item:      av,
 	})
 
@@ -122,7 +124,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 		}, nil
 	}
 
-	responseBody, err := FloorPlanJSONMarshal(map[string]interface{}{
+	responseBody, err := wrappers.JSONMarshal(map[string]interface{}{
 		"message":   fmt.Sprintf("floorplanId %s created successfully", floorplan.FloorplanID),
 		"factoryId": floorplan.FloorplanID,
 	})
