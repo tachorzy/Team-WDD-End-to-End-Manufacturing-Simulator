@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import AttributeInputColumn from "./AttributeInputColumn";
 import PropertyInputColumn from "./PropertyInputColumn";
 import AddAttributeButton from "./AddAttributeButton";
@@ -12,6 +12,9 @@ import ModelIdField from "./ModelIdField";
 
 const CreateModelForm = (props: { factoryId: string }) => {
     const { factoryId } = props;
+
+    console.log(factoryId);
+
     const modelId = "2024-04-08-9780";
 
     const [attributes, setAttributes] = useState([

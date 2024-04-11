@@ -1,8 +1,6 @@
 import CreateModelForm from "@/components/models/createmodelform/CreateModelForm";
 import AttributeInputColumn from "@/components/models/createmodelform/AttributeInputColumn";
 import PropertyInputColumn from "@/components/models/createmodelform/PropertyInputColumn";
-import AddAttributeButton from "@/components/models/createmodelform/AddAttributeButton";
-import AddPropertyButton from "@/components/models/createmodelform/AddPropertyButton";
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
