@@ -1,14 +1,11 @@
 import React from "react";
 
-const ModelIdField= (props: { modelId: string }) => {
-    
+const ModelIdField = (props: { modelId: string }) => {
     const { modelId } = props;
 
     return (
         <div className="">
-            <h1 className="text-2xl font-semibold text-gray-900">
-                Model ID
-            </h1>
+            <h1 className="text-2xl font-semibold text-gray-900">Model ID</h1>
             <div className="flex flex-col gap-y-0.5">
                 <h2 className="text-sm font-medium text-[#494949]">
                     Define ID Prefix
@@ -23,7 +20,7 @@ const ModelIdField= (props: { modelId: string }) => {
                 </div>
             </div>
         </div>
-    )
+    );
 };
 
 export default ModelIdField;
