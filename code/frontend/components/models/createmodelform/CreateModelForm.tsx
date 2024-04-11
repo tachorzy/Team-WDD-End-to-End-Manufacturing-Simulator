@@ -10,7 +10,9 @@ import AddPropertyButton from "./AddPropertyButton";
 //     onSave: (formData: Partial<Factory>) => void;
 // }
 
-const CreateModelForm: React.FC = () => {
+const CreateModelForm = (props: { factoryId: string}) => {
+    
+    const { factoryId } = props
     const modelId = "2024-04-08-9780";
 
     const [attributes, setAttributes] = useState([
@@ -19,8 +21,8 @@ const CreateModelForm: React.FC = () => {
     const [properties, setProperties] = useState([{ property: "", unit: "" }]);
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-            <div className="relative w-10/12 h-3/4 bg-white rounded-xl shadow-lg p-8 px-10">
+        <div className="items-center justify-center ml-32">
+            <div className="relative w-11/12 h-3/4 bg-white rounded-xl p-8 px-10">
                 <h1 className="text-3xl font-semibold mb-4 text-gray-900">
                     Create Your Asset Model
                 </h1>
@@ -31,7 +33,7 @@ const CreateModelForm: React.FC = () => {
                         </h1>
                         <div className="flex flex-col gap-y-0.5">
                             <h2 className="text-sm font-medium text-[#494949]">
-                                Define ID prefix
+                                Define ID Prefix
                             </h2>
                             <div className="flex flex-row gap-x-1">
                                 <input
