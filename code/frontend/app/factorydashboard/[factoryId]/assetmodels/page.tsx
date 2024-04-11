@@ -11,10 +11,9 @@ export default function assetModels({
     params: { factoryId: string };
 }) {
     const { factoryId } = params;
-    
+
     const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-
 
     return (
         <main className="flex flex-col bg-[#FAFAFA] min-h-screen mx-auto smooth-scroll">
@@ -25,7 +24,7 @@ export default function assetModels({
                 />
                 <section className="mt-6">
                     <div className="flex flex-col gap-x-12 float-right mx-32">
-                        <button 
+                        <button
                             type="button"
                             onClick={() => setIsSettingsOpen(true)}
                             className=""
@@ -39,34 +38,30 @@ export default function assetModels({
                             />
                         </button>
                         {isSettingsOpen && (
-                                <button 
-                                    type="button"
-                                    onClick={() => setIsCreateFormOpen(true)}
-                                    className=""
-                                >
-                                    <div className="flex flex-row gap-x-2 bg-[#FAFAFA] rounded-lg w-64 h-10 border-2 border-[#C5C9D6] px-4">
-                                        <Image 
-                                            src="/icons/add.svg"
-                                            width={20}
-                                            height={20}
-                                            alt="add"
-                                            className=""
-                                        />
+                            <button
+                                type="button"
+                                onClick={() => setIsCreateFormOpen(true)}
+                                className=""
+                            >
+                                <div className="flex flex-row gap-x-2 bg-[#FAFAFA] rounded-lg w-64 h-10 border-2 border-[#C5C9D6] px-4">
+                                    <Image
+                                        src="/icons/add.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="add"
+                                        className=""
+                                    />
 
-                                            <h1 className="my-1.5 text-[#494949] text-base font-medium">
-                                                Create asset model
-                                            </h1>
-                                    </div>
+                                    <h1 className="my-1.5 text-[#494949] text-base font-medium">
+                                        Create asset model
+                                    </h1>
+                                </div>
                             </button>
                         )}
-
                     </div>
-
                 </section>
 
-                {isCreateFormOpen && ( 
-                    <CreateModelForm factoryId={factoryId as string}/>
-                )}
+                {isCreateFormOpen && <CreateModelForm factoryId={factoryId} />}
             </div>
         </main>
     );

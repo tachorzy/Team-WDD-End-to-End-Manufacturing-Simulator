@@ -4,12 +4,14 @@ import PropertyInputColumn from "@/components/models/createmodelform/PropertyInp
 import AddAttributeButton from "@/components/models/createmodelform/AddAttributeButton";
 import AddPropertyButton from "@/components/models/createmodelform/AddPropertyButton";
 import { render, waitFor } from "@testing-library/react";
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 
 describe("CreateModelForm", () => {
     test("should render CreateModelForm component with model ID field", () => {
         const mockFactoryId = "12345678";
-        const { getByText, getByPlaceholderText } = render(<CreateModelForm factoryId={mockFactoryId}/>);
+        const { getByText, getByPlaceholderText } = render(
+            <CreateModelForm factoryId={mockFactoryId} />,
+        );
 
         const formTitle = getByText("Create Your Asset Model");
         const modelIDHeader = getByText("Model ID");
@@ -24,7 +26,9 @@ describe("CreateModelForm", () => {
 
     test("should render attribute and property columns", () => {
         const mockFactoryId = "12345678";
-        const { getByText } = render(<CreateModelForm factoryId={mockFactoryId} />);
+        const { getByText } = render(
+            <CreateModelForm factoryId={mockFactoryId} />,
+        );
         const attributeColumn = getByText("Attributes");
         const propertyColumn = getByText("Properties");
 
@@ -33,7 +37,11 @@ describe("CreateModelForm", () => {
     });
 
     test("should render AttributeInputColumn input fields", () => {
-        const { getByText, getByPlaceholderText } = render(<AttributeInputColumn attributes={[{ attribute: "", value: "" }]} />);
+        const { getByText, getByPlaceholderText } = render(
+            <AttributeInputColumn
+                attributes={[{ attribute: "", value: "" }]}
+            />,
+        );
         const attributeHeader = getByText("Attribute 1");
         const attributeInput = getByPlaceholderText("e.g. Model Name");
         const valueInput = getByPlaceholderText("e.g. CNC 1");
@@ -44,7 +52,9 @@ describe("CreateModelForm", () => {
     });
 
     test("should render PropertyInputColumn input fields", () => {
-        const { getByText, getByPlaceholderText } = render(<PropertyInputColumn properties={[{ property: "", unit: "" }]} />);
+        const { getByText, getByPlaceholderText } = render(
+            <PropertyInputColumn properties={[{ property: "", unit: "" }]} />,
+        );
         const propertyHeader = getByText("Property 1");
         const propertyInput = getByPlaceholderText("e.g. Temperature");
         const unitsInput = getByPlaceholderText("e.g. °C");
@@ -56,7 +66,9 @@ describe("CreateModelForm", () => {
 
     test("should add new attribute input field when Add Attribute button is clicked", async () => {
         const mockFactoryId = "12345678";
-        const { getByText } = render(<CreateModelForm factoryId={mockFactoryId} />);
+        const { getByText } = render(
+            <CreateModelForm factoryId={mockFactoryId} />,
+        );
         const addAttributeButton = getByText("Add Attribute");
 
         addAttributeButton.click();
@@ -64,7 +76,7 @@ describe("CreateModelForm", () => {
 
         await waitFor(() => {
             const attributeHeader2 = getByText("Attribute 2");
-                    
+
             expect(attributeHeader).toBeInTheDocument();
             expect(attributeHeader2).toBeInTheDocument();
         });
@@ -72,7 +84,9 @@ describe("CreateModelForm", () => {
 
     test("should add new property input field when Add Property button is clicked", async () => {
         const mockFactoryId = "12345678";
-        const { getByText } = render(<CreateModelForm factoryId={mockFactoryId} />);
+        const { getByText } = render(
+            <CreateModelForm factoryId={mockFactoryId} />,
+        );
         const addPropertyButton = getByText("Add Property");
         addPropertyButton.click();
 
@@ -85,5 +99,4 @@ describe("CreateModelForm", () => {
             expect(propertyHeader2).toBeInTheDocument();
         });
     });
-    
 });
