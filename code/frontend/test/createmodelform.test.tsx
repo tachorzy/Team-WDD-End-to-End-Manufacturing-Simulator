@@ -8,11 +8,12 @@ import '@testing-library/jest-dom';
 
 describe("CreateModelForm", () => {
     test("should render CreateModelForm component with model ID field", () => {
-        const { getByText, getByPlaceholderText, getByDisplayValue } = render(<CreateModelForm />);
+        const mockFactoryId = "12345678";
+        const { getByText, getByPlaceholderText } = render(<CreateModelForm factoryId={mockFactoryId}/>);
 
         const formTitle = getByText("Create Your Asset Model");
         const modelIDHeader = getByText("Model ID");
-        const modelIDPrompt = getByText("Define ID prefix");
+        const modelIDPrompt = getByText("Define ID Prefix");
         const modelIDInput = getByPlaceholderText("e.g. CNC");
 
         expect(formTitle).toBeInTheDocument();
@@ -22,7 +23,8 @@ describe("CreateModelForm", () => {
     });
 
     test("should render attribute and property columns", () => {
-        const { getByText } = render(<CreateModelForm />);
+        const mockFactoryId = "12345678";
+        const { getByText } = render(<CreateModelForm factoryId={mockFactoryId} />);
         const attributeColumn = getByText("Attributes");
         const propertyColumn = getByText("Properties");
 
@@ -53,7 +55,8 @@ describe("CreateModelForm", () => {
     });
 
     test("should add new attribute input field when Add Attribute button is clicked", async () => {
-        const { getByText } = render(<CreateModelForm/>);
+        const mockFactoryId = "12345678";
+        const { getByText } = render(<CreateModelForm factoryId={mockFactoryId} />);
         const addAttributeButton = getByText("Add Attribute");
 
         addAttributeButton.click();
@@ -68,7 +71,8 @@ describe("CreateModelForm", () => {
     });
 
     test("should add new property input field when Add Property button is clicked", async () => {
-        const { getByText } = render(<CreateModelForm/>);
+        const mockFactoryId = "12345678";
+        const { getByText } = render(<CreateModelForm factoryId={mockFactoryId} />);
         const addPropertyButton = getByText("Add Property");
         addPropertyButton.click();
 
