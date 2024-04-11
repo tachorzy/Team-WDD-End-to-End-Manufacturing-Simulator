@@ -5,14 +5,10 @@ import Image from "next/image";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import CreateModelForm from "@/components/models/createmodelform/CreateModelForm";
 
-export default function AssetModels({
-    params,
-}: {
-    params: { factoryId: string };
-}) {
+export default function Page({ params }: { params: { factoryId: string } }) {
     const { factoryId } = params;
 
-    const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
+    const [isCreateFormOpen, setIsCreateFormOpen] = useState(true);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     return (

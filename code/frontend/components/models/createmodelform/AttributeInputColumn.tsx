@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 
 const AttributeInputColumn = (props: {
     attributes: { attribute: string; value: string }[];
