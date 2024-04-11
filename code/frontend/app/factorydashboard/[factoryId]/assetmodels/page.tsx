@@ -5,7 +5,7 @@ import Image from "next/image";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import CreateModelForm from "@/components/models/createmodelform/CreateModelForm";
 
-export default function assetModels({
+export default function AssetModels({
     params,
 }: {
     params: { factoryId: string };

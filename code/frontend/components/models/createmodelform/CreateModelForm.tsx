@@ -27,20 +27,20 @@ const CreateModelForm = (props: { factoryId: string }) => {
                 </h1>
                 <div className="flex flex-row gap-x-16 mt-6">
                     <section className="flex flex-col gap-y-3 min-w-max">
-                        <ModelIdField modelId={modelId}/>
-                        <div className="flex flex-col gap-y-3 mt-8">
+                        <div className="flex flex-col gap-y-3">
                             <AttributeInputColumn attributes={attributes} />
                             <AddAttributeButton setAttributes={setAttributes} />
                         </div>
                     </section>
 
                     <section className="flex flex-row gap-y-3 gap-x-4">
-
                         <div className="flex flex-col w-1/2 gap-y-3">
                             <PropertyInputColumn properties={properties} />
                             <AddPropertyButton setProperties={setProperties} />
                         </div>
                     </section>
+
+                    <ModelIdField modelId={modelId} />
                 </div>
             </div>
         </div>
