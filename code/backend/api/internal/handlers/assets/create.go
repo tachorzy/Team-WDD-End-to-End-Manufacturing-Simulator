@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -17,22 +19,17 @@ import (
 	"github.com/google/uuid"
 )
 
-type AssetHandler struct {
-	DynamoDB *dynamodb.Client
-	S3Client *s3.Client
-}
-
-func NewCreateAssetHandler(db *dynamodb.Client, s3Client *s3.Client) *AssetHandler {
-	return &AssetHandler{
+func NewCreateAssetHandler(db *dynamodb.Client, s3Client *s3.Client) *Handler {
+	return &Handler{
 		DynamoDB: db,
 		S3Client: s3Client,
 	}
 }
 
-func (h *AssetHandler) HandleCreateAssetRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (h Handler) HandleCreateAssetRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	headers := getDefaultHeaders()
 
-	var asset Asset
+	var asset types.Asset
 	if err := json.Unmarshal([]byte(request.Body), &asset); err != nil {
 		return apiResponse(http.StatusBadRequest, "Error parsing JSON body: "+err.Error(), headers), nil
 	}
@@ -44,7 +41,7 @@ func (h *AssetHandler) HandleCreateAssetRequest(ctx context.Context, request eve
 		return apiResponse(http.StatusInternalServerError, err.Error(), headers), nil
 	}
 
-	av, err := AssetMarshalMap(asset)
+	av, err := wrappers.MarshalMap(asset)
 	if err != nil {
 		return apiResponse(http.StatusInternalServerError, "Error marshalling asset: "+err.Error(), headers), nil
 	}
@@ -64,7 +61,7 @@ func (h *AssetHandler) HandleCreateAssetRequest(ctx context.Context, request eve
 	return apiResponse(http.StatusOK, string(responseBody), headers), nil
 }
 
-func processAssetFiles(ctx context.Context, asset *Asset, s3Client *s3.Client) error {
+func processAssetFiles(ctx context.Context, asset *types.Asset, s3Client *s3.Client) error {
 	uploader := manager.NewUploader(s3Client)
 
 	if asset.ImageData != "" {

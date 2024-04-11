@@ -8,10 +8,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"net/http"
 	"testing"
+	"wdd/api/internal/mocks"
+	"wdd/api/internal/wrappers"
 )
 
 func TestHandleCreateFactoryRequest_BadJSON(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{}
+	mockDDBClient := &mocks.DynamoDBClient{}
 
 	handler := NewCreateFactoryHandler(mockDDBClient)
 
@@ -32,15 +34,15 @@ func TestHandleCreateFactoryRequest_BadJSON(t *testing.T) {
 }
 
 func TestHandleCreateFactoryRequest_MarshalMapError(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{}
+	mockDDBClient := &mocks.DynamoDBClient{}
 
 	handler := NewCreateFactoryHandler(mockDDBClient)
 
-	originalMarshalMap := FactoryMarshalMap
+	originalMarshalMap := wrappers.MarshalMap
 
-	defer func() { FactoryMarshalMap = originalMarshalMap }()
+	defer func() { wrappers.MarshalMap = originalMarshalMap }()
 
-	FactoryMarshalMap = func(interface{}) (map[string]types.AttributeValue, error) {
+	wrappers.MarshalMap = func(interface{}) (map[string]types.AttributeValue, error) {
 		return nil, errors.New("mock error")
 	}
 
@@ -61,7 +63,7 @@ func TestHandleCreateFactoryRequest_MarshalMapError(t *testing.T) {
 }
 
 func TestHandleCreateFactoryRequest_PutItemError(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
@@ -86,7 +88,7 @@ func TestHandleCreateFactoryRequest_PutItemError(t *testing.T) {
 }
 
 func TestHandleCreateFactoryRequest_JSONMarshalError(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
@@ -98,11 +100,11 @@ func TestHandleCreateFactoryRequest_JSONMarshalError(t *testing.T) {
 		Body: `{"name":"Test Factory","location":{"longitude":10,"latitude":20},"description":"Test Description"}`,
 	}
 
-	originalFactoryJSONMarshal := FactoryJSONMarshal
+	originalFactoryJSONMarshal := wrappers.JSONMarshal
 
-	defer func() { FactoryJSONMarshal = originalFactoryJSONMarshal }()
+	defer func() { wrappers.JSONMarshal = originalFactoryJSONMarshal }()
 
-	FactoryJSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
@@ -119,7 +121,7 @@ func TestHandleCreateFactoryRequest_JSONMarshalError(t *testing.T) {
 }
 
 func TestHandleCreateFactoryRequest_Success(t *testing.T) {
-	mockDDBClient := &MockDynamoDBClient{
+	mockDDBClient := &mocks.DynamoDBClient{
 		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},

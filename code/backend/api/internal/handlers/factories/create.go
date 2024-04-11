@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -13,14 +15,14 @@ import (
 	"github.com/google/uuid"
 )
 
-func NewCreateFactoryHandler(db DynamoDBClient) *Handler {
+func NewCreateFactoryHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
 }
 
 func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var factory Factory
+	var factory types.Factory
 
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",
@@ -38,7 +40,7 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 	factory.FactoryID = uuid.NewString()
 	factory.DateCreated = time.Now().Format(time.RFC3339)
 
-	av, err := FactoryMarshalMap(factory)
+	av, err := wrappers.MarshalMap(factory)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -60,7 +62,7 @@ func (h Handler) HandleCreateFactoryRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	responseBody, err := FactoryJSONMarshal(map[string]interface{}{
+	responseBody, err := wrappers.JSONMarshal(map[string]interface{}{
 		"message":   fmt.Sprintf("factoryId %s created successfully", factory.FactoryID),
 		"factoryId": factory.FactoryID,
 	})

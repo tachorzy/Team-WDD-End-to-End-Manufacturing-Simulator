@@ -1,4 +1,4 @@
-package factories
+package models
 
 import (
 	"context"
@@ -12,17 +12,17 @@ import (
 	"wdd/api/internal/wrappers"
 )
 
-func TestHandleUpdateFactoryRequest_BadJSON(t *testing.T) {
+func TestHandleUpdateModelRequest_BadJSON(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 
-	handler := NewUpdateFactoryHandler(mockDDBClient)
+	handler := NewUpdateModelHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
-		Body: `{"name":"Name", "location": "Invalid", "description":"Description"}`,
+		Body: `{"modelId": "test", "attributes": "invalid", "properties": "invalid"}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateFactoryRequest(ctx, request)
+	response, err := handler.HandleUpdateModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -33,10 +33,10 @@ func TestHandleUpdateFactoryRequest_BadJSON(t *testing.T) {
 	}
 }
 
-func TestHandleUpdateFactoryRequest_UpdateExpressionBuilderError(t *testing.T) {
+func TestHandleUpdateModelRequest_UpdateExpressionBuilderError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 
-	handler := NewUpdateFactoryHandler(mockDDBClient)
+	handler := NewUpdateModelHandler(mockDDBClient)
 
 	originalUpdateExpressionBuilder := wrappers.UpdateExpressionBuilder
 
@@ -47,11 +47,11 @@ func TestHandleUpdateFactoryRequest_UpdateExpressionBuilderError(t *testing.T) {
 	}
 
 	request := events.APIGatewayProxyRequest{
-		Body: `{"factoryId": "1", "name":"Test Factory","location":{"longitude":10,"latitude":20},"description":"Test Description"}`,
+		Body: `{"modelId": "test", "attributes": ["attribute1"], "properties": ["property1"]}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateFactoryRequest(ctx, request)
+	response, err := handler.HandleUpdateModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -62,21 +62,21 @@ func TestHandleUpdateFactoryRequest_UpdateExpressionBuilderError(t *testing.T) {
 	}
 }
 
-func TestHandleUpdateFactoryRequest_UpdateItemError(t *testing.T) {
+func TestHandleUpdateModelRequest_UpdateItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
 
-	handler := NewUpdateFactoryHandler(mockDDBClient)
+	handler := NewUpdateModelHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
-		Body: `{"factoryId": "1", "name":"Test Factory","location":{"longitude":10,"latitude":20},"description":"Test Description"}`,
+		Body: `{"modelId": "test", "attributes": ["attribute1"], "properties": ["property1"]}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateFactoryRequest(ctx, request)
+	response, err := handler.HandleUpdateModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -87,21 +87,21 @@ func TestHandleUpdateFactoryRequest_UpdateItemError(t *testing.T) {
 	}
 }
 
-func TestHandleUpdateFactoryRequest_Success(t *testing.T) {
+func TestHandleUpdateModelRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
 			return &dynamodb.UpdateItemOutput{}, nil
 		},
 	}
 
-	handler := NewUpdateFactoryHandler(mockDDBClient)
+	handler := NewUpdateModelHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
-		Body: `{"factoryId": "1", "name":"Test Factory","location":{"longitude":10,"latitude":20},"description":"Test Description"}`,
+		Body: `{"modelId": "test", "attributes": ["attribute1"], "properties": ["property1"]}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateFactoryRequest(ctx, request)
+	response, err := handler.HandleUpdateModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
