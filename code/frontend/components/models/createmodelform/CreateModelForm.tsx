@@ -10,9 +10,8 @@ import AddPropertyButton from "./AddPropertyButton";
 //     onSave: (formData: Partial<Factory>) => void;
 // }
 
-const CreateModelForm = (props: { factoryId: string}) => {
-    
-    const { factoryId } = props
+const CreateModelForm = (props: { factoryId: string }) => {
+    const { factoryId } = props;
     const modelId = "2024-04-08-9780";
 
     const [attributes, setAttributes] = useState([
@@ -22,7 +21,7 @@ const CreateModelForm = (props: { factoryId: string}) => {
 
     return (
         <div className="items-center justify-center ml-32">
-            <div className="relative w-11/12 h-3/4 bg-white rounded-xl p-8 px-10">
+            <div className="relative w-11/12 max-h-11/12 bg-white rounded-xl p-8 px-10 border-2 border-[#D7D9DF]">
                 <h1 className="text-3xl font-semibold mb-4 text-gray-900">
                     Create Your Asset Model
                 </h1>
@@ -44,13 +43,14 @@ const CreateModelForm = (props: { factoryId: string}) => {
                                 <h2 className="text-lg font-medium text-[#494949] mt-3">{`- ${modelId}`}</h2>
                             </div>
                         </div>
-                    </section>
-
-                    <section className="flex flex-row gap-y-3 gap-x-4">
-                        <div className="flex flex-col w-1/2 gap-y-3">
+                        <div className="flex flex-col gap-y-3 mt-8">
                             <AttributeInputColumn attributes={attributes} />
                             <AddAttributeButton setAttributes={setAttributes} />
                         </div>
+                    </section>
+
+                    <section className="flex flex-row gap-y-3 gap-x-4">
+
                         <div className="flex flex-col w-1/2 gap-y-3">
                             <PropertyInputColumn properties={properties} />
                             <AddPropertyButton setProperties={setProperties} />
