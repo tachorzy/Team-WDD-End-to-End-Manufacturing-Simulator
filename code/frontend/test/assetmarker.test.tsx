@@ -65,7 +65,7 @@ describe("AssetMarker Component", () => {
         fireEvent.mouseUp(assetMarker);
     });
 
-    test("should show Asset Info, name, and description when marker image is clicked", async () => {
+    test("should show Asset Info, name, and description when marker image is clicked", () => {
         const mockAsset: Asset = {
             assetId: "1",
             name: "Asset 1",
@@ -91,7 +91,7 @@ describe("AssetMarker Component", () => {
         expect(assetDescription).toBeInTheDocument();
     });
 
-    test("should show delete confirmation dialog when delete button is clicked", () => {
+    test("should show delete confirmation dialog when delete button is clicked", async () => {
         const mockAsset: Asset = {
             assetId: "1",
             name: "Asset 1",
