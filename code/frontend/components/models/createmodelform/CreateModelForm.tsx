@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import AttributesForm from "./AttributesForm";
+import AttributesForm from "./attributedefinition/AttributesForm";
 // interface CreateModelFormProps {
 //     onClose: () => void;
 //     onSave: (formData: Partial<Factory>) => void;
