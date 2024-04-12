@@ -3,7 +3,6 @@ package floorplan
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -35,7 +34,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 	}
 
 	var floorplan types.Floorplan
-	if err := json.Unmarshal([]byte(request.Body), &floorplan); err != nil {
+	if err := wrappers.JSONUnmarshal([]byte(request.Body), &floorplan); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
 			Headers:    headers,
