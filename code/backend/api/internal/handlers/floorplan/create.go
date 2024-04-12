@@ -3,7 +3,6 @@ package floorplan
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -35,41 +34,18 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 		"Access-Control-Allow-Methods": "*",
 	}
 
-	var requestBody map[string]interface{}
-	err := json.Unmarshal([]byte(request.Body), &requestBody)
-	if err != nil {
-		return events.APIGatewayProxyResponse{
-			Body:       fmt.Sprintf("Error parsing JSON body: %s", err.Error()),
-			StatusCode: http.StatusBadRequest,
-			Headers:    headers,
-		}, nil
-	}
-
-	imageData, hasImage := requestBody["imageData"].(string)
-	if !hasImage {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusBadRequest,
-			Headers:    headers,
-			Body:       "Missing imageData field in request body",
-		}, nil
-	}
-
-	delete(requestBody, "imageData")
-	floorplanData, err := wrappers.JSONMarshal(requestBody)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, fmt.Errorf("error re-preparing floorplan data: %w", err)
-	}
-
 	var floorplan types.Floorplan
-	err = json.Unmarshal(floorplanData, &floorplan)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, fmt.Errorf("error unmarshalling floorplan data: %w", err)
+	if err := json.Unmarshal([]byte(request.Body), &floorplan); err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusBadRequest,
+			Headers:    headers,
+			Body:       fmt.Sprintf("error unmarshalling floorplan data: %s", err.Error()),
+		}, nil
 	}
 
-	floorplan.FloorplanID = requestBody["factoryId"].(string)
 	floorplan.DateCreated = time.Now().Format(time.RFC3339)
 
-	decodedImageData, err := base64.StdEncoding.DecodeString(imageData)
+	decodedImageData, err := wrappers.Base64DecodeString(floorplan.ImageData)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
