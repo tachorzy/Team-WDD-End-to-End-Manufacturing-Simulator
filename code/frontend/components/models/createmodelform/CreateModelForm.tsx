@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useMemo } from "react";
 import AttributesForm from "./attributedefinition/AttributesForm";
 // interface CreateModelFormProps {
 //     onClose: () => void;
@@ -19,15 +19,34 @@ const CreateModelForm = (props: { factoryId: string }) => {
     ]);
     const [properties, setProperties] = useState([{ property: "", unit: "" }]);
 
+    const contextValue = useMemo(
+        () => ({
+            factoryId,
+            modelId,
+            attributes,
+            setAttributes,
+            properties,
+            setProperties,
+        }),
+        [
+            factoryId,
+            modelId,
+            attributes,
+            setAttributes,
+            properties,
+            setProperties,
+        ],
+    );
+
     return (
-        <Context.Provider value={{ factoryId, modelId, attributes, setAttributes, properties, setProperties }}>
+        <Context.Provider value={contextValue}>
             <div className="items-center justify-center ml-32">
                 <div className="relative w-11/12 max-h-11/12 bg-white rounded-xl p-8 px-10 border-2 border-[#D7D9DF]">
                     <h1 className="text-3xl font-semibold mb-4 text-gray-900">
                         Create Your Asset Model
                     </h1>
 
-                    <AttributesForm/>
+                    <AttributesForm />
                     {/* <div className="flex flex-row gap-x-16 mt-6 gap-y-2">
                         <section className="flex flex-col gap-y-3 min-w-max">
                             <NameField modelId={modelId} />
