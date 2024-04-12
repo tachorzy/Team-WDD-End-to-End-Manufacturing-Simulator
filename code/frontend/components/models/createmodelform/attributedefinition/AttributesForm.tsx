@@ -3,7 +3,7 @@ import React, { useState, useContext } from "react";
 import AttributeInputColumn from "./AttributeInputColumn";
 import AddAttributeButton from "./AddAttributeButton";
 import NameField from "./NameField";
-import { Context } from "./CreateModelForm";
+import { Context } from "../CreateModelForm";
 
 interface AttributesFormContext {
     factoryId: string;
