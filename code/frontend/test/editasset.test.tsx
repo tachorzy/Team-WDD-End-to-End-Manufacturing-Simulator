@@ -3,24 +3,19 @@
  */
 
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import EditAssetForm from "@/components/factorydashboard/floormanager/EditAssetForm";
 
-
 const closeEditFormMock = jest.fn();
 const props = {
-
     closeEditForm: closeEditFormMock,
-  
 };
-
 
 const assetName = "CNC Machine";
 const assetDescription = "This is a cnc machine";
 
 describe("Edit factory form ", () => {
-
     test("should render and its compontents correctly ", () => {
         const { getByText, getByAltText, getByPlaceholderText } = render(
             <EditAssetForm {...props} />,
@@ -108,5 +103,4 @@ describe("Edit factory form ", () => {
         expect(nameInput).toHaveValue(assetName);
         expect(descriptionInput).toHaveValue(assetDescription);
     });
-    
 });

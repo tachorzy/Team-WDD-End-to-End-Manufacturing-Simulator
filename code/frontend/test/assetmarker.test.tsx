@@ -9,17 +9,6 @@ import { Asset } from "@/app/api/_utils/types";
 import AssetMarker from "../components/factorydashboard/floorplan/blueprint/marker/AssetMarker";
 
 describe("AssetMarker Component", () => {
-    
-    const mockFunctions = {
-        handleDelete: jest.fn(),
-        handleEdit: jest.fn(),
-        showConfirmDialog: jest.fn(),
-        confirmDelete: jest.fn(),
-        cancelDelete: jest.fn(),
-        showEditForm: jest.fn(),
-        closeEditForm: jest.fn(),
-    };
-    
     test("should have a label with the name of the asset", () => {
         const mockAsset: Asset = {
             assetId: "1",
@@ -81,34 +70,40 @@ describe("AssetMarker Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData: "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
+            imageData:
+                "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
             factoryId: "1",
         };
-    
-        const { getByAltText, getByText, getByTestId } = render(<AssetMarker asset={mockAsset} />);
-    
+
+        const { getByAltText, getByText, getByTestId } = render(
+            <AssetMarker asset={mockAsset} />,
+        );
+
         const markerImage = getByAltText("asset marker icon");
         fireEvent.click(markerImage);
-    
+
         const assetInfoHeading = getByText("Asset Info");
         const assetName = getByTestId("name");
         const assetDescription = getByText("Description 1");
-    
+
         expect(assetInfoHeading).toBeInTheDocument();
         expect(assetName).toBeInTheDocument();
         expect(assetDescription).toBeInTheDocument();
     });
 
-    test("should show delete confirmation dialog when delete button is clicked", async () => {
+    test("should show delete confirmation dialog when delete button is clicked", () => {
         const mockAsset: Asset = {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData: "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
+            imageData:
+                "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
             factoryId: "1",
         };
-    
-        const { getByTestId, getByAltText } = render(<AssetMarker asset={mockAsset} />);
+
+        const { getByTestId, getByAltText } = render(
+            <AssetMarker asset={mockAsset} />,
+        );
 
         const markerImage = getByAltText("asset marker icon");
         fireEvent.click(markerImage);
@@ -127,11 +122,14 @@ describe("AssetMarker Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData: "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
+            imageData:
+                "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
             factoryId: "1",
         };
-    
-        const { getByTestId, getByAltText } = render(<AssetMarker asset={mockAsset} />);
+
+        const { getByTestId, getByAltText } = render(
+            <AssetMarker asset={mockAsset} />,
+        );
 
         const markerImage = getByAltText("asset marker icon");
         fireEvent.click(markerImage);
@@ -150,11 +148,14 @@ describe("AssetMarker Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData: "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
+            imageData:
+                "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
             factoryId: "1",
         };
-    
-        const { getByTestId, getByAltText } = render(<AssetMarker asset={mockAsset} />);
+
+        const { getByTestId, getByAltText } = render(
+            <AssetMarker asset={mockAsset} />,
+        );
 
         const markerImage = getByAltText("asset marker icon");
         fireEvent.click(markerImage);
@@ -166,10 +167,10 @@ describe("AssetMarker Component", () => {
             const confirmDialog = getByTestId("confirm-dialog");
             expect(confirmDialog).toBeInTheDocument();
 
-            const confirmButton = getByTestId("yes-button")
+            const confirmButton = getByTestId("yes-button");
             fireEvent.click(confirmButton);
 
-            expect(markerImage).not.toBeInTheDocument()
+            expect(markerImage).not.toBeInTheDocument();
         });
     });
 
@@ -178,11 +179,14 @@ describe("AssetMarker Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData: "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
+            imageData:
+                "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
             factoryId: "1",
         };
-    
-        const { getByTestId, getByAltText } = render(<AssetMarker asset={mockAsset} />);
+
+        const { getByTestId, getByAltText } = render(
+            <AssetMarker asset={mockAsset} />,
+        );
 
         const markerImage = getByAltText("asset marker icon");
         fireEvent.click(markerImage);
@@ -194,10 +198,10 @@ describe("AssetMarker Component", () => {
             const confirmDialog = getByTestId("confirm-dialog");
             expect(confirmDialog).toBeInTheDocument();
 
-            const denyButton = getByTestId("no-button")
+            const denyButton = getByTestId("no-button");
             fireEvent.click(denyButton);
 
-            expect(markerImage).toBeInTheDocument()
+            expect(markerImage).toBeInTheDocument();
         });
     });
 
@@ -206,11 +210,14 @@ describe("AssetMarker Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData: "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
+            imageData:
+                "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
             factoryId: "1",
         };
-    
-        const { getByTestId, getByAltText } = render(<AssetMarker asset={mockAsset} />);
+
+        const { getByTestId, getByAltText } = render(
+            <AssetMarker asset={mockAsset} />,
+        );
 
         const markerImage = getByAltText("asset marker icon");
         fireEvent.click(markerImage);
@@ -222,11 +229,10 @@ describe("AssetMarker Component", () => {
             const editForm = getByTestId("edit-form");
             expect(editForm).toBeInTheDocument();
 
-            const closeButton = getByAltText("Close icon")
+            const closeButton = getByAltText("Close icon");
             fireEvent.click(closeButton);
 
-            expect(editForm).not.toBeInTheDocument()
-
+            expect(editForm).not.toBeInTheDocument();
         });
     });
 });

@@ -22,7 +22,6 @@ const FileUploadContainer = (props: {
                     ...prevData,
                     imageData: base64String as string, // assuming reader.result contains the base64 string of the image
                 }));
-               
             };
             reader.readAsDataURL(file);
         },

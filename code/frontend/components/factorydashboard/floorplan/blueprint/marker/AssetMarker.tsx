@@ -2,20 +2,17 @@ import Image from "next/image";
 import Draggable from "react-draggable";
 import { Asset } from "@/app/api/_utils/types";
 import React, { useState } from "react";
-import MarkerPopups from "./MarkerPopups"
-import AssetBio from "@/components/factorydashboard/FactoryBio";
+import MarkerPopups from "./MarkerPopups";
 
 interface AssetMarkerProps {
     asset: Asset;
 }
 
 const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
-
     const [isDraggableVisible, setDraggableVisible] = useState(true);
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [showEditForm, setShowEditForm] = useState(false);
     const [showButtons, setShowButtons] = useState(false);
-    const [isDragging, setIsDragging] = useState(false);
 
     const handleDelete = () => {
         setShowConfirmDialog(true);
@@ -38,16 +35,13 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
         setShowEditForm(false);
     };
 
-    
-    const handleDraggableClick = (e: React.MouseEvent) => {
-       
+    const handleDraggableClick = () => {
         setShowButtons(!showButtons);
     };
 
     return (
         isDraggableVisible && (
-            <Draggable 
-             >
+            <Draggable>
                 <div className="group flex flex-col absolute top-0 left-0 z-10 drop-shadow-md items-center">
                     <Image
                         src="/icons/floorplan/asset-marker.svg"
@@ -63,23 +57,32 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
                     </p>
                     {showButtons && (
                         <div className="absolute left-full top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-xl p-6 min-w-max w-96 h-auto flex flex-col justify-between">
-                        <div>
-                            <h2 className="text-xl font-semibold mb-4 text-gray-900"  >Asset Info</h2>
-                            <h2 className="text-3xl font-semibold mb-2 text-gray-900"   data-testid="name">{asset.name}</h2>
-                            <p className="text-gray-800">{asset.description}</p>
+                            <div>
+                                <h2 className="text-xl font-semibold mb-4 text-gray-900">
+                                    Asset Info
+                                </h2>
+                                <h2
+                                    className="text-3xl font-semibold mb-2 text-gray-900"
+                                    data-testid="name"
+                                >
+                                    {asset.name}
+                                </h2>
+                                <p className="text-gray-800">
+                                    {asset.description}
+                                </p>
+                            </div>
+                            <div className="self-end">
+                                <MarkerPopups
+                                    handleDelete={handleDelete}
+                                    showConfirmDialog={showConfirmDialog}
+                                    confirmDelete={confirmDelete}
+                                    cancelDelete={cancelDelete}
+                                    handleEdit={handleEdit}
+                                    showEditForm={showEditForm}
+                                    closeEditForm={closeEditForm}
+                                />
+                            </div>
                         </div>
-                        <div className="self-end">
-                        <MarkerPopups
-                            handleDelete={handleDelete}
-                            showConfirmDialog={showConfirmDialog}
-                            confirmDelete={confirmDelete}
-                            cancelDelete={cancelDelete}
-                            handleEdit={handleEdit}
-                            showEditForm={showEditForm}
-                            closeEditForm={closeEditForm}
-                        />
-                        </div>
-                    </div>
                     )}
                 </div>
             </Draggable>
