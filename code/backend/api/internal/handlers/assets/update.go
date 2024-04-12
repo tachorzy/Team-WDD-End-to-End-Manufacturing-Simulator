@@ -1,23 +1,29 @@
 package assets
 
 import (
+	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 	"wdd/api/internal/types"
 	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func NewUpdateAssetHandler(db types.DynamoDBClient) *Handler {
+func NewUpdateAssetHandler(db types.DynamoDBClient, s3Client *s3.Client) *Handler {
 	return &Handler{
 		DynamoDB: db,
+		S3Client: s3Client,
 	}
 }
 
@@ -40,8 +46,24 @@ func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.AP
 		"assetId": &ddbtypes.AttributeValueMemberS{Value: asset.AssetID},
 	}
 
+	// Update the image if it's provided
+	if asset.ImageData != "" {
+		if err := processAssetImageUpdate(ctx, &asset, h.S3Client); err != nil {
+			return events.APIGatewayProxyResponse{
+				StatusCode: http.StatusInternalServerError,
+				Headers:    headers,
+				Body:       fmt.Sprintf("Error updating image: %s", err.Error()),
+			}, nil
+		}
+	}
+
+	asset.DateCreated = time.Now().Format(time.RFC3339)
+
 	var updateBuilder expression.UpdateBuilder
 
+	if asset.FactoryID != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("factoryId"), expression.Value(asset.FactoryID))
+	}
 	if asset.Name != nil {
 		updateBuilder = updateBuilder.Set(expression.Name("name"), expression.Value(asset.Name))
 	}
@@ -58,6 +80,15 @@ func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.AP
 		if asset.FloorplanCoords.Latitude != nil {
 			updateBuilder = updateBuilder.Set(expression.Name("floorplanCoords.latitude"), expression.Value(*asset.FloorplanCoords.Latitude))
 		}
+	}
+	if asset.ModelURL != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("modelUrl"), expression.Value(asset.ModelURL))
+	}
+	if asset.Type != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("type"), expression.Value(asset.Type))
+	}
+	if asset.Description != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("description"), expression.Value(asset.Description))
 	}
 
 	expr, err := wrappers.UpdateExpressionBuilder(updateBuilder)
@@ -90,4 +121,30 @@ func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.AP
 		Headers:    headers,
 		Body:       fmt.Sprintf("Asset with ID %s updated successfully", asset.AssetID),
 	}, nil
+}
+
+func processAssetImageUpdate(ctx context.Context, asset *types.Asset, s3Client *s3.Client) error {
+	uploader := manager.NewUploader(s3Client)
+
+	// Decode the base64 image data
+	decodedData, err := base64.StdEncoding.DecodeString(asset.ImageData)
+	if err != nil {
+		return fmt.Errorf("Base64 decode error: %w", err)
+	}
+
+	// Upload the image to S3
+	_, err = uploader.Upload(ctx, &s3.PutObjectInput{
+		Bucket:      aws.String("wingstopdrivenbucket"),
+		Key:         aws.String(fmt.Sprintf("assets/%s.jpg", asset.AssetID)),
+		Body:        bytes.NewReader(decodedData),
+		ContentType: aws.String("image/jpeg"),
+	})
+	if err != nil {
+		return fmt.Errorf("failed to upload image to S3: %w", err)
+	}
+
+	// Update the image URL in the asset
+	asset.ImageData = fmt.Sprintf("https://%s.s3.amazonaws.com/assets/%s.jpg", "wingstopdrivenbucket", asset.AssetID)
+
+	return nil
 }
