@@ -6,7 +6,7 @@ const AttributeInputColumn = (props: {
     const { attributes } = props;
 
     return (
-        <div className="flex flex-col gap-y-3 max-h-96 overflow-y-scroll">
+        <div className="flex flex-col gap-y-3 max-h-[22rem] overflow-y-scroll">
             <h1 className="text-2xl font-semibold text-gray-900">Attributes</h1>
             {attributes.map((attribute, index) => (
                 <div key={index}>
