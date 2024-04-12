@@ -17,8 +17,8 @@ const AssetItem: React.FC<AssetItemProps> = ({
 
     useEffect(() => {
         const loadImageData = async () => {
-            if (asset && asset.imageData) {
-                const response = await fetch(asset.imageData);
+            if (asset && (asset.imageData as string)) {
+                const response = await fetch(asset.imageData as string);
                 const blob = await response.blob();
                 const url = URL.createObjectURL(blob);
                 setImageSrc(url);
