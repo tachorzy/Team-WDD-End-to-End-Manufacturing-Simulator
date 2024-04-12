@@ -30,7 +30,7 @@ func (h Handler) HandleCreateAssetRequest(ctx context.Context, request events.AP
 	headers := getDefaultHeaders()
 
 	var asset types.Asset
-	if err := json.Unmarshal([]byte(request.Body), &asset); err != nil {
+	if err := wrappers.JSONUnmarshal([]byte(request.Body), &asset); err != nil {
 		return apiResponse(http.StatusBadRequest, "Error parsing JSON body: "+err.Error(), headers), nil
 	}
 
