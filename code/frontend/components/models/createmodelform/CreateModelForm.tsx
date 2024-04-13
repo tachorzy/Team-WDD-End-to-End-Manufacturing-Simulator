@@ -68,17 +68,17 @@ const CreateModelForm = (props: { factoryId: string }) => {
                         <button
                             type="button"
                             onClick={prevPage}
-                            className="bg-black p-2 w-24 rounded-full font-semibold text-lg"
+                            className="bg-black p-2 w-24 rounded-full font-semibold text-lg left-0 bottom-0 absolute mb-4 ml-8"
                         >
-                            Previous
+                            ‹ Back
                         </button>
                     )}
                     <button
                         type="button"
                         onClick={nextPage}
-                        className="bg-black p-2 w-24 rounded-full font-semibold text-lg"
+                        className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
                     >
-                        Next
+                        Next ›
                     </button>
                 </div>
             </div>

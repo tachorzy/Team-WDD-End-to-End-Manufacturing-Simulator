@@ -6,7 +6,7 @@ const AttributeInputColumn = (props: {
     const { properties } = props;
 
     return (
-        <div className="flex flex-col gap-y-3 max-h-[27.75rem] overflow-y-scroll">
+        <div className="flex flex-col gap-y-3 max-h-72 overflow-y-scroll">
             <h1 className="text-2xl font-semibold text-gray-900">Properties</h1>
             {properties.map((property, index) => (
                 <div key={index} className="flex flex-col gap-y-3">
@@ -16,7 +16,7 @@ const AttributeInputColumn = (props: {
                                 {`Property ${index + 1}`}
                             </h2>
                             <input
-                                className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
+                                className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. Temperature"
                             />
                         </div>
@@ -25,7 +25,7 @@ const AttributeInputColumn = (props: {
                                 Units
                             </h2>
                             <input
-                                className="bg-gray-200 p-4 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
+                                className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. °C"
                             />
                         </div>
