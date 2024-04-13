@@ -1,9 +1,11 @@
-import CreateModelForm from "@/components/models/createmodelform/CreateModelForm";
+import CreateModelForm, {
+    Context,
+} from "@/components/models/createmodelform/CreateModelForm";
 import AttributeInputColumn from "@/components/models/createmodelform/attributedefinition/AttributeInputColumn";
 import PropertyInputColumn from "@/components/models/createmodelform/propertiesdefinition/PropertyInputColumn";
 import AddAttributeForm from "@/components/models/createmodelform/attributedefinition/AttributesForm";
 import AddPropertyForm from "@/components/models/createmodelform/propertiesdefinition/PropertiesForm";
-import { Context } from "@/components/models/createmodelform/CreateModelForm";
+
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
@@ -46,15 +48,15 @@ describe("CreateModelForm", () => {
     });
 
     test("should add new attribute input field when Add Attribute button is clicked", async () => {
-        const mockContextValue = { 
+        const mockContextValue = {
             factoryId: "12345678",
             modelId: "12345678",
             attributes: [{ attribute: "name", value: "CNC 1" }],
             setAttributes: jest.fn(),
             properties: [{ property: "", unit: "" }],
             setProperties: jest.fn(),
-        }
-        
+        };
+
         const { getByText } = render(
             <Context.Provider value={mockContextValue}>
                 <AddAttributeForm />
@@ -65,20 +67,20 @@ describe("CreateModelForm", () => {
         addAttributeButton.click();
 
         await waitFor(() => {
-            expect(mockContextValue.setAttributes).toHaveBeenCalled()
+            expect(mockContextValue.setAttributes).toHaveBeenCalled();
         });
     });
 
     test("should add new property input field when Add Property button is clicked", async () => {
-        const mockContextValue = { 
+        const mockContextValue = {
             factoryId: "12345678",
             modelId: "12345678",
             attributes: [{ attribute: "name", value: "CNC 1" }],
             setAttributes: jest.fn(),
             properties: [{ property: "Temperature", unit: "°C" }],
             setProperties: jest.fn(),
-        }
-        
+        };
+
         const { getByText } = render(
             <Context.Provider value={mockContextValue}>
                 <AddPropertyForm />
@@ -88,7 +90,7 @@ describe("CreateModelForm", () => {
         addPropertyButton.click();
 
         await waitFor(() => {
-            expect(mockContextValue.setProperties).toHaveBeenCalled()
+            expect(mockContextValue.setProperties).toHaveBeenCalled();
         });
     });
 });

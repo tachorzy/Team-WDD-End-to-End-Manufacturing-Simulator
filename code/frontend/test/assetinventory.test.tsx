@@ -45,7 +45,7 @@ describe("AssetInventory", () => {
                 selectedAsset={null}
             />,
         );
-        
+
         assets.forEach((asset) => {
             const assetImages = getAllByAltText(`${asset.name} Asset Image`);
             assetImages.forEach((image) => {

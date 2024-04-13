@@ -34,7 +34,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
             setAttributes,
             properties,
             setProperties,
-            currentPage
+            currentPage,
         }),
         [
             factoryId,
@@ -43,7 +43,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
             setAttributes,
             properties,
             setProperties,
-            currentPage
+            currentPage,
         ],
     );
 
@@ -58,14 +58,28 @@ const CreateModelForm = (props: { factoryId: string }) => {
                 </div>
 
                 <div className="relative w-11/12 h-[34rem] bg-white rounded-xl p-8 px-10 border-2 border-[#D7D9DF]">
-                    <ProgressTracker progress={currentPage}/>
+                    <ProgressTracker progress={currentPage} />
 
                     {currentPage === 1 && <AttributesForm />}
                     {currentPage === 2 && <PropertiesForm />}
                     {/* {currentPage > 2 && <AddGeneratorForm propertyIndex={currentPage - 3} />} */}
 
-                    {currentPage > 1 && <button onClick={prevPage} className="bg-black p-2 w-24 rounded-full font-semibold text-lg">Previous</button>}
-                    <button onClick={nextPage} className="bg-black p-2 w-24 rounded-full font-semibold text-lg">Next</button>
+                    {currentPage > 1 && (
+                        <button
+                            type="button"
+                            onClick={prevPage}
+                            className="bg-black p-2 w-24 rounded-full font-semibold text-lg"
+                        >
+                            Previous
+                        </button>
+                    )}
+                    <button
+                        type="button"
+                        onClick={nextPage}
+                        className="bg-black p-2 w-24 rounded-full font-semibold text-lg"
+                    >
+                        Next
+                    </button>
                 </div>
             </div>
         </Context.Provider>
