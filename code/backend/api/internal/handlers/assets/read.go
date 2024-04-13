@@ -21,27 +21,37 @@ func NewReadFactoryAssetsHandler(db types.DynamoDBClient) *Handler {
 
 func (h Handler) HandleReadFactoryAssetsRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	factoryID := request.QueryStringParameters["factoryId"]
+	assetID := request.QueryStringParameters["assetId"]
 
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",
 		"Content-Type":                "application/json",
 	}
 
-	if factoryID == "" {
+	var input *dynamodb.QueryInput
+	if factoryID != "" {
+		input = &dynamodb.QueryInput{
+			TableName:              aws.String(TABLENAME),
+			IndexName:              aws.String("FactoryIndex"),
+			KeyConditionExpression: aws.String("factoryId = :factoryId"),
+			ExpressionAttributeValues: map[string]ddbtypes.AttributeValue{
+				":factoryId": &ddbtypes.AttributeValueMemberS{Value: factoryID},
+			},
+		}
+	} else if assetID != "" {
+		input = &dynamodb.QueryInput{
+			TableName:              aws.String(TABLENAME),
+			KeyConditionExpression: aws.String("assetId = :assetId"),
+			ExpressionAttributeValues: map[string]ddbtypes.AttributeValue{
+				":assetId": &ddbtypes.AttributeValueMemberS{Value: assetID},
+			},
+		}
+	} else {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
 			Headers:    headers,
-			Body:       "Missing factoryId query parameter",
+			Body:       "Missing factoryId or assetId query parameter",
 		}, nil
-	}
-
-	input := &dynamodb.QueryInput{
-		TableName:              aws.String(TABLENAME),
-		IndexName:              aws.String("factoryId"),
-		KeyConditionExpression: aws.String("factoryId = :factoryId"),
-		ExpressionAttributeValues: map[string]ddbtypes.AttributeValue{
-			":factoryId": &ddbtypes.AttributeValueMemberS{Value: factoryID},
-		},
 	}
 
 	result, err := h.DynamoDB.Query(ctx, input)
