@@ -58,7 +58,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
                 </div>
 
                 <div className="relative w-11/12 h-[34rem] bg-white rounded-xl p-8 px-10 border-2 border-[#D7D9DF]">
-                    <ProgressTracker />
+                    <ProgressTracker progress={currentPage}/>
 
                     {currentPage === 1 && <AttributesForm />}
                     {currentPage === 2 && <PropertiesForm />}
