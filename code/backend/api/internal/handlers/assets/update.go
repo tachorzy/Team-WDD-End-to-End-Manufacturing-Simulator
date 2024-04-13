@@ -18,6 +18,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/google/uuid"
 )
 
 func NewUpdateAssetHandler(db types.DynamoDBClient, s3Client *s3.Client) *Handler {
@@ -53,6 +54,15 @@ func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.AP
 				StatusCode: http.StatusInternalServerError,
 				Headers:    headers,
 				Body:       fmt.Sprintf("Error updating image: %s", err.Error()),
+			}, nil
+		}
+	}
+	if asset.ModelURL != nil {
+		if err := processAssetModelUpdate(ctx, &asset, h.S3Client); err != nil {
+			return events.APIGatewayProxyResponse{
+				StatusCode: http.StatusInternalServerError,
+				Headers:    headers,
+				Body:       fmt.Sprintf("Error updating model: %s", err.Error()),
 			}, nil
 		}
 	}
@@ -116,23 +126,30 @@ func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.AP
 		}, nil
 	}
 
+	updatedAssetJSON, err := json.Marshal(asset)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
+			Body:       fmt.Sprintf("Failed to serialize updated asset: %s", err.Error()),
+		}, nil
+	}
+
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Headers:    headers,
-		Body:       fmt.Sprintf("Asset with ID %s updated successfully", asset.AssetID),
+		Body:       string(updatedAssetJSON),
 	}, nil
 }
 
 func processAssetImageUpdate(ctx context.Context, asset *types.Asset, s3Client *s3.Client) error {
 	uploader := manager.NewUploader(s3Client)
 
-	// Decode the base64 image data
 	decodedData, err := base64.StdEncoding.DecodeString(asset.ImageData)
 	if err != nil {
 		return fmt.Errorf("Base64 decode error: %w", err)
 	}
 
-	// Upload the image to S3
 	_, err = uploader.Upload(ctx, &s3.PutObjectInput{
 		Bucket:      aws.String("wingstopdrivenbucket"),
 		Key:         aws.String(fmt.Sprintf("assets/%s.jpg", asset.AssetID)),
@@ -143,8 +160,33 @@ func processAssetImageUpdate(ctx context.Context, asset *types.Asset, s3Client *
 		return fmt.Errorf("failed to upload image to S3: %w", err)
 	}
 
-	// Update the image URL in the asset
 	asset.ImageData = fmt.Sprintf("https://%s.s3.amazonaws.com/assets/%s.jpg", "wingstopdrivenbucket", asset.AssetID)
+
+	return nil
+}
+
+func processAssetModelUpdate(ctx context.Context, asset *types.Asset, s3Client *s3.Client) error {
+	uploader := manager.NewUploader(s3Client)
+
+	decodedData, err := base64.StdEncoding.DecodeString(*asset.ModelURL)
+	if err != nil {
+		return fmt.Errorf("Base64 decode error: %w", err)
+	}
+	modelID := uuid.NewString()
+	asset.ModelID = &modelID
+
+	_, err = uploader.Upload(ctx, &s3.PutObjectInput{
+		Bucket:      aws.String("wingstopdrivenbucket"),
+		Key:         aws.String(fmt.Sprintf("models/%s.glb", *asset.ModelID)),
+		Body:        bytes.NewReader(decodedData),
+		ContentType: aws.String("model/gltf-binary"),
+	})
+	if err != nil {
+		return fmt.Errorf("failed to upload model to S3: %w", err)
+	}
+
+	modelURL := fmt.Sprintf("https://%s.s3.amazonaws.com/assets/%s.glb", "wingstopdrivenbucket", modelID)
+	asset.ModelURL = &modelURL
 
 	return nil
 }
