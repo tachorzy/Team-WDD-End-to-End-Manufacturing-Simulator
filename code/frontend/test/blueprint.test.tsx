@@ -23,8 +23,7 @@ describe("Blueprint Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData:
-                "assets/images/floorplan.jpg",
+            imageData: "assets/images/floorplan.jpg",
             factoryId: "1",
         };
 
@@ -50,8 +49,7 @@ describe("Blueprint Component", () => {
             assetId: "1",
             name: "Asset 1",
             description: "Description 1",
-            imageData:
-                "assets/images/floorplan.jpg",
+            imageData: "assets/images/floorplan.jpg",
             factoryId: "1",
         };
 
