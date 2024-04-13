@@ -8,15 +8,18 @@ import AssetBio from "../components/factorydashboard/floormanager/AssetBio";
 
 global.URL.createObjectURL = jest
     .fn()
-    .mockReturnValue("https://www.example.com/image.jpg");
+    .mockReturnValue("http://test.com/test.png");
+
+jest.mock("next/image", () => ({
+    __esModule: true,
+    default: (props: any) => <img alt="" {...props} />,
+}));
 
 global.fetch = jest.fn(() =>
     Promise.resolve({
         blob: () => Promise.resolve("mocked blob"),
     }),
 ) as jest.Mock;
-
-jest.spyOn(console, "error").mockImplementation(() => {});
 
 describe("AssetBio", () => {
     beforeEach(() => {
@@ -40,7 +43,7 @@ describe("AssetBio", () => {
         await waitFor(() => {
             expect(getByAltText("Asset Image")).toHaveAttribute(
                 "src",
-                "/_next/image?url=https%3A%2F%2Fwww.example.com%2Fimage.jpg&w=256&q=75",
+                "http://test.com/test.png",
             );
             expect(getByText("Asset 1")).toBeInTheDocument();
             expect(

@@ -7,8 +7,6 @@ import "@testing-library/jest-dom";
 
 fetchMock.enableMocks();
 
-jest.spyOn(global.console, "error").mockImplementation(() => {});
-
 describe("Factorybio Component", () => {
     beforeEach(() => {
         fetchMock.resetMocks();
