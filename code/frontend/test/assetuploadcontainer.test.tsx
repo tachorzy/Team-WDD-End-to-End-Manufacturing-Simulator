@@ -7,10 +7,6 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
 import FileUploadContainer from "../components/factorydashboard/floormanager/assetform/AssetUploadContainer";
 
-const consoleErrorMock = jest
-    .spyOn(console, "error")
-    .mockImplementation(() => {});
-
 const mocksetAssetImageFile = jest.fn();
 const mocksetFormData = jest.fn();
 
@@ -80,6 +76,10 @@ describe("AssetUploadContainer", () => {
     });
 
     test("should not accept files other than jpeg, png, svg", async () => {
+        const consoleErrorMock = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => {});
+
         const { getByTestId } = render(<FileUploadContainer {...props} />);
 
         const file = new File(["blob"], "floorplan.pdf", {
@@ -100,6 +100,10 @@ describe("AssetUploadContainer", () => {
     });
 
     test("should not accept files larger than 8MB", async () => {
+        const consoleErrorMock = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => {});
+
         const { getByTestId } = render(<FileUploadContainer {...props} />);
 
         const file = new File([new ArrayBuffer(8000001)], "floorplan.jpeg", {
