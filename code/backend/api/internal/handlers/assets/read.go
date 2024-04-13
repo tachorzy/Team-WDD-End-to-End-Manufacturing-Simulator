@@ -2,7 +2,6 @@ package assets
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"wdd/api/internal/types"
@@ -14,13 +13,13 @@ import (
 	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewReadFactoryAssetHandler(db types.DynamoDBClient) *Handler {
+func NewReadFactoryAssetsHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
 }
 
-func (h Handler) HandleReadAssetsByFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (h Handler) HandleReadFactoryAssetsRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	factoryID := request.QueryStringParameters["factoryId"]
 
 	headers := map[string]string{
@@ -64,7 +63,7 @@ func (h Handler) HandleReadAssetsByFactoryRequest(ctx context.Context, request e
 		}, nil
 	}
 
-	assetsJSON, err := json.Marshal(assets)
+	assetsJSON, err := wrappers.JSONMarshal(assets)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

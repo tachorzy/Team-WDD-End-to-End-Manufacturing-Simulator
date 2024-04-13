@@ -2,7 +2,6 @@ package factories
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"wdd/api/internal/types"
@@ -28,7 +27,7 @@ func (h Handler) HandleUpdateFactoryRequest(ctx context.Context, request events.
 		"Content-Type":                "application/json",
 	}
 
-	if err := json.Unmarshal([]byte(request.Body), &factory); err != nil {
+	if err := wrappers.JSONUnmarshal([]byte(request.Body), &factory); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
 			Headers:    headers,
