@@ -6,7 +6,7 @@ import AssetInventory from "./AssetInventory";
 import AddAssetForm from "./assetform/AddAssetForm";
 import InventoryNavBar from "./InventoryNavBar";
 import AssetBio from "./AssetBio";
-import AssetMarker from "../floorplan/blueprint/AssetMarker";
+import AssetMarker from "../floorplan/blueprint/marker/AssetMarker";
 
 interface FloorManagerProps {
     setAssetMarkers: React.Dispatch<React.SetStateAction<JSX.Element[]>>;
