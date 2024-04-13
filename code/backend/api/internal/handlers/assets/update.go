@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"wdd/api/internal/types"
 	"wdd/api/internal/wrappers"
 
@@ -129,6 +130,9 @@ func (h Handler) responseUpdatedAsset(headers map[string]string, asset *types.As
 func processAssetImageUpdate(ctx context.Context, asset *types.Asset, s3Client *s3.Client) error {
 	uploader := manager.NewUploader(s3Client)
 
+	if strings.HasPrefix(asset.ImageData, "http://") || strings.HasPrefix(asset.ImageData, "https://") {
+		return nil
+	}
 	decodedData, err := base64.StdEncoding.DecodeString(asset.ImageData)
 	if err != nil {
 		return fmt.Errorf("Base64 decode error: %w", err)

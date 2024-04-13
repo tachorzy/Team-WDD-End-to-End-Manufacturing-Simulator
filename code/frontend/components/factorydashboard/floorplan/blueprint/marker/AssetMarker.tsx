@@ -80,6 +80,7 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
                                     handleEdit={handleEdit}
                                     showEditForm={showEditForm}
                                     closeEditForm={closeEditForm}
+                                    asset={asset}
                                 />
                             </div>
                         </div>

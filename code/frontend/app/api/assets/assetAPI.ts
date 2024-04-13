@@ -24,3 +24,20 @@ export const getAssetsForFactory = async (factoryId: string) => {
     );
     return (await response.json()) as Asset[];
 };
+
+export const updateAsset = async (assetId: string, asset: Asset) => {
+    const response = await fetch(`${BASE_URL}/assets/`, {
+        ...requestOptions,
+        method: "PUT",
+        body: JSON.stringify(asset),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to update the asset');
+    }
+    
+    return (await response.json()) as Asset;
+};
+
+
+

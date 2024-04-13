@@ -22,6 +22,7 @@ const AssetPopups: React.FC<AssetPopupsProps> = ({
     handleEdit,
     showEditForm,
     closeEditForm,
+    asset
 }) => (
     <div>
         <Popup
@@ -73,7 +74,7 @@ const AssetPopups: React.FC<AssetPopupsProps> = ({
         >
             {showEditForm && (
                 <div>
-                    <EditAssetForm closeEditForm={closeEditForm} />
+                    <EditAssetForm asset={asset} closeEditForm={closeEditForm} />
                 </div>
             )}
         </Popup>
