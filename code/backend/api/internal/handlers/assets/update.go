@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 	"wdd/api/internal/types"
 	"wdd/api/internal/wrappers"
 
@@ -36,82 +35,51 @@ func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.AP
 	}
 
 	if err := json.Unmarshal([]byte(request.Body), &asset); err != nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusBadRequest,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Error parsing JSON body: %s", err.Error()),
-		}, nil
+		return h.responseBadRequest(headers, err)
 	}
 
-	key := map[string]ddbtypes.AttributeValue{
-		"assetId": &ddbtypes.AttributeValueMemberS{Value: asset.AssetID},
+	if err := h.updateAsset(ctx, &asset); err != nil {
+		return h.responseInternalServerError(headers, err)
 	}
 
-	// Update the image if it's provided
+	return h.responseUpdatedAsset(headers, &asset)
+}
+
+func (h Handler) updateAsset(ctx context.Context, asset *types.Asset) error {
+	if err := h.processAssetUpdates(ctx, asset); err != nil {
+		return err
+	}
+
+	if err := h.updateDynamoDBRecord(ctx, asset); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (h Handler) processAssetUpdates(ctx context.Context, asset *types.Asset) error {
 	if asset.ImageData != "" {
-		if err := processAssetImageUpdate(ctx, &asset, h.S3Client); err != nil {
-			return events.APIGatewayProxyResponse{
-				StatusCode: http.StatusInternalServerError,
-				Headers:    headers,
-				Body:       fmt.Sprintf("Error updating image: %s", err.Error()),
-			}, nil
+		if err := processAssetImageUpdate(ctx, asset, h.S3Client); err != nil {
+			return err
 		}
 	}
 	if asset.ModelURL != nil {
-		if err := processAssetModelUpdate(ctx, &asset, h.S3Client); err != nil {
-			return events.APIGatewayProxyResponse{
-				StatusCode: http.StatusInternalServerError,
-				Headers:    headers,
-				Body:       fmt.Sprintf("Error updating model: %s", err.Error()),
-			}, nil
+		if err := processAssetModelUpdate(ctx, asset, h.S3Client); err != nil {
+			return err
 		}
 	}
+	return nil
+}
 
-	asset.DateCreated = time.Now().Format(time.RFC3339)
-
-	var updateBuilder expression.UpdateBuilder
-
-	if asset.FactoryID != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("factoryId"), expression.Value(asset.FactoryID))
-	}
-	if asset.Name != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("name"), expression.Value(asset.Name))
-	}
-	if asset.ModelID != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("modelId"), expression.Value(asset.ModelID))
-	}
-	if asset.FloorplanID != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("floorplanId"), expression.Value(asset.FloorplanID))
-	}
-	if asset.FloorplanCoords != nil {
-		if asset.FloorplanCoords.Longitude != nil {
-			updateBuilder = updateBuilder.Set(expression.Name("floorplanCoords.longitude"), expression.Value(*asset.FloorplanCoords.Longitude))
-		}
-		if asset.FloorplanCoords.Latitude != nil {
-			updateBuilder = updateBuilder.Set(expression.Name("floorplanCoords.latitude"), expression.Value(*asset.FloorplanCoords.Latitude))
-		}
-	}
-	if asset.ModelURL != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("modelUrl"), expression.Value(asset.ModelURL))
-	}
-	if asset.Type != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("type"), expression.Value(asset.Type))
-	}
-	if asset.Description != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("description"), expression.Value(asset.Description))
-	}
-
+func (h Handler) updateDynamoDBRecord(ctx context.Context, asset *types.Asset) error {
+	updateBuilder := h.createUpdateBuilder(asset)
 	expr, err := wrappers.UpdateExpressionBuilder(updateBuilder)
 	if err != nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusInternalServerError,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Failed to build update expression: %s", err.Error()),
-		}, nil
+		return err
 	}
 
 	input := &dynamodb.UpdateItemInput{
-		Key:                       key,
+		Key:                       map[string]ddbtypes.AttributeValue{"assetId": &ddbtypes.AttributeValueMemberS{Value: asset.AssetID}},
 		TableName:                 aws.String(TABLENAME),
 		ExpressionAttributeNames:  expr.Names(),
 		ExpressionAttributeValues: expr.Values(),
@@ -119,13 +87,29 @@ func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.AP
 	}
 
 	if _, err = h.DynamoDB.UpdateItem(ctx, input); err != nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusInternalServerError,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Error updating item into DynamoDB: %s", err.Error()),
-		}, nil
+		return err
 	}
 
+	return nil
+}
+
+func (h Handler) responseBadRequest(headers map[string]string, err error) (events.APIGatewayProxyResponse, error) {
+	return events.APIGatewayProxyResponse{
+		StatusCode: http.StatusBadRequest,
+		Headers:    headers,
+		Body:       fmt.Sprintf("Error parsing JSON body: %s", err.Error()),
+	}, nil
+}
+
+func (h Handler) responseInternalServerError(headers map[string]string, err error) (events.APIGatewayProxyResponse, error) {
+	return events.APIGatewayProxyResponse{
+		StatusCode: http.StatusInternalServerError,
+		Headers:    headers,
+		Body:       fmt.Sprintf("Error during processing: %s", err.Error()),
+	}, nil
+}
+
+func (h Handler) responseUpdatedAsset(headers map[string]string, asset *types.Asset) (events.APIGatewayProxyResponse, error) {
 	updatedAssetJSON, err := json.Marshal(asset)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
@@ -189,4 +173,40 @@ func processAssetModelUpdate(ctx context.Context, asset *types.Asset, s3Client *
 	asset.ModelURL = &modelURL
 
 	return nil
+}
+
+func (h Handler) createUpdateBuilder(asset *types.Asset) expression.UpdateBuilder {
+	var updateBuilder expression.UpdateBuilder
+
+	if asset.FactoryID != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("factoryId"), expression.Value(asset.FactoryID))
+	}
+	if asset.Name != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("name"), expression.Value(asset.Name))
+	}
+	if asset.ModelID != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("modelId"), expression.Value(asset.ModelID))
+	}
+	if asset.FloorplanID != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("floorplanId"), expression.Value(asset.FloorplanID))
+	}
+	if asset.FloorplanCoords != nil {
+		if asset.FloorplanCoords.Longitude != nil {
+			updateBuilder = updateBuilder.Set(expression.Name("floorplanCoords.longitude"), expression.Value(*asset.FloorplanCoords.Longitude))
+		}
+		if asset.FloorplanCoords.Latitude != nil {
+			updateBuilder = updateBuilder.Set(expression.Name("floorplanCoords.latitude"), expression.Value(*asset.FloorplanCoords.Latitude))
+		}
+	}
+	if asset.ModelURL != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("modelUrl"), expression.Value(asset.ModelURL))
+	}
+	if asset.Type != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("type"), expression.Value(asset.Type))
+	}
+	if asset.Description != nil {
+		updateBuilder = updateBuilder.Set(expression.Name("description"), expression.Value(asset.Description))
+	}
+
+	return updateBuilder
 }
