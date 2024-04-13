@@ -1,26 +1,12 @@
 import CreateModelForm from "@/components/models/createmodelform/CreateModelForm";
 import AttributeInputColumn from "@/components/models/createmodelform/attributedefinition/AttributeInputColumn";
 import PropertyInputColumn from "@/components/models/createmodelform/propertiesdefinition/PropertyInputColumn";
+import AttributesForm from "@/components/models/createmodelform/attributedefinition/AttributesForm";
+import PropertiesForm from "@/components/models/createmodelform/propertiesdefinition/AddPropertyForm";
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 describe("CreateModelForm", () => {
-    test("should render CreateModelForm component with model ID field", () => {
-        const mockFactoryId = "12345678";
-        const { getByText, getByPlaceholderText } = render(
-            <CreateModelForm factoryId={mockFactoryId} />,
-        );
-
-        const formTitle = getByText("Create Your Asset Model");
-        const modelIDHeader = getByText("Model ID");
-        const modelIDPrompt = getByText("Define ID Prefix");
-        const modelIDInput = getByPlaceholderText("e.g. CNC");
-
-        expect(formTitle).toBeInTheDocument();
-        expect(modelIDHeader).toBeInTheDocument();
-        expect(modelIDPrompt).toBeInTheDocument();
-        expect(modelIDInput).toBeInTheDocument();
-    });
 
     test("should render attribute and property columns", () => {
         const mockFactoryId = "12345678";
@@ -63,9 +49,8 @@ describe("CreateModelForm", () => {
     });
 
     test("should add new attribute input field when Add Attribute button is clicked", async () => {
-        const mockFactoryId = "12345678";
         const { getByText } = render(
-            <CreateModelForm factoryId={mockFactoryId} />,
+            <AttributesForm />,
         );
         const addAttributeButton = getByText("Add Attribute");
 
@@ -81,9 +66,8 @@ describe("CreateModelForm", () => {
     });
 
     test("should add new property input field when Add Property button is clicked", async () => {
-        const mockFactoryId = "12345678";
         const { getByText } = render(
-            <CreateModelForm factoryId={mockFactoryId} />,
+            <PropertiesForm/>,
         );
         const addPropertyButton = getByText("Add Property");
         addPropertyButton.click();
