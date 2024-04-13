@@ -11,11 +11,12 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 func TestHandleUpdateAssetRequest_BadJSON(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
-	mockS3Client := &mocks.S3Client{}
+	mockS3Client := new(mocks.S3Client)
 
 	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Client)
 
@@ -37,7 +38,11 @@ func TestHandleUpdateAssetRequest_BadJSON(t *testing.T) {
 
 func TestHandleUpdateAssetRequest_UpdateExpressionBuilderError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
-	mockS3Client := &mocks.S3Client{}
+	mockS3Client := new(mocks.S3Client)
+
+	mockS3Client.PutObjectFunc = func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
+		return &s3.PutObjectOutput{}, nil
+	}
 
 	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Client)
 
@@ -71,6 +76,12 @@ func TestHandleUpdateAssetRequest_UpdateItemError(t *testing.T) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
+	mockS3Client := &mocks.S3Client{
+		PutObjectFunc: func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
+
+			return &s3.PutObjectOutput{}, nil
+		},
+	}
 
 	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Client)
 
@@ -94,6 +105,13 @@ func TestHandleUpdateAssetRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
 			return &dynamodb.UpdateItemOutput{}, nil
+		},
+	}
+
+	mockS3Client := &mocks.S3Client{
+		PutObjectFunc: func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
+
+			return &s3.PutObjectOutput{}, nil
 		},
 	}
 
