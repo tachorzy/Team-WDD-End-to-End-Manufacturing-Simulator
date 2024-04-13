@@ -20,6 +20,11 @@ const CreateModelForm = (props: { factoryId: string }) => {
     ]);
     const [properties, setProperties] = useState([{ property: "", unit: "" }]);
 
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
     const contextValue = useMemo(
         () => ({
             factoryId,
