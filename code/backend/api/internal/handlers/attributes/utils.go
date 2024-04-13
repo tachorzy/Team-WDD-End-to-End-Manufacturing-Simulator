@@ -1,12 +1,11 @@
-package assets
+package attributes
 
 import (
 	"wdd/api/internal/types"
 )
 
-const TABLENAME = "Asset"
+const TABLENAME = "Attribute"
 
 type Handler struct {
 	DynamoDB types.DynamoDBClient
-	S3Client types.S3Client
 }

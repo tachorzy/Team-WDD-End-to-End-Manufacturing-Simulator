@@ -21,10 +21,10 @@ import (
 	"github.com/google/uuid"
 )
 
-func NewUpdateAssetHandler(db types.DynamoDBClient, s3Client *s3.Client) *Handler {
+func NewUpdateAssetHandler(db types.DynamoDBClient, s3 types.S3Client) *Handler {
 	return &Handler{
 		DynamoDB: db,
-		S3Client: s3Client,
+		S3Client: s3,
 	}
 }
 
@@ -127,8 +127,9 @@ func (h Handler) responseUpdatedAsset(headers map[string]string, asset *types.As
 	}, nil
 }
 
-func processAssetImageUpdate(ctx context.Context, asset *types.Asset, s3Client *s3.Client) error {
-	uploader := manager.NewUploader(s3Client)
+func processAssetImageUpdate(ctx context.Context, asset *types.Asset, s3Client types.S3Client) error {
+	actualS3Client := s3Client.(interface{}).(*s3.Client)
+	uploader := manager.NewUploader(actualS3Client)
 
 	if strings.HasPrefix(asset.ImageData, "http://") || strings.HasPrefix(asset.ImageData, "https://") {
 		return nil
@@ -149,12 +150,12 @@ func processAssetImageUpdate(ctx context.Context, asset *types.Asset, s3Client *
 	}
 
 	asset.ImageData = fmt.Sprintf("https://%s.s3.amazonaws.com/assets/%s.jpg", "wingstopdrivenbucket", asset.AssetID)
-
 	return nil
 }
+func processAssetModelUpdate(ctx context.Context, asset *types.Asset, s3Client types.S3Client) error {
 
-func processAssetModelUpdate(ctx context.Context, asset *types.Asset, s3Client *s3.Client) error {
-	uploader := manager.NewUploader(s3Client)
+	actualS3Client := s3Client.(interface{}).(*s3.Client)
+	uploader := manager.NewUploader(actualS3Client)
 
 	decodedData, err := base64.StdEncoding.DecodeString(*asset.ModelURL)
 	if err != nil {

@@ -3,19 +3,21 @@ package assets
 import (
 	"context"
 	"errors"
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
 	"wdd/api/internal/wrappers"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
 func TestHandleUpdateAssetRequest_BadJSON(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
+	mockS3Client := &mocks.S3Client{}
 
-	handler := NewUpdateAssetHandler(mockDDBClient)
+	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Client)
 
 	request := events.APIGatewayProxyRequest{
 		Body: `{"assetId":1}`,
@@ -35,8 +37,9 @@ func TestHandleUpdateAssetRequest_BadJSON(t *testing.T) {
 
 func TestHandleUpdateAssetRequest_UpdateExpressionBuilderError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
+	mockS3Client := &mocks.S3Client{}
 
-	handler := NewUpdateAssetHandler(mockDDBClient)
+	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Client)
 
 	originalUpdateExpressionBuilder := wrappers.UpdateExpressionBuilder
 
@@ -69,7 +72,7 @@ func TestHandleUpdateAssetRequest_UpdateItemError(t *testing.T) {
 		},
 	}
 
-	handler := NewUpdateAssetHandler(mockDDBClient)
+	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Client)
 
 	request := events.APIGatewayProxyRequest{
 		Body: `{"assetId": "1", "name": "test", "modelId": "test", "floorplanId": "test", "floorplanCoords": {"longitude": 1.0, "latitude": 1.0}}`,
@@ -94,7 +97,7 @@ func TestHandleUpdateAssetRequest_Success(t *testing.T) {
 		},
 	}
 
-	handler := NewUpdateAssetHandler(mockDDBClient)
+	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Client)
 
 	request := events.APIGatewayProxyRequest{
 		Body: `{"assetId": "1", "name": "test", "modelId": "test", "floorplanId": "test", "floorplanCoords": {"longitude": 1.0, "latitude": 1.0}}`,
