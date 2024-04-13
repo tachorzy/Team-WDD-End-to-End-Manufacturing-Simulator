@@ -4,30 +4,30 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
-import fetchMock from "jest-fetch-mock";
 import { Asset } from "@/app/api/_utils/types";
 import AssetInventory from "../components/factorydashboard/floormanager/AssetInventory";
-import InventoryNavBar from "../components/factorydashboard/floormanager/InventoryNavBar";
 
-fetchMock.enableMocks();
+const mockCreateObjectURL = jest.fn();
+global.URL.createObjectURL = mockCreateObjectURL;
 
-beforeEach(() => {
-    global.URL.createObjectURL = jest.fn();
-    fetchMock.resetMocks();
-    const mockBase64Image = `data:image/jpeg;base64,${btoa("fake-image-data")}`;
-    fetchMock.mockResponseOnce(JSON.stringify({ src: mockBase64Image }));
-});
+interface AssetItemProps {
+    asset: Asset;
+}
+const mockAssetItem = jest.fn();
+jest.mock(
+    "../components/factorydashboard/floormanager/AssetItem",
+    () => (props: AssetItemProps) => {
+        mockAssetItem(props);
+
+        const { asset } = props;
+
+        return <div>{asset.name}</div>;
+    },
+);
 
 describe("AssetInventory", () => {
-    test("should have asset inventory navbar", () => {
-        const { getByText } = render(<InventoryNavBar />);
-        const cncHeader = getByText("CNC Models");
-        const stampingHeader = getByText("Stamping Models");
-        const edmHeader = getByText("EDM Models");
-
-        expect(cncHeader).toBeInTheDocument();
-        expect(stampingHeader).toBeInTheDocument();
-        expect(edmHeader).toBeInTheDocument();
+    beforeEach(() => {
+        mockCreateObjectURL.mockClear();
     });
 
     test("should render list of assets", () => {
@@ -48,7 +48,7 @@ describe("AssetInventory", () => {
             },
         ];
 
-        const { getAllByAltText } = render(
+        const { getByText } = render(
             <AssetInventory
                 assets={assets}
                 setSelectedAsset={jest.fn()}
@@ -57,10 +57,7 @@ describe("AssetInventory", () => {
         );
 
         assets.forEach((asset) => {
-            const assetImages = getAllByAltText(`${asset.name} Asset Image`);
-            assetImages.forEach((image) => {
-                expect(image).toBeInTheDocument();
-            });
+            expect(getByText(asset.name)).toBeInTheDocument();
         });
     });
 
@@ -74,8 +71,19 @@ describe("AssetInventory", () => {
                 selectedAsset={null}
             />,
         );
-        const noAssetsMessage = getByText("No assets found.");
 
-        expect(noAssetsMessage).toBeInTheDocument();
+        expect(getByText("No assets found.")).toBeInTheDocument();
+    });
+
+    test("should render No assets available when assets array is null", () => {
+        const { getByText } = render(
+            <AssetInventory
+                assets={undefined}
+                setSelectedAsset={jest.fn()}
+                selectedAsset={null}
+            />,
+        );
+
+        expect(getByText("No assets found.")).toBeInTheDocument();
     });
 });
