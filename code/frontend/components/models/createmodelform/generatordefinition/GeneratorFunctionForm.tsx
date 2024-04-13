@@ -1,6 +1,8 @@
 import React from "react";
 import RandomGeneratorForm from "./RandomGeneratorForm";
 import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
+import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
+
 const GeneratorFunctionForm = (props: {
     propertyIndex: number }) => {
     const { propertyIndex } = props;
@@ -10,6 +12,7 @@ const GeneratorFunctionForm = (props: {
             <div className="flex flex-row gap-x-16">
                 <RandomGeneratorForm />
                 <SineWaveGeneratorForm/>
+                <SawtoothGeneratorForm/>
             </div>
         </div>
     );
