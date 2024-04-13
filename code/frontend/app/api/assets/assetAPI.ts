@@ -24,3 +24,11 @@ export const getAssetsForFactory = async (factoryId: string) => {
     );
     return (await response.json()) as Asset[];
 };
+
+export const getAsset = async (assetId: string) => {
+    const response = await fetch(
+        `${BASE_URL}/assets?assetId=${assetId}`,
+        requestOptions,
+    );
+    return (await response.json()) as Asset;
+};
