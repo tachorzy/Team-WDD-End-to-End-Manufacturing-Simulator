@@ -42,12 +42,15 @@ const CreateModelForm = (props: { factoryId: string }) => {
     return (
         <Context.Provider value={contextValue}>
             <div className="items-center justify-center ml-32">
+                <div className="flex flex-row gap-x-[54rem]">
+                    <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:tracking-tight my-3 mt-6">
+                        Create Asset Model
+                    </h2>
+                    {/* put the exit button here later */}
+                </div>
+
                 <div className="relative w-11/12 h-[34rem] bg-white rounded-xl p-8 px-10 border-2 border-[#D7D9DF]">
-                    <ProgressTracker/>
-                    
-                    <h1 className="text-3xl font-semibold mb-4 text-gray-900">
-                        Create Your Asset Model
-                    </h1>
+                    <ProgressTracker />
 
                     <AttributesForm />
                     {/* <div className="flex flex-row gap-x-16 mt-6 gap-y-2">

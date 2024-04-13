@@ -18,8 +18,13 @@ export default function Page({ params }: { params: { factoryId: string } }) {
                     pageId="Asset Models"
                     factoryId={factoryId}
                 />
-                <section className="mt-6">
-                    <div className="flex flex-col gap-x-12 float-right mx-32">
+
+                {/* Extract the code below into a component of its own. */}
+                {/* <section className="flex flex-row mt-6 mx-32">
+                    <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:tracking-tight">
+                            {isCreateFormOpen ? "Create asset model" : "Asset Models"}
+                    </h2>
+                    <div className="flex flex-col ml-[56rem] float-right">                               
                         <button
                             type="button"
                             onClick={() => setIsSettingsOpen(true)}
@@ -37,7 +42,7 @@ export default function Page({ params }: { params: { factoryId: string } }) {
                             <button
                                 type="button"
                                 onClick={() => setIsCreateFormOpen(true)}
-                                className=""
+                                className="absolute mt-20 mx-32"
                             >
                                 <div className="flex flex-row gap-x-2 bg-[#FAFAFA] rounded-lg w-64 h-10 border-2 border-[#C5C9D6] px-4">
                                     <Image
@@ -55,7 +60,7 @@ export default function Page({ params }: { params: { factoryId: string } }) {
                             </button>
                         )}
                     </div>
-                </section>
+                </section> */}
 
                 {isCreateFormOpen && <CreateModelForm factoryId={factoryId} />}
             </div>

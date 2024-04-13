@@ -2,12 +2,11 @@ import CreateModelForm from "@/components/models/createmodelform/CreateModelForm
 import AttributeInputColumn from "@/components/models/createmodelform/attributedefinition/AttributeInputColumn";
 import PropertyInputColumn from "@/components/models/createmodelform/propertiesdefinition/PropertyInputColumn";
 import AttributesForm from "@/components/models/createmodelform/attributedefinition/AttributesForm";
-import PropertiesForm from "@/components/models/createmodelform/propertiesdefinition/AddPropertyForm";
 import { render, waitFor } from "@testing-library/react";
+import PropertiesForm from "@/components/models/createmodelform/propertiesdefinition/AddPropertyForm";
 import "@testing-library/jest-dom";
 
 describe("CreateModelForm", () => {
-
     test("should render attribute and property columns", () => {
         const mockFactoryId = "12345678";
         const { getByText } = render(
@@ -49,9 +48,7 @@ describe("CreateModelForm", () => {
     });
 
     test("should add new attribute input field when Add Attribute button is clicked", async () => {
-        const { getByText } = render(
-            <AttributesForm />,
-        );
+        const { getByText } = render(<AttributesForm />);
         const addAttributeButton = getByText("Add Attribute");
 
         addAttributeButton.click();
@@ -66,9 +63,7 @@ describe("CreateModelForm", () => {
     });
 
     test("should add new property input field when Add Property button is clicked", async () => {
-        const { getByText } = render(
-            <PropertiesForm/>,
-        );
+        const { getByText } = render(<PropertiesForm />);
         const addPropertyButton = getByText("Add Property");
         addPropertyButton.click();
 
