@@ -78,7 +78,6 @@ func TestHandleUpdateAssetRequest_UpdateItemError(t *testing.T) {
 	}
 	mockS3Client := &mocks.S3Client{
 		PutObjectFunc: func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
-
 			return &s3.PutObjectOutput{}, nil
 		},
 	}
@@ -110,7 +109,6 @@ func TestHandleUpdateAssetRequest_Success(t *testing.T) {
 
 	mockS3Client := &mocks.S3Client{
 		PutObjectFunc: func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
-
 			return &s3.PutObjectOutput{}, nil
 		},
 	}
