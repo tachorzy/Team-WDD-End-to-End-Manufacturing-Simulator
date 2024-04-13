@@ -153,7 +153,6 @@ func processAssetImageUpdate(ctx context.Context, asset *types.Asset, s3Client t
 	return nil
 }
 func processAssetModelUpdate(ctx context.Context, asset *types.Asset, s3Client types.S3Client) error {
-
 	actualS3Client := s3Client.(interface{}).(*s3.Client)
 	uploader := manager.NewUploader(actualS3Client)
 
