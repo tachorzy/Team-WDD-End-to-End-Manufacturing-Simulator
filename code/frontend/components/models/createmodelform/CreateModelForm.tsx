@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import AttributesForm from "./attributedefinition/AttributesForm";
 import PropertiesForm from "./propertiesdefinition/PropertiesForm";
 import ProgressTracker from "./ProgressTracker";
+import GeneratorFunctionForm from "./generatordefinition/GeneratorFunctionForm";
 // interface CreateModelFormProps {
 //     onClose: () => void;
 //     onSave: (formData: Partial<Factory>) => void;
@@ -62,7 +63,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
 
                     {currentPage === 1 && <AttributesForm />}
                     {currentPage === 2 && <PropertiesForm />}
-                    {/* {currentPage > 2 && <AddGeneratorForm propertyIndex={currentPage - 3} />} */}
+                    {currentPage > 2 && <GeneratorFunctionForm propertyIndex={currentPage - 3} />}
 
                     {currentPage > 1 && (
                         <button
