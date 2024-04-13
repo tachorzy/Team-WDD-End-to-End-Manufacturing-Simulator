@@ -202,5 +202,16 @@ func (h Handler) createUpdateBuilder(asset *types.Asset) expression.UpdateBuilde
 	setIfNotNil("type", asset.Type)
 	setIfNotNil("description", asset.Description)
 
+	if len(asset.Attributes) > 0 {
+		for key, attr := range asset.Attributes {
+			valuePath := "attributes." + key + ".value"
+			unitPath := "attributes." + key + ".unit"
+			updateBuilder = updateBuilder.Set(expression.Name(valuePath), expression.Value(attr.Value))
+			if attr.Unit != "" {
+				updateBuilder = updateBuilder.Set(expression.Name(unitPath), expression.Value(attr.Unit))
+			}
+		}
+	}
+
 	return updateBuilder
 }
