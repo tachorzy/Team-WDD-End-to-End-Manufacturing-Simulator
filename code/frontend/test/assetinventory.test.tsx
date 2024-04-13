@@ -3,12 +3,22 @@
  */
 import "@testing-library/jest-dom";
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
 import AssetInventory from "../components/factorydashboard/floormanager/inventory/AssetInventory";
 import InventoryNavBar from "../components/factorydashboard/floormanager/inventory/InventoryNavBar";
+import fetchMock from "jest-fetch-mock";
+
+fetchMock.enableMocks();
 
 describe("AssetInventory", () => {
+    beforeEach(() => {
+        global.URL.createObjectURL = jest.fn();
+        // const mockImageData = new Blob([""], { type: "image/jpeg" });
+        const mockBase64Data = "data:image/jpeg;base64,";
+        fetchMock.mockResponseOnce(() => Promise.resolve(mockBase64Data));
+    });
+    
     test("should have asset inventory navbar", () => {
         const { getByText } = render(<InventoryNavBar />);
         const cncHeader = getByText("CNC Models");
@@ -20,8 +30,8 @@ describe("AssetInventory", () => {
         expect(edmHeader).toBeInTheDocument();
     });
 
-    test("should render list of assets", () => {
-        const assets: Asset[] = [
+    test("should render list of assets", async () => {
+        const mockAssets: Asset[] = [
             {
                 assetId: "1",
                 name: "Asset 1",
@@ -38,19 +48,17 @@ describe("AssetInventory", () => {
             },
         ];
 
-        const { getAllByAltText } = render(
+        const { findByAltText } = render(
             <AssetInventory
-                assets={assets}
+                assets={mockAssets}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
             />,
         );
 
-        assets.forEach((asset) => {
-            const assetImages = getAllByAltText(`${asset.name} Asset Image`);
-            assetImages.forEach((image) => {
-                expect(image).toBeInTheDocument();
-            });
+        mockAssets.forEach(async (asset) => {
+            const image = await findByAltText(`${asset.name} Asset Image`);
+            expect(image).toBeInTheDocument();
         });
     });
 
