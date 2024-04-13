@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import AttributesForm from "./attributedefinition/AttributesForm";
+import PropertiesForm from "./propertiesdefinition/PropertiesForm";
 import ProgressTracker from "./ProgressTracker";
 // interface CreateModelFormProps {
 //     onClose: () => void;
@@ -33,6 +34,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
             setAttributes,
             properties,
             setProperties,
+            currentPage
         }),
         [
             factoryId,
@@ -41,6 +43,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
             setAttributes,
             properties,
             setProperties,
+            currentPage
         ],
     );
 
@@ -57,24 +60,12 @@ const CreateModelForm = (props: { factoryId: string }) => {
                 <div className="relative w-11/12 h-[34rem] bg-white rounded-xl p-8 px-10 border-2 border-[#D7D9DF]">
                     <ProgressTracker />
 
-                    <AttributesForm />
-                    {/* <div className="flex flex-row gap-x-16 mt-6 gap-y-2">
-                        <section className="flex flex-col gap-y-3 min-w-max">
-                            <NameField modelId={modelId} />
-                            <div className="flex flex-col gap-y-3">
-                                <AttributeInputColumn attributes={attributes} />
-                                <AddAttributeButton setAttributes={setAttributes} />
-                            </div>
-                        </section>
+                    {currentPage === 1 && <AttributesForm />}
+                    {currentPage === 2 && <PropertiesForm />}
+                    {/* {currentPage > 2 && <AddGeneratorForm propertyIndex={currentPage - 3} />} */}
 
-                        <section className="flex flex-row gap-y-3 gap-x-4">
-                            <div className="flex flex-col w-3/4 gap-y-3">
-                                <PropertyInputColumn properties={properties} />
-                                <AddPropertyButton setProperties={setProperties} />
-                            </div>
-                        </section>
-
-                    </div> */}
+                    {currentPage > 1 && <button onClick={prevPage} className="bg-black p-2 w-24 rounded-full font-semibold text-lg">Previous</button>}
+                    <button onClick={nextPage} className="bg-black p-2 w-24 rounded-full font-semibold text-lg">Next</button>
                 </div>
             </div>
         </Context.Provider>

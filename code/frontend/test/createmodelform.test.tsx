@@ -2,7 +2,7 @@ import CreateModelForm from "@/components/models/createmodelform/CreateModelForm
 import AttributeInputColumn from "@/components/models/createmodelform/attributedefinition/AttributeInputColumn";
 import PropertyInputColumn from "@/components/models/createmodelform/propertiesdefinition/PropertyInputColumn";
 import AddAttributeForm from "@/components/models/createmodelform/attributedefinition/AttributesForm";
-import AddPropertyForm from "@/components/models/createmodelform/propertiesdefinition/AddPropertyForm";
+import AddPropertyForm from "@/components/models/createmodelform/propertiesdefinition/PropertiesForm";
 import { Context } from "@/components/models/createmodelform/CreateModelForm";
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
