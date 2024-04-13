@@ -67,8 +67,9 @@ describe("AssetUploadContainer", () => {
         fireEvent.drop(dropInput);
 
         await waitFor(() => {
-            const mockCall = mocksetFormData.mock
-                .calls[0] as [(prevData: Asset) => Asset];
+            const mockCall = mocksetFormData.mock.calls[0] as [
+                (prevData: Asset) => Asset,
+            ];
             const updateFunction = mockCall[0];
             const newData = updateFunction(prevData);
 

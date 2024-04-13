@@ -8,7 +8,7 @@ import InventoryNavBar from "./InventoryNavBar";
 import AssetBio from "./AssetBio";
 import AssetMarker from "../floorplan/blueprint/AssetMarker";
 
-interface FloorManagerProps {
+export interface FloorManagerProps {
     setAssetMarkers: React.Dispatch<React.SetStateAction<JSX.Element[]>>;
     factoryId: string;
 }
@@ -24,7 +24,7 @@ const FloorManager: React.FC<FloorManagerProps> = ({
 
     useEffect(() => {
         const fetchAssets = async () => {
-            console.log(factoryId);
+            // console.log(factoryId);
             const data = await getAssetsForFactory(factoryId);
             setAssets(data);
         };
