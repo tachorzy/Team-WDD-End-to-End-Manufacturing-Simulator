@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { Asset } from "@/app/api/_utils/types"; // Ensure updateAsset is exported and imported correctly
+import { Asset } from "@/app/api/_utils/types"; 
 import { updateAsset } from "@/app/api/assets/assetAPI";
 
 interface EditAssetProps {
     asset: Asset;
-    closeEditForm: (event: React.MouseEvent<HTMLElement>) => void;
+    closeEditForm: () => void;
 }
 
 const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
@@ -13,6 +13,7 @@ const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
     const [description, setDescription] = useState(asset.description || "");
 
     const handleSaveChanges = async () => {
+       
         try {
             const updatedAsset = await updateAsset( {
                 ...asset,
@@ -20,10 +21,11 @@ const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
                 description,
             });
             console.log("Asset Updated Successfully:", updatedAsset);
-            closeEditForm();
+           
         } catch (error) {
             console.error("Failed to update asset:", error);
         }
+        closeEditForm();
     };
 
     return (
@@ -35,7 +37,7 @@ const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
                 <button
                     type="button"
                     className="absolute top-3 right-3 p-1 rounded-full bg-gray-200 hover:bg-gray-300"
-                    onClick={(e) => closeEditForm(e)}
+                    onClick={closeEditForm}
                 >
                     <Image
                         src="/icons/navbar/close.svg"
