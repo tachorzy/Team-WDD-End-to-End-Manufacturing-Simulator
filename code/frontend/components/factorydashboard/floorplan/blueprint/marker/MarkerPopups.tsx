@@ -1,4 +1,5 @@
 import React, { MouseEventHandler, SyntheticEvent } from "react";
+import { Asset } from "@/app/api/_utils/types";
 import Popup from "reactjs-popup";
 import Image from "next/image";
 import EditAssetForm from "@/components/factorydashboard/floormanager/EditAssetForm";
@@ -12,6 +13,7 @@ interface AssetPopupsProps {
     handleEdit: (event?: SyntheticEvent<Element, Event>) => void;
     showEditForm: boolean;
     closeEditForm: React.MouseEventHandler<HTMLElement>;
+    asset: Asset;
 }
 
 const AssetPopups: React.FC<AssetPopupsProps> = ({
@@ -22,7 +24,7 @@ const AssetPopups: React.FC<AssetPopupsProps> = ({
     handleEdit,
     showEditForm,
     closeEditForm,
-    asset
+    asset,
 }) => (
     <div>
         <Popup
@@ -74,7 +76,10 @@ const AssetPopups: React.FC<AssetPopupsProps> = ({
         >
             {showEditForm && (
                 <div>
-                    <EditAssetForm asset={asset} closeEditForm={closeEditForm} />
+                    <EditAssetForm
+                        asset={asset}
+                        closeEditForm={closeEditForm}
+                    />
                 </div>
             )}
         </Popup>

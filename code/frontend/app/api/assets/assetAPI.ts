@@ -33,11 +33,8 @@ export const updateAsset = async (assetId: string, asset: Asset) => {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to update the asset');
+        throw new Error("Failed to update the asset");
     }
-    
+
     return (await response.json()) as Asset;
 };
-
-
-

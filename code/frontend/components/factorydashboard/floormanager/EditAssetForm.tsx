@@ -4,24 +4,25 @@ import { Asset } from "@/app/api/_utils/types"; // Ensure updateAsset is exporte
 import { updateAsset } from "@/app/api/assets/assetAPI";
 
 interface EditAssetProps {
-    asset: Asset; 
+    asset: Asset;
     closeEditForm: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
-  
     const [name, setName] = useState(asset.name || "");
     const [description, setDescription] = useState(asset.description || "");
 
-  
     const handleSaveChanges = async () => {
         try {
-            const updatedAsset = await updateAsset(asset.assetId, { ...asset, name, description });
+            const updatedAsset = await updateAsset(asset.assetId, {
+                ...asset,
+                name,
+                description,
+            });
             console.log("Asset Updated Successfully:", updatedAsset);
-            closeEditForm(); 
+            closeEditForm();
         } catch (error) {
             console.error("Failed to update asset:", error);
-            
         }
     };
 
@@ -54,20 +55,23 @@ const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
                         type="text"
                         name="name"
                         value={name}
-                        onChange={e => setName(e.target.value)}
+                        onChange={(e) => setName(e.target.value)}
                         placeholder="Enter asset name"
                         className="w-full px-4 py-2 rounded-lg border border-gray-800 focus:outline-none focus:border-indigo-500 text-gray-900"
                     />
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="description" className="block mb-1 text-gray-800">
+                    <label
+                        htmlFor="description"
+                        className="block mb-1 text-gray-800"
+                    >
                         Description:
                     </label>
                     <input
                         type="text"
                         name="description"
                         value={description}
-                        onChange={e => setDescription(e.target.value)}
+                        onChange={(e) => setDescription(e.target.value)}
                         placeholder="Enter asset description"
                         className="w-full px-4 py-2 rounded-lg border border-gray-800 focus:outline-none focus:border-indigo-500 text-gray-900"
                     />
