@@ -9,11 +9,17 @@ import { Asset } from "@/app/api/_utils/types";
 import Blueprint from "../components/factorydashboard/floorplan/blueprint/Blueprint";
 import AssetMarker from "../components/factorydashboard/floorplan/blueprint/AssetMarker";
 
+const mockCreateObjectURL = jest.fn();
+global.URL.createObjectURL = mockCreateObjectURL;
+
 describe("Blueprint Component", () => {
     beforeEach(() => {
-        global.URL.createObjectURL = jest.fn();
+        jest.clearAllMocks();
     });
+    
     test("should render an image as a floorplan", () => {
+        mockCreateObjectURL.mockReturnValue("https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927");
+
         const mockAsset: Asset = {
             assetId: "1",
             name: "Asset 1",
@@ -41,6 +47,8 @@ describe("Blueprint Component", () => {
     });
 
     test("should render with the correct CSS classes", () => {
+        mockCreateObjectURL.mockReturnValue("https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927");
+
         const mockAsset: Asset = {
             assetId: "1",
             name: "Asset 1",
