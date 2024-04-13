@@ -22,7 +22,7 @@ const AttributesForm = () => {
     const contextValue = useContext(Context) as AttributesFormContext;
 
     return (
-        <div className="flex flex-row gap-x-16 mt-6 gap-y-2">
+        <div className="flex flex-row gap-x-24 mt-6 gap-y-2">
             <section className="flex flex-col gap-y-3 min-w-max">
                 <NameField modelId={contextValue?.modelId} />
             </section>
