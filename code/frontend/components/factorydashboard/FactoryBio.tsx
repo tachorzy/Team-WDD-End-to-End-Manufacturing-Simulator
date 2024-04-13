@@ -6,7 +6,7 @@ import Image from "next/image";
 import { GetConfig, NextServerConnector } from "@/app/api/_utils/connector";
 import EditFactoryForm from "./editFactory";
 
-export interface LocationData {
+interface LocationData {
     address: {
         ISO: string;
         city: string;
