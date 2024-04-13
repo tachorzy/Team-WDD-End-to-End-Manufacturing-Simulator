@@ -178,35 +178,25 @@ func processAssetModelUpdate(ctx context.Context, asset *types.Asset, s3Client *
 func (h Handler) createUpdateBuilder(asset *types.Asset) expression.UpdateBuilder {
 	var updateBuilder expression.UpdateBuilder
 
-	if asset.FactoryID != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("factoryId"), expression.Value(asset.FactoryID))
+	setIfNotNil := func(field string, value interface{}) {
+		if value != nil {
+			updateBuilder = updateBuilder.Set(expression.Name(field), expression.Value(value))
+		}
 	}
-	if asset.Name != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("name"), expression.Value(asset.Name))
-	}
-	if asset.ModelID != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("modelId"), expression.Value(asset.ModelID))
-	}
-	if asset.FloorplanID != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("floorplanId"), expression.Value(asset.FloorplanID))
-	}
+
+	setIfNotNil("factoryId", asset.FactoryID)
+	setIfNotNil("name", asset.Name)
+	setIfNotNil("modelId", asset.ModelID)
+	setIfNotNil("floorplanId", asset.FloorplanID)
+
 	if asset.FloorplanCoords != nil {
-		if asset.FloorplanCoords.Longitude != nil {
-			updateBuilder = updateBuilder.Set(expression.Name("floorplanCoords.longitude"), expression.Value(*asset.FloorplanCoords.Longitude))
-		}
-		if asset.FloorplanCoords.Latitude != nil {
-			updateBuilder = updateBuilder.Set(expression.Name("floorplanCoords.latitude"), expression.Value(*asset.FloorplanCoords.Latitude))
-		}
+		setIfNotNil("floorplanCoords.longitude", asset.FloorplanCoords.Longitude)
+		setIfNotNil("floorplanCoords.latitude", asset.FloorplanCoords.Latitude)
 	}
-	if asset.ModelURL != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("modelUrl"), expression.Value(asset.ModelURL))
-	}
-	if asset.Type != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("type"), expression.Value(asset.Type))
-	}
-	if asset.Description != nil {
-		updateBuilder = updateBuilder.Set(expression.Name("description"), expression.Value(asset.Description))
-	}
+
+	setIfNotNil("modelUrl", asset.ModelURL)
+	setIfNotNil("type", asset.Type)
+	setIfNotNil("description", asset.Description)
 
 	return updateBuilder
 }
