@@ -5,7 +5,7 @@ import { updateAsset } from "@/app/api/assets/assetAPI";
 
 interface EditAssetProps {
     asset: Asset;
-    closeEditForm: () => void;
+    closeEditForm: (event?: React.MouseEvent<HTMLElement>) => void;
 }
 
 const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
