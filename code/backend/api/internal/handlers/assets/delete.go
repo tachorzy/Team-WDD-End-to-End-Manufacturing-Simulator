@@ -4,14 +4,15 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"wdd/api/internal/types"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewDeleteAssetHandler(db DynamoDBClient) *Handler {
+func NewDeleteAssetHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -27,8 +28,8 @@ func (h Handler) HandleDeleteAssetRequest(ctx context.Context, request events.AP
 		}, nil
 	}
 
-	key := map[string]types.AttributeValue{
-		"assetID": &types.AttributeValueMemberS{Value: assetID},
+	key := map[string]ddbtypes.AttributeValue{
+		"assetID": &ddbtypes.AttributeValueMemberS{Value: assetID},
 	}
 
 	input := &dynamodb.DeleteItemInput{

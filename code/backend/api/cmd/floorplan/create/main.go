@@ -18,8 +18,8 @@ func main() {
 		panic(fmt.Sprintf("Failed loading config, %v", err))
 	}
 
-	svc := dynamodb.NewFromConfig(cfg)
-	handler := floorplan.NewCreateFloorPlanHandler(svc)
+	dbClient := dynamodb.NewFromConfig(cfg)
+	handler := floorplan.NewCreateFloorPlanHandler(dbClient)
 
 	lambda.Start(handler.HandleCreateFloorPlanRequest)
 }

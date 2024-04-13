@@ -19,7 +19,7 @@ func main() {
 	}
 
 	svc := dynamodb.NewFromConfig(cfg)
-	handler := assets.NewReadFactoryAssetHandler(svc)
+	handler := assets.NewReadFactoryAssetsHandler(svc)
 
-	lambda.Start(handler.HandleReadAssetsByFactoryRequest)
+	lambda.Start(handler.HandleReadFactoryAssetsRequest)
 }
