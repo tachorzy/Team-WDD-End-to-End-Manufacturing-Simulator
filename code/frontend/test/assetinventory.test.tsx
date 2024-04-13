@@ -3,7 +3,7 @@
  */
 import "@testing-library/jest-dom";
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import fetchMock from "jest-fetch-mock";
 import { Asset } from "@/app/api/_utils/types";
 import AssetInventory from "../components/factorydashboard/floormanager/AssetInventory";
@@ -11,8 +11,11 @@ import InventoryNavBar from "../components/factorydashboard/floormanager/Invento
 
 fetchMock.enableMocks();
 
+const mockCreateObjectURL = jest.fn();
+global.URL.createObjectURL = mockCreateObjectURL;
+
 beforeEach(() => {
-    global.URL.createObjectURL = jest.fn();
+    mockCreateObjectURL.mockClear();
     fetchMock.resetMocks();
     const mockBase64Image = `data:image/jpeg;base64,${btoa("fake-image-data")}`;
     fetchMock.mockResponseOnce(JSON.stringify({ src: mockBase64Image }));
@@ -30,7 +33,9 @@ describe("AssetInventory", () => {
         expect(edmHeader).toBeInTheDocument();
     });
 
-    test("should render list of assets", () => {
+    test("should render list of assets", async () => {
+        mockCreateObjectURL.mockReturnValue("https://picsum.photos/69");
+
         const assets: Asset[] = [
             {
                 assetId: "1",
@@ -56,15 +61,19 @@ describe("AssetInventory", () => {
             />,
         );
 
-        assets.forEach((asset) => {
-            const assetImages = getAllByAltText(`${asset.name} Asset Image`);
-            assetImages.forEach((image) => {
-                expect(image).toBeInTheDocument();
+        await waitFor(()=> {
+            assets.forEach((asset) => {
+                const assetImages = getAllByAltText(`${asset.name} Asset Image`);
+                assetImages.forEach((image) => {
+                    expect(image).toBeInTheDocument();
+                });
             });
         });
     });
 
-    test("should render No assets available when assets array is empty", () => {
+    test("should render No assets available when assets array is empty", async () => {
+        mockCreateObjectURL.mockReturnValue("https://picsum.photos/69");
+
         const assets: Asset[] = [];
 
         const { getByText } = render(
@@ -76,6 +85,8 @@ describe("AssetInventory", () => {
         );
         const noAssetsMessage = getByText("No assets found.");
 
-        expect(noAssetsMessage).toBeInTheDocument();
+        await waitFor(() =>{
+            expect(noAssetsMessage).toBeInTheDocument();
+        });
     });
 });
