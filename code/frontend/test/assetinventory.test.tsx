@@ -3,11 +3,11 @@
  */
 import "@testing-library/jest-dom";
 import React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
+import fetchMock from "jest-fetch-mock";
 import AssetInventory from "../components/factorydashboard/floormanager/inventory/AssetInventory";
 import InventoryNavBar from "../components/factorydashboard/floormanager/inventory/InventoryNavBar";
-import fetchMock from "jest-fetch-mock";
 
 fetchMock.enableMocks();
 
@@ -18,7 +18,7 @@ describe("AssetInventory", () => {
         const mockBase64Data = "data:image/jpeg;base64,";
         fetchMock.mockResponseOnce(() => Promise.resolve(mockBase64Data));
     });
-    
+
     test("should have asset inventory navbar", () => {
         const { getByText } = render(<InventoryNavBar />);
         const cncHeader = getByText("CNC Models");
@@ -30,7 +30,7 @@ describe("AssetInventory", () => {
         expect(edmHeader).toBeInTheDocument();
     });
 
-    test("should render list of assets", async () => {
+    test("should render list of assets", () => {
         const mockAssets: Asset[] = [
             {
                 assetId: "1",
