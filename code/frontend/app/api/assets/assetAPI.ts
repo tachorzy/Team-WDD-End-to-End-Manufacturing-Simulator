@@ -33,7 +33,7 @@ export const getAsset = async (assetId: string) => {
     return (await response.json()) as Asset;
 
 }
-export const updateAsset = async (assetId: string, asset: Asset) => {
+export const updateAsset = async (asset: Asset) => {
     const response = await fetch(`${BASE_URL}/assets/`, {
         ...requestOptions,
         method: "PUT",

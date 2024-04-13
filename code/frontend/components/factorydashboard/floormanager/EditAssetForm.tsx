@@ -14,7 +14,7 @@ const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
 
     const handleSaveChanges = async () => {
         try {
-            const updatedAsset = await updateAsset(asset.assetId, {
+            const updatedAsset = await updateAsset( {
                 ...asset,
                 name,
                 description,
