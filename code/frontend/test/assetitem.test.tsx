@@ -11,7 +11,7 @@ import AssetItem from "../components/factorydashboard/floormanager/inventory/Ass
 describe("AssetItem", () => {
     beforeEach(() => {
         global.URL.createObjectURL = jest.fn();
-        const mockImageData = new Blob([""], { type: "image/jpeg" });
+        // const mockImageData = new Blob([""], { type: "image/jpeg" });
         const mockBase64Data = "data:image/jpeg;base64,";
         fetchMock.mockResponseOnce(() => Promise.resolve(mockBase64Data));
     });

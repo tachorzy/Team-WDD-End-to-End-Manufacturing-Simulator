@@ -4,19 +4,9 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
-import fetchMock from "jest-fetch-mock";
 import { Asset } from "@/app/api/_utils/types";
 import AssetInventory from "../components/factorydashboard/floormanager/inventory/AssetInventory";
 import InventoryNavBar from "../components/factorydashboard/floormanager/inventory/InventoryNavBar";
-
-fetchMock.enableMocks();
-
-beforeEach(() => {
-    global.URL.createObjectURL = jest.fn();
-    fetchMock.resetMocks();
-    const mockBase64Image = `data:image/jpeg;base64,${btoa("fake-image-data")}`;
-    fetchMock.mockResponseOnce(JSON.stringify({ src: mockBase64Image }));
-});
 
 describe("AssetInventory", () => {
     test("should have asset inventory navbar", () => {
