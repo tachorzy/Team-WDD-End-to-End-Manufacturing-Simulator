@@ -10,7 +10,7 @@ fetchMock.enableMocks();
 
 beforeEach(() => {
     fetchMock.resetMocks();
-    process.env.NEXT_PUBLIC_AWS_ENDPOINT = 'https://aws.com/api';
+    process.env.NEXT_PUBLIC_AWS_ENDPOINT = "https://aws.com/api";
 });
 
 describe("BackendConnector", () => {
@@ -58,9 +58,12 @@ describe("BackendConnector", () => {
             });
 
             expect(fetchMock).toHaveBeenCalledTimes(1);
-            expect(fetchMock).toHaveBeenCalledWith(`${BASE_URL}/assets?factoryId=${factoryId}`, {
-                headers: { "Content-Type": "application/json" },
-            });
+            expect(fetchMock).toHaveBeenCalledWith(
+                `${BASE_URL}/assets?factoryId=${factoryId}`,
+                {
+                    headers: { "Content-Type": "application/json" },
+                },
+            );
             expect(result).toEqual(mockAssets);
         });
     });

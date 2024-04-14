@@ -22,13 +22,15 @@ describe("Edit factory form ", () => {
     test("should change asset name textbox on input", () => {
         const { getByPlaceholderText } = render(<EditAssetForm {...props} />);
 
-        const nameInput = getByPlaceholderText("Enter asset name") as HTMLInputElement;
-        const descriptionInput = getByPlaceholderText("Enter asset description") as HTMLInputElement;
+        const nameInput = getByPlaceholderText(
+            "Enter asset name",
+        ) as HTMLInputElement;
+        const descriptionInput = getByPlaceholderText(
+            "Enter asset description",
+        ) as HTMLInputElement;
 
-       
         fireEvent.change(nameInput, { target: { value: assetName } });
 
-        
         expect(nameInput.value).toBe(assetName);
         expect(descriptionInput.value).toBe(mockAsset.description);
     });
@@ -36,11 +38,16 @@ describe("Edit factory form ", () => {
     test("should change factory description textbox on input", () => {
         const { getByPlaceholderText } = render(<EditAssetForm {...props} />);
 
-        const nameInput = getByPlaceholderText("Enter asset name") as HTMLInputElement;
-        const descriptionInput = getByPlaceholderText("Enter asset description") as HTMLInputElement;
+        const nameInput = getByPlaceholderText(
+            "Enter asset name",
+        ) as HTMLInputElement;
+        const descriptionInput = getByPlaceholderText(
+            "Enter asset description",
+        ) as HTMLInputElement;
 
-      
-        fireEvent.change(descriptionInput, { target: { value: assetDescription } });
+        fireEvent.change(descriptionInput, {
+            target: { value: assetDescription },
+        });
 
         expect(nameInput.value).toBe(mockAsset.name);
         expect(descriptionInput.value).toBe(assetDescription);
@@ -49,14 +56,18 @@ describe("Edit factory form ", () => {
     test("both factory name and description textboxes changes on input", () => {
         const { getByPlaceholderText } = render(<EditAssetForm {...props} />);
 
-        const nameInput = getByPlaceholderText("Enter asset name") as HTMLInputElement;
-        const descriptionInput = getByPlaceholderText("Enter asset description") as HTMLInputElement;
+        const nameInput = getByPlaceholderText(
+            "Enter asset name",
+        ) as HTMLInputElement;
+        const descriptionInput = getByPlaceholderText(
+            "Enter asset description",
+        ) as HTMLInputElement;
 
-       
         fireEvent.change(nameInput, { target: { value: assetName } });
-        fireEvent.change(descriptionInput, { target: { value: assetDescription } });
+        fireEvent.change(descriptionInput, {
+            target: { value: assetDescription },
+        });
 
-        
         expect(nameInput.value).toBe(assetName);
         expect(descriptionInput.value).toBe(assetDescription);
     });

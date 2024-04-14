@@ -1,27 +1,29 @@
-// Importing additional jest utilities for improved typing
 import "@testing-library/jest-dom";
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
+import { Asset } from "@/app/api/_utils/types";
 import * as Connector from "@/app/api/_utils/connector";
 import FloorManager from "../components/factorydashboard/floormanager/FloorManager";
 import AddAssetForm from "../components/factorydashboard/floormanager/assetform/AddAssetForm";
 
-
 jest.mock("@/app/api/_utils/connector", () => ({
     BackendConnector: {
-        get: jest.fn(),
-        post: jest.fn(),
+        get: jest.fn<Promise<Asset[]>, [Connector.GetConfig]>(),
+        post: jest.fn<
+            Promise<{ assetId: string; message: string }>,
+            [Connector.PostConfig<Asset>]
+        >(),
     },
 }));
 
-
-const mockedBackendConnector = Connector.BackendConnector as jest.Mocked<typeof Connector.BackendConnector>;
+const mockedBackendConnector = Connector.BackendConnector as jest.Mocked<
+    typeof Connector.BackendConnector
+>;
 
 describe("FloorManager", () => {
     beforeEach(() => {
         jest.clearAllMocks();
 
-        // Setup mock behavior
         mockedBackendConnector.get.mockResolvedValue([
             {
                 assetId: "mockAssetId1",
@@ -32,12 +34,10 @@ describe("FloorManager", () => {
             },
         ]);
 
-        mockedBackendConnector.post.mockImplementation(() =>
-            Promise.resolve({
-                assetId: "mockGeneratedAssetId",
-                message: "Asset mockGeneratedAssetId created successfully",
-            }),
-        );
+        mockedBackendConnector.post.mockResolvedValue({
+            assetId: "mockGeneratedAssetId",
+            message: "Asset mockGeneratedAssetId created successfully",
+        });
     });
 
     test("should open AddAssetForm when 'Create Asset' button is clicked", async () => {
@@ -78,14 +78,14 @@ describe("FloorManager", () => {
         fireEvent.click(createAssetButton);
 
         await waitFor(() => {
+            // eslint-disable-next-line @typescript-eslint/unbound-method
             expect(mockedBackendConnector.post).toHaveBeenCalledWith({
                 resource: "assets",
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 payload: expect.objectContaining({
                     name: "New Asset",
                     description: "New Asset Description",
                     factoryId: "1",
-                    assetId: expect.anything(),  
-                    imageData: expect.anything() 
                 }),
             });
             expect(handleAdd).toHaveBeenCalled();

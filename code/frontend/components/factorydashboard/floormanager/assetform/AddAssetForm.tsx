@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
-import AssetUploadContainer from "./AssetUploadContainer";
 import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
+import AssetUploadContainer from "./AssetUploadContainer";
 
 interface AddAssetFormProps {
     onClose: () => void;

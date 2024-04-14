@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
-import {BackendConnector,PutConfig,NextServerConnector} from "@/app/api/_utils/connector"
+import {
+    BackendConnector,
+    PutConfig,
+    NextServerConnector,
+} from "@/app/api/_utils/connector";
 
 interface EditAssetProps {
     asset: Asset;
     closeEditForm: (event?: React.MouseEvent<HTMLElement>) => void;
 }
-
 
 const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
     const [name, setName] = useState(asset.name || "");
@@ -15,14 +18,14 @@ const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
 
     const handleSaveChanges = async () => {
         const updatedAssetData = {
-            ...asset,         
-            name: name,         
-            description: description 
+            ...asset,
+            name,
+            description,
         };
 
         try {
             const updatedAsset = await BackendConnector.put<Asset>({
-                resource: `assets`,
+                resource: "assets",
                 payload: updatedAssetData,
             });
             console.log("Updated Asset:", updatedAsset);

@@ -27,7 +27,7 @@ const FloorManager: React.FC<FloorManagerProps> = ({
             try {
                 const config: GetConfig = {
                     resource: "assets",
-                    params: { factoryId }
+                    params: { factoryId },
                 };
                 const newAssets = await BackendConnector.get<Asset[]>(config);
                 setAssets(newAssets);

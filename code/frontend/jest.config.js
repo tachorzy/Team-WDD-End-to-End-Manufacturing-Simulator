@@ -13,4 +13,4 @@ module.exports = {
     },
 };
 
-process.env.NEXT_PUBLIC_AWS_ENDPOINT = 'https://aws.com/api';
+process.env.NEXT_PUBLIC_AWS_ENDPOINT = "https://aws.com/api";
