@@ -12,3 +12,5 @@ module.exports = {
         "^@/(.*)$": "<rootDir>/$1",
     },
 };
+
+process.env.NEXT_PUBLIC_AWS_ENDPOINT = 'https://aws.com/api';

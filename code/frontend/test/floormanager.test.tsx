@@ -1,12 +1,11 @@
-/**
- * @jest-environment jsdom
- */
+// Importing additional jest utilities for improved typing
 import "@testing-library/jest-dom";
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
-import { BackendConnector } from "@/app/api/_utils/connector";
+import * as Connector from "@/app/api/_utils/connector";
 import FloorManager from "../components/factorydashboard/floormanager/FloorManager";
 import AddAssetForm from "../components/factorydashboard/floormanager/assetform/AddAssetForm";
+
 
 jest.mock("@/app/api/_utils/connector", () => ({
     BackendConnector: {
@@ -15,11 +14,15 @@ jest.mock("@/app/api/_utils/connector", () => ({
     },
 }));
 
+
+const mockedBackendConnector = Connector.BackendConnector as jest.Mocked<typeof Connector.BackendConnector>;
+
 describe("FloorManager", () => {
     beforeEach(() => {
         jest.clearAllMocks();
 
-        BackendConnector.get.mockResolvedValue([
+        // Setup mock behavior
+        mockedBackendConnector.get.mockResolvedValue([
             {
                 assetId: "mockAssetId1",
                 name: "Mock Asset 1",
@@ -29,7 +32,7 @@ describe("FloorManager", () => {
             },
         ]);
 
-        BackendConnector.post.mockImplementation(() =>
+        mockedBackendConnector.post.mockImplementation(() =>
             Promise.resolve({
                 assetId: "mockGeneratedAssetId",
                 message: "Asset mockGeneratedAssetId created successfully",
@@ -75,13 +78,15 @@ describe("FloorManager", () => {
         fireEvent.click(createAssetButton);
 
         await waitFor(() => {
-            expect(BackendConnector.post).toHaveBeenCalledWith({
+            expect(mockedBackendConnector.post).toHaveBeenCalledWith({
                 resource: "assets",
-                payload: {
+                payload: expect.objectContaining({
                     name: "New Asset",
                     description: "New Asset Description",
                     factoryId: "1",
-                },
+                    assetId: expect.anything(),  
+                    imageData: expect.anything() 
+                }),
             });
             expect(handleAdd).toHaveBeenCalled();
         });

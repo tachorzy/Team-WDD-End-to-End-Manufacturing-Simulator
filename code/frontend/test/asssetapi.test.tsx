@@ -3,13 +3,14 @@
  */
 
 import fetchMock from "jest-fetch-mock";
-import { BackendConnector } from "../app/api/_utils/connector";
-import { Asset } from "../app/api/_utils/types";
+import { BackendConnector } from "@/app/api/_utils/connector";
+import { Asset } from "@/app/api/_utils/types";
 
 fetchMock.enableMocks();
 
 beforeEach(() => {
     fetchMock.resetMocks();
+    process.env.NEXT_PUBLIC_AWS_ENDPOINT = 'https://aws.com/api';
 });
 
 describe("BackendConnector", () => {
@@ -45,24 +46,21 @@ describe("BackendConnector", () => {
         it("should fetch assets for a given factory ID", async () => {
             const factoryId = "factory123";
             const mockAssets: Asset[] = [
-                { assetId: "1", name: "Asset 1", factoryId: factoryId, description: "" },
-                { assetId: "2", name: "Asset 2", factoryId: factoryId, description: "" },
+                { assetId: "1", name: "Asset 1", factoryId, description: "" },
+                { assetId: "2", name: "Asset 2", factoryId, description: "" },
             ];
 
             fetchMock.mockResponseOnce(JSON.stringify(mockAssets));
 
             const result = await BackendConnector.get<Asset[]>({
                 resource: "assets",
-                params: { factoryId: factoryId },
+                params: { factoryId },
             });
 
             expect(fetchMock).toHaveBeenCalledTimes(1);
-            expect(fetchMock).toHaveBeenCalledWith(
-                `${BASE_URL}/assets?factoryId=${factoryId}`,
-                {
-                    headers: { "Content-Type": "application/json" },
-                },
-            );
+            expect(fetchMock).toHaveBeenCalledWith(`${BASE_URL}/assets?factoryId=${factoryId}`, {
+                headers: { "Content-Type": "application/json" },
+            });
             expect(result).toEqual(mockAssets);
         });
     });
