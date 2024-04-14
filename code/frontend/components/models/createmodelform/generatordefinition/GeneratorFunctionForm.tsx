@@ -17,8 +17,7 @@ interface GeneratorFunctionFormContext {
     >;
 }
 
-const GeneratorFunctionForm = (props: {
-    propertyIndex: number }) => {
+const GeneratorFunctionForm = (props: { propertyIndex: number }) => {
     const { propertyIndex } = props;
     const contextValue = useContext(Context) as GeneratorFunctionFormContext;
 
@@ -26,8 +25,8 @@ const GeneratorFunctionForm = (props: {
         <div className="flex flex-col gap-y-3 max-h-72">
             <div className="flex flex-row gap-x-16">
                 <RandomGeneratorForm />
-                <SineWaveGeneratorForm/>
-                <SawtoothGeneratorForm/>
+                <SineWaveGeneratorForm />
+                <SawtoothGeneratorForm />
             </div>
         </div>
     );

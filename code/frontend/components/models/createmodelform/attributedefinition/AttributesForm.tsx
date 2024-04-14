@@ -1,23 +1,18 @@
 import React, { useContext } from "react";
 // import Image from "next/image";
+import { Attribute, Property } from "@/app/api/_utils/types";
 import AttributeInputColumn from "./AttributeInputColumn";
 import AddAttributeButton from "./AddAttributeButton";
 import NameField from "./NameField";
 import { Context } from "../CreateModelForm";
-import { Attribute } from "@/app/api/_utils/types";
-import { Property } from "@/app/api/_utils/types";
 
 interface AttributesFormContext {
     factoryId: string;
     modelId: string;
     attributes: Attribute[];
-    setAttributes: React.Dispatch<
-        React.SetStateAction<Attribute[]>
-    >;
+    setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
     properties: { property: string; unit: string }[];
-    setProperties: React.Dispatch<
-        React.SetStateAction<Property[]>
-    >;
+    setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
 }
 
 const AttributesForm = () => {

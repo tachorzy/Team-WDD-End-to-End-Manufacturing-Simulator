@@ -1,10 +1,9 @@
 import React, { useState, useMemo } from "react";
+import { Attribute, Property } from "@/app/api/_utils/types";
 import AttributesForm from "./attributedefinition/AttributesForm";
 import PropertiesForm from "./propertiesdefinition/PropertiesForm";
 import ProgressTracker from "./ProgressTracker";
 import GeneratorFunctionForm from "./generatordefinition/GeneratorFunctionForm";
-import { Attribute } from "@/app/api/_utils/types";
-import { Property } from "@/app/api/_utils/types";
 
 // interface CreateModelFormProps {
 //     onClose: () => void;
@@ -20,12 +19,12 @@ const CreateModelForm = (props: { factoryId: string }) => {
 
     const modelId = "2024-04-08-9780";
 
-    const initialAttribute = { 
-        factoryId: "", 
-        modelId: "", 
-        name: "", 
-        value: "" 
-    }
+    const initialAttribute = {
+        factoryId: "",
+        modelId: "",
+        name: "",
+        value: "",
+    };
 
     const initialProperty = {
         factoryId: "",
@@ -33,9 +32,11 @@ const CreateModelForm = (props: { factoryId: string }) => {
         measurementId: "",
         name: "",
         unit: "",
-    }
-    
-    const [attributes, setAttributes] = useState<Attribute[]>([initialAttribute]);
+    };
+
+    const [attributes, setAttributes] = useState<Attribute[]>([
+        initialAttribute,
+    ]);
     const [properties, setProperties] = useState<Property[]>([initialProperty]);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -68,12 +69,11 @@ const CreateModelForm = (props: { factoryId: string }) => {
         setAttributes(values);
         nextPage();
     };
-    
+
     const handlePropertiesSubmit = (values: Property[]) => {
         setProperties(values);
         nextPage();
     };
-
 
     return (
         <Context.Provider value={contextValue}>
@@ -90,7 +90,11 @@ const CreateModelForm = (props: { factoryId: string }) => {
 
                     {currentPage === 1 && <AttributesForm />}
                     {currentPage === 2 && <PropertiesForm />}
-                    {currentPage > 2 && <GeneratorFunctionForm propertyIndex={currentPage - 3} />}
+                    {currentPage > 2 && (
+                        <GeneratorFunctionForm
+                            propertyIndex={currentPage - 3}
+                        />
+                    )}
 
                     {currentPage > 1 && (
                         <button

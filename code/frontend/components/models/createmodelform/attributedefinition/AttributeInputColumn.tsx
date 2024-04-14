@@ -1,9 +1,7 @@
 import React from "react";
 import { Attribute } from "@/app/api/_utils/types";
 
-const AttributeInputColumn = (props: {
-    attributes: Attribute[];
-}) => {
+const AttributeInputColumn = (props: { attributes: Attribute[] }) => {
     const { attributes } = props;
 
     return (

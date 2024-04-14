@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
 // import Image from "next/image";
+import { Attribute, Property } from "@/app/api/_utils/types";
 import PropertyInputColumn from "./PropertyInputColumn";
 import AddPropertyButton from "./AddPropertyButton";
 import { Context } from "../CreateModelForm";
-import { Attribute } from "@/app/api/_utils/types";
-import { Property } from "@/app/api/_utils/types";
 
 interface PropertiesFormContext {
     factoryId: string;

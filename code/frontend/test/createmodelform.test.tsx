@@ -5,17 +5,17 @@ import AttributeInputColumn from "@/components/models/createmodelform/attributed
 import PropertyInputColumn from "@/components/models/createmodelform/propertiesdefinition/PropertyInputColumn";
 import AddAttributeForm from "@/components/models/createmodelform/attributedefinition/AttributesForm";
 import AddPropertyForm from "@/components/models/createmodelform/propertiesdefinition/PropertiesForm";
-import { Attribute } from "@/app/api/_utils/types";
-import { Property } from "@/app/api/_utils/types";
+import { Attribute, Property } from "@/app/api/_utils/types";
+
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-const initialAttribute: Attribute = { 
-    factoryId: "", 
-    modelId: "", 
-    name: "", 
-    value: "" 
-}
+const initialAttribute: Attribute = {
+    factoryId: "",
+    modelId: "",
+    name: "",
+    value: "",
+};
 
 const initialProperty: Property = {
     factoryId: "",
@@ -23,7 +23,7 @@ const initialProperty: Property = {
     measurementId: "",
     name: "",
     unit: "",
-}
+};
 
 describe("CreateModelForm", () => {
     test("should render CreateModelForm", () => {
@@ -37,9 +37,7 @@ describe("CreateModelForm", () => {
 
     test("should render AttributeInputColumn input fields", () => {
         const { getByText, getByPlaceholderText } = render(
-            <AttributeInputColumn
-                attributes={[initialAttribute]}
-            />,
+            <AttributeInputColumn attributes={[initialAttribute]} />,
         );
         const attributeHeader = getByText("Attribute 1");
         const attributeInput = getByPlaceholderText("e.g. Model Name");
@@ -52,7 +50,10 @@ describe("CreateModelForm", () => {
 
     test("should render PropertyInputColumn input fields", () => {
         const { getByText, getByPlaceholderText } = render(
-            <PropertyInputColumn properties={[initialProperty]} setProperties={jest.fn()} />,
+            <PropertyInputColumn
+                properties={[initialProperty]}
+                setProperties={jest.fn()}
+            />,
         );
         const propertyHeader = getByText("Property 1");
         const propertyInput = getByPlaceholderText("e.g. Temperature");

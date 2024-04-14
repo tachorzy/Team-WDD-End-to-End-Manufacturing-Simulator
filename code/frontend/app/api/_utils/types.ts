@@ -30,7 +30,7 @@ export interface Asset {
     factoryId: string;
 }
 
-export interface Attribute { 
+export interface Attribute {
     attributeId?: string;
     factoryId: string;
     modelId: string;
@@ -38,7 +38,7 @@ export interface Attribute {
     value: string;
 }
 
-export interface Property { 
+export interface Property {
     propertyId?: string;
     factoryId: string;
     modelId: string;
