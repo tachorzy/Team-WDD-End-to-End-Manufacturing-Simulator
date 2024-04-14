@@ -29,8 +29,8 @@ const FloorManager: React.FC<FloorManagerProps> = ({
                     resource: "assets",
                     params: { factoryId }
                 };
-                const assets = await BackendConnector.get<Asset[]>(config);
-                setAssets(assets);
+                const newAssets = await BackendConnector.get<Asset[]>(config);
+                setAssets(newAssets);
             } catch (error) {
                 console.error("Failed to fetch assets:", error);
             }
