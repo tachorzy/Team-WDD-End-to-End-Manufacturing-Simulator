@@ -29,3 +29,20 @@ export interface Asset {
     imageData?: string;
     factoryId: string;
 }
+
+export interface Attribute { 
+    attributeId?: string;
+    factoryId: string;
+    modelId: string;
+    name: string;
+    value: string;
+}
+
+export interface Property { 
+    propertyId?: string;
+    factoryId: string;
+    modelId: string;
+    measurementId: string;
+    name: string;
+    unit: string;
+}

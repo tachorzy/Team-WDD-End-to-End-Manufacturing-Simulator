@@ -26,6 +26,7 @@ const AddPropertyForm = () => {
                 <div className="flex flex-col w-full gap-y-3">
                     <PropertyInputColumn
                         properties={contextValue?.properties}
+                        setProperties={contextValue?.setProperties}
                     />
                     <AddPropertyButton
                         setProperties={contextValue?.setProperties}

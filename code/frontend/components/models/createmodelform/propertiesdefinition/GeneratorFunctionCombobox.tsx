@@ -4,7 +4,7 @@ import { Combobox } from '@headlessui/react'
 const generatorFunctions = ["Random", "Sine wave", "Sawtooth", "Replay"]
 
 const GeneratorFunctionCombobox = () => {
-  const [selectedFunction, setSelectedFunction] = useState(generatorFunctions[0])
+  const [selectedFunction, setSelectedFunction] = useState('')
   const [query, setQuery] = useState('')
 
   const filteredFunctions =

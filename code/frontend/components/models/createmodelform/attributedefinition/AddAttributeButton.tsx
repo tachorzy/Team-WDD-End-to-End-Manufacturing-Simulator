@@ -1,12 +1,20 @@
 import React from "react";
 import Image from "next/image";
+import { Attribute } from "@/app/api/_utils/types";
 
 const AddAttributeButton = (props: {
     setAttributes: React.Dispatch<
-        React.SetStateAction<{ attribute: string; value: string }[]>
+        React.SetStateAction<Attribute[]>
     >;
 }) => {
     const { setAttributes } = props;
+
+    const newAttribute = { 
+        factoryId: "", 
+        modelId: "", 
+        name: "", 
+        value: "" 
+    }
 
     return (
         <button
@@ -14,7 +22,7 @@ const AddAttributeButton = (props: {
             onClick={() => {
                 setAttributes((prev) => [
                     ...prev,
-                    { attribute: "", value: "" },
+                    newAttribute,
                 ]);
             }}
             className="flex flex-row items-center justify-center cursor-pointer w-[96%] p-2 border-2 border-dashed border-[#494949] border-solid rounded-lg text-[#494949] hover:scale-[101.5%] hover:border-MainBlue transition duration-500 ease-in-out"

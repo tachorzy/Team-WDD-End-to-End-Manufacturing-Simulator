@@ -3,6 +3,9 @@ import AttributesForm from "./attributedefinition/AttributesForm";
 import PropertiesForm from "./propertiesdefinition/PropertiesForm";
 import ProgressTracker from "./ProgressTracker";
 import GeneratorFunctionForm from "./generatordefinition/GeneratorFunctionForm";
+import { Attribute } from "@/app/api/_utils/types";
+import { Property } from "@/app/api/_utils/types";
+
 // interface CreateModelFormProps {
 //     onClose: () => void;
 //     onSave: (formData: Partial<Factory>) => void;
@@ -17,10 +20,23 @@ const CreateModelForm = (props: { factoryId: string }) => {
 
     const modelId = "2024-04-08-9780";
 
-    const [attributes, setAttributes] = useState([
-        { attribute: "", value: "" },
-    ]);
-    const [properties, setProperties] = useState([{ property: "", unit: "" }]);
+    const initialAttribute = { 
+        factoryId: "", 
+        modelId: "", 
+        name: "", 
+        value: "" 
+    }
+
+    const initialProperty = {
+        factoryId: "",
+        modelId: "",
+        measurementId: "",
+        name: "",
+        unit: "",
+    }
+    
+    const [attributes, setAttributes] = useState<Attribute[]>([initialAttribute]);
+    const [properties, setProperties] = useState<Property[]>([initialProperty]);
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -47,6 +63,17 @@ const CreateModelForm = (props: { factoryId: string }) => {
             currentPage,
         ],
     );
+
+    const handleAttributesSubmit = (values: Attribute[]) => {
+        setAttributes(values);
+        nextPage();
+    };
+    
+    const handlePropertiesSubmit = (values: Property[]) => {
+        setProperties(values);
+        nextPage();
+    };
+
 
     return (
         <Context.Provider value={contextValue}>

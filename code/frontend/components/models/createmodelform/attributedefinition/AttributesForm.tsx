@@ -4,17 +4,19 @@ import AttributeInputColumn from "./AttributeInputColumn";
 import AddAttributeButton from "./AddAttributeButton";
 import NameField from "./NameField";
 import { Context } from "../CreateModelForm";
+import { Attribute } from "@/app/api/_utils/types";
+import { Property } from "@/app/api/_utils/types";
 
 interface AttributesFormContext {
     factoryId: string;
     modelId: string;
-    attributes: { attribute: string; value: string }[];
+    attributes: Attribute[];
     setAttributes: React.Dispatch<
-        React.SetStateAction<{ attribute: string; value: string }[]>
+        React.SetStateAction<Attribute[]>
     >;
     properties: { property: string; unit: string }[];
     setProperties: React.Dispatch<
-        React.SetStateAction<{ property: string; unit: string }[]>
+        React.SetStateAction<Property[]>
     >;
 }
 
