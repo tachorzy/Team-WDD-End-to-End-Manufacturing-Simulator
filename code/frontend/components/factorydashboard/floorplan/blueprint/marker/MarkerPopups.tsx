@@ -12,7 +12,7 @@ interface AssetPopupsProps {
     cancelDelete: MouseEventHandler<HTMLButtonElement>;
     handleEdit: (event?: SyntheticEvent<Element, Event>) => void;
     showEditForm: boolean;
-    closeEditForm: React.MouseEventHandler<HTMLElement>;
+    closeEditForm: (event?: React.MouseEvent<HTMLElement> | undefined) => void;
     asset: Asset;
 }
 

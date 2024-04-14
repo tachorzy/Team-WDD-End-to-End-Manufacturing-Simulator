@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { Asset } from "@/app/api/_utils/types"; 
+import { Asset } from "@/app/api/_utils/types";
 import { updateAsset } from "@/app/api/assets/assetAPI";
 
 interface EditAssetProps {
@@ -13,15 +13,13 @@ const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
     const [description, setDescription] = useState(asset.description || "");
 
     const handleSaveChanges = async () => {
-       
         try {
-            const updatedAsset = await updateAsset( {
+            const updatedAsset = await updateAsset({
                 ...asset,
                 name,
                 description,
             });
             console.log("Asset Updated Successfully:", updatedAsset);
-           
         } catch (error) {
             console.error("Failed to update asset:", error);
         }
