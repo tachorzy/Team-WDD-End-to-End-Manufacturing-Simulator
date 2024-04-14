@@ -4,7 +4,7 @@ import PropertyInputColumn from "./PropertyInputColumn";
 import AddPropertyButton from "./AddPropertyButton";
 import { Context } from "../CreateModelForm";
 
-interface AttributesFormContext {
+interface PropertiesFormContext {
     factoryId: string;
     modelId: string;
     attributes: { attribute: string; value: string }[];
@@ -18,10 +18,10 @@ interface AttributesFormContext {
 }
 
 const AddPropertyForm = () => {
-    const contextValue = useContext(Context) as AttributesFormContext;
+    const contextValue = useContext(Context) as PropertiesFormContext;
 
     return (
-        <div className="flex flex-row gap-x-24 mt-6 gap-y-2">
+        <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
             <section>
                 <div className="flex flex-col w-full gap-y-3">
                     <PropertyInputColumn

@@ -1,4 +1,5 @@
 import React from "react";
+import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";
 
 const AttributeInputColumn = (props: {
     properties: { property: string; unit: string }[];
@@ -6,7 +7,7 @@ const AttributeInputColumn = (props: {
     const { properties } = props;
 
     return (
-        <div className="flex flex-col gap-y-3 max-h-72 overflow-y-scroll">
+        <div className="flex flex-col gap-y-3 max-h-80 overflow-y-scroll">
             <h1 className="text-2xl font-semibold text-gray-900">Properties</h1>
             {properties.map((property, index) => (
                 <div key={index} className="flex flex-col gap-y-3">
@@ -30,6 +31,7 @@ const AttributeInputColumn = (props: {
                             />
                         </div>
                     </div>
+                    <GeneratorFunctionCombobox/>
                 </div>
             ))}
         </div>
