@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { getAssetsForFactory } from "@/app/api/assets/assetAPI";
+import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 import { Asset } from "@/app/api/_utils/types";
 import AssetInventory from "./AssetInventory";
 import AddAssetForm from "./assetform/AddAssetForm";
@@ -24,13 +24,22 @@ const FloorManager: React.FC<FloorManagerProps> = ({
 
     useEffect(() => {
         const fetchAssets = async () => {
-            console.log(factoryId);
-            const data = await getAssetsForFactory(factoryId);
-            setAssets(data);
+            try {
+                const config: GetConfig = {
+                    resource: "assets",
+                    params: { factoryId }
+                };
+                const assets = await BackendConnector.get<Asset[]>(config);
+                setAssets(assets);
+            } catch (error) {
+                console.error("Failed to fetch assets:", error);
+            }
         };
-        fetchAssets();
-    }, [factoryId]);
 
+        if (factoryId) {
+            fetchAssets();
+        }
+    }, [factoryId]);
     // Function to add new asset to the list
     const handleAddAsset = (newAsset: Asset) => {
         setAssets((prevAssets) => [...prevAssets, newAsset]);

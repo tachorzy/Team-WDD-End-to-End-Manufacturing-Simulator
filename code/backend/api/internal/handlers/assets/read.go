@@ -32,7 +32,7 @@ func (h Handler) HandleReadFactoryAssetsRequest(ctx context.Context, request eve
 	if factoryID != "" {
 		input = &dynamodb.QueryInput{
 			TableName:              aws.String(TABLENAME),
-			IndexName:              aws.String("FactoryIndex"),
+			IndexName:              aws.String("factoryId"),
 			KeyConditionExpression: aws.String("factoryId = :factoryId"),
 			ExpressionAttributeValues: map[string]ddbtypes.AttributeValue{
 				":factoryId": &ddbtypes.AttributeValueMemberS{Value: factoryID},

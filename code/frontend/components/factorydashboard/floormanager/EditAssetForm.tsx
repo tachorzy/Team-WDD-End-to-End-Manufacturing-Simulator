@@ -1,25 +1,31 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
-import { updateAsset } from "@/app/api/assets/assetAPI";
+import {BackendConnector,PutConfig,NextServerConnector} from "@/app/api/_utils/connector"
 
 interface EditAssetProps {
     asset: Asset;
     closeEditForm: (event?: React.MouseEvent<HTMLElement>) => void;
 }
 
+
 const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
     const [name, setName] = useState(asset.name || "");
     const [description, setDescription] = useState(asset.description || "");
 
     const handleSaveChanges = async () => {
+        const updatedAssetData = {
+            ...asset,         
+            name: name,         
+            description: description 
+        };
+
         try {
-            const updatedAsset = await updateAsset({
-                ...asset,
-                name,
-                description,
+            const updatedAsset = await BackendConnector.put<Asset>({
+                resource: `assets`,
+                payload: updatedAssetData,
             });
-            console.log("Asset Updated Successfully:", updatedAsset);
+            console.log("Updated Asset:", updatedAsset);
         } catch (error) {
             console.error("Failed to update asset:", error);
         }

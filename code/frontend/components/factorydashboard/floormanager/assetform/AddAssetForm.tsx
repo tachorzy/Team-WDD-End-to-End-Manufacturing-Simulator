@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { createAsset } from "@/app/api/assets/assetAPI";
 import { Asset } from "@/app/api/_utils/types";
 import AssetUploadContainer from "./AssetUploadContainer";
+import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
 
 interface AddAssetFormProps {
     onClose: () => void;
@@ -33,9 +33,12 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
     };
 
     const handleAddAsset = async () => {
-        // next steps: adding input validation..maybe
         try {
-            const asset = await createAsset(formData);
+            const config: PostConfig<Asset> = {
+                resource: "assets",
+                payload: formData,
+            };
+            const asset = await BackendConnector.post<Asset>(config);
             onAdd(asset);
             onClose();
         } catch (error) {
