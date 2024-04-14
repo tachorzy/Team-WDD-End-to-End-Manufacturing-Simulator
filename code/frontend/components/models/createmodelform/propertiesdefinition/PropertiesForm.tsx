@@ -3,15 +3,17 @@ import React, { useContext } from "react";
 import PropertyInputColumn from "./PropertyInputColumn";
 import AddPropertyButton from "./AddPropertyButton";
 import { Context } from "../CreateModelForm";
+import { Attribute } from "@/app/api/_utils/types";
+import { Property } from "@/app/api/_utils/types";
 
 interface PropertiesFormContext {
     factoryId: string;
     modelId: string;
-    attributes: { attribute: string; value: string }[];
+    attributes: Attribute[];
     setAttributes: React.Dispatch<
         React.SetStateAction<{ attribute: string; value: string }[]>
     >;
-    properties: { property: string; unit: string }[];
+    properties: Property[];
     setProperties: React.Dispatch<
         React.SetStateAction<{ property: string; unit: string }[]>
     >;

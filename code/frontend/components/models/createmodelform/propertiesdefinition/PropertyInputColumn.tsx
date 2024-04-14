@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";
+import { Property } from "@/app/api/_utils/types";
 
 const PropertyInputColumn = (props: {
-    properties: { property: string; unit: string }[]
+    properties: Property[]
 , setProperties: React.Dispatch<
 React.SetStateAction<{ property: string; unit: string }[]>
 >}) => {
