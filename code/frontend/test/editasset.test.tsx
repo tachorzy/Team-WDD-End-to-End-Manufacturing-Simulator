@@ -17,8 +17,13 @@ const assetDescription = "This is a cnc machine";
 
 describe("Edit factory form ", () => {
     test("should render and its compontents correctly ", () => {
+        const mockAsset = {
+            name: "Test Asset",
+            description: "Test Description",
+            factoryId: "factory123",
+        };
         const { getByText, getByAltText, getByPlaceholderText } = render(
-            <EditAssetForm {...props} />,
+            <EditAssetForm {...props}  asset={mockAsset}/>,
         );
 
         const header = getByText(/(Edit Asset Details)/);
@@ -37,7 +42,12 @@ describe("Edit factory form ", () => {
     });
 
     test("should be closed when close icon clicked", () => {
-        const { getByAltText } = render(<EditAssetForm {...props} />);
+        const mockAsset = {
+            name: "Test Asset",
+            description: "Test Description",
+            factoryId: "factory123",
+        };
+        const { getByAltText } = render(<EditAssetForm {...props} asset={mockAsset} />);
 
         const closeIcon = getByAltText("Close icon");
         fireEvent.click(closeIcon);
@@ -46,7 +56,12 @@ describe("Edit factory form ", () => {
     });
 
     test("should change asset name textbox on input", () => {
-        const { getByPlaceholderText } = render(<EditAssetForm {...props} />);
+        const mockAsset = {
+            name: "Test Asset",
+            description: "Test Description",
+            factoryId: "factory123",
+        };
+        const { getByPlaceholderText } = render(<EditAssetForm {...props} asset={mockAsset}/>);
 
         const nameInput = getByPlaceholderText("Enter asset name");
         const descriptionInput = getByPlaceholderText(
@@ -64,7 +79,12 @@ describe("Edit factory form ", () => {
     });
 
     test("should change factory description textbox on input", () => {
-        const { getByPlaceholderText } = render(<EditAssetForm {...props} />);
+        const mockAsset = {
+            name: "Test Asset",
+            description: "Test Description",
+            factoryId: "factory123",
+        };
+        const { getByPlaceholderText } = render(<EditAssetForm {...props} asset={mockAsset} />);
 
         const nameInput = getByPlaceholderText("Enter asset name");
         const descriptionInput = getByPlaceholderText(
@@ -82,7 +102,12 @@ describe("Edit factory form ", () => {
     });
 
     test("both factory name and description textboxes changes on input", () => {
-        const { getByPlaceholderText } = render(<EditAssetForm {...props} />);
+        const mockAsset = {
+            name: "Test Asset",
+            description: "Test Description",
+            factoryId: "factory123",
+        };
+        const { getByPlaceholderText } = render(<EditAssetForm {...props} asset={mockAsset} />);
 
         const nameInput = getByPlaceholderText("Enter asset name");
         const descriptionInput = getByPlaceholderText(
