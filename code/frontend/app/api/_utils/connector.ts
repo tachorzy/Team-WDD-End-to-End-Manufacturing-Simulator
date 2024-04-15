@@ -65,7 +65,7 @@ class Connector {
         return (await response.json()) as Promise<T>;
     }
 
-    async put<T>({ resource, payload }: PutConfig<T>): Promise<void> {
+    async put<T>({ resource, payload }: PutConfig<T>): Promise<T> {
         const url = new URL(`${this.baseURL}/${resource}`);
 
         const response = await fetch(url.toString(), {
@@ -77,8 +77,12 @@ class Connector {
         });
 
         if (!response.ok) {
-            throw new Error(`Fetch error: ${response.statusText}`);
+            throw new Error(
+                `Fetch error: ${response.statusText} (${response.status})`,
+            );
         }
+
+        return (await response.json()) as Promise<T>;
     }
 }
 
