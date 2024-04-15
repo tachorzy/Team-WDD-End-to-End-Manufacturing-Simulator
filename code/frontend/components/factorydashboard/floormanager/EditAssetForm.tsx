@@ -8,7 +8,7 @@ interface EditAssetProps {
 
 const EditAssetForm: React.FC<EditAssetProps> = ({ closeEditForm }) => (
     <div
-        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10 no-drag"
         data-testid="edit-form"
     >
         <div className=" relative bg-white shadow-lg rounded-xl p-6 w-96">

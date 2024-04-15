@@ -13,7 +13,7 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [showEditForm, setShowEditForm] = useState(false);
     const [showButtons, setShowButtons] = useState(false);
-
+    const [isDragging, setIsDragging] = useState(false);
     const handleDelete = () => {
         setShowConfirmDialog(true);
     };
@@ -35,13 +35,23 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
         setShowEditForm(false);
     };
 
-    const handleDraggableClick = () => {
+ 
+const handleDraggableClick = () => {
+    if (!isDragging) {
         setShowButtons(!showButtons);
-    };
+    }
+};
+
 
     return (
+        
         isDraggableVisible && (
-            <Draggable>
+            <Draggable cancel=".no-drag" 
+            onStart={() => setIsDragging(true)}
+            onStop={() => setIsDragging(false)}
+            onDrag={() => setShowButtons(false)}
+           
+              >
                 <div className="group flex flex-col absolute top-0 left-0 z-10 drop-shadow-md items-center">
                     <Image
                         src="/icons/floorplan/asset-marker.svg"
@@ -56,7 +66,7 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
                         {asset?.name}
                     </p>
                     {showButtons && (
-                        <div className="absolute left-full top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-xl p-6 min-w-max w-96 h-auto flex flex-col justify-between">
+                        <div className="absolute left-full top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-xl p-6 min-w-max w-96 h-auto flex flex-col justify-between no-drag">
                             <div>
                                 <h2 className="text-xl font-semibold mb-4 text-gray-900">
                                     Asset Info
@@ -71,7 +81,7 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
                                     {asset.description}
                                 </p>
                             </div>
-                            <div className="self-end">
+                            <div className="self-end"  >
                                 <MarkerPopups
                                     handleDelete={handleDelete}
                                     showConfirmDialog={showConfirmDialog}
