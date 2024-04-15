@@ -4,14 +4,16 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewReadFloorPlanHandler(db DynamoDBClient) *Handler {
+func NewReadFloorPlanHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -27,7 +29,7 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 
 	if floorplanID == "" {
 		input := &dynamodb.ScanInput{
-			TableName: aws.String("Floorplan"),
+			TableName: aws.String(TABLENAME),
 		}
 		result, err := h.DynamoDB.Scan(ctx, input)
 		if err != nil {
@@ -38,8 +40,8 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 			}, nil
 		}
 
-		var floorplans []Floorplan
-		if err = FloorPlanUnmarshalListOfMaps(result.Items, &floorplans); err != nil {
+		var floorplans []types.Floorplan
+		if err = wrappers.UnmarshalListOfMaps(result.Items, &floorplans); err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
 				Headers:    headers,
@@ -47,7 +49,7 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 			}, nil
 		}
 
-		floorplansJSON, err := FloorPlanJSONMarshal(floorplans)
+		floorplansJSON, err := wrappers.JSONMarshal(floorplans)
 		if err != nil {
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
@@ -63,8 +65,8 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	key := map[string]types.AttributeValue{
-		"floorplanId": &types.AttributeValueMemberS{Value: floorplanID},
+	key := map[string]ddbtypes.AttributeValue{
+		"floorplanId": &ddbtypes.AttributeValueMemberS{Value: floorplanID},
 	}
 
 	input := &dynamodb.GetItemInput{
@@ -89,8 +91,8 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	var floorplan Floorplan
-	if err = FloorPlanUnmarshalMap(result.Item, &floorplan); err != nil {
+	var floorplan types.Floorplan
+	if err = wrappers.UnmarshalMap(result.Item, &floorplan); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,
@@ -98,7 +100,7 @@ func (h Handler) HandleReadFloorPlanRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	floorplanJSON, err := FloorPlanJSONMarshal(floorplan)
+	floorplanJSON, err := wrappers.JSONMarshal(floorplan)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

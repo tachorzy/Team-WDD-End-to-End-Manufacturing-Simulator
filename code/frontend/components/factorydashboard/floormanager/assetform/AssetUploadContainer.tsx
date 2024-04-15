@@ -17,7 +17,7 @@ const FileUploadContainer = (props: {
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64String = reader.result?.toString().split(",")[1];
-                console.log(base64String);
+                // console.log(base64String);
                 setFormData((prevData) => ({
                     ...prevData,
                     imageData: base64String as string, // assuming reader.result contains the base64 string of the image
@@ -45,8 +45,9 @@ const FileUploadContainer = (props: {
             <div
                 {...getRootProps({ className: "dropzone" })}
                 className="group flex flex-col w-[62.5%] h-[30rem] p-4 gap-y-3 items-center justify-center border-MainBlue hover:border-LightBlue transition duration-700 ease-in border-dashed border-4 rounded-2xl cursor-pointer scale-[100.25%] shadow-sm"
+                data-testid="dropzone"
             >
-                <input {...getInputProps()} />
+                <input data-testid="drop-input" {...getInputProps()} />
                 <Image
                     width={30}
                     height={30}

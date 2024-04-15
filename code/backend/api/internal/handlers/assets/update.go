@@ -2,35 +2,32 @@ package assets
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
+	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewUpdateAssetHandler(db DynamoDBClient) *Handler {
+func NewUpdateAssetHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
 }
 
-var UpdateExpressionBuilder = func(update expression.UpdateBuilder) (expression.Expression, error) {
-	return expression.NewBuilder().WithUpdate(update).Build()
-}
-
 func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var asset Asset
+	var asset types.Asset
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",
 		"Content-Type":                "application/json",
 	}
 
-	if err := json.Unmarshal([]byte(request.Body), &asset); err != nil {
+	if err := wrappers.JSONUnmarshal([]byte(request.Body), &asset); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
 			Headers:    headers,
@@ -38,8 +35,8 @@ func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.AP
 		}, nil
 	}
 
-	key := map[string]types.AttributeValue{
-		"assetId": &types.AttributeValueMemberS{Value: asset.AssetID},
+	key := map[string]ddbtypes.AttributeValue{
+		"assetId": &ddbtypes.AttributeValueMemberS{Value: asset.AssetID},
 	}
 
 	var updateBuilder expression.UpdateBuilder
@@ -62,7 +59,7 @@ func (h Handler) HandleUpdateAssetRequest(ctx context.Context, request events.AP
 		}
 	}
 
-	expr, err := UpdateExpressionBuilder(updateBuilder)
+	expr, err := wrappers.UpdateExpressionBuilder(updateBuilder)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

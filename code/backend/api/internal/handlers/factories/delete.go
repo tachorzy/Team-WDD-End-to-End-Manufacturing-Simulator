@@ -6,11 +6,12 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"net/http"
+	"wdd/api/internal/types"
 )
 
-func NewDeleteFactoryHandler(db DynamoDBClient) *Handler {
+func NewDeleteFactoryHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -26,8 +27,8 @@ func (h Handler) HandleDeleteFactoryRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	key := map[string]types.AttributeValue{
-		"factoryId": &types.AttributeValueMemberS{Value: factoryID},
+	key := map[string]ddbtypes.AttributeValue{
+		"factoryId": &ddbtypes.AttributeValueMemberS{Value: factoryID},
 	}
 
 	input := &dynamodb.DeleteItemInput{

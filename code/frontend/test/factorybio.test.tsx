@@ -1,316 +1,231 @@
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import { Factory } from "@/app/api/_utils/types";
-import fetchMock from "jest-fetch-mock";
+import { NextServerConnector } from "@/app/api/_utils/connector";
 import FactoryBio from "../components/factorydashboard/FactoryBio";
 import "@testing-library/jest-dom";
 
-fetchMock.enableMocks();
+jest.mock("@/app/api/_utils/connector", () => ({
+    NextServerConnector: {
+        get: jest.fn(),
+    },
+}));
+
+global.fetch = jest.fn();
+
+jest.mock("next/image", () => ({
+    __esModule: true,
+    default: (props: any) => <img alt="" {...props} />,
+}));
+
+const mockEditFactoryForm = jest.fn();
+jest.mock("../components/factorydashboard/editFactory", () => (props: any) => {
+    mockEditFactoryForm(props);
+    return <div data-testid="edit-factory" />;
+});
 
 describe("Factorybio Component", () => {
-    beforeEach(() => {
-        fetchMock.resetMocks();
+    afterEach(() => {
+        jest.clearAllMocks();
+        (global.fetch as jest.Mock).mockClear();
     });
 
-    test("should render the Factorybio component", async () => {
-        const mockFactory: Factory = {
-            factoryId: "123456789",
-            name: "New Factory",
-            location: {
-                latitude: 44.0544393,
-                longitude: -123.0903921,
-            },
-            description: "This is a new factory",
-        };
+    const mockFactory: Factory = {
+        factoryId: "1",
+        name: "New Factory",
+        location: {
+            latitude: 123.45,
+            longitude: -678.9,
+        },
+        description: "This is a new factory",
+    };
 
-        fetchMock.mockResponseOnce(
-            JSON.stringify({ data: { factory: mockFactory } }),
-        );
+    const mockAddress = {
+        ISO: "",
+        city: "",
+        country: "",
+        country_code: "",
+        county: "",
+        house_number: "",
+        postcode: "",
+        road: "",
+        state: "",
+    };
 
-        const mockFactoryId = "123456789";
-        const { queryAllByText } = render(
-            <FactoryBio factoryId={mockFactoryId} />,
-        );
-
-        await waitFor(() =>
-            expect(queryAllByText("Loading...").length).toBeGreaterThan(0),
-        );
-    });
-
-    test("should display 'Loading...' when factory data is not yet available", async () => {
-        fetchMock.mockResponse(() => new Promise(() => {}));
-
-        const { findAllByText } = render(<FactoryBio factoryId="123456789" />);
-
-        const loadingElements = await findAllByText("Loading...");
-        expect(loadingElements).toBeTruthy();
-    });
-
-    test("should display factory data", async () => {
-        const mockFactory: Factory = {
-            factoryId: "123456789",
-            name: "New Factory",
-            location: {
-                latitude: 44.0544393,
-                longitude: -123.0903921,
-            },
-            description: "This is a new factory",
-        };
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockFactory));
-
-        const { findByText } = render(
-            <FactoryBio factoryId={mockFactory.factoryId as string} />,
-        );
-
-        const nameElement = await findByText(mockFactory.name);
-        const locationElement = await findByText(
-            `${Number(mockFactory.location.latitude).toFixed(2)}°, ${Number(mockFactory.location.longitude).toFixed(2)}°`,
-        );
-        const descriptionElement = await findByText(mockFactory.description);
-
-        expect(nameElement).toBeInTheDocument();
-        expect(locationElement).toBeInTheDocument();
-        expect(descriptionElement).toBeInTheDocument();
-    });
-
-    test("should find factory's city and country by reverse geocode search", async () => {
-        const mockFactory = {
-            factoryId: "123456789",
-            name: "New Factory",
-            location: {
-                latitude: 44.0544393,
-                longitude: -123.0903921,
-            },
-            description: "This is a new factory",
-        };
-
-        const mockLocation = {
-            address: {
-                city: "Eugene",
-                country: "United States",
-                state: "Oregon",
-            },
-        };
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockFactory));
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockLocation));
-
-        const { findByText } = render(
-            <FactoryBio factoryId={mockFactory.factoryId} />,
-        );
-
-        const civilLocationElement = await findByText(
-            `${mockLocation.address.city}, ${mockLocation.address.state}, ${mockLocation.address.country}`,
-        );
-
-        expect(civilLocationElement).toBeInTheDocument();
-    });
-
-    test("should not display undefined city location", async () => {
-        const mockFactory: Factory = {
-            factoryId: "1111111",
-            name: "New Factory",
-            location: {
-                latitude: 18.0,
-                longitude: 76.0,
-            },
-            description: "These coordinates are in the middle of nowhere.",
-        };
-
-        const mockLocation = {
-            address: {
-                city: undefined,
-                country: "India",
-                state: "Maharashtra",
-            },
-        };
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockFactory));
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockLocation));
-
-        const { findByText } = render(
-            <FactoryBio factoryId={mockFactory.factoryId as string} />,
-        );
-
-        const civilLocationElement = await findByText(
-            `${mockLocation.address?.state}, ${mockLocation.address?.country}`,
-        );
-
-        expect(civilLocationElement).toBeInTheDocument();
-    });
-
-    test("should not display undefined city in location", async () => {
-        const mockFactory: Factory = {
-            factoryId: "1111111",
-            name: "New Factory",
-            location: {
-                latitude: 18.0,
-                longitude: 76.0,
-            },
-            description: "These coordinates are in the middle of nowhere.",
-        };
-
-        const mockLocation = {
-            address: {
-                city: undefined,
-                country: "India",
-                state: "Maharashtra",
-            },
-        };
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockFactory));
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockLocation));
-
-        const { findByText } = render(
-            <FactoryBio factoryId={mockFactory.factoryId as string} />,
-        );
-
-        const civilLocationElement = await findByText(
-            `${mockLocation.address?.state}, ${mockLocation.address?.country}`,
-        );
-
-        expect(civilLocationElement).toBeInTheDocument();
-    });
-
-    test("should not display undefined region in location", async () => {
-        const mockFactory: Factory = {
-            factoryId: "01010101010",
-            name: "New Factory",
-            location: {
-                latitude: 1.3521,
-                longitude: 103.8198,
-            },
-            description: "These coordinates are in the middle of nowhere.",
-        };
-
-        const mockLocation = {
-            address: {
-                city: "Singapore",
-                country: "Singapore",
-                state: undefined,
-            },
-        };
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockFactory));
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockLocation));
-
-        const { findByText } = render(
-            <FactoryBio factoryId={mockFactory.factoryId as string} />,
-        );
-
-        const civilLocationElement = await findByText(
-            `${mockLocation.address?.city}, ${mockLocation.address?.country}`,
-        );
-
-        expect(civilLocationElement).toBeInTheDocument();
-    });
-
-    test("should not display a city, region or country for offshore facilities", () => {
-        const mockFactory: Factory = {
-            factoryId: "123123123",
-            name: "New Factory",
-            location: {
-                latitude: 0,
-                longitude: 0,
-            },
-            description: "These coordinates are in the middle of nowhere.",
-        };
-
-        const mockLocation = {
-            address: {
-                city: undefined,
-                country: undefined,
-                state: undefined,
-            },
-        };
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockFactory));
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockLocation));
-
-        const { queryByText } = render(
-            <FactoryBio factoryId={mockFactory.factoryId as string} />,
-        );
-
-        const civilLocationElement = queryByText(
-            `${mockLocation.address?.city}, ${mockLocation.address?.state}, ${mockLocation.address?.country}`,
-        );
-
-        expect(civilLocationElement).not.toBeInTheDocument();
-    });
-
-    test("should display flag icon by ISO2 code of the facilities country", async () => {
-        const mockFactory = {
-            factoryId: "123456789",
-            name: "New Factory",
-            location: {
-                latitude: 44.0544393,
-                longitude: -123.0903921,
-            },
-            description: "This is a new factory",
-        };
-
-        const mockLocation = {
-            address: {
-                city: "Eugene",
-                country: "United States",
-                state: "Oregon",
-                country_code: "us",
-            },
-        };
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockFactory));
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockLocation));
-
-        const { getByAltText } = render(
-            <FactoryBio factoryId={mockFactory.factoryId} />,
+    test("should render without default values", async () => {
+        const { getAllByText, getByAltText } = render(
+            <FactoryBio factoryId="1" />,
         );
 
         await waitFor(() => {
-            const flagIcon = getByAltText(
-                `flag icon ${mockLocation.address.country_code}`,
+            const loadingElements = getAllByText("Loading...");
+            expect(loadingElements).toHaveLength(4);
+            expect(getByAltText("edit icon")).toBeInTheDocument();
+            expect(getByAltText("globe icon")).toBeInTheDocument();
+        });
+    });
+
+    test.each([
+        [
+            {
+                address: {
+                    ...mockAddress,
+                    city: "Houston",
+                    state: "Texas",
+                    country: "United States",
+                },
+            },
+            /Houston, Texas, United States/,
+        ],
+        [
+            {
+                address: {
+                    ...mockAddress,
+                    city: "Houston",
+                },
+            },
+            /Houston,/,
+        ],
+        [
+            {
+                address: {
+                    ...mockAddress,
+                    city: "Houston",
+                    state: "Texas",
+                },
+            },
+            /Houston, Texas,/,
+        ],
+    ])("should display civil location", async (location, expected) => {
+        const consoleErrorMock = jest
+            .spyOn(console, "error")
+            .mockImplementationOnce(() => {});
+
+        (NextServerConnector.get as jest.Mock).mockResolvedValueOnce(
+            mockFactory,
+        );
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                ok: true,
+                json: () => Promise.resolve(location),
+            }),
+        );
+
+        const { getByText } = render(<FactoryBio factoryId="1" />);
+
+        await waitFor(() => {
+            const civilLocationElement = getByText(expected);
+            expect(civilLocationElement).toHaveTextContent(expected);
+        });
+
+        consoleErrorMock.mockRestore();
+    });
+
+    test("should render EditFactoryForm when clicking on edit icon", async () => {
+        const { getByAltText, getByTestId } = render(
+            <FactoryBio factoryId="1" />,
+        );
+
+        fireEvent.click(getByAltText("edit icon"));
+
+        await waitFor(() => {
+            expect(getByTestId("edit-factory")).toBeInTheDocument();
+        });
+    });
+
+    test("should close EditFactoryForm when the form is closed", async () => {
+        const { getByAltText, getByTestId, queryByTestId } = render(
+            <FactoryBio factoryId="1" />,
+        );
+
+        fireEvent.click(getByAltText("edit icon"));
+
+        await waitFor(() => {
+            expect(getByTestId("edit-factory")).toBeInTheDocument();
+        });
+
+        act(() => {
+            const mockCalls = mockEditFactoryForm.mock.calls[0] as [
+                { onClose: () => void },
+            ];
+            mockCalls[0].onClose();
+        });
+
+        await waitFor(() => {
+            expect(queryByTestId("edit-factory")).not.toBeInTheDocument();
+        });
+    });
+
+    test("should close EditFactoryForm when the form is saved", async () => {
+        const { getByAltText, getByTestId, queryByTestId } = render(
+            <FactoryBio factoryId="1" />,
+        );
+
+        fireEvent.click(getByAltText("edit icon"));
+
+        await waitFor(() => {
+            expect(getByTestId("edit-factory")).toBeInTheDocument();
+        });
+
+        act(() => {
+            const mockCalls = mockEditFactoryForm.mock.calls[0] as [
+                { onSave: () => void },
+            ];
+            mockCalls[0].onSave();
+        });
+
+        await waitFor(() => {
+            expect(queryByTestId("edit-factory")).not.toBeInTheDocument();
+        });
+    });
+
+    test("should log an error on fetch failure", async () => {
+        (NextServerConnector.get as jest.Mock).mockRejectedValueOnce(
+            new Error("404"),
+        );
+
+        const consoleErrorMock = jest
+            .spyOn(console, "error")
+            .mockImplementationOnce(() => {});
+
+        render(<FactoryBio factoryId="1" />);
+
+        await waitFor(() => {
+            expect(consoleErrorMock).toHaveBeenCalledWith(
+                "Error fetching factory:",
+                new Error("404"),
             );
-            expect(flagIcon).toBeInTheDocument();
         });
+
+        consoleErrorMock.mockRestore();
     });
 
-    test("should display globe icon when a facility is not in a country", async () => {
-        const mockFactory = {
-            factoryId: "123456789",
-            name: "New Factory",
-            location: {
-                latitude: 82.8628,
-                longitude: 135.0,
-            },
-            description: "This factory is super cold",
-        };
-
-        const mockLocation = {
-            address: {
-                city: undefined,
-                country: undefined,
-                state: undefined,
-                country_code: undefined,
-            },
-        };
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockFactory));
-
-        fetchMock.mockResponseOnce(JSON.stringify(mockLocation));
-
-        const { getByAltText } = render(
-            <FactoryBio factoryId={mockFactory.factoryId} />,
+    test("should log error on location fetch failure", async () => {
+        (NextServerConnector.get as jest.Mock).mockResolvedValueOnce(
+            mockFactory,
+        );
+        (global.fetch as jest.Mock).mockImplementationOnce(() =>
+            Promise.resolve({
+                ok: false,
+            }),
         );
 
+        const consoleErrorMock = jest
+            .spyOn(console, "error")
+            .mockImplementationOnce(() => {});
+
+        render(<FactoryBio factoryId="1" />);
+
         await waitFor(() => {
-            const flagIcon = getByAltText("globe icon");
-            expect(flagIcon).toBeInTheDocument();
+            expect(consoleErrorMock).toHaveBeenCalledWith(
+                "Error:",
+                new Error("Failed to fetch location: undefined"),
+            );
         });
+
+        consoleErrorMock.mockRestore();
     });
 });

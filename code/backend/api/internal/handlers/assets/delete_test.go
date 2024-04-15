@@ -1,4 +1,4 @@
-package factories
+package assets
 
 import (
 	"context"
@@ -10,33 +10,31 @@ import (
 	"wdd/api/internal/mocks"
 )
 
-func TestHandleDeleteFactoryRequest_MissingFactoryId(t *testing.T) {
+func TestHandleDeleteAssetRequest_MissingAssetId(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
-	handler := NewDeleteFactoryHandler(mockDDBClient)
+	handler := NewDeleteAssetHandler(mockDDBClient)
 
-	request := events.APIGatewayProxyRequest{
-		QueryStringParameters: map[string]string{},
-	}
+	request := events.APIGatewayProxyRequest{}
 
 	ctx := context.Background()
-	response, err := handler.HandleDeleteFactoryRequest(ctx, request)
+	response, err := handler.HandleDeleteAssetRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Did not expect an error, got %v", err)
 	}
 
 	if response.StatusCode != http.StatusBadRequest {
-		t.Errorf("Expected status code %d for missing factoryId, got %d", http.StatusBadRequest, response.StatusCode)
+		t.Errorf("Expected status code %d for missing assetId, got %d", http.StatusBadRequest, response.StatusCode)
 	}
 }
 
-func TestHandleDeleteFactoryRequest_DeleteItemError(t *testing.T) {
+func TestHandleDeleteAssetRequest_DeleteItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		DeleteItemFunc: func(ctx context.Context, params *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
 			return nil, errors.New("mock DynamoDB error")
 		},
 	}
-	handler := NewDeleteFactoryHandler(mockDDBClient)
+	handler := NewDeleteAssetHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
 		QueryStringParameters: map[string]string{
@@ -45,33 +43,33 @@ func TestHandleDeleteFactoryRequest_DeleteItemError(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleDeleteFactoryRequest(ctx, request)
+	response, err := handler.HandleDeleteAssetRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Did not expect an error, got %v", err)
 	}
 
 	if response.StatusCode != http.StatusInternalServerError {
-		t.Errorf("Expected status code %d for DynamoDB error, got %d", http.StatusInternalServerError, response.StatusCode)
+		t.Errorf("Expected status code %d for DynamoDB delete item error, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
 
-func TestHandleDeleteFactoryRequest_Success(t *testing.T) {
+func TestHandleDeleteAssetRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		DeleteItemFunc: func(ctx context.Context, params *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
 			return &dynamodb.DeleteItemOutput{}, nil
 		},
 	}
-	handler := NewDeleteFactoryHandler(mockDDBClient)
+	handler := NewDeleteAssetHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
 		QueryStringParameters: map[string]string{
-			"id": "someFactoryId",
+			"id": "testID",
 		},
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleDeleteFactoryRequest(ctx, request)
+	response, err := handler.HandleDeleteAssetRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Did not expect an error, got %v", err)

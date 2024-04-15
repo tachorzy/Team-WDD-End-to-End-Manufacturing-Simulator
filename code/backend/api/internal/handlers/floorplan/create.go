@@ -3,11 +3,11 @@ package floorplan
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
+	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -17,7 +17,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func NewCreateFloorPlanHandler(db DynamoDBClient) *Handler {
+func NewCreateFloorPlanHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -33,41 +33,18 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 		"Access-Control-Allow-Methods": "*",
 	}
 
-	var requestBody map[string]interface{}
-	err := json.Unmarshal([]byte(request.Body), &requestBody)
-	if err != nil {
-		return events.APIGatewayProxyResponse{
-			Body:       fmt.Sprintf("Error parsing JSON body: %s", err.Error()),
-			StatusCode: http.StatusBadRequest,
-			Headers:    headers,
-		}, nil
-	}
-
-	imageData, hasImage := requestBody["imageData"].(string)
-	if !hasImage {
+	var floorplan types.Floorplan
+	if err := wrappers.JSONUnmarshal([]byte(request.Body), &floorplan); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
 			Headers:    headers,
-			Body:       "Missing imageData field in request body",
+			Body:       fmt.Sprintf("error unmarshalling floorplan data: %s", err.Error()),
 		}, nil
 	}
 
-	delete(requestBody, "imageData")
-	floorplanData, err := FloorPlanJSONMarshal(requestBody)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, fmt.Errorf("error re-preparing floorplan data: %w", err)
-	}
-
-	var floorplan Floorplan
-	err = json.Unmarshal(floorplanData, &floorplan)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, fmt.Errorf("error unmarshalling floorplan data: %w", err)
-	}
-
-	floorplan.FloorplanID = requestBody["factoryId"].(string)
 	floorplan.DateCreated = time.Now().Format(time.RFC3339)
 
-	decodedImageData, err := base64.StdEncoding.DecodeString(imageData)
+	decodedImageData, err := wrappers.Base64DecodeString(floorplan.ImageData)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
@@ -100,7 +77,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 
 	floorplan.ImageData = fmt.Sprintf("https://%s.s3.amazonaws.com/%s", "wingstopdrivenbucket", imageFileName)
 
-	av, err := FloorPlanMarshalMap(floorplan)
+	av, err := wrappers.MarshalMap(floorplan)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -110,7 +87,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 	}
 
 	_, err = h.DynamoDB.PutItem(ctx, &dynamodb.PutItemInput{
-		TableName: aws.String("Floorplan"),
+		TableName: aws.String(TABLENAME),
 		Item:      av,
 	})
 
@@ -122,7 +99,7 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 		}, nil
 	}
 
-	responseBody, err := FloorPlanJSONMarshal(map[string]interface{}{
+	responseBody, err := wrappers.JSONMarshal(map[string]interface{}{
 		"message":   fmt.Sprintf("floorplanId %s created successfully", floorplan.FloorplanID),
 		"factoryId": floorplan.FloorplanID,
 	})

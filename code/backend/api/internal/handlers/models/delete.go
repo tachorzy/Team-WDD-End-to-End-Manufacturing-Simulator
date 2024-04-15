@@ -4,14 +4,15 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"wdd/api/internal/types"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewDeleteModelHandler(db DynamoDBClient) *Handler {
+func NewDeleteModelHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -27,8 +28,8 @@ func (h Handler) HandleDeleteModelRequest(ctx context.Context, request events.AP
 		}, nil
 	}
 
-	key := map[string]types.AttributeValue{
-		"modelId": &types.AttributeValueMemberS{Value: modelID},
+	key := map[string]ddbtypes.AttributeValue{
+		"modelId": &ddbtypes.AttributeValueMemberS{Value: modelID},
 	}
 
 	input := &dynamodb.DeleteItemInput{

@@ -2,35 +2,32 @@ package factories
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
+	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewUpdateFactoryHandler(db DynamoDBClient) *Handler {
+func NewUpdateFactoryHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
 }
 
-var UpdateExpressionBuilder = func(update expression.UpdateBuilder) (expression.Expression, error) {
-	return expression.NewBuilder().WithUpdate(update).Build()
-}
-
 func (h Handler) HandleUpdateFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var factory Factory
+	var factory types.Factory
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",
 		"Content-Type":                "application/json",
 	}
 
-	if err := json.Unmarshal([]byte(request.Body), &factory); err != nil {
+	if err := wrappers.JSONUnmarshal([]byte(request.Body), &factory); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
 			Headers:    headers,
@@ -38,8 +35,8 @@ func (h Handler) HandleUpdateFactoryRequest(ctx context.Context, request events.
 		}, nil
 	}
 
-	key := map[string]types.AttributeValue{
-		"factoryId": &types.AttributeValueMemberS{Value: factory.FactoryID},
+	key := map[string]ddbtypes.AttributeValue{
+		"factoryId": &ddbtypes.AttributeValueMemberS{Value: factory.FactoryID},
 	}
 
 	var updateBuilder expression.UpdateBuilder
@@ -58,7 +55,7 @@ func (h Handler) HandleUpdateFactoryRequest(ctx context.Context, request events.
 		}
 	}
 
-	expr, err := UpdateExpressionBuilder(updateBuilder)
+	expr, err := wrappers.UpdateExpressionBuilder(updateBuilder)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

@@ -2,23 +2,24 @@ package assets
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
+	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewReadFactoryAssetHandler(db DynamoDBClient) *Handler {
+func NewReadFactoryAssetsHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
 }
 
-func (h Handler) HandleReadAssetsByFactoryRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (h Handler) HandleReadFactoryAssetsRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	factoryID := request.QueryStringParameters["factoryId"]
 
 	headers := map[string]string{
@@ -38,8 +39,8 @@ func (h Handler) HandleReadAssetsByFactoryRequest(ctx context.Context, request e
 		TableName:              aws.String(TABLENAME),
 		IndexName:              aws.String("factoryId"),
 		KeyConditionExpression: aws.String("factoryId = :factoryId"),
-		ExpressionAttributeValues: map[string]types.AttributeValue{
-			":factoryId": &types.AttributeValueMemberS{Value: factoryID},
+		ExpressionAttributeValues: map[string]ddbtypes.AttributeValue{
+			":factoryId": &ddbtypes.AttributeValueMemberS{Value: factoryID},
 		},
 	}
 
@@ -52,8 +53,8 @@ func (h Handler) HandleReadAssetsByFactoryRequest(ctx context.Context, request e
 		}, nil
 	}
 
-	var assets []Asset
-	err = AssetUnmarshalListOfMaps(result.Items, &assets)
+	var assets []types.Asset
+	err = wrappers.UnmarshalListOfMaps(result.Items, &assets)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -62,7 +63,7 @@ func (h Handler) HandleReadAssetsByFactoryRequest(ctx context.Context, request e
 		}, nil
 	}
 
-	assetsJSON, err := json.Marshal(assets)
+	assetsJSON, err := wrappers.JSONMarshal(assets)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
