@@ -22,5 +22,4 @@ func main() {
 	handler := properties.NewCreatePropertyHandler(svc)
 
 	lambda.Start(handler.HandleCreatePropertyRequest)
-
 }

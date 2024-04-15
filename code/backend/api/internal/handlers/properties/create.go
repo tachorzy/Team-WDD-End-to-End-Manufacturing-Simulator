@@ -70,5 +70,4 @@ func (h Handler) HandleCreatePropertyRequest(ctx context.Context, request events
 		Headers:    headers,
 		Body:       string(responseBody),
 	}, nil
-
 }

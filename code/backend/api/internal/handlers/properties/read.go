@@ -62,7 +62,6 @@ func (h Handler) HandleReadPropertyRequest(ctx context.Context, request events.A
 			Headers:    headers,
 			Body:       string(propertiesJSON),
 		}, nil
-
 	}
 	key := map[string]ddbtypes.AttributeValue{
 		"propertyId": &ddbtypes.AttributeValueMemberS{Value: PropertyID},
