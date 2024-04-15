@@ -22,50 +22,60 @@ jest.mock("@/app/api/assets/assetAPI", () => ({
 }));
 
 const mockInventoryNavBar = jest.fn();
-jest.mock(
-    "../components/factorydashboard/floormanager/InventoryNavBar",
-    () => (props: any) => {
+jest.mock("../components/factorydashboard/floormanager/InventoryNavBar", () => {
+    const MockInventoryNavBar = (props: any) => {
         mockInventoryNavBar(props);
         return <div data-testid="inventory-navbar" />;
-    },
-);
+    };
+    MockInventoryNavBar.displayName = "InventoryNavBar";
+    return MockInventoryNavBar;
+});
 
 const mockAssetInventory = jest.fn();
-jest.mock(
-    "../components/factorydashboard/floormanager/AssetInventory",
-    () => (props: any) => {
+jest.mock("../components/factorydashboard/floormanager/AssetInventory", () => {
+    const MockAssetInventory = (props: any) => {
         mockAssetInventory(props);
-
         return <div data-testid="asset-inventory" />;
-    },
-);
+    };
+    MockAssetInventory.displayName = "AssetInventory";
+    return MockAssetInventory;
+});
 
 const mockAddAssetForm = jest.fn();
 jest.mock(
     "../components/factorydashboard/floormanager/assetform/AddAssetForm",
-    () => (props: any) => {
-        mockAddAssetForm(props);
-        return <div data-testid="asset-form" />;
+    () => {
+        const MockAddAssetForm = (props: any) => {
+            mockAddAssetForm(props);
+            return <div data-testid="asset-form" />;
+        };
+        MockAddAssetForm.displayName = "AddAssetForm";
+        return MockAddAssetForm;
     },
 );
 
 const mockAssetMarker = jest.fn();
 jest.mock(
     "../components/factorydashboard/floorplan/blueprint/AssetMarker",
-    () => (props: any) => {
-        mockAssetMarker(props);
-        return <div />;
+    () => {
+        const MockAssetMarker = (props: any) => {
+            mockAssetMarker(props);
+            return <div />;
+        };
+        MockAssetMarker.displayName = "AssetMarker";
+        return MockAssetMarker;
     },
 );
 
 const mockAssetBio = jest.fn();
-jest.mock(
-    "../components/factorydashboard/floormanager/AssetBio",
-    () => (props: any) => {
+jest.mock("../components/factorydashboard/floormanager/AssetBio", () => {
+    const MockAssetBio = (props: any) => {
         mockAssetBio(props);
         return <div data-testid="asset-bio" />;
-    },
-);
+    };
+    MockAssetBio.displayName = "AssetBio";
+    return MockAssetBio;
+});
 
 const mockSetAssetMarkers = jest.fn();
 const props: FloorManagerProps = {
