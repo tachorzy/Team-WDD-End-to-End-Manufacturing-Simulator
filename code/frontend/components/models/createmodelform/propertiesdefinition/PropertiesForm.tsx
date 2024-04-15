@@ -68,9 +68,7 @@ const AddPropertyForm = () => {
             </section>
             <button
                 type="submit"
-                onClick={() => { 
-                    contextValue?.nextPage
-                }}
+                onClick={contextValue?.nextPage}
                 className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
             >
                 Next ›

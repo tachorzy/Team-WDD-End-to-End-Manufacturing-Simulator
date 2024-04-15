@@ -37,7 +37,12 @@ describe("CreateModelForm", () => {
 
     test("should render AttributeInputColumn input fields", () => {
         const { getByText, getByPlaceholderText } = render(
-            <AttributeInputColumn inputFields={[initialAttribute]} attributes={[initialAttribute]} setAttributes={jest.fn()} factoryId={"123456789"}/>,
+            <AttributeInputColumn
+                inputFields={[initialAttribute]}
+                attributes={[initialAttribute]}
+                setAttributes={jest.fn()}
+                factoryId="123456789"
+            />,
         );
         const attributeHeader = getByText("Attribute 1");
         const attributeInput = getByPlaceholderText("e.g. Model Name");

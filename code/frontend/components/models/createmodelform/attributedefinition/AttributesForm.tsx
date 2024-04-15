@@ -18,7 +18,9 @@ interface AttributesFormContext {
 
 const AttributesForm = () => {
     const contextValue = useContext(Context) as AttributesFormContext;
-    const [inputFields, setInputFields] = useState<Attribute[]>([{ factoryId: "", modelId: "", name: "", value: "" }]);
+    const [inputFields, setInputFields] = useState<Attribute[]>([
+        { factoryId: "", modelId: "", name: "", value: "" },
+    ]);
 
     return (
         <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
@@ -34,9 +36,7 @@ const AttributesForm = () => {
                         setAttributes={contextValue?.setAttributes}
                         factoryId={contextValue?.factoryId}
                     />
-                    <AddAttributeButton
-                        setInputFields={setInputFields}
-                    />
+                    <AddAttributeButton setInputFields={setInputFields} />
                 </div>
             </section>
             <section className="flex flex-row w-[30%] gap-y-3 gap-x-4">

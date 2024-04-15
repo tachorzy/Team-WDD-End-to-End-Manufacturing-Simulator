@@ -1,28 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Attribute } from "@/app/api/_utils/types";
 
-const AttributeInputColumn = (props: { inputFields: Attribute[], attributes: Attribute[], setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>, factoryId: string }) => {
+const AttributeInputColumn = (props: {
+    inputFields: Attribute[];
+    attributes: Attribute[];
+    setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
+    factoryId: string;
+}) => {
     const { inputFields, attributes, setAttributes, factoryId } = props;
-    const [attribute, setAttribute] = useState('');
-    const [value, setValue] = useState('');
+    const [attribute, setAttribute] = useState("");
+    const [value, setValue] = useState("");
 
     useEffect(() => {
-        if(attribute === '' || value === '') return;
+        if (attribute === "" || value === "") return;
 
         const data: Attribute = {
-            factoryId: factoryId,
+            factoryId,
             modelId: "123456", // later we will create the id from the backend
             name: attribute,
-            value: value
+            value,
         };
-        console.log(`Adding new Attribute named: ${attribute} with value: ${value} to the list of attributes`);
-        setAttributes([...attributes, data])
+        console.log(
+            `Adding new Attribute named: ${attribute} with value: ${value} to the list of attributes`,
+        );
+        setAttributes([...attributes, data]);
     }, [attribute, value]);
-    
+
     return (
         <div className="flex flex-col gap-y-3 max-h-[22rem] overflow-y-scroll">
             <h1 className="text-2xl font-semibold text-gray-900">Attributes</h1>
-            {inputFields.map((attribute, index) => (
+            {inputFields.map((_, index) => (
                 <div key={index}>
                     <div className="flex flex-col gap-y-1 items-start">
                         <div className="flex flex-col">

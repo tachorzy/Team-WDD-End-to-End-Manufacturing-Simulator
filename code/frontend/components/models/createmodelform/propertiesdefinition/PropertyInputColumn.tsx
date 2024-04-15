@@ -1,18 +1,19 @@
 import React, { useContext } from "react";
-import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";
 import { Property } from "@/app/api/_utils/types";
+import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";
 
 const PropertyInputColumn = (props: {
-    properties: Property[]
-, setProperties: React.Dispatch<
-React.SetStateAction<{ property: string; unit: string }[]>
->}) => {
+    properties: Property[];
+    setProperties: React.Dispatch<
+        React.SetStateAction<{ property: string; unit: string }[]>
+    >;
+}) => {
     const { properties, setProperties } = props;
 
     return (
         <div className="flex flex-col gap-y-3 max-h-[19rem] overflow-y-scroll">
             <h1 className="text-2xl font-semibold text-gray-900">Properties</h1>
-            {properties.map((property, index) => (
+            {properties.map((__, index) => (
                 <div key={index} className="flex flex-col gap-y-3">
                     <div className="flex flex-row items-start">
                         <div className="flex flex-col">
@@ -34,7 +35,7 @@ React.SetStateAction<{ property: string; unit: string }[]>
                             />
                         </div>
                     </div>
-                    <GeneratorFunctionCombobox/>
+                    <GeneratorFunctionCombobox />
                 </div>
             ))}
         </div>

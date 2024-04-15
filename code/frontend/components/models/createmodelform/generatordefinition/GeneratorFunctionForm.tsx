@@ -1,21 +1,17 @@
 import React, { useContext } from "react";
+import { Attribute, Property } from "@/app/api/_utils/types";
 import RandomGeneratorForm from "./RandomGeneratorForm";
 import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
 import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
 import { Context } from "../CreateModelForm";
-import { Attribute, Property } from "@/app/api/_utils/types";
 
 interface GeneratorFunctionFormContext {
     factoryId: string;
     modelId: string;
     attributes: { attribute: string; value: string }[];
-    setAttributes: React.Dispatch<
-        React.SetStateAction<Attribute[]>
-    >;
+    setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
     properties: { property: string; unit: string }[];
-    setProperties: React.Dispatch<
-        React.SetStateAction<Property[]>
-    >;
+    setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
 }
 
 const GeneratorFunctionForm = (props: { propertyIndex: number }) => {
