@@ -51,3 +51,11 @@ type Model struct {
 	Properties  *[]string `json:"properties,omitempty" dynamodbav:"properties"`
 	DateCreated string    `json:"dateCreated" dynamodbav:"dateCreated"`
 }
+
+type Property struct {
+	PropertyID    string  `json:"propertyId" dynamodbav:"propertyId"`
+	MeasurementID string  `json:"measurementId" dynamodbav:"measurementId"`
+	Name          string  `json:"name" dynamodbav:"name"`
+	Value         float64 `json:"value" dynamodbav:"value"`
+	Unit          string  `json:"unit" dynamodbav:"unit"`
+}
