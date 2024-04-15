@@ -187,6 +187,42 @@ describe("Connector", () => {
                 new Error(`Fetch error: ${config.resource} Not Found`),
             );
         });
+
+        test("each method should throw TypeError when url is empty", async () => {
+            jest.doMock("@/app/api/_utils/constants", () => ({
+                BASE_NEXT_API_URL: undefined,
+            }));
+            jest.resetModules();
+
+            interface ConnectorType {
+                NextServerConnector: typeof NextServerConnector;
+            }
+
+            const { NextServerConnector: ActualNextServerConnector } =
+                jest.requireActual(
+                    "@/app/api/_utils/connector",
+                ) as unknown as ConnectorType;
+
+            interface MockType {
+                mockData: string;
+            }
+
+            await expect(
+                ActualNextServerConnector.get({ resource: "mockResource" }),
+            ).rejects.toThrow(new TypeError("Invalid URL: /mockResource"));
+            await expect(
+                ActualNextServerConnector.post<MockType>({
+                    resource: "mockResource",
+                    payload: { mockData: "Post this data" },
+                }),
+            ).rejects.toThrow(new TypeError("Invalid URL: /mockResource"));
+            await expect(
+                ActualNextServerConnector.put<MockType>({
+                    resource: "mockResource",
+                    payload: { mockData: "Put this data" },
+                }),
+            ).rejects.toThrow(new TypeError("Invalid URL: /mockResource"));
+        });
     });
 
     describe("As Backend Connector", () => {
@@ -351,6 +387,42 @@ describe("Connector", () => {
             ).rejects.toThrow(
                 new Error(`Fetch error: ${config.resource} Not Found`),
             );
+        });
+
+        test("each method should throw TypeError when url is empty", async () => {
+            jest.doMock("@/app/api/_utils/constants", () => ({
+                BASE_BACKEND_API_URL: undefined,
+            }));
+            jest.resetModules();
+
+            interface ConnectorType {
+                BackendConnector: typeof BackendConnector;
+            }
+
+            const { BackendConnector: ActualBackendConnector } =
+                jest.requireActual(
+                    "@/app/api/_utils/connector",
+                ) as unknown as ConnectorType;
+
+            interface MockType {
+                mockData: string;
+            }
+
+            await expect(
+                ActualBackendConnector.get({ resource: "mockResource" }),
+            ).rejects.toThrow(new TypeError("Invalid URL: /mockResource"));
+            await expect(
+                ActualBackendConnector.post<MockType>({
+                    resource: "mockResource",
+                    payload: { mockData: "Post this data" },
+                }),
+            ).rejects.toThrow(new TypeError("Invalid URL: /mockResource"));
+            await expect(
+                ActualBackendConnector.put<MockType>({
+                    resource: "mockResource",
+                    payload: { mockData: "Put this data" },
+                }),
+            ).rejects.toThrow(new TypeError("Invalid URL: /mockResource"));
         });
     });
 });
