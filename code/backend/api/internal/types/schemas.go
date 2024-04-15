@@ -59,3 +59,12 @@ type Property struct {
 	Value         float64 `json:"value" dynamodbav:"value"`
 	Unit          string  `json:"unit" dynamodbav:"unit"`
 }
+
+type Measurement struct {
+	MeasurementID     string  `json:"measurementId" dynamodbav:"measurementId"`
+	Frequency         float64 `json:"frequency" dynamodbav:"frequency"`
+	GeneratorFunction string  `json:"generatorFunction" dynamodbav:"generatorFunction"`
+	LowerBound        float64 `json:"lowerBound" dynamodbav:"lowerBound"`
+	UpperBound        float64 `json:"upperBound" dynamodbav:"upperBound"`
+	Precision         float64 `json:"precision" dynamodbav:"precision"`
+}
