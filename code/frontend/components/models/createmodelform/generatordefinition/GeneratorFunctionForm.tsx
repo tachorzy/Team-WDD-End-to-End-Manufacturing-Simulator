@@ -3,17 +3,18 @@ import RandomGeneratorForm from "./RandomGeneratorForm";
 import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
 import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
 import { Context } from "../CreateModelForm";
+import { Attribute, Property } from "@/app/api/_utils/types";
 
 interface GeneratorFunctionFormContext {
     factoryId: string;
     modelId: string;
     attributes: { attribute: string; value: string }[];
     setAttributes: React.Dispatch<
-        React.SetStateAction<{ attribute: string; value: string }[]>
+        React.SetStateAction<Attribute[]>
     >;
     properties: { property: string; unit: string }[];
     setProperties: React.Dispatch<
-        React.SetStateAction<{ property: string; unit: string }[]>
+        React.SetStateAction<Property[]>
     >;
 }
 

@@ -53,6 +53,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
             properties,
             setProperties,
             currentPage,
+            nextPage,
         }),
         [
             factoryId,
@@ -62,6 +63,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
             properties,
             setProperties,
             currentPage,
+            nextPage,
         ],
     );
 
@@ -105,13 +107,13 @@ const CreateModelForm = (props: { factoryId: string }) => {
                             ‹ Back
                         </button>
                     )}
-                    <button
-                        type="button"
+                    {/* <button
+                        type="submit"
                         onClick={nextPage}
                         className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
                     >
                         Next ›
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </Context.Provider>

@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
-import { Property } from "@/app/api/_utils/types";
 import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";
+import { Property } from "@/app/api/_utils/types";
 
 const PropertyInputColumn = (props: {
-    properties: Property[];
-    setProperties: React.Dispatch<
-        React.SetStateAction<{ property: string; unit: string }[]>
-    >;
-}) => {
+    properties: Property[]
+, setProperties: React.Dispatch<
+React.SetStateAction<{ property: string; unit: string }[]>
+>}) => {
     const { properties, setProperties } = props;
 
     return (
@@ -35,7 +34,7 @@ const PropertyInputColumn = (props: {
                             />
                         </div>
                     </div>
-                    <GeneratorFunctionCombobox />
+                    <GeneratorFunctionCombobox/>
                 </div>
             ))}
         </div>

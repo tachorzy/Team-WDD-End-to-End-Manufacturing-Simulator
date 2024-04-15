@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 // import Image from "next/image";
 import { Attribute, Property } from "@/app/api/_utils/types";
 import AttributeInputColumn from "./AttributeInputColumn";
@@ -13,10 +13,12 @@ interface AttributesFormContext {
     setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
     properties: { property: string; unit: string }[];
     setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
+    nextPage: () => void;
 }
 
 const AttributesForm = () => {
     const contextValue = useContext(Context) as AttributesFormContext;
+    const [inputFields, setInputFields] = useState<Attribute[]>([{ factoryId: "", modelId: "", name: "", value: "" }]);
 
     return (
         <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
@@ -27,10 +29,13 @@ const AttributesForm = () => {
             <section>
                 <div className="flex flex-col w-full gap-y-3">
                     <AttributeInputColumn
+                        inputFields={inputFields}
                         attributes={contextValue?.attributes}
+                        setAttributes={contextValue?.setAttributes}
+                        factoryId={contextValue?.factoryId}
                     />
                     <AddAttributeButton
-                        setAttributes={contextValue?.setAttributes}
+                        setInputFields={setInputFields}
                     />
                 </div>
             </section>
@@ -53,6 +58,13 @@ const AttributesForm = () => {
                     </p>
                 </div>
             </section>
+            <button
+                type="submit"
+                onClick={contextValue?.nextPage}
+                className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
+            >
+                Next ›
+            </button>
         </div>
     );
 };

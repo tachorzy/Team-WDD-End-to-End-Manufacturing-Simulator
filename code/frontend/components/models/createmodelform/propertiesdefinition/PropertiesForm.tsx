@@ -16,6 +16,7 @@ interface PropertiesFormContext {
     setProperties: React.Dispatch<
         React.SetStateAction<{ property: string; unit: string }[]>
     >;
+    nextPage: () => void;
 }
 
 const AddPropertyForm = () => {
@@ -23,7 +24,7 @@ const AddPropertyForm = () => {
 
     return (
         <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
-            <section>
+            <form>
                 <div className="flex flex-col w-full gap-y-3">
                     <PropertyInputColumn
                         properties={contextValue?.properties}
@@ -33,7 +34,7 @@ const AddPropertyForm = () => {
                         setProperties={contextValue?.setProperties}
                     />
                 </div>
-            </section>
+            </form>
             <section className="flex flex-row w-[30%] gap-y-3 gap-x-4">
                 <div className="flex flex-col gap-y-2">
                     <h1 className="text-xl font-semibold text-[#494949]">
@@ -65,6 +66,15 @@ const AddPropertyForm = () => {
                     </p>
                 </div>
             </section>
+            <button
+                type="submit"
+                onClick={() => { 
+                    contextValue?.nextPage
+                }}
+                className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
+            >
+                Next ›
+            </button>
         </div>
     );
 };
