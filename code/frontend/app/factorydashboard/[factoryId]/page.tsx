@@ -8,7 +8,7 @@ import Blueprint from "@/components/factorydashboard/floorplan/blueprint/Bluepri
 import FloorManager from "@/components/factorydashboard/floormanager/FloorManager";
 import { GetConfig, NextServerConnector } from "@/app/api/_utils/connector";
 import { Floorplan } from "@/app/api/_utils/types";
-import AssetTable from "@/components/factorydashboard/AssetTable"; 
+import AssetTable from "@/components/factorydashboard/AssetTable";
 
 export default function FactoryDashboard({
     params,
@@ -76,12 +76,9 @@ export default function FactoryDashboard({
                                 setAssetMarkers={setAssetMarkers}
                                 factoryId={factoryId}
                             />
-                           
                         </div>
                     </div>
-                    <AssetTable
-                    factoryId={factoryId}
-                    /> 
+                    <AssetTable factoryId={factoryId} />
                 </div>
             </div>
         </main>
