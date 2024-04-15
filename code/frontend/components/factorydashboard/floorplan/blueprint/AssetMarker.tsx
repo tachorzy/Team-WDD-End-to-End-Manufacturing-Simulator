@@ -3,7 +3,7 @@ import Draggable from "react-draggable";
 import { Asset } from "@/app/api/_utils/types";
 
 interface AssetMarkerProps {
-    asset: Asset;
+    asset: Asset | null;
 }
 
 const AssetMarker: React.FC<AssetMarkerProps> = (props) => {

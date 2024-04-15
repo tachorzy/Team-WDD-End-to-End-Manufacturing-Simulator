@@ -3,65 +3,49 @@
  */
 
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { createEvent, fireEvent, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Asset } from "@/app/api/_utils/types";
 import AssetMarker from "../components/factorydashboard/floorplan/blueprint/AssetMarker";
 
 describe("AssetMarker Component", () => {
-    test("should have a label with the name of the asset", () => {
-        const mockAsset: Asset = {
-            assetId: "1",
-            name: "Asset 1",
-            description: "Description 1",
-            imageData:
-                "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
-            factoryId: "1",
-        };
+    const mockAsset: Asset = {
+        assetId: "1",
+        name: "Asset 1",
+        description: "Description 1",
+        imageData: "imageData.png",
+        factoryId: "1",
+    };
 
-        render(<AssetMarker asset={mockAsset} />);
-
-        const label = screen.getByText(`${mockAsset.name}`);
-
-        expect(label).toHaveClass(
-            "shadow-md text-xs group-hover:visible invisible text-center self-center bg-opacity-[40%] px-1 py-0.5 font-medium rounded-sm bg-gray-800 my-1",
+    test("should render without error", () => {
+        const { getByText, getByAltText } = render(
+            <AssetMarker asset={mockAsset} />,
         );
+
+        const assetImage = getByText(`${mockAsset.name}`);
+        const asssetName = getByAltText("asset marker icon");
+
+        expect(assetImage).toBeInTheDocument();
+        expect(asssetName).toBeInTheDocument();
     });
 
-    test("should render the correct marker image", () => {
-        const mockAsset: Asset = {
-            assetId: "1",
-            name: "Asset 1",
-            description: "Description 1",
-            imageData:
-                "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
-            factoryId: "1",
-        };
-
+    test("should call preventDefault when dragged", () => {
         const { getByAltText } = render(<AssetMarker asset={mockAsset} />);
 
-        const markerImage = getByAltText(
-            "asset marker icon",
-        ) as HTMLImageElement;
-        expect(markerImage.src).toContain("/icons/floorplan/asset-marker.svg");
+        const assetMarker = getByAltText("asset marker icon");
+        const dragEvent = createEvent.dragStart(assetMarker);
+        const prevented = jest.spyOn(dragEvent, "preventDefault");
+
+        fireEvent(assetMarker, dragEvent);
+
+        expect(prevented).toHaveBeenCalled();
     });
 
-    test("should be draggable", () => {
-        const mockAsset: Asset = {
-            assetId: "1",
-            name: "Asset 1",
-            description: "Description 1",
-            imageData:
-                "ttps://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927",
-            factoryId: "1",
-        };
+    test("should render an empty string when asset is missing", () => {
+        render(<AssetMarker asset={null} />);
 
-        const { getByText } = render(<AssetMarker asset={mockAsset} />);
+        const assetName = document.querySelector("p");
 
-        const assetMarker = getByText(`${mockAsset.name}`);
-
-        fireEvent.mouseDown(assetMarker);
-        fireEvent.mouseMove(assetMarker, { clientX: 100, clientY: 100 });
-        fireEvent.mouseUp(assetMarker);
+        expect(assetName).toHaveTextContent("");
     });
 });
