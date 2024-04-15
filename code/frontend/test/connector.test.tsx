@@ -184,7 +184,9 @@ describe("Connector", () => {
             await expect(
                 NextServerConnector.put<MockType>(config),
             ).rejects.toThrow(
-                new Error(`Fetch error: ${config.resource} Not Found`),
+                new Error(
+                    `Fetch error: ${config.resource} Not Found (undefined)`,
+                ),
             );
         });
 
@@ -385,7 +387,9 @@ describe("Connector", () => {
             await expect(
                 BackendConnector.put<MockType>(config),
             ).rejects.toThrow(
-                new Error(`Fetch error: ${config.resource} Not Found`),
+                new Error(
+                    `Fetch error: ${config.resource} Not Found (undefined)`,
+                ),
             );
         });
 
