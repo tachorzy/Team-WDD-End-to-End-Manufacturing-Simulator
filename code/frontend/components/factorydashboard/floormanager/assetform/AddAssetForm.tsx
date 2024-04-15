@@ -4,7 +4,7 @@ import { createAsset } from "@/app/api/assets/assetAPI";
 import { Asset } from "@/app/api/_utils/types";
 import AssetUploadContainer from "./AssetUploadContainer";
 
-interface AddAssetFormProps {
+export interface AddAssetFormProps {
     onClose: () => void;
     onAdd: (newAsset: Asset) => void;
     factoryId: string;
