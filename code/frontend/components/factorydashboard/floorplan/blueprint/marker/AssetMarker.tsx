@@ -46,7 +46,9 @@ const handleDraggableClick = () => {
     return (
         
         isDraggableVisible && (
-            <Draggable cancel=".no-drag" 
+            <Draggable 
+            cancel=".no-drag" 
+            bounds=".floorplan"
             onStart={() => setIsDragging(true)}
             onStop={() => setIsDragging(false)}
             onDrag={() => setShowButtons(false)}
