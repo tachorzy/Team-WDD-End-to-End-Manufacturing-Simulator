@@ -72,6 +72,7 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
            
               >
                 <div className="group flex flex-col absolute top-0 left-0 z-10 drop-shadow-md items-center">
+                    <div className="text-gray-900">Position: {`(${deltaPosition.x}, ${deltaPosition.y})`}</div>
                     <Image
                         src="/icons/floorplan/asset-marker.svg"
                         width={30}

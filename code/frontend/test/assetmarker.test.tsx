@@ -56,7 +56,13 @@ describe("AssetMarker Component", () => {
             factoryId: "1",
         };
 
-        const { getByText } = render(<AssetMarker asset={mockAsset} />);
+        const MockParent = () => (
+            <div className="floorplan">
+                <AssetMarker asset={mockAsset} />
+            </div>
+        );
+    
+        const { getByText } = render(<MockParent />);
 
         const assetMarker = getByText(`${mockAsset.name}`);
 
