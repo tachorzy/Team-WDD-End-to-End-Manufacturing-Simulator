@@ -3,9 +3,11 @@ import { Combobox } from "@headlessui/react";
 
 const generatorFunctions = ["Random", "Sine wave", "Sawtooth", "Replay"];
 
-const GeneratorFunctionCombobox = (props: {setGeneratorFunction: React.Dispatch<React.SetStateAction<string>>}) => {
+const GeneratorFunctionCombobox = (props: {
+    setGeneratorFunction: React.Dispatch<React.SetStateAction<string>>;
+}) => {
     const { setGeneratorFunction } = props;
-    
+
     const [selectedFunction, setSelectedFunction] = useState("");
     const [query, setQuery] = useState("");
 
@@ -17,7 +19,7 @@ const GeneratorFunctionCombobox = (props: {setGeneratorFunction: React.Dispatch<
               );
 
     useEffect(() => {
-        console.log(`Selected generator function: ${selectedFunction}`)
+        console.log(`Selected generator function: ${selectedFunction}`);
         setGeneratorFunction(selectedFunction);
     }, [selectedFunction]);
 

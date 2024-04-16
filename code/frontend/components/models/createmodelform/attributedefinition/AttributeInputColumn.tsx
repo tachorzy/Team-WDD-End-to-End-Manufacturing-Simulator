@@ -18,7 +18,7 @@ const AttributeInputColumn = (props: {
             factoryId,
             modelId: "123456", // later we will create the id from the backend
             name: attribute,
-            value: value,
+            value,
         };
         console.log(
             `Adding new Attribute named: ${attribute} with value: ${value} to the list of attributes`,

@@ -9,22 +9,25 @@ interface PropertiesFormContext {
     factoryId: string;
     modelId: string;
     attributes: Attribute[];
-    setAttributes: React.Dispatch<
-        React.SetStateAction<Attribute[]>
-    >;
+    setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
     properties: Property[];
-    setProperties: React.Dispatch<
-        React.SetStateAction<Property[]>
-    >;
+    setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
     nextPage: () => void;
 }
 
 const PropertiesForm = () => {
     const contextValue = useContext(Context) as PropertiesFormContext;
     const [inputFields, setInputFields] = useState<Property[]>([
-        { factoryId: "", modelId: "", measurementId: "", name: "", unit: "", generatorType: "" },
+        {
+            factoryId: "",
+            modelId: "",
+            measurementId: "",
+            name: "",
+            unit: "",
+            generatorType: "",
+        },
     ]);
-    
+
     return (
         <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
             <form>
@@ -34,9 +37,7 @@ const PropertiesForm = () => {
                         properties={contextValue?.properties}
                         setProperties={contextValue?.setProperties}
                     />
-                    <AddPropertyButton
-                        setProperties={contextValue?.setProperties}
-                    />
+                    <AddPropertyButton setInputFields={setInputFields} />
                 </div>
             </form>
             <section className="flex flex-row w-[30%] gap-y-3 gap-x-4">

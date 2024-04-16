@@ -2,13 +2,18 @@ import React from "react";
 import Image from "next/image";
 import { Property } from "@/app/api/_utils/types";
 
-const SineWaveGeneratorForm = (props: { propertyIndex: number, property: Property}) => {
-    const { propertyIndex } = props; 
+const SineWaveGeneratorForm = (props: {
+    propertyIndex: number;
+    property: Property;
+}) => {
+    const { propertyIndex, property } = props;
 
     return (
         <div className="flex flex-col gap-y-3 max-h-72">
             <div>
-                <h1 className="text-2xl font-semibold text-gray-900">Properties {propertyIndex}</h1>
+                <h1 className="text-2xl font-semibold text-gray-900">
+                    Property - {propertyIndex}
+                </h1>
                 <div className="flex flex-row gap-x-1">
                     <Image
                         src="/icons/generation/sine-waves.svg"

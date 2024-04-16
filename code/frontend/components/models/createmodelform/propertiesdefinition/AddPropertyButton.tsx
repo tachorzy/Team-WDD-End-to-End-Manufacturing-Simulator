@@ -3,11 +3,9 @@ import Image from "next/image";
 import { Property } from "@/app/api/_utils/types";
 
 const AddPropertyButton = (props: {
-    setProperties: React.Dispatch<
-        React.SetStateAction<Property[]>
-    >;
+    setInputFields: React.Dispatch<React.SetStateAction<Property[]>>;
 }) => {
-    const { setProperties } = props;
+    const { setInputFields } = props;
 
     const newProperty = {
         factoryId: "",
@@ -18,12 +16,11 @@ const AddPropertyButton = (props: {
         generatorType: "",
     };
 
-
     return (
         <button
             type="button"
             onClick={() => {
-                setProperties((prev) => [...prev, newProperty]);
+                setInputFields((prev) => [...prev, newProperty]);
             }}
             className="flex flex-row items-center justify-center cursor-pointer w-[91.5%] p-2 border-2 border-dashed border-[#494949] border-solid rounded-lg text-[#494949] hover:scale-[101.5%] hover:border-MainBlue transition duration-500 ease-in-out"
         >
@@ -39,6 +36,6 @@ const AddPropertyButton = (props: {
                 </h1>
             </div>
         </button>
-    )
+    );
 };
 export default AddPropertyButton;

@@ -5,31 +5,30 @@ import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";
 const PropertyInputColumn = (props: {
     inputFields: Property[];
     properties: Property[];
-    setProperties: React.Dispatch<
-        React.SetStateAction<Property[]>
-    >;
+    setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
 }) => {
     const { inputFields, properties, setProperties } = props;
-    const [property, setProperty] = React.useState("")
-    const [unit, setUnit] = React.useState("")
-    const [generatorFunction, setGeneratorFunction] = React.useState("")
+    const [property, setProperty] = React.useState("");
+    const [unit, setUnit] = React.useState("");
+    const [generatorFunction, setGeneratorFunction] = React.useState("");
 
-    useEffect(() => {  
-        if (property === "" || unit === "" || generatorFunction === "") return
+    useEffect(() => {
+        if (property === "" || unit === "" || generatorFunction === "") return;
 
         const data: Property = {
             factoryId: "",
             modelId: "",
             measurementId: "",
             name: property,
-            unit: unit,
-            generatorType: generatorFunction,   
-        }
-        console.log(`new property added: ${data.name} with unit: ${data.unit} and generator function: ${data.generatorType}`)
-        setProperties([...properties, data])
-        console.log(`properties array's size is now ${properties.length}`)
-    }, [property, unit, generatorFunction])
-
+            unit,
+            generatorType: generatorFunction,
+        };
+        console.log(
+            `new property added: ${data.name} with unit: ${data.unit} and generator function: ${data.generatorType}`,
+        );
+        setProperties([...properties, data]);
+        console.log(`properties array's size is now ${properties.length}`);
+    }, [property, unit, generatorFunction]);
 
     return (
         <div className="flex flex-col gap-y-3 max-h-[19rem] overflow-y-scroll">
@@ -58,7 +57,9 @@ const PropertyInputColumn = (props: {
                             />
                         </div>
                     </div>
-                    <GeneratorFunctionCombobox setGeneratorFunction={setGeneratorFunction}/>
+                    <GeneratorFunctionCombobox
+                        setGeneratorFunction={setGeneratorFunction}
+                    />
                 </div>
             ))}
         </div>

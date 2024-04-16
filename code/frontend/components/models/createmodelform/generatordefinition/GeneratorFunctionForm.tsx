@@ -15,40 +15,43 @@ interface GeneratorFunctionFormContext {
     nextPage: () => void;
 }
 
-const GeneratorFunctionForm = (props: { property: Property,propertyIndex: number }) => {
-    const { property, propertyIndex } = props;
+const GeneratorFunctionForm = (props: { propertyIndex: number }) => {
+    const { propertyIndex } = props;
     const contextValue = useContext(Context) as GeneratorFunctionFormContext;
 
-    console.log(`properties received in generator function form: ${contextValue?.properties}`)
-    console.log(`propertyIndex received in generator function form: ${propertyIndex}`)
-    console.log(`property at index ${propertyIndex}: name: ${property.name} generator type: ${property.generatorType}`)
     return (
         <div className="flex flex-col gap-y-3 max-h-72">
-            <div className="flex flex-row gap-x-16">
+            <div className="flex flex-col max-h-[28rem] overflow-y-scroll gap-y-1 gap-x-16">
                 {contextValue?.properties.map((property, index) => (
                     <div key={index}>
                         {property.generatorType === "Random" && (
-                            <RandomGeneratorForm propertyIndex={index} property={property} />
+                            <RandomGeneratorForm
+                                propertyIndex={index}
+                                property={property}
+                            />
                         )}
                         {property.generatorType === "Sine wave" && (
-                            <SineWaveGeneratorForm propertyIndex={index} property={property} />
+                            <SineWaveGeneratorForm
+                                propertyIndex={index}
+                                property={property}
+                            />
                         )}
                         {property.generatorType === "Sawtooth" && (
-                            <SawtoothGeneratorForm propertyIndex={index} property={property} />
+                            <SawtoothGeneratorForm
+                                propertyIndex={index}
+                                property={property}
+                            />
                         )}
                     </div>
                 ))}
             </div>
-            {propertyIndex < contextValue?.properties.length - 1 && ( 
-                <button
-                    type="submit"
-                    onClick={contextValue?.nextPage}
-                    className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
-                >
-                    Next ›
-                </button>
-            )   }
 
+            <button
+                type="submit"
+                className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
+            >
+                Submit ›
+            </button>
         </div>
     );
 };
