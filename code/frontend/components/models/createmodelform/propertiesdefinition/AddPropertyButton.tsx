@@ -17,7 +17,6 @@ const AddPropertyButton = (props: {
         unit: "",
         generatorType: "",
     };
-    }
 
 
     return (
@@ -40,6 +39,6 @@ const AddPropertyButton = (props: {
                 </h1>
             </div>
         </button>
-    );
+    )
 };
 export default AddPropertyButton;
