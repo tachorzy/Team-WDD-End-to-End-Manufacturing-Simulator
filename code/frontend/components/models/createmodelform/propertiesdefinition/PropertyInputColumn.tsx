@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Property } from "@/app/api/_utils/types";
 import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";
 
@@ -23,12 +23,9 @@ const PropertyInputColumn = (props: {
             unit,
             generatorType: generatorFunction,
         };
-        console.log(
-            `new property added: ${data.name} with unit: ${data.unit} and generator function: ${data.generatorType}`,
-        );
+
         setProperties([...properties, data]);
-        console.log(`properties array's size is now ${properties.length}`);
-    }, [property, unit, generatorFunction]);
+    }, [property, unit, generatorFunction, properties, setProperties]);
 
     return (
         <div className="flex flex-col gap-y-3 max-h-[19rem] overflow-y-scroll">

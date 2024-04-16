@@ -1,23 +1,6 @@
-import React, { useContext } from "react";
-// import Image from "next/image";
-// import { Context } from "./CreateModelForm";
-
-// interface ProgressTrackerContext {
-//     factoryId: string;
-//     modelId: string;
-//     attributes: { attribute: string; value: string }[];
-//     setAttributes: React.Dispatch<
-//         React.SetStateAction<{ attribute: string; value: string }[]>
-//     >;
-//     properties: { property: string; unit: string }[];
-//     setProperties: React.Dispatch<
-//         React.SetStateAction<{ property: string; unit: string }[]>
-//     >;
-// }
+import React from "react";
 
 const ProgressTracker = (props: { progress: number }) => {
-    // const contextValue = useContext(Context) as ProgressTrackerContext;
-
     const { progress } = props;
 
     return (

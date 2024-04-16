@@ -15,8 +15,7 @@ interface GeneratorFunctionFormContext {
     nextPage: () => void;
 }
 
-const GeneratorFunctionForm = (props: { propertyIndex: number }) => {
-    const { propertyIndex } = props;
+const GeneratorFunctionForm = () => {
     const contextValue = useContext(Context) as GeneratorFunctionFormContext;
 
     return (

@@ -24,7 +24,7 @@ const AttributeInputColumn = (props: {
             `Adding new Attribute named: ${attribute} with value: ${value} to the list of attributes`,
         );
         setAttributes([...attributes, data]);
-    }, [attribute, value]);
+    }, [attribute, value, factoryId, attributes, setAttributes]);
 
     return (
         <div className="flex flex-col gap-y-3 max-h-[22rem] overflow-y-scroll">
