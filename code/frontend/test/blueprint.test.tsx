@@ -7,7 +7,7 @@ import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Asset } from "@/app/api/_utils/types";
 import Blueprint from "../components/factorydashboard/floorplan/blueprint/Blueprint";
-import AssetMarker from "../components/factorydashboard/floorplan/blueprint/AssetMarker";
+import AssetMarker from "../components/factorydashboard/floorplan/blueprint/marker/AssetMarker";
 
 global.URL.createObjectURL = jest
     .fn()

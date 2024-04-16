@@ -1,23 +1,30 @@
-/**
- * @jest-environment jsdom
- */
 import "@testing-library/jest-dom";
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
-import * as assetAPI from "@/app/api/assets/assetAPI";
+import { Asset } from "@/app/api/_utils/types";
+import * as Connector from "@/app/api/_utils/connector";
 import FloorManager from "../components/factorydashboard/floormanager/FloorManager";
 import AddAssetForm from "../components/factorydashboard/floormanager/assetform/AddAssetForm";
 
-jest.mock("@/app/api/assets/assetAPI", () => ({
-    getAssetsForFactory: jest.fn(),
-    createAsset: jest.fn(),
+jest.mock("@/app/api/_utils/connector", () => ({
+    BackendConnector: {
+        get: jest.fn<Promise<Asset[]>, [Connector.GetConfig]>(),
+        post: jest.fn<
+            Promise<{ assetId: string; message: string }>,
+            [Connector.PostConfig<Asset>]
+        >(),
+    },
 }));
+
+const mockedBackendConnector = Connector.BackendConnector as jest.Mocked<
+    typeof Connector.BackendConnector
+>;
 
 describe("FloorManager", () => {
     beforeEach(() => {
         jest.clearAllMocks();
 
-        (assetAPI.getAssetsForFactory as jest.Mock).mockResolvedValue([
+        mockedBackendConnector.get.mockResolvedValue([
             {
                 assetId: "mockAssetId1",
                 name: "Mock Asset 1",
@@ -27,14 +34,10 @@ describe("FloorManager", () => {
             },
         ]);
 
-        // in the backend i accidentally put "floorplanId when its supposed to be assetId in the message, my bad chile
-        (assetAPI.createAsset as jest.Mock).mockImplementation(() =>
-            Promise.resolve({
-                assetId: "mockGeneratedAssetId",
-                message:
-                    "floorplanId mockGeneratedAssetId created successfully",
-            }),
-        );
+        mockedBackendConnector.post.mockResolvedValue({
+            assetId: "mockGeneratedAssetId",
+            message: "Asset mockGeneratedAssetId created successfully",
+        });
     });
 
     test("should open AddAssetForm when 'Create Asset' button is clicked", async () => {
@@ -51,16 +54,6 @@ describe("FloorManager", () => {
         expect(nameInput).toBeInTheDocument();
         expect(descriptionInput).toBeInTheDocument();
     });
-
-    jest.mock("react-dropzone", () => ({
-        useDropzone: () => ({
-            getRootProps: jest.fn(),
-            getInputProps: jest.fn(),
-            isDragActive: false,
-            isDragAccept: false,
-            isDragReject: false,
-        }),
-    }));
 
     test("should add new asset to FloorManager when AddAssetForm is filled out and submitted", async () => {
         const handleAdd = jest.fn();
@@ -85,13 +78,17 @@ describe("FloorManager", () => {
         fireEvent.click(createAssetButton);
 
         await waitFor(() => {
-            expect(assetAPI.createAsset).toHaveBeenCalledWith(
-                expect.objectContaining({
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            expect(mockedBackendConnector.post).toHaveBeenCalledWith({
+                resource: "assets",
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                payload: expect.objectContaining({
                     name: "New Asset",
                     description: "New Asset Description",
                     factoryId: "1",
                 }),
-            );
+            });
+            expect(handleAdd).toHaveBeenCalled();
         });
     });
 });

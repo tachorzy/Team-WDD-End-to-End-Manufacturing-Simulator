@@ -6,7 +6,7 @@ import React from "react";
 import { createEvent, fireEvent, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Asset } from "@/app/api/_utils/types";
-import AssetMarker from "../components/factorydashboard/floorplan/blueprint/AssetMarker";
+import AssetMarker from "../components/factorydashboard/floorplan/blueprint/marker/AssetMarker";
 
 describe("AssetMarker Component", () => {
     const mockAsset: Asset = {
