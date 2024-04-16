@@ -10,11 +10,11 @@ interface PropertiesFormContext {
     modelId: string;
     attributes: Attribute[];
     setAttributes: React.Dispatch<
-        React.SetStateAction<{ attribute: string; value: string }[]>
+        React.SetStateAction<Attribute[]>
     >;
     properties: Property[];
     setProperties: React.Dispatch<
-        React.SetStateAction<{ property: string; unit: string }[]>
+        React.SetStateAction<Property[]>
     >;
     nextPage: () => void;
 }
