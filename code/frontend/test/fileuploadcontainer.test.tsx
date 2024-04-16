@@ -3,113 +3,129 @@
  */
 import React from "react";
 import "@testing-library/jest-dom";
-import { createEvent, fireEvent, render } from "@testing-library/react"; // Import screen here
-import {
-    useDropzone,
-    DropzoneRootProps,
-    DropzoneInputProps,
-} from "react-dropzone";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import FileUploadContainer from "../components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
-import AcceptedUploadForm from "../components/factorydashboard/floorplan/uploadcontainer/AcceptedUploadForm";
 
-jest.mock("react-dropzone", () => ({
-    useDropzone: jest.fn(),
-}));
+interface MockAcceptedUploadFormProps {
+    acceptedFileItems: React.JSX.Element[];
+    fileRejectionItems: React.JSX.Element[];
+}
 
+const mockAcceptedUploadForm = jest.fn();
 jest.mock(
     "../components/factorydashboard/floorplan/uploadcontainer/AcceptedUploadForm",
-    () => jest.fn(() => null),
+    () => {
+        const MockAcceptedUploadForm = (props: MockAcceptedUploadFormProps) => {
+            mockAcceptedUploadForm(props);
+
+            const { acceptedFileItems, fileRejectionItems } = props;
+
+            return (
+                <div>
+                    <div data-testid="accpetedfiles">
+                        <h1>Accepted files:</h1>
+                        <ul>{acceptedFileItems}</ul>
+                    </div>
+                    <div data-testid="rejectedfiles">
+                        <h1>Rejected files:</h1>
+                        <ul>{fileRejectionItems}</ul>
+                    </div>
+                </div>
+            );
+        };
+        MockAcceptedUploadForm.displayName = "AcceptedUploadForm";
+        return MockAcceptedUploadForm;
+    },
 );
 
 describe("FileUploadContainer", () => {
-    afterEach(() => {
+    beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    describe("FileUploadContainer ", () => {
-        test("should handle no file being dropped", () => {
-            (useDropzone as jest.Mock).mockReturnValue({
-                getRootProps: () => ({}),
-                getInputProps: () => ({}),
-                acceptedFiles: [],
-                fileRejections: [],
-            });
+    test("should render without error", () => {
+        const { getByTestId, getByText } = render(
+            <FileUploadContainer setFloorPlanFile={jest.fn()} />,
+        );
 
-            const { getByText } = render(
-                <FileUploadContainer setFloorPlanFile={jest.fn()} />,
-            );
+        expect(getByTestId("dropzone")).toBeInTheDocument();
+        expect(getByTestId("drop-input")).toBeInTheDocument();
+        expect(
+            getByText("Click or drop your floor plan file here to upload."),
+        ).toBeInTheDocument();
+    });
 
-            const input = getByText(
-                /Click or drop your floor plan file here to upload./,
-            ).parentElement;
-            const dropEvent = createEvent.drop(input as Element);
-            Object.defineProperty(dropEvent, "dataTransfer", {
-                value: {
-                    files: [],
-                },
-            });
-            fireEvent(input as Element, dropEvent);
+    test.each([
+        ["jpeg", "jpeg"],
+        ["png", "png"],
+        ["svg", "svg+xml"],
+    ])("should handle %s file drop", async (filename, filetype) => {
+        const { getByTestId } = render(
+            <FileUploadContainer setFloorPlanFile={jest.fn()} />,
+        );
 
-            expect(useDropzone).toHaveBeenCalled();
-            expect(input).not.toBeNull();
+        const file = new File([new ArrayBuffer(69)], `floorplan.${filename}`, {
+            type: `image/${filetype}`,
         });
 
-        test("should handle file being accepted", () => {
-            const setFloorPlanFileMock = jest.fn();
+        const dropInput = getByTestId("drop-input");
+        Object.defineProperty(dropInput, "files", {
+            value: [file],
+        });
+        fireEvent.drop(dropInput);
 
-            (useDropzone as jest.Mock).mockReturnValue({
-                getRootProps: jest.fn() as jest.Mock<DropzoneRootProps>,
-                getInputProps: jest.fn() as jest.Mock<DropzoneInputProps>,
-                acceptedFiles: [
-                    new File(["test content"], "test.png", {
-                        type: "image/png",
-                    }),
-                ],
-                fileRejections: [],
-            });
-
-            render(
-                <FileUploadContainer setFloorPlanFile={setFloorPlanFileMock} />,
+        await waitFor(() => {
+            expect(getByTestId("accpetedfiles")).toHaveTextContent(
+                `Accepted files:${file.name} - ${file.size} bytes`,
             );
+        });
+    });
 
-            expect(AcceptedUploadForm).not.toHaveBeenCalled();
+    test("should handle no accpedted file uploaded", async () => {
+        const { getByTestId } = render(
+            <FileUploadContainer setFloorPlanFile={jest.fn()} />,
+        );
 
-            setTimeout(() => {
-                expect(AcceptedUploadForm).toHaveBeenCalled();
-                expect(setFloorPlanFileMock).toHaveBeenCalledWith(
-                    expect.any(File),
-                );
-            }, 0);
+        const file = new File([new ArrayBuffer(69)], "floorplan.txt", {
+            type: "text/plain",
         });
 
-        test("should handle file being declined", () => {
-            const setFloorPlanFileMock = jest.fn();
+        const dropInput = getByTestId("drop-input");
+        Object.defineProperty(dropInput, "files", {
+            value: [file],
+        });
+        fireEvent.drop(dropInput);
 
-            (useDropzone as jest.Mock).mockReturnValue({
-                getRootProps: jest.fn() as jest.Mock<DropzoneRootProps>,
-                getInputProps: jest.fn() as jest.Mock<DropzoneInputProps>,
-                acceptedFiles: [],
-                fileRejections: [
-                    {
-                        file: new File(["test content"], "test.txt", {
-                            type: "text/plain",
-                        }),
-                        errors: [
-                            {
-                                code: "file-invalid-type",
-                                message: "Invalid file type",
-                            },
-                        ],
-                    },
-                ],
-            });
+        await waitFor(() => {
+            expect(mockAcceptedUploadForm).not.toHaveBeenCalled();
+        });
+    });
 
-            // const { getByText } = render(
-            //     <FileUploadContainer setFloorPlanFile={setFloorPlanFileMock} />,
-            // );
+    test("should handle file being declined", async () => {
+        const { getByTestId } = render(
+            <FileUploadContainer setFloorPlanFile={jest.fn()} />,
+        );
 
-            expect(AcceptedUploadForm).not.toHaveBeenCalled();
-            expect(setFloorPlanFileMock).not.toHaveBeenCalled();
+        const accpedtedFile = new File([new ArrayBuffer(69)], "floorplan.png", {
+            type: "image/png",
+        });
+        const rejectedFile = new File([new ArrayBuffer(69)], "floorplan.txt", {
+            type: "text/plain",
+        });
+
+        const dropInput = getByTestId("drop-input");
+        Object.defineProperty(dropInput, "files", {
+            value: [accpedtedFile, rejectedFile],
+        });
+        fireEvent.drop(dropInput);
+
+        await waitFor(() => {
+            expect(getByTestId("accpetedfiles")).toHaveTextContent(
+                "Accepted files:floorplan.png - 69 bytes",
+            );
+            expect(getByTestId("rejectedfiles")).toHaveTextContent(
+                "Rejected files:floorplan.txt - 69 bytes",
+            );
         });
     });
 });

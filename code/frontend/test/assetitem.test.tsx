@@ -3,61 +3,107 @@
  */
 import "@testing-library/jest-dom";
 import React from "react";
-import { render } from "@testing-library/react";
-import fetchMock from "jest-fetch-mock";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
 import AssetItem from "../components/factorydashboard/floormanager/inventory/AssetItem";
 
+global.URL.createObjectURL = jest
+    .fn()
+    .mockReturnValue("http://test.com/test.png");
+
+jest.mock("next/image", () => ({
+    __esModule: true,
+    default: (props: any) => <img alt="" {...props} />,
+}));
+
+global.fetch = jest.fn(() =>
+    Promise.resolve({
+        blob: () => Promise.resolve("mocked blob"),
+    }),
+) as jest.Mock;
+
 describe("AssetItem", () => {
-    beforeEach(() => {
-        global.URL.createObjectURL = jest.fn();
-        // const mockImageData = new Blob([""], { type: "image/jpeg" });
-        const mockBase64Data = "data:image/jpeg;base64,";
-        fetchMock.mockResponseOnce(() => Promise.resolve(mockBase64Data));
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
-    test("should render correctly with valid asset", () => {
-        const asset: Asset = {
-            assetId: "1",
-            name: "Asset 1",
-            description: "Description",
-            imageData:
-                "https://wcs.smartdraw.com/floor-plan/img/facility-planning-example.png?bn=15100111927", // for some reason it doesnt pass in github when we use image/test.jpg so a temp solution is using a real image url
-            factoryId: "1",
+    const mockAsset: Asset = {
+        assetId: "1",
+        name: "Asset 1",
+        description: "Description",
+        imageData: "image1.png",
+        factoryId: "1",
+    };
+
+    const props = {
+        asset: mockAsset,
+        setSelectedAsset: jest.fn(),
+        selectedAsset: null,
+    };
+
+    test("should render correctly with valid asset", async () => {
+        const { getByAltText } = render(<AssetItem {...props} />);
+
+        await waitFor(() => {
+            expect(
+                getByAltText(`${mockAsset.name} Asset Image`),
+            ).toBeInTheDocument();
+        });
+    });
+
+    test("should render with placeholder image", async () => {
+        const noImageDataAssetProp = {
+            ...props,
+            asset: {
+                ...mockAsset,
+                imageData: undefined,
+            },
         };
 
         const { getByAltText } = render(
-            <AssetItem
-                asset={asset}
-                setSelectedAsset={jest.fn()}
-                selectedAsset={null}
-            />,
+            <AssetItem {...noImageDataAssetProp} />,
         );
 
-        expect(getByAltText(`${asset.name} Asset Image`)).toBeInTheDocument();
+        await waitFor(() => {
+            expect(
+                getByAltText(`${mockAsset.name} Asset Image`),
+            ).toBeInTheDocument();
+            expect(
+                getByAltText(`${mockAsset.name} Asset Image`),
+            ).toHaveAttribute("src", "/icons/floorplan/placeholder-asset.svg");
+        });
     });
 
-    test("should render placeholder asset image when no image is provided", () => {
-        const asset: Asset = {
-            assetId: "1",
-            name: "Asset 1",
-            description: "Description 1",
-            imageData: "",
-            factoryId: "1",
+    test("should display 'No Asset data avaible' when the asset is undefinded", () => {
+        const noAssetProp = {
+            ...props,
+            asset: undefined,
+        };
+        const { getByText } = render(<AssetItem {...noAssetProp} />);
+
+        expect(getByText("No asset data available")).toBeInTheDocument();
+    });
+
+    test("should select asset when clicked", async () => {
+        const { getByRole } = render(<AssetItem {...props} />);
+
+        fireEvent.click(getByRole("button"));
+
+        await waitFor(() => {
+            expect(props.setSelectedAsset).toHaveBeenCalledWith(mockAsset);
+        });
+    });
+
+    test("should have border-blue-200 when selected", async () => {
+        const selectedAssetProp = {
+            ...props,
+            selectedAsset: mockAsset,
         };
 
-        const { getByAltText } = render(
-            <AssetItem
-                asset={asset}
-                setSelectedAsset={jest.fn()}
-                selectedAsset={null}
-            />,
-        );
+        const { getByRole } = render(<AssetItem {...selectedAssetProp} />);
 
-        const assetImage = getByAltText(
-            `${asset.name} Asset Image`,
-        ) as HTMLImageElement;
-        expect(assetImage.src).toContain("placeholder-asset.svg");
-        expect(assetImage).toBeInTheDocument();
+        await waitFor(() => {
+            expect(getByRole("button")).toHaveClass("border-blue-200");
+        });
     });
 });

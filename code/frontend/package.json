@@ -26,7 +26,8 @@
     "react-dom": "^18",
     "react-draggable": "^4.4.6",
     "react-dropzone": "^14.2.3",
-    "react-leaflet": "^4.2.1"
+    "react-leaflet": "^4.2.1",
+    "reactjs-popup": "^2.0.6"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.3",
