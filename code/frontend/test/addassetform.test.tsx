@@ -4,15 +4,17 @@
 import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { createAsset } from "@/app/api/assets/assetAPI";
 import { Asset } from "@/app/api/_utils/types";
 import AddAssetForm, {
     AddAssetFormProps,
 } from "../components/factorydashboard/floormanager/assetform/AddAssetForm";
+import { BackendConnector, PostConfig } from "@/app/api/_utils/connector";
 
-jest.mock("@/app/api/assets/assetAPI", () => ({
-    createAsset: jest.fn(),
-}));
+jest.mock("@/app/api/_utils/connector", () => ({
+    BackendConnector: {
+        post: jest.fn(),
+    },
+}));  
 
 global.URL.createObjectURL = jest
     .fn()
@@ -68,7 +70,7 @@ describe("AddAssetForm", () => {
             factoryId: "1",
             imageData: "http://example.com/test.png",
         };
-        (createAsset as jest.Mock).mockResolvedValue(mockAsset);
+        (BackendConnector.post as jest.Mock).mockResolvedValue(mockAsset);
 
         const mockFormData = {
             ...mockAsset,
@@ -96,16 +98,21 @@ describe("AddAssetForm", () => {
                 imageData: "http://example.com/test.png",
             }));
             fireEvent.click(getByText("Create Asset"));
+            
+            const fetchExpected = {
+                resource: "assets",
+                payload: mockFormData,
+            }
 
-            expect(createAsset).toHaveBeenCalledWith(mockFormData);
+            expect(BackendConnector.post).toHaveBeenCalledWith(fetchExpected);
             expect(mockOnAdd).toHaveBeenCalledWith(mockAsset);
             expect(mockOnClose).toHaveBeenCalled();
-        });
+        });  
     });
 
     test("should log failuer on creating asset", async () => {
         const error = new Error("Failed to add asset");
-        (createAsset as jest.Mock).mockRejectedValue(error);
+        (BackendConnector.post as jest.Mock).mockRejectedValue(error);
 
         const consoleErrorSpy = jest
             .spyOn(console, "error")
