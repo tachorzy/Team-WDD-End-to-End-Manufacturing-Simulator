@@ -13,6 +13,7 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.18",
     "@types/react-dropzone": "^5.1.0",
     "axios": "^1.6.7",
     "dotenv": "^16.4.3",

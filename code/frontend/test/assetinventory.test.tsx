@@ -5,7 +5,7 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
-import AssetInventory from "../components/factorydashboard/floormanager/AssetInventory";
+import AssetInventory from "../components/factorydashboard/floormanager/inventory/AssetInventory";
 
 const mockCreateObjectURL = jest.fn();
 global.URL.createObjectURL = mockCreateObjectURL;
@@ -14,7 +14,7 @@ interface AssetItemProps {
     asset: Asset;
 }
 const mockAssetItem = jest.fn();
-jest.mock("../components/factorydashboard/floormanager/AssetItem", () => {
+jest.mock("../components/factorydashboard/floormanager/inventory/AssetItem", () => {
     const MockAssetItem = (props: AssetItemProps) => {
         mockAssetItem(props);
 
@@ -32,7 +32,7 @@ describe("AssetInventory", () => {
     });
 
     test("should render list of assets", () => {
-        const assets: Asset[] = [
+        const mockAssets: Asset[] = [
             {
                 assetId: "1",
                 name: "Asset 1",
@@ -51,13 +51,13 @@ describe("AssetInventory", () => {
 
         const { getByText } = render(
             <AssetInventory
-                assets={assets}
+                assets={mockAssets}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
             />,
         );
 
-        assets.forEach((asset) => {
+        mockAssets.forEach((asset) => {
             expect(getByText(asset.name)).toBeInTheDocument();
         });
     });

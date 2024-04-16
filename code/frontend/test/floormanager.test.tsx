@@ -25,7 +25,7 @@ jest.mock("@/app/api/_utils/connector", () => ({
 }));
 
 const mockInventoryNavBar = jest.fn();
-jest.mock("../components/factorydashboard/floormanager/InventoryNavBar", () => {
+jest.mock("../components/factorydashboard/floormanager/inventory/InventoryNavBar", () => {
     const MockInventoryNavBar = (props: any) => {
         mockInventoryNavBar(props);
         return <div data-testid="inventory-navbar" />;
@@ -35,7 +35,7 @@ jest.mock("../components/factorydashboard/floormanager/InventoryNavBar", () => {
 });
 
 const mockAssetInventory = jest.fn();
-jest.mock("../components/factorydashboard/floormanager/AssetInventory", () => {
+jest.mock("../components/factorydashboard/floormanager/inventory/AssetInventory", () => {
     const MockAssetInventory = (props: any) => {
         mockAssetInventory(props);
         return <div data-testid="asset-inventory" />;

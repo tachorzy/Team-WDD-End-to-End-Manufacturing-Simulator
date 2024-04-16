@@ -22,7 +22,7 @@ describe("FactoryPageNavBar", () => {
 
         const homeLink = screen.getByText("Home");
         const dashboardLink = screen.getByText("Dashboard");
-        const assetsLink = screen.getByText("Assets");
+        const assetsLink = screen.getByText("Asset Models");
         const anomalyDetectionLink = screen.getByText("Anomaly Detection");
 
         expect(homeLink).toBeInTheDocument();
