@@ -114,7 +114,7 @@ describe("CreateModelForm", () => {
         addPropertyButton.click();
 
         await waitFor(() => {
-            expect(mockContextValue.setProperties).toHaveBeenCalled();
+            expect(getByText("Property 2")).toBeInTheDocument();
         });
     });
 });
