@@ -5,7 +5,7 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
-import AssetInventory from "../components/factorydashboard/floormanager/AssetInventory";
+import AssetInventory from "../components/factorydashboard/floormanager/inventory/AssetInventory";
 
 const mockCreateObjectURL = jest.fn();
 global.URL.createObjectURL = mockCreateObjectURL;
@@ -57,7 +57,7 @@ describe("AssetInventory", () => {
             />,
         );
 
-        assets.forEach((asset) => {
+        mockAssets.forEach((asset) => {
             expect(getByText(asset.name)).toBeInTheDocument();
         });
     });
