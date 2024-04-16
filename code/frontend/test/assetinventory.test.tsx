@@ -14,16 +14,17 @@ interface AssetItemProps {
     asset: Asset;
 }
 const mockAssetItem = jest.fn();
-jest.mock(
-    "../components/factorydashboard/floormanager/AssetItem",
-    () => (props: AssetItemProps) => {
+jest.mock("../components/factorydashboard/floormanager/AssetItem", () => {
+    const MockAssetItem = (props: AssetItemProps) => {
         mockAssetItem(props);
 
         const { asset } = props;
 
         return <div>{asset.name}</div>;
-    },
-);
+    };
+    MockAssetItem.displayName = "AssetItem";
+    return MockAssetItem;
+});
 
 describe("AssetInventory", () => {
     beforeEach(() => {

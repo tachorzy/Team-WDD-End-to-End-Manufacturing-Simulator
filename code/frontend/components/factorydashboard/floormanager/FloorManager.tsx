@@ -8,7 +8,7 @@ import InventoryNavBar from "./InventoryNavBar";
 import AssetBio from "./AssetBio";
 import AssetMarker from "../floorplan/blueprint/marker/AssetMarker";
 
-interface FloorManagerProps {
+export interface FloorManagerProps {
     setAssetMarkers: React.Dispatch<React.SetStateAction<JSX.Element[]>>;
     factoryId: string;
 }
