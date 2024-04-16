@@ -5,7 +5,7 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
-import AssetItem from "../components/factorydashboard/floormanager/AssetItem";
+import AssetItem from "../components/factorydashboard/floormanager/inventory/AssetItem";
 
 global.URL.createObjectURL = jest
     .fn()
