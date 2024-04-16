@@ -8,7 +8,7 @@ const RandomGeneratorForm = (props: { propertyIndex: number, property: Property}
     return (
         <div className="flex flex-col gap-y-3 max-h-72">
             <div>
-                <h1 className="text-2xl font-semibold text-gray-900">Property {propertyIndex}</h1>
+                <h1 className="text-2xl font-semibold text-gray-900">Property {propertyIndex} - {property.name}</h1>
                 <div className="flex flex-row gap-x-0.5">
                     <Image
                         src="/icons/generation/random.svg"

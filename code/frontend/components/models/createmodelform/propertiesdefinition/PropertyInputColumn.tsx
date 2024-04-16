@@ -27,7 +27,7 @@ const PropertyInputColumn = (props: {
         }
         console.log(`new property added: ${data.name} with unit: ${data.unit} and generator function: ${data.generatorType}`)
         setProperties([...properties, data])
-
+        console.log(`properties array's size is now ${properties.length}`)
     }, [property, unit, generatorFunction])
 
 

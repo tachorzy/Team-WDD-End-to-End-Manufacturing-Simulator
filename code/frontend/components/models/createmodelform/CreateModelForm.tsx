@@ -78,6 +78,8 @@ const CreateModelForm = (props: { factoryId: string }) => {
         nextPage();
     };
 
+    console.log(`properties length from CreateModelForm is ${properties.length}`)
+
     return (
         <Context.Provider value={contextValue}>
             <div className="items-center justify-center ml-32">
@@ -95,10 +97,10 @@ const CreateModelForm = (props: { factoryId: string }) => {
                     {currentPage === 2 && <PropertiesForm />}
                     {currentPage > 2 && (
                         <GeneratorFunctionForm
+                            property={properties[currentPage - 3]}
                             propertyIndex={currentPage - 3}
                         />
                     )}
-
                     {currentPage > 1 && (
                         <button
                             type="button"
