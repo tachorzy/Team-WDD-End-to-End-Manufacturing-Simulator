@@ -21,7 +21,7 @@ describe("FactoryPageNavBar", () => {
         expect(getByText("Home")).toBeInTheDocument();
         expect(getByText("Factory Floor")).toBeInTheDocument();
         expect(getByText("Dashboard")).toBeInTheDocument();
-        expect(getByText("Assets")).toBeInTheDocument();
+        expect(getByText("Asset Models")).toBeInTheDocument();
         expect(getByText("Anomaly Detection")).toBeInTheDocument();
         expect(getByAltText("brand")).toBeInTheDocument();
         expect(getByTestId("sign-up")).toBeInTheDocument();
