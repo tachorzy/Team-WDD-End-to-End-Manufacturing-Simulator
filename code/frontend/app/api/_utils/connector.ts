@@ -18,6 +18,11 @@ export interface PutConfig<T> {
     payload: T;
 }
 
+export interface DeleteConfig<T>{
+    resource: string;
+   params?: Record<string, string>;
+}
+
 class Connector {
     private readonly baseURL: string;
 
@@ -80,6 +85,28 @@ class Connector {
             throw new Error(
                 `Fetch error: ${response.statusText} (${response.status})`,
             );
+        }
+
+        return (await response.json()) as Promise<T>;
+    }
+    async delete<T>({ resource, params }: DeleteConfig<T>): Promise<T> {
+        const url = new URL(`${this.baseURL}/${resource}`);
+
+        if (params) {
+            Object.keys(params).forEach((key) =>
+                url.searchParams.append(key, params[key]),
+            );
+        }
+
+        const response = await fetch(url.toString(), {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Fetch error: ${response.statusText}`);
         }
 
         return (await response.json()) as Promise<T>;

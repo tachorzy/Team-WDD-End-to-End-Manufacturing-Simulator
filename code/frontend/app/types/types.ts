@@ -29,3 +29,11 @@ export interface Asset {
     image?: string;
     factoryId: string;
 }
+
+export interface Property{
+    propertyId?:string,
+    measurementId:string,
+    name:string,
+    value:number,
+    unit:string,
+}
