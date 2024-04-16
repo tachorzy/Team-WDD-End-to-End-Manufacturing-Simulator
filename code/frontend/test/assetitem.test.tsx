@@ -5,26 +5,14 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
-import AssetItem from "../components/factorydashboard/floormanager/AssetItem";
-
-global.URL.createObjectURL = jest
-    .fn()
-    .mockReturnValue("http://test.com/test.png");
-
-jest.mock("next/image", () => ({
-    __esModule: true,
-    default: (props: any) => <img alt="" {...props} />,
-}));
-
-global.fetch = jest.fn(() =>
-    Promise.resolve({
-        blob: () => Promise.resolve("mocked blob"),
-    }),
-) as jest.Mock;
+import AssetItem from "../components/factorydashboard/floormanager/inventory/AssetItem";
 
 describe("AssetItem", () => {
-    afterEach(() => {
-        jest.clearAllMocks();
+    beforeEach(() => {
+        global.URL.createObjectURL = jest.fn();
+        // const mockImageData = new Blob([""], { type: "image/jpeg" });
+        const mockBase64Data = "data:image/jpeg;base64,";
+        fetchMock.mockResponseOnce(() => Promise.resolve(mockBase64Data));
     });
 
     const mockAsset: Asset = {
