@@ -5,10 +5,10 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
+import { BackendConnector } from "@/app/api/_utils/connector";
 import FloorManager, {
     FloorManagerProps,
 } from "../components/factorydashboard/floormanager/FloorManager";
-import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 
 const mockAsset: Asset = {
     assetId: "1",
@@ -22,7 +22,7 @@ jest.mock("@/app/api/_utils/connector", () => ({
     BackendConnector: {
         get: jest.fn(),
     },
-}));  
+}));
 
 const mockInventoryNavBar = jest.fn();
 jest.mock("../components/factorydashboard/floormanager/InventoryNavBar", () => {
@@ -181,14 +181,21 @@ describe("FloorManager", () => {
     });
 
     test("should log error on fetch failure", async () => {
-        const conolseErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+        const conolseErrorSpy = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => {});
 
-        (BackendConnector.get as jest.Mock).mockRejectedValueOnce(new Error("404"));
+        (BackendConnector.get as jest.Mock).mockRejectedValueOnce(
+            new Error("404"),
+        );
 
         render(<FloorManager {...props} />);
 
         await waitFor(() => {
-            expect(conolseErrorSpy).toHaveBeenCalledWith("Failed to fetch assets:", new Error("404"));
+            expect(conolseErrorSpy).toHaveBeenCalledWith(
+                "Failed to fetch assets:",
+                new Error("404"),
+            );
         });
 
         conolseErrorSpy.mockRestore();
