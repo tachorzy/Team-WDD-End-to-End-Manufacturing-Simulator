@@ -14,7 +14,7 @@ interface AssetItemProps {
     asset: Asset;
 }
 const mockAssetItem = jest.fn();
-jest.mock("../components/factorydashboard/floormanager/AssetItem", () => {
+jest.mock("../components/factorydashboard/floormanager/inventory/AssetItem", () => {
     const MockAssetItem = (props: AssetItemProps) => {
         mockAssetItem(props);
 
