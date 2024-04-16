@@ -1,7 +1,8 @@
 import React from "react";
 import Image from "next/image";
+import { Property } from "@/app/api/_utils/types";
 
-const SawtoothGeneratorForm = (props: { propertyIndex: number}) => {
+const SawtoothGeneratorForm = (props: { propertyIndex: number, property: Property}) => {
     const { propertyIndex } = props;
 
     return (

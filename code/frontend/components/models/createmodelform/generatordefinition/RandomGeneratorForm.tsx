@@ -1,8 +1,9 @@
 import React from "react";
 import Image from "next/image";
+import { Property } from "@/app/api/_utils/types";
 
-const RandomGeneratorForm = (props: { propertyIndex: number}) => { 
-    const { propertyIndex } = props;
+const RandomGeneratorForm = (props: { propertyIndex: number, property: Property}) => { 
+    const { propertyIndex, property } = props;
     
     return (
         <div className="flex flex-col gap-y-3 max-h-72">
