@@ -1,36 +1,24 @@
 import React from "react";
 import L from "leaflet";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { Factory } from "@/app/api/_utils/types";
-import MapPin, { PinProps } from "../components/home/map/MapPin";
-import { groupFactoriesByLocation } from "../components/home/map/Map.client";
-
+import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import MapPin, { PinProps } from "../components/home/map/MapPin";
+import { Factory } from "@/app/api/_utils/types";
 
-const fakeFactories = [
+const fakeFactories: Factory[] = [
     {
         factoryId: "1",
         name: "Factory 1",
-        lat: 123.456,
-        lon: 456.789,
         description: "This is the first factory",
-        location: {
-            latitude: 123.456,
-            longitude: 456.789,
-        },
+        location: { latitude: 1, longitude: 1 },
     },
     {
         factoryId: "2",
         name: "Factory 2",
-        lat: 234.567,
-        lon: 567.89,
         description: "This is the second factory",
-        location: {
-            latitude: 234.567,
-            longitude: 567.89,
-        },
+        location: { latitude: 1, longitude: 1 },
     },
-];
+]
 
 const icon = L.icon({
     iconUrl: "icons/map/factory-map-marker.svg",
@@ -62,141 +50,64 @@ describe("MapPin component", () => {
         render(<MapPin {...props} />);
     });
 
-    test("groupFactoriesByLocation groups factories correctly", () => {
-        const fakeFactoryArray: Factory[] = [
-            {
-                factoryId: "1",
-                name: "Factory 1",
-                location: { latitude: 1, longitude: 1 },
-                description: "This is the first factory",
-            },
-            {
-                factoryId: "2",
-                name: "Factory 2",
-                location: { latitude: 1, longitude: 1 },
-                description: "This is the second factory",
-            },
-            {
-                factoryId: "3",
-                name: "Factory 3",
-                location: { latitude: 2, longitude: 2 },
-                description: "This is the third factory",
-            },
-        ];
-        const groupedFactories = groupFactoriesByLocation(fakeFactoryArray);
-        expect(Object.keys(groupedFactories)).toHaveLength(2);
-    });
-
     test("Displays the details of a single factory at a location in a popup", () => {
-        const factoriesAtLocation = [
-            {
-                factoryId: "1",
-                name: "Factory 1",
-                description: "This is the first factory",
-                location: { latitude: 1, longitude: 1 },
-            },
-        ];
         const newProps: PinProps = {
-            _key: 1234,
-            position: { lat: 1, lng: 1 },
-            factoriesAtLocation,
-            icon,
+           ...props,
+            factoriesAtLocation: [fakeFactories[0]],
         };
-        render(<MapPin {...newProps} />);
-        const firstFactory = factoriesAtLocation[0];
-        expect(screen.getByTestId("popup")).toHaveTextContent(
+
+        const { getByTestId } = render(<MapPin {...newProps} />);
+
+        const firstFactory = newProps.factoriesAtLocation[0];
+        expect(getByTestId("popup")).toHaveTextContent(
             `${firstFactory.name}${firstFactory.location.latitude.toFixed(2)}°, ${firstFactory.location.longitude.toFixed(2)}°${firstFactory.description}View Factory›`,
         );
     });
 
     test("Next button correctly renders the next page of a location", () => {
-        const factoriesAtLocation = [
-            {
-                factoryId: "1",
-                name: "Factory 1",
-                description: "This is the first factory",
-                location: { latitude: 1, longitude: 1 },
-            },
-            {
-                factoryId: "2",
-                name: "Factory 2",
-                description: "This is the second factory",
-                location: { latitude: 1, longitude: 1 },
-            },
-        ];
+        const { getByTestId, getByText} = render(<MapPin {...props} />);
 
-        const newProps: PinProps = {
-            _key: 1234,
-            position: { lat: 1, lng: 1 },
-            factoriesAtLocation,
-            icon,
-        };
-
-        render(<MapPin {...newProps} />);
-
-        expect(screen.getByTestId("popup")).toHaveTextContent(
-            factoriesAtLocation[0].name,
+        expect(getByTestId("popup")).toHaveTextContent(
+            fakeFactories[0].name,
         );
 
-        const nextButton = screen.getByText("Next");
+        const nextButton = getByText("Next");
         fireEvent.click(nextButton);
 
-        expect(screen.getByTestId("popup")).toHaveTextContent(
-            factoriesAtLocation[1].name,
+        expect(getByTestId("popup")).toHaveTextContent(
+            fakeFactories[1].name,
         );
     });
 
     test("Previous button correctly renders the next page of a location", () => {
-        const factoriesAtLocation = [
-            {
-                factoryId: "1",
-                name: "Factory 1",
-                description: "This is the first factory",
-                location: { latitude: 1, longitude: 1 },
-            },
-            {
-                factoryId: "2",
-                name: "Factory 2",
-                description: "This is the second factory",
-                location: { latitude: 1, longitude: 1 },
-            },
-        ];
+        const { getByTestId, getByText} = render(<MapPin {...props} />);
 
-        const newProps: PinProps = {
-            _key: 1234,
-            position: { lat: 1, lng: 1 },
-            factoriesAtLocation,
-            icon,
-        };
-
-        render(<MapPin {...newProps} />);
-
-        expect(screen.getByTestId("popup")).toHaveTextContent(
-            factoriesAtLocation[0].name,
+        expect(getByTestId("popup")).toHaveTextContent(
+            fakeFactories[0].name,
         );
 
-        const nextButton = screen.getByText("Next");
+        const nextButton = getByText("Next");
         fireEvent.click(nextButton);
 
-        expect(screen.getByTestId("popup")).toHaveTextContent(
-            factoriesAtLocation[1].name,
+        expect(getByTestId("popup")).toHaveTextContent(
+            fakeFactories[1].name,
         );
 
-        const prevButton = screen.getByText("Previous");
+        const prevButton = getByText("Previous");
         fireEvent.click(prevButton);
 
-        expect(screen.getByTestId("popup")).toHaveTextContent(
-            factoriesAtLocation[0].name,
+        expect(getByTestId("popup")).toHaveTextContent(
+            fakeFactories[0].name,
         );
     });
 
     test("Next and Previous buttons are disabled appropriately", () => {
-        render(<MapPin {...props} />);
+        const { getByTestId, getByText} = render(<MapPin {...props} />);
 
-        const previousButton = screen.getByText("Previous");
+        const previousButton = getByText("Previous");
         expect(previousButton).toBeDisabled();
 
-        const nextButton = screen.getByText("Next");
+        const nextButton = getByText("Next");
         fakeFactories.forEach(() => {
             fireEvent.click(nextButton);
         });
@@ -205,40 +116,36 @@ describe("MapPin component", () => {
     });
 
     test("Displays the details of a all factories at a marker's location", () => {
-        const factoriesAtLocation = [
-            {
-                factoryId: "1",
-                name: "Factory 1",
-                description: "This is the first factory",
-                location: { latitude: 1, longitude: 1 },
-            },
-            {
-                factoryId: "2",
-                name: "Factory 2",
-                description: "This is the second factory",
-                location: { latitude: 1, longitude: 1 },
-            },
-        ];
-
         const newProps: PinProps = {
-            _key: 1234,
-            position: { lat: 1, lng: 1 },
-            factoriesAtLocation,
-            icon,
+            ...props,
+            factoriesAtLocation: fakeFactories,
         };
 
-        render(<MapPin {...newProps} />);
+        const { getByTestId, getByText} = render(<MapPin {...newProps} />);
 
-        const firstFactory = factoriesAtLocation[0];
-        expect(screen.getByTestId("popup")).toHaveTextContent(
+        const firstFactory = newProps.factoriesAtLocation[0];
+        expect(getByTestId("popup")).toHaveTextContent(
             `${firstFactory.name}${firstFactory.location.latitude.toFixed(2)}°, ${firstFactory.location.longitude.toFixed(2)}°${firstFactory.description}View Factory›‹Previous1Next›`,
         );
-        const nextButton = screen.getByText("Next");
+        const nextButton = getByText("Next");
         fireEvent.click(nextButton);
 
-        const secondFactory = factoriesAtLocation[1];
-        expect(screen.getByTestId("popup")).toHaveTextContent(
+        const secondFactory = newProps.factoriesAtLocation[1];
+        expect(getByTestId("popup")).toHaveTextContent(
             `${secondFactory.name}${secondFactory.location.latitude.toFixed(2)}°, ${secondFactory.location.longitude.toFixed(2)}°${secondFactory.description}View Factory›‹Previous2Next›`,
+        );
+    });
+
+    test("should display 'No description' when a factory has no description", () => {
+        const newProps: PinProps = {
+            ...props,
+            factoriesAtLocation: [{ ...fakeFactories[0], description: "" }],
+        };
+
+        const { getByTestId } = render(<MapPin {...newProps} />);
+
+        expect(getByTestId("popup")).toHaveTextContent(
+            "No description.",
         );
     });
 });
