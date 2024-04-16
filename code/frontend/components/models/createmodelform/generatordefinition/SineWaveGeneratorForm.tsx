@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Property } from "@/app/api/_utils/types";
 
@@ -7,6 +7,12 @@ const SineWaveGeneratorForm = (props: {
     property: Property;
 }) => {
     const { propertyIndex, property } = props;
+    const [frequency, setFrequency] = useState<number>(0.0);
+    const [angularFrequency, setAngularFrequency] = useState<number>(0.0);
+    const [amplitude, setAmplitude] = useState<number>(0.0);
+    const [phase, setPhase] = useState<number>(0.0);
+    const [maxValue, setMaxValue] = useState<number>(0.0);
+
 
     return (
         <div className="flex flex-col gap-y-3 max-h-72">
