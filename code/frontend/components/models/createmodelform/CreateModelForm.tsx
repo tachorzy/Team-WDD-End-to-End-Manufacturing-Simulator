@@ -32,6 +32,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
         measurementId: "",
         name: "",
         unit: "",
+        generatorType: "",
     };
 
     const [attributes, setAttributes] = useState<Attribute[]>([

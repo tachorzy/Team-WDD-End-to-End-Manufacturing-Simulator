@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 // import Image from "next/image";
 import { Attribute, Property } from "@/app/api/_utils/types";
 import PropertyInputColumn from "./PropertyInputColumn";
@@ -19,14 +19,18 @@ interface PropertiesFormContext {
     nextPage: () => void;
 }
 
-const AddPropertyForm = () => {
+const PropertiesForm = () => {
     const contextValue = useContext(Context) as PropertiesFormContext;
-
+    const [inputFields, setInputFields] = useState<Property[]>([
+        { factoryId: "", modelId: "", measurementId: "", name: "", unit: "", generatorType: "" },
+    ]);
+    
     return (
         <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
             <form>
                 <div className="flex flex-col w-full gap-y-3">
                     <PropertyInputColumn
+                        inputFields={inputFields}
                         properties={contextValue?.properties}
                         setProperties={contextValue?.setProperties}
                     />
@@ -76,4 +80,4 @@ const AddPropertyForm = () => {
         </div>
     );
 };
-export default AddPropertyForm;
+export default PropertiesForm;

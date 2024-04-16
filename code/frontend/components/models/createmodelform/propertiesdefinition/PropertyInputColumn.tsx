@@ -1,14 +1,35 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Property } from "@/app/api/_utils/types";
 import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";
 
 const PropertyInputColumn = (props: {
+    inputFields: Property[];
     properties: Property[];
     setProperties: React.Dispatch<
-        React.SetStateAction<{ property: string; unit: string }[]>
+        React.SetStateAction<Property[]>
     >;
 }) => {
-    const { properties, setProperties } = props;
+    const { inputFields, properties, setProperties } = props;
+    const [property, setProperty] = React.useState("")
+    const [unit, setUnit] = React.useState("")
+    const [generatorFunction, setGeneratorFunction] = React.useState("")
+
+    useEffect(() => {  
+        if (property === "" && unit === "" && generatorFunction === "") return
+
+        const data: Property = {
+            factoryId: "",
+            modelId: "",
+            measurementId: "",
+            name: property,
+            unit: unit,
+            generatorType: generatorFunction,   
+        }
+
+        setProperties([...properties, data])
+
+    }, [property, unit, generatorFunction])
+
 
     return (
         <div className="flex flex-col gap-y-3 max-h-[19rem] overflow-y-scroll">

@@ -45,4 +45,5 @@ export interface Property {
     measurementId: string;
     name: string;
     unit: string;
+    generatorType: string;
 }
