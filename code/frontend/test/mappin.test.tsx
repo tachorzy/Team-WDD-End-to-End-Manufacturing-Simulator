@@ -2,8 +2,8 @@ import React from "react";
 import L from "leaflet";
 import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import MapPin, { PinProps } from "../components/home/map/MapPin";
 import { Factory } from "@/app/api/_utils/types";
+import MapPin, { PinProps } from "../components/home/map/MapPin";
 
 const fakeFactories: Factory[] = [
     {
@@ -18,7 +18,7 @@ const fakeFactories: Factory[] = [
         description: "This is the second factory",
         location: { latitude: 1, longitude: 1 },
     },
-]
+];
 
 const icon = L.icon({
     iconUrl: "icons/map/factory-map-marker.svg",
@@ -52,7 +52,7 @@ describe("MapPin component", () => {
 
     test("Displays the details of a single factory at a location in a popup", () => {
         const newProps: PinProps = {
-           ...props,
+            ...props,
             factoriesAtLocation: [fakeFactories[0]],
         };
 
@@ -65,44 +65,34 @@ describe("MapPin component", () => {
     });
 
     test("Next button correctly renders the next page of a location", () => {
-        const { getByTestId, getByText} = render(<MapPin {...props} />);
+        const { getByTestId, getByText } = render(<MapPin {...props} />);
 
-        expect(getByTestId("popup")).toHaveTextContent(
-            fakeFactories[0].name,
-        );
+        expect(getByTestId("popup")).toHaveTextContent(fakeFactories[0].name);
 
         const nextButton = getByText("Next");
         fireEvent.click(nextButton);
 
-        expect(getByTestId("popup")).toHaveTextContent(
-            fakeFactories[1].name,
-        );
+        expect(getByTestId("popup")).toHaveTextContent(fakeFactories[1].name);
     });
 
     test("Previous button correctly renders the next page of a location", () => {
-        const { getByTestId, getByText} = render(<MapPin {...props} />);
+        const { getByTestId, getByText } = render(<MapPin {...props} />);
 
-        expect(getByTestId("popup")).toHaveTextContent(
-            fakeFactories[0].name,
-        );
+        expect(getByTestId("popup")).toHaveTextContent(fakeFactories[0].name);
 
         const nextButton = getByText("Next");
         fireEvent.click(nextButton);
 
-        expect(getByTestId("popup")).toHaveTextContent(
-            fakeFactories[1].name,
-        );
+        expect(getByTestId("popup")).toHaveTextContent(fakeFactories[1].name);
 
         const prevButton = getByText("Previous");
         fireEvent.click(prevButton);
 
-        expect(getByTestId("popup")).toHaveTextContent(
-            fakeFactories[0].name,
-        );
+        expect(getByTestId("popup")).toHaveTextContent(fakeFactories[0].name);
     });
 
     test("Next and Previous buttons are disabled appropriately", () => {
-        const { getByTestId, getByText} = render(<MapPin {...props} />);
+        const { getByText } = render(<MapPin {...props} />);
 
         const previousButton = getByText("Previous");
         expect(previousButton).toBeDisabled();
@@ -121,7 +111,7 @@ describe("MapPin component", () => {
             factoriesAtLocation: fakeFactories,
         };
 
-        const { getByTestId, getByText} = render(<MapPin {...newProps} />);
+        const { getByTestId, getByText } = render(<MapPin {...newProps} />);
 
         const firstFactory = newProps.factoriesAtLocation[0];
         expect(getByTestId("popup")).toHaveTextContent(
@@ -144,8 +134,6 @@ describe("MapPin component", () => {
 
         const { getByTestId } = render(<MapPin {...newProps} />);
 
-        expect(getByTestId("popup")).toHaveTextContent(
-            "No description.",
-        );
+        expect(getByTestId("popup")).toHaveTextContent("No description.");
     });
 });
