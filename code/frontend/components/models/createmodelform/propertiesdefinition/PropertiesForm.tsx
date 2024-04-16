@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 // import Image from "next/image";
 import { Attribute, Property } from "@/app/api/_utils/types";
 import PropertyInputColumn from "./PropertyInputColumn";
@@ -9,30 +9,35 @@ interface PropertiesFormContext {
     factoryId: string;
     modelId: string;
     attributes: Attribute[];
-    setAttributes: React.Dispatch<
-        React.SetStateAction<{ attribute: string; value: string }[]>
-    >;
+    setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
     properties: Property[];
-    setProperties: React.Dispatch<
-        React.SetStateAction<{ property: string; unit: string }[]>
-    >;
+    setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
     nextPage: () => void;
 }
 
-const AddPropertyForm = () => {
+const PropertiesForm = () => {
     const contextValue = useContext(Context) as PropertiesFormContext;
+    const [inputFields, setInputFields] = useState<Property[]>([
+        {
+            factoryId: "",
+            modelId: "",
+            measurementId: "",
+            name: "",
+            unit: "",
+            generatorType: "",
+        },
+    ]);
 
     return (
         <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
             <form>
                 <div className="flex flex-col w-full gap-y-3">
                     <PropertyInputColumn
+                        inputFields={inputFields}
                         properties={contextValue?.properties}
                         setProperties={contextValue?.setProperties}
                     />
-                    <AddPropertyButton
-                        setProperties={contextValue?.setProperties}
-                    />
+                    <AddPropertyButton setInputFields={setInputFields} />
                 </div>
             </form>
             <section className="flex flex-row w-[30%] gap-y-3 gap-x-4">
@@ -76,4 +81,4 @@ const AddPropertyForm = () => {
         </div>
     );
 };
-export default AddPropertyForm;
+export default PropertiesForm;

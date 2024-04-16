@@ -4,7 +4,7 @@
 import React from "react";
 import { fireEvent, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import InventoryNavBar from "../components/factorydashboard/floormanager/InventoryNavBar";
+import InventoryNavBar from "../components/factorydashboard/floormanager/inventory/InventoryNavBar";
 
 describe("InventoryNavBar", () => {
     test("should render without error", () => {

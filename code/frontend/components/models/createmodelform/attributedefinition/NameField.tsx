@@ -1,7 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Attribute } from "@/app/api/_utils/types";
 
-const NameField = (props: { modelId: string }) => {
-    const { modelId } = props;
+const NameField = (props: {
+    modelId: string;
+    factoryId: string;
+    attributes: Attribute[];
+    setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
+}) => {
+    const { modelId, factoryId, attributes, setAttributes } = props;
+    const [name, setName] = useState("");
+
+    useEffect(() => {
+        if (name === "") return;
+
+        const data: Attribute = {
+            factoryId,
+            modelId, // later we will create the id from the backend
+            name: "name",
+            value: name,
+        };
+        setAttributes([...attributes, data]);
+    }, [name, modelId, factoryId, attributes, setAttributes]);
 
     return (
         <div className="">
@@ -10,6 +29,7 @@ const NameField = (props: { modelId: string }) => {
                 <div className="flex flex-row gap-x-1">
                     <input
                         id="nameInput"
+                        onChange={(e) => setName(e.target.value)}
                         className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-full"
                         placeholder="Enter a model name"
                     />

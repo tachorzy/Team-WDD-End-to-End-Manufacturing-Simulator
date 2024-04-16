@@ -8,11 +8,8 @@ import { Asset } from "@/app/api/_utils/types";
 import AssetItem from "../components/factorydashboard/floormanager/inventory/AssetItem";
 
 describe("AssetItem", () => {
-    beforeEach(() => {
-        global.URL.createObjectURL = jest.fn();
-        // const mockImageData = new Blob([""], { type: "image/jpeg" });
-        const mockBase64Data = "data:image/jpeg;base64,";
-        fetchMock.mockResponseOnce(() => Promise.resolve(mockBase64Data));
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     const mockAsset: Asset = {

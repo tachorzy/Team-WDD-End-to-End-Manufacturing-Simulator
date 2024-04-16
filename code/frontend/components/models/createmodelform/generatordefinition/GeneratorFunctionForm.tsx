@@ -8,23 +8,49 @@ import { Context } from "../CreateModelForm";
 interface GeneratorFunctionFormContext {
     factoryId: string;
     modelId: string;
-    attributes: { attribute: string; value: string }[];
+    attributes: Attribute[];
     setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
-    properties: { property: string; unit: string }[];
+    properties: Property[];
     setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
+    nextPage: () => void;
 }
 
-const GeneratorFunctionForm = (props: { propertyIndex: number }) => {
-    const { propertyIndex } = props;
+const GeneratorFunctionForm = () => {
     const contextValue = useContext(Context) as GeneratorFunctionFormContext;
 
     return (
         <div className="flex flex-col gap-y-3 max-h-72">
-            <div className="flex flex-row gap-x-16">
-                <RandomGeneratorForm />
-                <SineWaveGeneratorForm />
-                <SawtoothGeneratorForm />
+            <div className="flex flex-col max-h-[28rem] overflow-y-scroll gap-y-1 gap-x-16">
+                {contextValue?.properties.map((property, index) => (
+                    <div key={index}>
+                        {property.generatorType === "Random" && (
+                            <RandomGeneratorForm
+                                propertyIndex={index}
+                                property={property}
+                            />
+                        )}
+                        {property.generatorType === "Sine wave" && (
+                            <SineWaveGeneratorForm
+                                propertyIndex={index}
+                                property={property}
+                            />
+                        )}
+                        {property.generatorType === "Sawtooth" && (
+                            <SawtoothGeneratorForm
+                                propertyIndex={index}
+                                property={property}
+                            />
+                        )}
+                    </div>
+                ))}
             </div>
+
+            <button
+                type="submit"
+                className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
+            >
+                Submit ›
+            </button>
         </div>
     );
 };

@@ -23,6 +23,7 @@ const initialProperty: Property = {
     measurementId: "",
     name: "",
     unit: "",
+    generatorType: "",
 };
 
 describe("CreateModelForm", () => {
@@ -56,6 +57,7 @@ describe("CreateModelForm", () => {
     test("should render PropertyInputColumn input fields", () => {
         const { getByText, getByPlaceholderText } = render(
             <PropertyInputColumn
+                inputFields={[initialProperty]}
                 properties={[initialProperty]}
                 setProperties={jest.fn()}
             />,
@@ -112,7 +114,7 @@ describe("CreateModelForm", () => {
         addPropertyButton.click();
 
         await waitFor(() => {
-            expect(mockContextValue.setProperties).toHaveBeenCalled();
+            expect(getByText("Property 2")).toBeInTheDocument();
         });
     });
 });

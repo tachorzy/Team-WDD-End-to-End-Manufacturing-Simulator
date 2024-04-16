@@ -5,11 +5,6 @@ import PropertiesForm from "./propertiesdefinition/PropertiesForm";
 import ProgressTracker from "./ProgressTracker";
 import GeneratorFunctionForm from "./generatordefinition/GeneratorFunctionForm";
 
-// interface CreateModelFormProps {
-//     onClose: () => void;
-//     onSave: (formData: Partial<Factory>) => void;
-// }
-
 export const Context = React.createContext({});
 
 const CreateModelForm = (props: { factoryId: string }) => {
@@ -32,6 +27,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
         measurementId: "",
         name: "",
         unit: "",
+        generatorType: "",
     };
 
     const [attributes, setAttributes] = useState<Attribute[]>([
@@ -67,15 +63,9 @@ const CreateModelForm = (props: { factoryId: string }) => {
         ],
     );
 
-    const handleAttributesSubmit = (values: Attribute[]) => {
-        setAttributes(values);
-        nextPage();
-    };
-
-    const handlePropertiesSubmit = (values: Property[]) => {
-        setProperties(values);
-        nextPage();
-    };
+    console.log(
+        `properties length from CreateModelForm is ${properties.length}`,
+    );
 
     return (
         <Context.Provider value={contextValue}>
@@ -92,12 +82,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
 
                     {currentPage === 1 && <AttributesForm />}
                     {currentPage === 2 && <PropertiesForm />}
-                    {currentPage > 2 && (
-                        <GeneratorFunctionForm
-                            propertyIndex={currentPage - 3}
-                        />
-                    )}
-
+                    {currentPage > 2 && <GeneratorFunctionForm />}
                     {currentPage > 1 && (
                         <button
                             type="button"
@@ -107,13 +92,6 @@ const CreateModelForm = (props: { factoryId: string }) => {
                             ‹ Back
                         </button>
                     )}
-                    {/* <button
-                        type="submit"
-                        onClick={nextPage}
-                        className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
-                    >
-                        Next ›
-                    </button> */}
                 </div>
             </div>
         </Context.Provider>
