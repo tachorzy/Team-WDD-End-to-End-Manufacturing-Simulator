@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Attribute } from "@/app/api/_utils/types";
 import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
 
@@ -20,16 +20,24 @@ const NameField = (props: {
     } = props;
     const [name, setName] = useState("");
 
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
     useEffect(() => {
         if (name === "") return;
 
-        const data: Attribute = {
-            factoryId,
-            modelId, // later we will create the id from the backend
-            name: "name",
-            value: name,
-        };
-        setAttributes([...attributes, data]);
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
+        
+        debounceTimeout.current = setTimeout(() => {
+            const data: Attribute = {
+                factoryId,
+                modelId, // later we will create the id from the backend
+                name: "name",
+                value: name,
+            };
+            setAttributes([...attributes, data]);
+        }, 500);
     }, [name, modelId, factoryId, attributes, setAttributes]);
 
     return (

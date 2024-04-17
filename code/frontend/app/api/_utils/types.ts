@@ -61,3 +61,10 @@ export interface Measurement {
     amplitude?: number;
     phase?: number;
 }
+
+export interface Model { 
+    modelId: string;
+    factoryId: string;
+    attributes: Attribute[];
+    properties: Property[];
+}

@@ -34,7 +34,7 @@ const PropertiesForm = () => {
     ) => {
         event.preventDefault();
         if (
-            contextValue?.properties.length <= 1 ||
+            contextValue?.properties.length <= 1 &&
             contextValue?.properties.some(
                 (property) => property.generatorType === "",
             )

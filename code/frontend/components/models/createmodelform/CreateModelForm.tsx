@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Attribute, Property, Measurement } from "@/app/api/_utils/types";
+import { Attribute, Property, Measurement, Model } from "@/app/api/_utils/types";
 import AttributesForm from "./attributedefinition/AttributesForm";
 import PropertiesForm from "./propertiesdefinition/PropertiesForm";
 import ProgressTracker from "./ProgressTracker";
@@ -16,40 +16,11 @@ const CreateModelForm = (props: { factoryId: string }) => {
 
     const modelId = "2024-04-08-9780"; // REPLACE WITH ACTUAL MODEL ID
 
-    const initialAttribute = {
-        factoryId: "",
-        modelId: "",
-        name: "",
-        value: "",
-    };
+    const [models, setModels] = useState<Model[]>([]);
 
-    const initialProperty = {
-        factoryId: "",
-        modelId: "",
-        measurementId: "",
-        name: "",
-        unit: "",
-        generatorType: "",
-    };
-
-    const initialMeasurement = {
-        measurementId: "",
-        modelId: "",
-        factoryId: "",
-        lowerBound: 0.0,
-        upperBound: 0.0,
-        generatorFunction: "",
-        frequency: 0,
-        precision: 0,
-    };
-
-    const [attributes, setAttributes] = useState<Attribute[]>([
-        initialAttribute,
-    ]);
-    const [properties, setProperties] = useState<Property[]>([initialProperty]);
-    const [measurements, setMeasurements] = useState<Measurement[]>([
-        initialMeasurement,
-    ]);
+    const [attributes, setAttributes] = useState<Attribute[]>([]);
+    const [properties, setProperties] = useState<Property[]>([]);
+    const [measurements, setMeasurements] = useState<Measurement[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     const nextPage = () => setCurrentPage(currentPage + 1);
@@ -59,6 +30,8 @@ const CreateModelForm = (props: { factoryId: string }) => {
         () => ({
             factoryId,
             modelId,
+            models,
+            setModels,
             attributes,
             setAttributes,
             properties,
@@ -71,6 +44,8 @@ const CreateModelForm = (props: { factoryId: string }) => {
         [
             factoryId,
             modelId,
+            models,
+            setModels,
             attributes,
             setAttributes,
             properties,
