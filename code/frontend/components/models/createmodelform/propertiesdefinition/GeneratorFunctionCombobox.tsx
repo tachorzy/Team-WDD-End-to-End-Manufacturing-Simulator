@@ -19,7 +19,6 @@ const GeneratorFunctionCombobox = (props: {
               );
 
     useEffect(() => {
-        console.log(`Selected generator function: ${selectedFunction}`);
         setGeneratorFunction(selectedFunction);
     }, [selectedFunction]);
 

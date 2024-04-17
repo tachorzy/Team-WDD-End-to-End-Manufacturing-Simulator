@@ -1,5 +1,10 @@
 import React, { useState, useMemo } from "react";
-import { Attribute, Property } from "@/app/api/_utils/types";
+import {
+    Attribute,
+    Property,
+    Measurement,
+    Model,
+} from "@/app/api/_utils/types";
 import AttributesForm from "./attributedefinition/AttributesForm";
 import PropertiesForm from "./propertiesdefinition/PropertiesForm";
 import ProgressTracker from "./ProgressTracker";
@@ -12,29 +17,15 @@ const CreateModelForm = (props: { factoryId: string }) => {
 
     console.log(factoryId);
 
-    const modelId = "2024-04-08-9780";
+    // GENERATE THE ID FROM THE BACKEND!
 
-    const initialAttribute = {
-        factoryId: "",
-        modelId: "",
-        name: "",
-        value: "",
-    };
+    const modelId = "2024-04-08-9780"; // REPLACE WITH ACTUAL MODEL ID
 
-    const initialProperty = {
-        factoryId: "",
-        modelId: "",
-        measurementId: "",
-        name: "",
-        unit: "",
-        generatorType: "",
-    };
+    const [models, setModels] = useState<Model[]>([]);
 
-    const [attributes, setAttributes] = useState<Attribute[]>([
-        initialAttribute,
-    ]);
-    const [properties, setProperties] = useState<Property[]>([initialProperty]);
-
+    const [attributes, setAttributes] = useState<Attribute[]>([]);
+    const [properties, setProperties] = useState<Property[]>([]);
+    const [measurements, setMeasurements] = useState<Measurement[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     const nextPage = () => setCurrentPage(currentPage + 1);
@@ -44,27 +35,31 @@ const CreateModelForm = (props: { factoryId: string }) => {
         () => ({
             factoryId,
             modelId,
+            models,
+            setModels,
             attributes,
             setAttributes,
             properties,
             setProperties,
+            measurements,
+            setMeasurements,
             currentPage,
             nextPage,
         }),
         [
             factoryId,
             modelId,
+            models,
+            setModels,
             attributes,
             setAttributes,
             properties,
             setProperties,
+            measurements,
+            setMeasurements,
             currentPage,
             nextPage,
         ],
-    );
-
-    console.log(
-        `properties length from CreateModelForm is ${properties.length}`,
     );
 
     return (

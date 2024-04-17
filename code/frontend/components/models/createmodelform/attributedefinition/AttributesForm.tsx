@@ -21,6 +21,18 @@ const AttributesForm = () => {
     const [inputFields, setInputFields] = useState<Attribute[]>([
         { factoryId: "", modelId: "", name: "", value: "" },
     ]);
+    const [invalidAttribute, setInvalidAttribute] = useState(false);
+
+    const handleNextPageButton = (
+        event: React.MouseEvent<HTMLButtonElement>,
+    ) => {
+        event.preventDefault();
+        if (contextValue?.attributes.length < 2) {
+            setInvalidAttribute(true);
+            return;
+        }
+        contextValue?.nextPage();
+    };
 
     return (
         <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
@@ -30,6 +42,8 @@ const AttributesForm = () => {
                     factoryId={contextValue?.factoryId}
                     attributes={contextValue?.attributes}
                     setAttributes={contextValue?.setAttributes}
+                    invalidAttribute={invalidAttribute}
+                    setInvalidAttribute={setInvalidAttribute}
                 />
             </section>
 
@@ -40,6 +54,9 @@ const AttributesForm = () => {
                         attributes={contextValue?.attributes}
                         setAttributes={contextValue?.setAttributes}
                         factoryId={contextValue?.factoryId}
+                        modelId={contextValue?.modelId}
+                        invalidAttribute={invalidAttribute}
+                        setInvalidAttribute={setInvalidAttribute}
                     />
                     <AddAttributeButton setInputFields={setInputFields} />
                 </div>
@@ -65,7 +82,7 @@ const AttributesForm = () => {
             </section>
             <button
                 type="submit"
-                onClick={contextValue?.nextPage}
+                onClick={handleNextPageButton}
                 className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
             >
                 Next ›

@@ -47,3 +47,24 @@ export interface Property {
     unit: string;
     generatorType: string;
 }
+
+export interface Measurement {
+    measurementId: string;
+    modelId: string;
+    factoryId: string;
+    lowerBound: number;
+    upperBound: number;
+    generatorFunction: string;
+    frequency: number;
+    precision: number;
+    angularFrequency?: number;
+    amplitude?: number;
+    phase?: number;
+}
+
+export interface Model {
+    modelId: string;
+    factoryId: string;
+    attributes: Attribute[];
+    properties: Property[];
+}
