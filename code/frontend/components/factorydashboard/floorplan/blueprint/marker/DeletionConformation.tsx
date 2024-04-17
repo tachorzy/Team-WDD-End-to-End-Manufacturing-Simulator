@@ -10,7 +10,7 @@ const DeletionConfirmation: React.FC<DeletionConfirmationProps> = ({
     cancelDelete,
 }) => (
     <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 no-drag"
         data-testid="confirm-dialog"
     >
         <div className="relative w-full max-w-md bg-white rounded-xl shadow-lg p-6">

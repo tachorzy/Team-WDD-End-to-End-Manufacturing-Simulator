@@ -6,7 +6,7 @@ import AddPropertyButton from "./AddPropertyButton";
 import { Context } from "../CreateModelForm";
 import { BackendConnector,PostConfig } from "@/app/api/_utils/connector";
 
-interface PropertiesFormContext {
+export interface PropertiesFormContext {
     factoryId: string;
     modelId: string;
     attributes: Attribute[];
@@ -98,7 +98,10 @@ const PropertiesForm = () => {
     };
 
     return (
-        <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
+        <div
+            className="flex flex-row gap-x-24 mt-4 gap-y-2"
+            data-tesid="properties-form"
+        >
             <form>
                 <div className="flex flex-col w-full gap-y-3">
                     <PropertyInputColumn
