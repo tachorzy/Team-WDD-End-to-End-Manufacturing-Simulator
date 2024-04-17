@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { Attribute, Property, Measurement } from "@/app/api/_utils/types";
+import Link from "next/link";
 import RandomGeneratorForm from "./RandomGeneratorForm";
 import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
 import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
 import { Context } from "../CreateModelForm";
-import Link from "next/link";
 
 interface GeneratorFunctionFormContext {
     factoryId: string;
@@ -21,8 +21,8 @@ interface GeneratorFunctionFormContext {
 const GeneratorFunctionForm = () => {
     const contextValue = useContext(Context) as GeneratorFunctionFormContext;
     const uniqueNames: Record<string, boolean> = {};
-    
-    const uniqueProperties = contextValue.properties.filter(property => {
+
+    const uniqueProperties = contextValue.properties.filter((property) => {
         if (!uniqueNames[property.name]) {
             uniqueNames[property.name] = true;
             return true;

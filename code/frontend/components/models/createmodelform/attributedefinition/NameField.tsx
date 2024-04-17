@@ -10,7 +10,14 @@ const NameField = (props: {
     invalidAttribute: boolean;
     setInvalidAttribute: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const { modelId, factoryId, attributes, setAttributes, invalidAttribute, setInvalidAttribute } = props;
+    const {
+        modelId,
+        factoryId,
+        attributes,
+        setAttributes,
+        invalidAttribute,
+        setInvalidAttribute,
+    } = props;
     const [name, setName] = useState("");
 
     useEffect(() => {
@@ -40,7 +47,10 @@ const NameField = (props: {
                 <div className="flex flex-row gap-x-1">
                     <input
                         id="nameInput"
-                        onChange={(e) => { setName(e.target.value); setInvalidAttribute(false)}}
+                        onChange={(e) => {
+                            setName(e.target.value);
+                            setInvalidAttribute(false);
+                        }}
                         className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-full"
                         placeholder="Enter a model name"
                     />

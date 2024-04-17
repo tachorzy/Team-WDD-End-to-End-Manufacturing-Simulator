@@ -23,14 +23,16 @@ const AttributesForm = () => {
     ]);
     const [invalidAttribute, setInvalidAttribute] = useState(false);
 
-    const handleNextPageButton = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleNextPageButton = (
+        event: React.MouseEvent<HTMLButtonElement>,
+    ) => {
         event.preventDefault();
         if (contextValue?.attributes.length < 2) {
-            setInvalidAttribute(true)
+            setInvalidAttribute(true);
             return;
         }
         contextValue?.nextPage();
-    }
+    };
 
     return (
         <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
@@ -42,7 +44,6 @@ const AttributesForm = () => {
                     setAttributes={contextValue?.setAttributes}
                     invalidAttribute={invalidAttribute}
                     setInvalidAttribute={setInvalidAttribute}
-
                 />
             </section>
 

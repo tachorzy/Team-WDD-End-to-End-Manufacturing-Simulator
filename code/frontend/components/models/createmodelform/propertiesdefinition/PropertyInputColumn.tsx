@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Property } from "@/app/api/_utils/types";
-import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";
 import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
+import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";
 
 const PropertyInputColumn = (props: {
     inputFields: Property[];
@@ -10,7 +10,13 @@ const PropertyInputColumn = (props: {
     invalidProperty: boolean;
     setInvalidProperty: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const { inputFields, properties, setProperties, invalidProperty, setInvalidProperty } = props;
+    const {
+        inputFields,
+        properties,
+        setProperties,
+        invalidProperty,
+        setInvalidProperty,
+    } = props;
     const [property, setProperty] = React.useState("");
     const [unit, setUnit] = React.useState("");
     const [generatorFunction, setGeneratorFunction] = React.useState("");
@@ -34,7 +40,12 @@ const PropertyInputColumn = (props: {
         <div className="flex flex-col gap-y-3 max-h-[19rem] overflow-y-scroll">
             <h1 className="text-2xl font-semibold text-gray-900">Properties</h1>
             <div className="-ml-3 -mt-2 -mb-2">
-                {invalidProperty && <ErrorMessage message="Please fill out all provided input fields." icon="factory-error.svg" />}
+                {invalidProperty && (
+                    <ErrorMessage
+                        message="Please fill out all provided input fields."
+                        icon="factory-error.svg"
+                    />
+                )}
             </div>
             {inputFields.map((__, index) => (
                 <div key={index} className="flex flex-col gap-y-3">
@@ -44,7 +55,10 @@ const PropertyInputColumn = (props: {
                                 {`Property ${index + 1}`}
                             </h2>
                             <input
-                                onChange={(e) => { setProperty(e.target.value); setInvalidProperty(false)} }
+                                onChange={(e) => {
+                                    setProperty(e.target.value);
+                                    setInvalidProperty(false);
+                                }}
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. Temperature"
                             />
@@ -54,7 +68,10 @@ const PropertyInputColumn = (props: {
                                 Units
                             </h2>
                             <input
-                                onChange={(e) => { setUnit(e.target.value); setInvalidProperty(false)}}
+                                onChange={(e) => {
+                                    setUnit(e.target.value);
+                                    setInvalidProperty(false);
+                                }}
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. °C"
                             />

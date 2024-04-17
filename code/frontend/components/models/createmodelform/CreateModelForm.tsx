@@ -14,7 +14,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
 
     // GENERATE THE ID FROM THE BACKEND!
 
-    const modelId = "2024-04-08-9780"; //REPLACE WITH ACTUAL MODEL ID
+    const modelId = "2024-04-08-9780"; // REPLACE WITH ACTUAL MODEL ID
 
     const initialAttribute = {
         factoryId: "",

@@ -10,7 +10,14 @@ const AttributeInputColumn = (props: {
     invalidAttribute: boolean;
     setInvalidAttribute: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const { inputFields, attributes, setAttributes, factoryId, invalidAttribute, setInvalidAttribute  } = props;
+    const {
+        inputFields,
+        attributes,
+        setAttributes,
+        factoryId,
+        invalidAttribute,
+        setInvalidAttribute,
+    } = props;
     const [attribute, setAttribute] = useState("");
     const [value, setValue] = useState("");
 
@@ -50,7 +57,10 @@ const AttributeInputColumn = (props: {
                             <input
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-full"
                                 placeholder="e.g. Serial number"
-                                onChange={(e) => { setAttribute(e.target.value); setInvalidAttribute(false) }}
+                                onChange={(e) => {
+                                    setAttribute(e.target.value);
+                                    setInvalidAttribute(false);
+                                }}
                             />
                         </div>
                         <div className="flex flex-col">

@@ -29,15 +29,21 @@ const PropertiesForm = () => {
     ]);
     const [invalidProperty, setInvalidProperty] = useState(false);
 
-    const handleNextPageButton = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleNextPageButton = (
+        event: React.MouseEvent<HTMLButtonElement>,
+    ) => {
         event.preventDefault();
-        if (contextValue?.properties.length <= 1 || contextValue?.properties.some(property => property.generatorType === "")) {
-            setInvalidProperty(true)
+        if (
+            contextValue?.properties.length <= 1 ||
+            contextValue?.properties.some(
+                (property) => property.generatorType === "",
+            )
+        ) {
+            setInvalidProperty(true);
             return;
         }
         contextValue?.nextPage();
-    }
-
+    };
 
     return (
         <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
