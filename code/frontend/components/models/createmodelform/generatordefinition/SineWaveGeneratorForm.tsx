@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,  useRef, useState } from "react";
 import Image from "next/image";
 import { Measurement, Property } from "@/app/api/_utils/types";
 
@@ -15,22 +15,31 @@ const SineWaveGeneratorForm = (props: {
     const [phase, setPhase] = useState<number>(0.0);
     const [maxValue, setMaxValue] = useState<number>(0.0);
 
-    useEffect(() => {
-        const data: Measurement = {
-            measurementId: "test test test test", // REPLACE
-            modelId: "test test test test", // REPLACE
-            factoryId: "test test test test", // REPLACE
-            lowerBound: 0.0,
-            upperBound: maxValue,
-            frequency,
-            angularFrequency,
-            amplitude,
-            phase,
-            precision: 0.0,
-            generatorFunction: "sinewave",
-        };
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
-        setMeasurements([...measurements, data]);
+    useEffect(() => {
+
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
+
+        debounceTimeout.current = setTimeout(() => {
+            const data: Measurement = {
+                measurementId: "test test test test", // REPLACE
+                modelId: "test test test test", // REPLACE
+                factoryId: "test test test test", // REPLACE
+                lowerBound: 0.0,
+                upperBound: maxValue,
+                frequency,
+                angularFrequency,
+                amplitude,
+                phase,
+                precision: 0.0,
+                generatorFunction: "sinewave",
+            };
+
+            setMeasurements([...measurements, data]);
+        }, 500);
     }, [frequency, angularFrequency, amplitude, phase, maxValue]);
 
     return (
