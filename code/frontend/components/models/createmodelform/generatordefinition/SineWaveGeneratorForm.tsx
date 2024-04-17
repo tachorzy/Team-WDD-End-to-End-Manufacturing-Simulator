@@ -58,6 +58,7 @@ const SineWaveGeneratorForm = (props: {
                             Frequency (ms)
                         </h2>
                         <input
+                            onChange={(e) => setFrequency(Number(e.target.value))}
                             className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                             placeholder="e.g. 60000"
                         />
@@ -65,6 +66,7 @@ const SineWaveGeneratorForm = (props: {
                             Angular frequency (ω)
                         </h2>
                         <input
+                            onChange={(e) => setAngularFrequency(Number(e.target.value))}
                             className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                             placeholder="e.g. 1000"
                         />
@@ -75,6 +77,7 @@ const SineWaveGeneratorForm = (props: {
                                 Amplitude
                             </h2>
                             <input
+                                onChange={(e) => setAmplitude(Number(e.target.value))}
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 2"
                             />
@@ -82,6 +85,7 @@ const SineWaveGeneratorForm = (props: {
                                 Phase
                             </h2>
                             <input
+                                onChange={(e) => setPhase(Number(e.target.value))}   
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 0.5"
                             />
@@ -91,6 +95,7 @@ const SineWaveGeneratorForm = (props: {
                                 Maximum value
                             </h2>
                             <input
+                                onChange={(e) => setMaxValue(Number(e.target.value))}
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 100"
                             />
