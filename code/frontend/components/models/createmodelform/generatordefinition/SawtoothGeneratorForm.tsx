@@ -23,7 +23,7 @@ const SawtoothGeneratorForm = (props: {
             clearTimeout(debounceTimeout.current);
         }
 
-        debounceTimeout.current = setTimeout(() => {
+        const handleData = debounceTimeout.current = setTimeout(() => {
             const data: Measurement = {
                 measurementId: "test test test test", // REPLACE
                 modelId: "test test test test", // REPLACE
@@ -40,6 +40,7 @@ const SawtoothGeneratorForm = (props: {
 
             setMeasurements([...measurements, data]);
         }, 500);
+        return () => clearTimeout(handleData)
     }, [frequency, angularFrequency, amplitude, phase, maxValue]);
 
     return (

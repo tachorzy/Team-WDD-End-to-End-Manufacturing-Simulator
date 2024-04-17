@@ -29,7 +29,7 @@ const NameField = (props: {
             clearTimeout(debounceTimeout.current);
         }
 
-        debounceTimeout.current = setTimeout(() => {
+        const handleData = debounceTimeout.current = setTimeout(() => {
             const data: Attribute = {
                 factoryId,
                 modelId, // later we will create the id from the backend
@@ -38,6 +38,7 @@ const NameField = (props: {
             };
             setAttributes([...attributes, data]);
         }, 500);
+        return () => clearTimeout(handleData)
     }, [name, modelId, factoryId, attributes, setAttributes]);
 
     return (
