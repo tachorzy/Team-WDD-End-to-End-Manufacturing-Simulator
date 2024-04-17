@@ -57,6 +57,8 @@ type Model struct {
 
 type Property struct {
 	PropertyID    string  `json:"propertyId" dynamodbav:"propertyId"`
+	AssetID       string  `json:"assetId" dynamodbav:"assetId"`
+	FactoryID     string  `json:"factoryId" dynamodbav:"factoryId"`
 	MeasurementID string  `json:"measurementId" dynamodbav:"measurementId"`
 	Name          string  `json:"name" dynamodbav:"name"`
 	Value         float64 `json:"value" dynamodbav:"value"`
@@ -65,10 +67,13 @@ type Property struct {
 }
 
 type Measurement struct {
-	MeasurementID     string  `json:"measurementId" dynamodbav:"measurementId"`
-	Frequency         float64 `json:"frequency" dynamodbav:"frequency"`
-	GeneratorFunction string  `json:"generatorFunction" dynamodbav:"generatorFunction"`
-	LowerBound        float64 `json:"lowerBound" dynamodbav:"lowerBound"`
-	UpperBound        float64 `json:"upperBound" dynamodbav:"upperBound"`
-	Precision         float64 `json:"precision" dynamodbav:"precision"`
+	MeasurementID     string `json:"measurementId" dynamodbav:"measurementId"`
+	PropertyID        string `json:"propertyId" dynamodbav:"propertyId"`
+	Amplitude         int    `json:"amplitude" dynamodbav:"amplitude"`
+	Frequency         int    `json:"frequency" dynamodbav:"frequency"`
+	GeneratorFunction string `json:"generatorFunction" dynamodbav:"generatorFunction"`
+	LowerBound        int    `json:"lowerBound" dynamodbav:"lowerBound"`
+	UpperBound        int    `json:"upperBound" dynamodbav:"upperBound"`
+	Precision         int    `json:"precision" dynamodbav:"precision"`
+	AngularFrequency  int    `json:"angularFrequency" dynamodbav:"angularFrequency"`
 }

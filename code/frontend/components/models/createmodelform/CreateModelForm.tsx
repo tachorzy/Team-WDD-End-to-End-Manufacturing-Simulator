@@ -1,5 +1,10 @@
 import React, { useState, useMemo } from "react";
-import { Attribute, Property, Measurement ,Asset} from "@/app/api/_utils/types";
+import {
+    Attribute,
+    Property,
+    Measurement,
+    Model,Asset
+} from "@/app/api/_utils/types";
 import AttributesForm from "./attributedefinition/AttributesForm";
 import PropertiesForm from "./propertiesdefinition/PropertiesForm";
 import ProgressTracker from "./ProgressTracker";
@@ -15,53 +20,14 @@ const CreateModelForm = (props: { factoryId: string }) => {
 
     // GENERATE THE ID FROM THE BACKEND!
 
-    const modelId = ""; //REPLACE WITH ACTUAL MODEL ID
+    const modelId = ""; // REPLACE WITH ACTUAL MODEL ID
 
-    const initialAttribute = {
-        factoryId: "",
-        modelId: "",
-        name: "",
-        assetId:"",
-        value: "",
-    };
+    const [models, setModels] = useState<Model[]>([]);
+    const [asset,setAsset] = useState<Asset|null>(null);
 
-    const initialProperty = {
-        factoryId: "",
-        modelId: "",
-        assetId:"",
-        measurementId: "",
-        name: "",
-        unit: "",
-        generatorType: "",
-    };
-    const initialAsset = {
-        assetId:"",
-        factoryId: "",
-        modelId: "",
-        name: "",
-        description: "",
-        modelUrl:"",
-    }
-
-    const initialMeasurement = {
-        measurementId: "",
-        modelId: "",
-        factoryId: "",
-        lowerBound: 0.0,
-        upperBound: 0.0,
-        generatorFunction: "",
-        frequency: 0,
-        precision: 0,
-    };
-
-    const [attributes, setAttributes] = useState<Attribute[]>([
-        initialAttribute,
-    ]);
-    const [properties, setProperties] = useState<Property[]>([initialProperty]);
- const[asset,setAsset] = useState<Asset>([initialAsset]);
-    const [measurements, setMeasurements] = useState<Measurement[]>([
-        initialMeasurement,
-    ]);
+    const [attributes, setAttributes] = useState<Attribute[]>([]);
+    const [properties, setProperties] = useState<Property[]>([]);
+    const [measurements, setMeasurements] = useState<Measurement[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     const nextPage = () => setCurrentPage(currentPage + 1);
@@ -73,6 +39,8 @@ const CreateModelForm = (props: { factoryId: string }) => {
             modelId,
             asset,
             setAsset,
+            models,
+            setModels,
             attributes,
             setAttributes,
             properties,
@@ -87,6 +55,8 @@ const CreateModelForm = (props: { factoryId: string }) => {
             modelId,
             asset,
             setAsset,
+            models,
+            setModels,
             attributes,
             setAttributes,
             properties,

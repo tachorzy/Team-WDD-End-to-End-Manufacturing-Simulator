@@ -23,7 +23,7 @@ export interface Floorplan {
 }
 
 export interface Asset {
-    assetId?: string;
+    assetId: string;
     name: string;
     description: string;
     imageData?: string;
@@ -43,9 +43,10 @@ export interface Attribute {
 }
 
 export interface Property {
-    propertyId?: string;
+    propertyId: string;
     factoryId: string;
     modelId: string;
+    assetId: string;
     measurementId: string;
     name: string;
     unit: string;
@@ -54,6 +55,7 @@ export interface Property {
 
 export interface Measurement {
     measurementId: string;
+    propertyId: string;
     modelId: string;
     factoryId: string;
     lowerBound: number;
@@ -64,4 +66,11 @@ export interface Measurement {
     angularFrequency?: number;
     amplitude?: number;
     phase?: number;
+}
+
+export interface Model {
+    modelId: string;
+    factoryId: string;
+    attributes: Attribute[];
+    properties: Property[];
 }

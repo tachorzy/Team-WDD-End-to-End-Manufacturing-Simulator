@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Property, Measurement } from "@/app/api/_utils/types";
 
@@ -13,19 +13,28 @@ const RandomGeneratorForm = (props: {
     const [minValue, setMinValue] = useState<number>(0.0);
     const [maxValue, setMaxValue] = useState<number>(0.0);
 
-    useEffect(() => {
-        const data: Measurement = {
-            measurementId: "test test test test", // REPLACE
-            modelId: "test test test test", // REPLACE
-            factoryId: "test test", // REPLACE
-            lowerBound: minValue,
-            upperBound: maxValue,
-            frequency,
-            precision: 0.0,
-            generatorFunction: "random",
-        };
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
-        setMeasurements([...measurements, data]);
+    useEffect(() => {
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
+
+        debounceTimeout.current = setTimeout(() => {
+            const data: Measurement = {
+                measurementId: property.measurementId, 
+                modelId: property.modelId,
+                factoryId: property.factoryId, 
+                propertyId: property.propertyId,
+                lowerBound: minValue,
+                upperBound: maxValue,
+                frequency,
+                precision: 0.0,
+                generatorFunction: "random",
+            };
+
+            setMeasurements([...measurements, data]);
+        }, 500);
     }, [frequency, minValue, maxValue]);
 
     return (

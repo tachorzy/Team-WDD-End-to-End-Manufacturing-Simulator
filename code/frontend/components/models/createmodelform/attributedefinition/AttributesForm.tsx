@@ -66,11 +66,27 @@ const AttributesForm = () => {
         }
     };
     
-  const handleNext = async () => {
-    contextValue.nextPage(); 
-    await handleSubmit();  
-    
-};
+
+    const [invalidAttribute, setInvalidAttribute] = useState(false);
+
+    const handleNextPageButton = (
+        event: React.MouseEvent<HTMLButtonElement>,
+    ) => {
+        event.preventDefault();
+        if (contextValue?.attributes.length < 2) {
+            setInvalidAttribute(true);
+            return;
+        }
+        contextValue?.nextPage();
+    };
+
+    const handleNext =  (
+        event: React.MouseEvent<HTMLButtonElement>,
+    )=> {
+        handleNextPageButton(event); 
+         handleSubmit();  
+        
+    };
 
     return (
         <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
@@ -82,6 +98,8 @@ const AttributesForm = () => {
                     factoryId={contextValue?.factoryId}
                     attributes={contextValue?.attributes}
                     setAttributes={contextValue?.setAttributes}
+                    invalidAttribute={invalidAttribute}
+                    setInvalidAttribute={setInvalidAttribute}
                 />
             </section>
 
@@ -92,6 +110,9 @@ const AttributesForm = () => {
                         attributes={contextValue?.attributes}
                         setAttributes={contextValue?.setAttributes}
                         factoryId={contextValue?.factoryId}
+                        modelId={contextValue?.modelId}
+                        invalidAttribute={invalidAttribute}
+                        setInvalidAttribute={setInvalidAttribute}
                     />
                     <AddAttributeButton setInputFields={setInputFields} />
                 </div>
