@@ -2,7 +2,7 @@ import CreateModelForm from "@/components/models/createmodelform/CreateModelForm
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-const mockFactoryId = "12345678";
+const mockFactoryId = "123456789";
 
 // suppresses console.log
 jest.spyOn(global.console, "log").mockImplementation(() => {});

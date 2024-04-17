@@ -6,7 +6,7 @@ import AddAttributeButton from "./AddAttributeButton";
 import NameField from "./NameField";
 import { Context } from "../CreateModelForm";
 
-interface AttributesFormContext {
+export interface AttributesFormContext {
     factoryId: string;
     modelId: string;
     attributes: Attribute[];
@@ -18,6 +18,7 @@ interface AttributesFormContext {
 
 const AttributesForm = () => {
     const contextValue = useContext(Context) as AttributesFormContext;
+    console.log(contextValue);
     const [inputFields, setInputFields] = useState<Attribute[]>([
         { factoryId: "", modelId: "", name: "", value: "" },
     ]);
