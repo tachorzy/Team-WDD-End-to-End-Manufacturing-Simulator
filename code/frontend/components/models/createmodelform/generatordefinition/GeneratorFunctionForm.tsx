@@ -11,7 +11,7 @@ import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
 import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
 import { Context } from "../CreateModelForm";
 
-interface GeneratorFunctionFormContext {
+export interface GeneratorFunctionFormContext {
     factoryId: string;
     modelId: string;
     models: Model[];
@@ -49,13 +49,16 @@ const GeneratorFunctionForm = () => {
         };
         console.log(`newModel: ${JSON.stringify(newModel)}\n`);
         contextValue.setModels([...contextValue.models, newModel]);
-        contextValue.models.forEach((model) => {
-            console.log(`\n\nMODEL: ${JSON.stringify(model)}\n`);
-        });
+        // contextValue.models.forEach((model) => {
+        //     console.log(`\n\nMODEL: ${JSON.stringify(model)}\n`);
+        // });
     };
 
     return (
-        <div className="flex flex-col gap-y-3 max-h-72" data-testid="generator-function-form">
+        <div
+            className="flex flex-col gap-y-3 max-h-72"
+            data-testid="generator-function-form"
+        >
             <div className="flex flex-col max-h-[28rem] overflow-y-scroll gap-y-1 gap-x-16">
                 {uniqueProperties.map((property, index) => (
                     <div key={index}>

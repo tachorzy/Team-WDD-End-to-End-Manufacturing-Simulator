@@ -1,5 +1,6 @@
+import React from "react";
 import CreateModelForm from "@/components/models/createmodelform/CreateModelForm";
-import { render, fireEvent } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 const mockFactoryId = "123456789";
@@ -8,6 +9,14 @@ const mockFactoryId = "123456789";
 jest.spyOn(global.console, "log").mockImplementation(() => {});
 
 describe("CreateModelForm", () => {
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.restoreAllMocks();
+    });
+
     test("should render without errors", () => {
         const { getByText, getByTestId } = render(
             <CreateModelForm factoryId={mockFactoryId} />,
