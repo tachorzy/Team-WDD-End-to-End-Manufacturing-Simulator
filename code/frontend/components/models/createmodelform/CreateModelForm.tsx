@@ -12,7 +12,9 @@ const CreateModelForm = (props: { factoryId: string }) => {
 
     console.log(factoryId);
 
-    const modelId = "2024-04-08-9780";
+    // GENERATE THE ID FROM THE BACKEND!
+
+    const modelId = "2024-04-08-9780"; //REPLACE WITH ACTUAL MODEL ID
 
     const initialAttribute = {
         factoryId: "",
@@ -78,10 +80,6 @@ const CreateModelForm = (props: { factoryId: string }) => {
             currentPage,
             nextPage,
         ],
-    );
-
-    console.log(
-        `properties length from CreateModelForm is ${properties.length}`,
     );
 
     return (

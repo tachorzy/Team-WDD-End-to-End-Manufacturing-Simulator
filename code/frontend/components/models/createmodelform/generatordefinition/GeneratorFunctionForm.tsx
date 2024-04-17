@@ -20,11 +20,19 @@ interface GeneratorFunctionFormContext {
 
 const GeneratorFunctionForm = () => {
     const contextValue = useContext(Context) as GeneratorFunctionFormContext;
-
+    const uniqueNames: Record<string, boolean> = {};
+    
+    const uniqueProperties = contextValue.properties.filter(property => {
+        if (!uniqueNames[property.name]) {
+            uniqueNames[property.name] = true;
+            return true;
+        }
+        return false;
+    });
     return (
         <div className="flex flex-col gap-y-3 max-h-72">
             <div className="flex flex-col max-h-[28rem] overflow-y-scroll gap-y-1 gap-x-16">
-                {contextValue?.properties.map((property, index) => (
+                {uniqueProperties.map((property, index) => (
                     <div key={index}>
                         {property.generatorType === "Random" && (
                             <RandomGeneratorForm
