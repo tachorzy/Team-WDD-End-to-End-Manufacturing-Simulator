@@ -11,7 +11,6 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/google/uuid"
 )
 
 func NewCreateMeasurementHandler(db types.DynamoDBClient) *Handler {
@@ -35,7 +34,6 @@ func (h Handler) HandleCreateMeasurementRequest(ctx context.Context, request eve
 			Body:       fmt.Sprintf("Error unmarshalling: %v", err),
 		}, nil
 	}
-	measurement.MeasurementID = uuid.NewString()
 
 	av, err := wrappers.MarshalMap(measurement)
 	if err != nil {

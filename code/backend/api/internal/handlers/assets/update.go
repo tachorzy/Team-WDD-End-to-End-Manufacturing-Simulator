@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strings"
 	"wdd/api/internal/types"
-	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -18,7 +17,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/google/uuid"
 )
 
 func NewUpdateAssetHandler(db types.DynamoDBClient, s3 types.S3Client) *Handler {
@@ -73,13 +71,11 @@ func (h Handler) processAssetUpdates(ctx context.Context, asset *types.Asset) er
 }
 
 func (h Handler) updateDynamoDBRecord(ctx context.Context, asset *types.Asset) error {
-	updateBuilder := h.createUpdateBuilder(asset)
-	expr, err := wrappers.UpdateExpressionBuilder(updateBuilder)
+	expr, err := h.createUpdateBuilder(asset)
 	if err != nil {
+		fmt.Printf("Error building update expression: %v\n", err)
 		return err
 	}
-
-	fmt.Printf("Expression Attribute Names: %v", expr.Names())
 
 	input := &dynamodb.UpdateItemInput{
 		Key:                       map[string]ddbtypes.AttributeValue{"assetId": &ddbtypes.AttributeValueMemberS{Value: asset.AssetID}},
@@ -89,7 +85,9 @@ func (h Handler) updateDynamoDBRecord(ctx context.Context, asset *types.Asset) e
 		UpdateExpression:          expr.Update(),
 	}
 
-	if _, err = h.DynamoDB.UpdateItem(ctx, input); err != nil {
+	_, err = h.DynamoDB.UpdateItem(ctx, input)
+	if err != nil {
+		fmt.Printf("Error updating DynamoDB record: %v\n", err)
 		return err
 	}
 
@@ -163,12 +161,10 @@ func processAssetModelUpdate(ctx context.Context, asset *types.Asset, s3Client t
 	if err != nil {
 		return fmt.Errorf("Base64 decode error: %w", err)
 	}
-	modelID := uuid.NewString()
-	asset.ModelID = &modelID
 
 	_, err = uploader.Upload(ctx, &s3.PutObjectInput{
 		Bucket:      aws.String("wingstopdrivenbucket"),
-		Key:         aws.String(fmt.Sprintf("models/%s.glb", *asset.ModelID)),
+		Key:         aws.String(fmt.Sprintf("models/%s.glb", asset.ModelID)),
 		Body:        bytes.NewReader(decodedData),
 		ContentType: aws.String("model/gltf-binary"),
 	})
@@ -176,40 +172,30 @@ func processAssetModelUpdate(ctx context.Context, asset *types.Asset, s3Client t
 		return fmt.Errorf("failed to upload model to S3: %w", err)
 	}
 
-	modelURL := fmt.Sprintf("https://%s.s3.amazonaws.com/assets/%s.glb", "wingstopdrivenbucket", modelID)
+	modelURL := fmt.Sprintf("https://%s.s3.amazonaws.com/assets/%s.glb", "wingstopdrivenbucket", asset.ModelID)
 	asset.ModelURL = &modelURL
 
 	return nil
 }
 
-func (h Handler) createUpdateBuilder(asset *types.Asset) expression.UpdateBuilder {
+func (h Handler) createUpdateBuilder(asset *types.Asset) (expression.Expression, error) {
 	updateBuilder := expression.UpdateBuilder{}
 
-	setIfNotNil := func(path string, value interface{}) {
-		if value != nil {
-			updateBuilder = updateBuilder.Set(expression.Name(path), expression.Value(value))
+	setIfNotNilAndNotEmpty := func(path string, value *string) {
+		if value != nil && *value != "" {
+			updateBuilder = updateBuilder.Set(expression.Name(path), expression.Value(*value))
 		}
 	}
 
-	setIfNotNil("factoryId", asset.FactoryID)
-	setIfNotNil("name", asset.Name)
-	setIfNotNil("modelId", asset.ModelID)
-	setIfNotNil("floorplanId", asset.FloorplanID)
-	setIfNotNil("modelUrl", asset.ModelURL)
-	setIfNotNil("type", asset.Type)
-	setIfNotNil("description", asset.Description)
+	setIfNotNilAndNotEmpty("name", asset.Name)
+	setIfNotNilAndNotEmpty("type", asset.Type)
+	setIfNotNilAndNotEmpty("description", asset.Description)
 
-	for key, attr := range asset.Attributes {
-		basePath := fmt.Sprintf("attributes.%s", key)
-		attrID := uuid.NewString()
-		setIfNotNil(fmt.Sprintf("%s.attributeId", basePath), attrID)
-		setIfNotNil(fmt.Sprintf("%s.name", basePath), attr.Name)
-		setIfNotNil(fmt.Sprintf("%s.value", basePath), attr.Value)
-		setIfNotNil(fmt.Sprintf("%s.unit", basePath), attr.Unit)
-		setIfNotNil(fmt.Sprintf("%s.modelId", basePath), attr.ModelID)
-		setIfNotNil(fmt.Sprintf("%s.assetId", basePath), attr.AssetID)
-		setIfNotNil(fmt.Sprintf("%s.factoryId", basePath), attr.FactoryID)
+	expr, err := expression.NewBuilder().WithUpdate(updateBuilder).Build()
+	if err != nil {
+		fmt.Printf("Error building expression: %v\n", err)
+		return expression.Expression{}, err
 	}
 
-	return updateBuilder
+	return expr, nil
 }

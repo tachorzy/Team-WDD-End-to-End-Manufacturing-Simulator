@@ -34,7 +34,6 @@ const PropertiesForm = () => {
         
         const uniqueNames: Record<string, boolean> = {};
     
-       
         const uniqueProperties = contextValue.properties.filter(property => {
             if (!uniqueNames[property.name]) {
                 uniqueNames[property.name] = true;

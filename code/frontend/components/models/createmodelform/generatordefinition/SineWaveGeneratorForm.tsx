@@ -1,12 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { Property } from "@/app/api/_utils/types";
+import { Measurement, Property } from "@/app/api/_utils/types";
 
 const SineWaveGeneratorForm = (props: {
     propertyIndex: number;
     property: Property;
+    measurements: Measurement[];
+    setMeasurements: React.Dispatch<React.SetStateAction<Measurement[]>>;
 }) => {
-    const { propertyIndex, property } = props;
+    const { propertyIndex, property, measurements, setMeasurements } = props;
+    const [frequency, setFrequency] = useState<number>(0.0);
+    const [angularFrequency, setAngularFrequency] = useState<number>(0.0);
+    const [amplitude, setAmplitude] = useState<number>(0.0);
+    const [phase, setPhase] = useState<number>(0.0);
+    const [maxValue, setMaxValue] = useState<number>(0.0);
+
+    useEffect(() => {
+        const data: Measurement = {
+            measurementId: "test test test test", // REPLACE
+            modelId: "test test test test", // REPLACE
+            factoryId: "test test test test", // REPLACE
+            lowerBound: 0.0,
+            upperBound: maxValue,
+            frequency,
+            angularFrequency,
+            amplitude,
+            phase,
+            precision: 0.0,
+            generatorFunction: "sinewave",
+        };
+
+        setMeasurements([...measurements, data]);
+    }, [frequency, angularFrequency, amplitude, phase, maxValue]);
 
     return (
         <div className="flex flex-col gap-y-3 max-h-72">
@@ -33,6 +58,9 @@ const SineWaveGeneratorForm = (props: {
                             Frequency (ms)
                         </h2>
                         <input
+                            onChange={(e) =>
+                                setFrequency(Number(e.target.value))
+                            }
                             className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                             placeholder="e.g. 60000"
                         />
@@ -40,6 +68,9 @@ const SineWaveGeneratorForm = (props: {
                             Angular frequency (ω)
                         </h2>
                         <input
+                            onChange={(e) =>
+                                setAngularFrequency(Number(e.target.value))
+                            }
                             className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                             placeholder="e.g. 1000"
                         />
@@ -50,6 +81,9 @@ const SineWaveGeneratorForm = (props: {
                                 Amplitude
                             </h2>
                             <input
+                                onChange={(e) =>
+                                    setAmplitude(Number(e.target.value))
+                                }
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 2"
                             />
@@ -57,6 +91,9 @@ const SineWaveGeneratorForm = (props: {
                                 Phase
                             </h2>
                             <input
+                                onChange={(e) =>
+                                    setPhase(Number(e.target.value))
+                                }
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 0.5"
                             />
@@ -66,6 +103,9 @@ const SineWaveGeneratorForm = (props: {
                                 Maximum value
                             </h2>
                             <input
+                                onChange={(e) =>
+                                    setMaxValue(Number(e.target.value))
+                                }
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 100"
                             />

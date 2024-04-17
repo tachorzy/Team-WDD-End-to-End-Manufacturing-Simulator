@@ -1,6 +1,5 @@
-import React, { useState, useMemo,useEffect } from "react";
-import uuid from 'react-uuid'
-import { Attribute, Property } from "@/app/api/_utils/types";
+import React, { useState, useMemo } from "react";
+import { Attribute, Property, Measurement ,Asset} from "@/app/api/_utils/types";
 import AttributesForm from "./attributedefinition/AttributesForm";
 import PropertiesForm from "./propertiesdefinition/PropertiesForm";
 import ProgressTracker from "./ProgressTracker";
@@ -11,18 +10,25 @@ export const Context = React.createContext({});
 const CreateModelForm = (props: { factoryId: string }) => {
     const { factoryId } = props;
 
-    const modelId =  uuid();
+    
+    
+
+    // GENERATE THE ID FROM THE BACKEND!
+
+    const modelId = ""; //REPLACE WITH ACTUAL MODEL ID
 
     const initialAttribute = {
         factoryId: "",
         modelId: "",
         name: "",
+        assetId:"",
         value: "",
     };
 
     const initialProperty = {
         factoryId: "",
         modelId: "",
+        assetId:"",
         measurementId: "",
         name: "",
         unit: "",
@@ -37,11 +43,25 @@ const CreateModelForm = (props: { factoryId: string }) => {
         modelUrl:"",
     }
 
+    const initialMeasurement = {
+        measurementId: "",
+        modelId: "",
+        factoryId: "",
+        lowerBound: 0.0,
+        upperBound: 0.0,
+        generatorFunction: "",
+        frequency: 0,
+        precision: 0,
+    };
+
     const [attributes, setAttributes] = useState<Attribute[]>([
         initialAttribute,
     ]);
     const [properties, setProperties] = useState<Property[]>([initialProperty]);
  const[asset,setAsset] = useState<Asset>([initialAsset]);
+    const [measurements, setMeasurements] = useState<Measurement[]>([
+        initialMeasurement,
+    ]);
     const [currentPage, setCurrentPage] = useState(1);
 
     const nextPage = () => setCurrentPage(currentPage + 1);
@@ -57,6 +77,8 @@ const CreateModelForm = (props: { factoryId: string }) => {
             setAttributes,
             properties,
             setProperties,
+            measurements,
+            setMeasurements,
             currentPage,
             nextPage,
         }),
@@ -69,13 +91,11 @@ const CreateModelForm = (props: { factoryId: string }) => {
             setAttributes,
             properties,
             setProperties,
+            measurements,
+            setMeasurements,
             currentPage,
             nextPage,
         ],
-    );
-
-    console.log(
-        `properties length from CreateModelForm is ${properties.length}`,
     );
 
     return (

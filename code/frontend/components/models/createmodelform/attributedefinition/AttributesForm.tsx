@@ -26,38 +26,46 @@ interface AttributesFormContext {
 const AttributesForm = () => {
     const contextValue = useContext(Context) as AttributesFormContext;
     const [inputFields, setInputFields] = useState<Attribute[]>([
-        { factoryId: "", modelId: "", name: "", value: "" },
+        { factoryId: "", assetId:"",modelId: "", name: "", value: "" },
     ]);
-    const attributesArray = contextValue.attributes;  
    
- const handleSubmit = async () => {
-    const { asset, modelId, attributes } = contextValue
-    const attributesMap = new Map();
-    attributes.forEach(attr => {
-        attributesMap.set(attr.name, attr); 
-    });
-
-  
-
-    const addModelAndAttributestoAsset={
-        ...asset,
-        modelId, // we need to figure out how we are gonna do this without the glb upload
-        attributes:attributesMap
-        
-    };
-    console.log(addModelAndAttributestoAsset);
-    try{
-        const config = await BackendConnector.put<Asset>({
-            resource: "assets",
-            payload:addModelAndAttributestoAsset,
+    const handleSubmit = async () => {
+        const { asset, modelId, attributes } = contextValue;
+    
+      
+        const assetId = asset?.assetId || '';
+        const uniqueNames: Record<string, boolean> = {};
+    
+        const uniqueAttributes = contextValue.attributes.filter(attribute => {
+            if (!uniqueNames[attribute.name]) {
+                uniqueNames[attribute.name] = true;
+                return true;
+            }
+            return false;
         });
-
-            
-    } catch (e) {
-        console.log(e);
-    }
-        
-  }
+    
+      
+        for (const attribute of uniqueAttributes) {
+            try {
+                
+                const payload = {
+                    ...attribute, 
+                    factoryId: contextValue.factoryId,
+                    assetId: assetId,
+                    modelId: contextValue.asset.modelId,
+                };
+                
+                const config = await BackendConnector.post<Attribute>({
+                    resource: "attributes",
+                    payload: payload, 
+                });
+                console.log(config);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    };
+    
   const handleNext = async () => {
     contextValue.nextPage(); 
     await handleSubmit();  

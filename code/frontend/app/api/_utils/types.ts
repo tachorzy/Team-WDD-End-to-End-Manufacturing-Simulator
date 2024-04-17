@@ -30,11 +30,13 @@ export interface Asset {
     factoryId: string;
     modelId:string;
     modelUrl:string;
+    
 }
 
 export interface Attribute {
     attributeId?: string;
     factoryId: string;
+    assetId: string;
     modelId: string;
     name: string;
     value: string;
@@ -48,4 +50,18 @@ export interface Property {
     name: string;
     unit: string;
     generatorType: string;
+}
+
+export interface Measurement {
+    measurementId: string;
+    modelId: string;
+    factoryId: string;
+    lowerBound: number;
+    upperBound: number;
+    generatorFunction: string;
+    frequency: number;
+    precision: number;
+    angularFrequency?: number;
+    amplitude?: number;
+    phase?: number;
 }

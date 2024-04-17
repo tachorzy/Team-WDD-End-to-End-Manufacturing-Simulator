@@ -36,7 +36,7 @@ func (h Handler) HandleCreateAssetRequest(ctx context.Context, request events.AP
 
 	asset.AssetID = uuid.NewString()
 	asset.DateCreated = time.Now().Format(time.RFC3339)
-
+	asset.ModelID = uuid.NewString()
 	if err := processAssetFiles(ctx, &asset, h.S3Client); err != nil {
 		return apiResponse(http.StatusInternalServerError, err.Error(), headers), nil
 	}

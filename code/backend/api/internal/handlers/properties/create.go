@@ -36,6 +36,7 @@ func (h Handler) HandleCreatePropertyRequest(ctx context.Context, request events
 		}, nil
 	}
 	property.PropertyID = uuid.NewString()
+	property.MeasurementID = uuid.NewString()
 
 	av, err := wrappers.MarshalMap(property)
 	if err != nil {
