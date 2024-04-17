@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {  useRef, useEffect } from "react";
 import { Property } from "@/app/api/_utils/types";
 import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
 import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";
@@ -21,19 +21,27 @@ const PropertyInputColumn = (props: {
     const [unit, setUnit] = React.useState("");
     const [generatorFunction, setGeneratorFunction] = React.useState("");
 
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
     useEffect(() => {
         if (property === "" || unit === "" || generatorFunction === "") return;
 
-        const data: Property = {
-            factoryId: "",
-            modelId: "",
-            measurementId: "",
-            name: property,
-            unit,
-            generatorType: generatorFunction,
-        };
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
 
-        setProperties([...properties, data]);
+        debounceTimeout.current = setTimeout(() => {
+            const data: Property = {
+                factoryId: "",
+                modelId: "",
+                measurementId: "",
+                name: property,
+                unit,
+                generatorType: generatorFunction,
+            };
+
+            setProperties([...properties, data]);
+        }, 500);
     }, [property, unit, generatorFunction, properties, setProperties]);
 
     return (
