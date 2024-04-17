@@ -60,6 +60,8 @@ describe("CreateModelForm", () => {
                 inputFields={[initialProperty]}
                 properties={[initialProperty]}
                 setProperties={jest.fn()}
+                invalidProperty={false}
+                setInvalidProperty={jest.fn()}
             />,
         );
         const propertyHeader = getByText("Property 1");
