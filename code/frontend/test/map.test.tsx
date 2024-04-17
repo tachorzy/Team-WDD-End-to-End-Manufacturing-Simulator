@@ -4,15 +4,18 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import L from "leaflet";
+import { LatLng } from "leaflet";
 import { Factory } from "@/app/api/_utils/types";
-
 import MapComponent, { ChangeView } from "../components/home/map/Map.client";
+
+const mockMap = {
+    flyTo: jest.fn(),
+};
 
 jest.mock("react-leaflet", () => ({
     MapContainer: () => <div data-testid="mapcontainer">"Map Container"</div>,
     TileLayer: jest.fn(),
-    useMap: jest.fn(),
+    useMap: () => mockMap,
 }));
 
 jest.mock("leaflet/dist/leaflet.css", () => {});
@@ -400,11 +403,13 @@ describe("MapCompenent", () => {
 
     test("ChangeView renders without error", () => {
         const ChangeViewprops = {
-            center: L.latLng(12.34, 56.789),
+            center: new LatLng(123.456, 456.789),
             zoom: 15,
         };
 
         render(<ChangeView {...ChangeViewprops} />);
+
+        expect(mockMap.flyTo).toHaveBeenCalled();
     });
 
     test("should throw and log an error on fetch", async () => {
