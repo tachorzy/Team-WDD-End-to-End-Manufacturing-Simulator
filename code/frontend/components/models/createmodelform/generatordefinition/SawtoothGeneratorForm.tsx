@@ -58,7 +58,9 @@ const SawtoothGeneratorForm = (props: {
                             Frequency (ms)
                         </h2>
                         <input
-                            onChange={(e) => setFrequency(Number(e.target.value))}
+                            onChange={(e) =>
+                                setFrequency(Number(e.target.value))
+                            }
                             className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                             placeholder="e.g. 60000"
                         />
@@ -66,7 +68,9 @@ const SawtoothGeneratorForm = (props: {
                             Angular frequency (ω)
                         </h2>
                         <input
-                            onChange={(e) => setAngularFrequency(Number(e.target.value))}
+                            onChange={(e) =>
+                                setAngularFrequency(Number(e.target.value))
+                            }
                             className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                             placeholder="e.g. 1000"
                         />
@@ -77,7 +81,9 @@ const SawtoothGeneratorForm = (props: {
                                 Amplitude
                             </h2>
                             <input
-                                onChange={(e) => setAmplitude(Number(e.target.value))}
+                                onChange={(e) =>
+                                    setAmplitude(Number(e.target.value))
+                                }
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 2"
                             />
@@ -85,7 +91,9 @@ const SawtoothGeneratorForm = (props: {
                                 Phase
                             </h2>
                             <input
-                                onChange={(e) => setPhase(Number(e.target.value))}
+                                onChange={(e) =>
+                                    setPhase(Number(e.target.value))
+                                }
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 0.5"
                             />
@@ -95,7 +103,9 @@ const SawtoothGeneratorForm = (props: {
                                 Maximum value
                             </h2>
                             <input
-                                onChange={(e) => setMaxValue(Number(e.target.value))}
+                                onChange={(e) =>
+                                    setMaxValue(Number(e.target.value))
+                                }
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 100"
                             />
