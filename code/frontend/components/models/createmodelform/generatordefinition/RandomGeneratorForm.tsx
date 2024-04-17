@@ -17,16 +17,15 @@ const RandomGeneratorForm = (props: {
         const data: Measurement = {
             measurementId: "test test test test", // REPLACE
             modelId: "test test test test", // REPLACE
-            factoryId: "test test", //REPLACE
+            factoryId: "test test", // REPLACE
             lowerBound: minValue,
             upperBound: maxValue,
-            frequency: frequency,
+            frequency,
             precision: 0.0,
-            generatorFunction: "random"
-        }
+            generatorFunction: "random",
+        };
 
-        setMeasurements([...measurements, data])
-
+        setMeasurements([...measurements, data]);
     }, [frequency, minValue, maxValue]);
 
     return (
@@ -54,7 +53,9 @@ const RandomGeneratorForm = (props: {
                             Frequency (ms)
                         </h2>
                         <input
-                            onChange={(e) => setFrequency(parseFloat(e.target.value))}
+                            onChange={(e) =>
+                                setFrequency(parseFloat(e.target.value))
+                            }
                             className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                             placeholder="e.g. 60000"
                         />
@@ -65,7 +66,9 @@ const RandomGeneratorForm = (props: {
                                 Minimum value
                             </h2>
                             <input
-                                onChange={(e) => setMinValue(parseFloat(e.target.value))}
+                                onChange={(e) =>
+                                    setMinValue(parseFloat(e.target.value))
+                                }
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 0"
                             />
@@ -75,7 +78,9 @@ const RandomGeneratorForm = (props: {
                                 Maximum value
                             </h2>
                             <input
-                                onChange={(e) => setMaxValue(parseFloat(e.target.value))}
+                                onChange={(e) =>
+                                    setMaxValue(parseFloat(e.target.value))
+                                }
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 100"
                             />

@@ -16,26 +16,22 @@ const SineWaveGeneratorForm = (props: {
     const [maxValue, setMaxValue] = useState<number>(0.0);
 
     useEffect(() => {
-        const data: Measurement = { 
+        const data: Measurement = {
             measurementId: "test test test test", // REPLACE
             modelId: "test test test test", // REPLACE
             factoryId: "test test test test", // REPLACE
             lowerBound: 0.0,
             upperBound: maxValue,
-            frequency: frequency,
-            angularFrequency: angularFrequency,
-            amplitude: amplitude,
-            phase: phase,
+            frequency,
+            angularFrequency,
+            amplitude,
+            phase,
             precision: 0.0,
-            generatorFunction: "sinewave"
-        }
+            generatorFunction: "sinewave",
+        };
 
-        setMeasurements([...measurements, data])
-        
+        setMeasurements([...measurements, data]);
     }, [frequency, angularFrequency, amplitude, phase, maxValue]);
-
-
-
 
     return (
         <div className="flex flex-col gap-y-3 max-h-72">

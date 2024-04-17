@@ -41,12 +41,13 @@ const CreateModelForm = (props: { factoryId: string }) => {
         precision: 0,
     };
 
-
     const [attributes, setAttributes] = useState<Attribute[]>([
         initialAttribute,
     ]);
     const [properties, setProperties] = useState<Property[]>([initialProperty]);
-    const [measurements, setMeasurements] = useState <Measurement[]>([initialMeasurement]);
+    const [measurements, setMeasurements] = useState<Measurement[]>([
+        initialMeasurement,
+    ]);
     const [currentPage, setCurrentPage] = useState(1);
 
     const nextPage = () => setCurrentPage(currentPage + 1);

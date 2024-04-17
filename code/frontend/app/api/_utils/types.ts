@@ -48,7 +48,7 @@ export interface Property {
     generatorType: string;
 }
 
-export interface Measurement { 
+export interface Measurement {
     measurementId: string;
     modelId: string;
     factoryId: string;
