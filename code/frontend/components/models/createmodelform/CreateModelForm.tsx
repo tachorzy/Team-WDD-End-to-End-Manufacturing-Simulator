@@ -1,5 +1,10 @@
 import React, { useState, useMemo } from "react";
-import { Attribute, Property, Measurement, Model } from "@/app/api/_utils/types";
+import {
+    Attribute,
+    Property,
+    Measurement,
+    Model,
+} from "@/app/api/_utils/types";
 import AttributesForm from "./attributedefinition/AttributesForm";
 import PropertiesForm from "./propertiesdefinition/PropertiesForm";
 import ProgressTracker from "./ProgressTracker";

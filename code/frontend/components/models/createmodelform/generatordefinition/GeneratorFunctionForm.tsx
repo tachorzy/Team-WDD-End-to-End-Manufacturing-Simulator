@@ -1,5 +1,10 @@
 import React, { useContext } from "react";
-import { Attribute, Property, Measurement, Model } from "@/app/api/_utils/types";
+import {
+    Attribute,
+    Property,
+    Measurement,
+    Model,
+} from "@/app/api/_utils/types";
 import Link from "next/link";
 import RandomGeneratorForm from "./RandomGeneratorForm";
 import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
@@ -42,9 +47,9 @@ const GeneratorFunctionForm = () => {
             attributes: contextValue.attributes,
             properties: contextValue.properties,
         };
-        console.log(`newModel: ${JSON.stringify(newModel)}`)
+        console.log(`newModel: ${JSON.stringify(newModel)}`);
         contextValue.setModels([...contextValue.models, newModel]);
-        console.log(`models: ${JSON.stringify(contextValue.models)}`)
+        console.log(`models: ${JSON.stringify(contextValue.models)}`);
     };
 
     return (

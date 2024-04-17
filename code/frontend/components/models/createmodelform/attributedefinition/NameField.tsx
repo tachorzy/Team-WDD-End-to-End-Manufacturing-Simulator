@@ -28,7 +28,7 @@ const NameField = (props: {
         if (debounceTimeout.current) {
             clearTimeout(debounceTimeout.current);
         }
-        
+
         debounceTimeout.current = setTimeout(() => {
             const data: Attribute = {
                 factoryId,

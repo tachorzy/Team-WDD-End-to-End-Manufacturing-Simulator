@@ -62,7 +62,7 @@ export interface Measurement {
     phase?: number;
 }
 
-export interface Model { 
+export interface Model {
     modelId: string;
     factoryId: string;
     attributes: Attribute[];

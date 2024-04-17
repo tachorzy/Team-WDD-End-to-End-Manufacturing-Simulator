@@ -1,4 +1,4 @@
-import React, {  useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { Property } from "@/app/api/_utils/types";
 import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
 import GeneratorFunctionCombobox from "./GeneratorFunctionCombobox";

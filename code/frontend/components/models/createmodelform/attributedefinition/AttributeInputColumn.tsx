@@ -22,10 +22,10 @@ const AttributeInputColumn = (props: {
     const [value, setValue] = useState("");
 
     const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
-    
+
     useEffect(() => {
         if (attribute === "" || value === "") return;
-        
+
         if (debounceTimeout.current) {
             clearTimeout(debounceTimeout.current);
         }
