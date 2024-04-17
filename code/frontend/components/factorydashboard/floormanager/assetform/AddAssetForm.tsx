@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { createAsset } from "@/app/api/assets/assetAPI";
 import { Asset } from "@/app/api/_utils/types";
+import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
 import AssetUploadContainer from "./AssetUploadContainer";
 
-interface AddAssetFormProps {
+export interface AddAssetFormProps {
     onClose: () => void;
     onAdd: (newAsset: Asset) => void;
     factoryId: string;
@@ -33,9 +33,12 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
     };
 
     const handleAddAsset = async () => {
-        // next steps: adding input validation..maybe
         try {
-            const asset = await createAsset(formData);
+            const config: PostConfig<Asset> = {
+                resource: "assets",
+                payload: formData,
+            };
+            const asset = await BackendConnector.post<Asset>(config);
             onAdd(asset);
             onClose();
         } catch (error) {

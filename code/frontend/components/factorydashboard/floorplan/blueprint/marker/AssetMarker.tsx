@@ -83,7 +83,7 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
                         onClick={handleDraggableClick}
                     />
                     <p className="shadow-md text-xs group-hover:visible invisible text-center self-center bg-opacity-[40%] px-1 py-0.5 font-medium rounded-sm bg-gray-800 my-1">
-                        {asset?.name}
+                        {asset.name}
                     </p>
                     {showButtons && (
                         <div className={`absolute ${isCloseToLeft ? 'left-full' : 'right-full'} top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-xl p-6 min-w-max w-96 h-auto flex flex-col justify-between no-drag`}>
@@ -110,6 +110,7 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
                                     handleEdit={handleEdit}
                                     showEditForm={showEditForm}
                                     closeEditForm={closeEditForm}
+                                    asset={asset}
                                 />
                             </div>
                         </div>

@@ -14,23 +14,27 @@ interface MockAcceptedUploadFormProps {
 const mockAcceptedUploadForm = jest.fn();
 jest.mock(
     "../components/factorydashboard/floorplan/uploadcontainer/AcceptedUploadForm",
-    () => (props: MockAcceptedUploadFormProps) => {
-        mockAcceptedUploadForm(props);
+    () => {
+        const MockAcceptedUploadForm = (props: MockAcceptedUploadFormProps) => {
+            mockAcceptedUploadForm(props);
 
-        const { acceptedFileItems, fileRejectionItems } = props;
+            const { acceptedFileItems, fileRejectionItems } = props;
 
-        return (
-            <div>
-                <div data-testid="accpetedfiles">
-                    <h1>Accepted files:</h1>
-                    <ul>{acceptedFileItems}</ul>
+            return (
+                <div>
+                    <div data-testid="accpetedfiles">
+                        <h1>Accepted files:</h1>
+                        <ul>{acceptedFileItems}</ul>
+                    </div>
+                    <div data-testid="rejectedfiles">
+                        <h1>Rejected files:</h1>
+                        <ul>{fileRejectionItems}</ul>
+                    </div>
                 </div>
-                <div data-testid="rejectedfiles">
-                    <h1>Rejected files:</h1>
-                    <ul>{fileRejectionItems}</ul>
-                </div>
-            </div>
-        );
+            );
+        };
+        MockAcceptedUploadForm.displayName = "AcceptedUploadForm";
+        return MockAcceptedUploadForm;
     },
 );
 

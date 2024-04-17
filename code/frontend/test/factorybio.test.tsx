@@ -22,9 +22,13 @@ jest.mock("next/image", () => ({
 }));
 
 const mockEditFactoryForm = jest.fn();
-jest.mock("../components/factorydashboard/editFactory", () => (props: any) => {
-    mockEditFactoryForm(props);
-    return <div data-testid="edit-factory" />;
+jest.mock("../components/factorydashboard/editFactory", () => {
+    const MockEditFactoryForm = (props: any) => {
+        mockEditFactoryForm(props);
+        return <div data-testid="edit-factory" />;
+    };
+    MockEditFactoryForm.displayName = "EditFactoryForm";
+    return MockEditFactoryForm;
 });
 
 describe("Factorybio Component", () => {
