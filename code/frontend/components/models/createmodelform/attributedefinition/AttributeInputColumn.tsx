@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Attribute } from "@/app/api/_utils/types";
-import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
+// import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
 
 const AttributeInputColumn = (props: {
     inputFields: Attribute[];
@@ -32,14 +32,14 @@ const AttributeInputColumn = (props: {
     return (
         <div className="flex flex-col gap-y-3 max-h-[22rem] overflow-y-scroll">
             <h1 className="text-2xl font-semibold text-gray-900">Attributes</h1>
-            <div className="-ml-3 -mt-2 -mb-2">
+            {/* <div className="-ml-3 -mt-2 -mb-2">
                 {invalidAttribute && (
                     <ErrorMessage
                         message="Please fill out all provided input fields."
                         icon="factory-error.svg"
                     />
                 )}
-            </div>
+            </div> */}
             {inputFields.map((_, index) => (
                 <div key={index}>
                     <div className="flex flex-col gap-y-1 items-start">
