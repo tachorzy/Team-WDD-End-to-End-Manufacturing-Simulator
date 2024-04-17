@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 import { Asset } from "@/app/api/_utils/types";
-import AssetInventory from "./AssetInventory";
+import AssetInventory from "./inventory/AssetInventory";
 import AddAssetForm from "./assetform/AddAssetForm";
-import InventoryNavBar from "./InventoryNavBar";
+import InventoryNavBar from "./inventory/InventoryNavBar";
 import AssetBio from "./AssetBio";
 import AssetMarker from "../floorplan/blueprint/marker/AssetMarker";
 
-interface FloorManagerProps {
+export interface FloorManagerProps {
     setAssetMarkers: React.Dispatch<React.SetStateAction<JSX.Element[]>>;
     factoryId: string;
 }

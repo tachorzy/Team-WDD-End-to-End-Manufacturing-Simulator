@@ -28,7 +28,7 @@ const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
                 resource: "assets",
                 payload: updatedAssetData,
             });
-            console.log("Updated Asset:", updatedAsset);
+            // console.log("Updated Asset:", updatedAsset);
         } catch (error) {
             console.error("Failed to update asset:", error);
         }
