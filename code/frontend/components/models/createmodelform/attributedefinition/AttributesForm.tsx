@@ -35,7 +35,7 @@ const AttributesForm = () => {
     };
 
     return (
-        <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
+        <div className="flex flex-row gap-x-24 mt-4 gap-y-2" data-testid="attributes-form">
             <section className="flex flex-col gap-y-3 min-w-max h-96 pr-20 border-r-2 border-[#D6D6D6] border-opacity-30">
                 <NameField
                     modelId={contextValue?.modelId}

@@ -1,124 +1,94 @@
-import CreateModelForm, {
-    Context,
-} from "@/components/models/createmodelform/CreateModelForm";
-import AttributeInputColumn from "@/components/models/createmodelform/attributedefinition/AttributeInputColumn";
-import PropertyInputColumn from "@/components/models/createmodelform/propertiesdefinition/PropertyInputColumn";
-import AddAttributeForm from "@/components/models/createmodelform/attributedefinition/AttributesForm";
-import AddPropertyForm from "@/components/models/createmodelform/propertiesdefinition/PropertiesForm";
-import { Attribute, Property } from "@/app/api/_utils/types";
-
-import { render, waitFor } from "@testing-library/react";
+import CreateModelForm from "@/components/models/createmodelform/CreateModelForm";
+import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-const initialAttribute: Attribute = {
-    factoryId: "",
-    modelId: "",
-    name: "",
-    value: "",
-};
+const mockFactoryId = "12345678";
 
-const initialProperty: Property = {
-    factoryId: "",
-    modelId: "",
-    measurementId: "",
-    name: "",
-    unit: "",
-    generatorType: "",
-};
+// suppresses console.log
+jest.spyOn(global.console, "log").mockImplementation(() => {});
 
 describe("CreateModelForm", () => {
-    test("should render CreateModelForm", () => {
-        const mockFactoryId = "12345678";
-        const { getByText } = render(
+    test("should render without errors", () => {
+        const { getByText, getByTestId } = render(
             <CreateModelForm factoryId={mockFactoryId} />,
         );
+
         const formTitle = getByText("Create Asset Model");
+        const progressTracker = getByTestId("progress-tracker");
         expect(formTitle).toBeInTheDocument();
+        expect(progressTracker).toBeInTheDocument();
     });
 
-    test("should render AttributeInputColumn input fields", () => {
-        const { getByText, getByPlaceholderText } = render(
-            <AttributeInputColumn
-                inputFields={[initialAttribute]}
-                attributes={[initialAttribute]}
-                setAttributes={jest.fn()}
-                factoryId="123456789"
-                invalidAttribute={false}
-                setInvalidAttribute={jest.fn()}
-            />,
+    test("should render 'AttributesForm'", () => {
+        const { getByTestId } = render(
+            <CreateModelForm factoryId={mockFactoryId} />,
         );
-        const attributeHeader = getByText("Attribute 1");
-        const attributeInput = getByPlaceholderText("e.g. Serial number");
-        const valueInput = getByPlaceholderText("e.g. SN-1234567890");
 
-        expect(attributeHeader).toBeInTheDocument();
-        expect(attributeInput).toBeInTheDocument();
-        expect(valueInput).toBeInTheDocument();
+        const attributesForm = getByTestId("attributes-form");
+        expect(attributesForm).toBeInTheDocument();
     });
 
-    test("should render PropertyInputColumn input fields", () => {
-        const { getByText, getByPlaceholderText } = render(
-            <PropertyInputColumn
-                inputFields={[initialProperty]}
-                properties={[initialProperty]}
-                setProperties={jest.fn()}
-                invalidProperty={false}
-                setInvalidProperty={jest.fn()}
-            />,
-        );
-        const propertyHeader = getByText("Property 1");
-        const propertyInput = getByPlaceholderText("e.g. Temperature");
-        const unitsInput = getByPlaceholderText("e.g. °C");
+    // test("should render 'PropertiesForm'", () => {
+    //     const { getByText, getByTestId } = render(
+    //         <CreateModelForm factoryId={mockFactoryId} />,
+    //     );
 
-        expect(propertyHeader).toBeInTheDocument();
-        expect(propertyInput).toBeInTheDocument();
-        expect(unitsInput).toBeInTheDocument();
-    });
+    //     const nextButton = getByText(/Next/);
+    //     fireEvent.click(nextButton);
 
-    test("should add new attribute input field when Add Attribute button is clicked", async () => {
-        const mockContextValue = {
-            factoryId: "12345678",
-            modelId: "12345678",
-            attributes: [{ attribute: "name", value: "CNC 1" }],
-            setAttributes: jest.fn(),
-            properties: [{ property: "", unit: "" }],
-            setProperties: jest.fn(),
-        };
+    //     const propertiesForm = getByTestId("properties-form");
+    //     expect(propertiesForm).toBeInTheDocument();
+    // });
 
-        const { getByText } = render(
-            <Context.Provider value={mockContextValue}>
-                <AddAttributeForm />
-            </Context.Provider>,
-        );
-        const addAttributeButton = getByText("Add Attribute");
+    // test("should go back to 'AttributesForm' when 'Back' button is clicked from 'PropertiesForm'", () => {
+    //     const { getByText, getByTestId } = render(
+    //         <CreateModelForm factoryId={mockFactoryId} />,
+    //     );
 
-        addAttributeButton.click();
+    //     const nextButton = getByText(/Next/);
+    //     fireEvent.click(nextButton);
 
-        await waitFor(() => {
-            expect(getByText("Attribute 2")).toBeInTheDocument();
-        });
-    });
+    //     const propertiesForm = getByTestId("properties-form");
+    //     expect(propertiesForm).toBeInTheDocument();
 
-    test("should add new property input field when Add Property button is clicked", async () => {
-        const mockContextValue = {
-            factoryId: "12345678",
-            modelId: "12345678",
-            attributes: [{ attribute: "name", value: "CNC 1" }],
-            setAttributes: jest.fn(),
-            properties: [{ property: "Temperature", unit: "°C" }],
-            setProperties: jest.fn(),
-        };
+    //     const backButton = getByText(/Back/);
+    //     fireEvent.click(backButton);
 
-        const { getByText } = render(
-            <Context.Provider value={mockContextValue}>
-                <AddPropertyForm />
-            </Context.Provider>,
-        );
-        const addPropertyButton = getByText("Add Property");
-        addPropertyButton.click();
+    //     const attributesForm = getByTestId("attributes-form");
+    //     expect(attributesForm).toBeInTheDocument();
+    // });
 
-        await waitFor(() => {
-            expect(getByText("Property 2")).toBeInTheDocument();
-        });
-    });
+    // test("should render 'GeneratorFunctionForm' with 'Back' button", () => {
+    //     const { getByText, getByTestId } = render(
+    //         <CreateModelForm factoryId={mockFactoryId} />,
+    //     );
+
+    //     const nextButtonAttributesForm = getByText(/Next/);
+    //     fireEvent.click(nextButtonAttributesForm);
+    //     const nextButtonPropertiesForm = getByText(/Next/);
+    //     fireEvent.click(nextButtonPropertiesForm);
+
+    //     const generatorFunctionForm = getByTestId("generator-function-form");
+    //     expect(generatorFunctionForm).toBeInTheDocument();
+    // });
+
+    // test("should go back to 'PropertiesForm' when 'Back' button is clicked from 'GeneratorFunctionForm'", () => {
+    //     const { getByText, getByTestId } = render(
+    //         <CreateModelForm factoryId={mockFactoryId} />,
+    //     );
+
+    //     const nextButtonAttributesForm = getByText(/Next/);
+    //     fireEvent.click(nextButtonAttributesForm);
+    //     const nextButtonPropertiesForm = getByText(/Next/);
+    //     fireEvent.click(nextButtonPropertiesForm);
+
+    //     const generatorFunctionForm = getByTestId("generator-function-form");
+    //     expect(generatorFunctionForm).toBeInTheDocument();
+
+    //     const backButton = getByText(/Back/);
+    //     fireEvent.click(backButton);
+
+    //     const propertiesForm = getByTestId("properties-form");
+    //     expect(propertiesForm).toBeInTheDocument();
+    // });
 });

@@ -4,7 +4,7 @@ const ProgressTracker = (props: { progress: number }) => {
     const { progress } = props;
 
     return (
-        <div className="flex flex-row items-center justify-center gap-x-2 mb-3 gap-y-2 scale-[85%]">
+        <div className="flex flex-row items-center justify-center gap-x-2 mb-3 gap-y-2 scale-[85%]" data-testid="progress-tracker">
             <div className="rounded-full w-12 h-12 p-2.5 bg-gradient-to-br from-MainBlue to-DarkBlue items-center justify-center text-center font-semibold text-xl">
                 1
             </div>

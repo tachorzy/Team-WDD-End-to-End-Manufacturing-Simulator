@@ -46,7 +46,7 @@ const PropertiesForm = () => {
     };
 
     return (
-        <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
+        <div className="flex flex-row gap-x-24 mt-4 gap-y-2" data-tesid="properties-form">
             <form>
                 <div className="flex flex-col w-full gap-y-3">
                     <PropertyInputColumn

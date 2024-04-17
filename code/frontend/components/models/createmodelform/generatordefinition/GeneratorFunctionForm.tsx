@@ -55,7 +55,7 @@ const GeneratorFunctionForm = () => {
     };
 
     return (
-        <div className="flex flex-col gap-y-3 max-h-72">
+        <div className="flex flex-col gap-y-3 max-h-72" data-testid="generator-function-form">
             <div className="flex flex-col max-h-[28rem] overflow-y-scroll gap-y-1 gap-x-16">
                 {uniqueProperties.map((property, index) => (
                     <div key={index}>
