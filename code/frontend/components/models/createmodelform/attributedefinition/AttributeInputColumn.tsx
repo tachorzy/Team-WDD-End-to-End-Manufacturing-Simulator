@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Attribute } from "@/app/api/_utils/types";
 // import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
 
@@ -21,19 +21,27 @@ const AttributeInputColumn = (props: {
     const [attribute, setAttribute] = useState("");
     const [value, setValue] = useState("");
 
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+    
     useEffect(() => {
         if (attribute === "" || value === "") return;
+        
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
 
-        const data: Attribute = {
-            factoryId,
-            modelId: "123456", // later we will create the id from the backend
-            name: attribute,
-            value,
-        };
-        console.log(
-            `Adding new Attribute named: ${attribute} with value: ${value} to the list of attributes`,
-        );
-        setAttributes([...attributes, data]);
+        debounceTimeout.current = setTimeout(() => {
+            const data: Attribute = {
+                factoryId,
+                modelId: "123456", // later we will create the id from the backend
+                name: attribute,
+                value,
+            };
+            console.log(
+                `Adding new Attribute named: ${attribute} with value: ${value} to the list of attributes`,
+            );
+            setAttributes([...attributes, data]);
+        }, 500);
     }, [attribute, value, factoryId, attributes, setAttributes]);
 
     return (
