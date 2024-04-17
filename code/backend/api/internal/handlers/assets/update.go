@@ -79,6 +79,8 @@ func (h Handler) updateDynamoDBRecord(ctx context.Context, asset *types.Asset) e
 		return err
 	}
 
+	fmt.Printf("Expression Attribute Names: %v", expr.Names())
+
 	input := &dynamodb.UpdateItemInput{
 		Key:                       map[string]ddbtypes.AttributeValue{"assetId": &ddbtypes.AttributeValueMemberS{Value: asset.AssetID}},
 		TableName:                 aws.String(TABLENAME),
@@ -152,6 +154,7 @@ func processAssetImageUpdate(ctx context.Context, asset *types.Asset, s3Client t
 	asset.ImageData = fmt.Sprintf("https://%s.s3.amazonaws.com/assets/%s.jpg", "wingstopdrivenbucket", asset.AssetID)
 	return nil
 }
+
 func processAssetModelUpdate(ctx context.Context, asset *types.Asset, s3Client types.S3Client) error {
 	actualS3Client := s3Client.(interface{}).(*s3.Client)
 	uploader := manager.NewUploader(actualS3Client)
@@ -180,11 +183,11 @@ func processAssetModelUpdate(ctx context.Context, asset *types.Asset, s3Client t
 }
 
 func (h Handler) createUpdateBuilder(asset *types.Asset) expression.UpdateBuilder {
-	var updateBuilder expression.UpdateBuilder
+	updateBuilder := expression.UpdateBuilder{}
 
-	setIfNotNil := func(field string, value interface{}) {
+	setIfNotNil := func(path string, value interface{}) {
 		if value != nil {
-			updateBuilder = updateBuilder.Set(expression.Name(field), expression.Value(value))
+			updateBuilder = updateBuilder.Set(expression.Name(path), expression.Value(value))
 		}
 	}
 
@@ -192,25 +195,20 @@ func (h Handler) createUpdateBuilder(asset *types.Asset) expression.UpdateBuilde
 	setIfNotNil("name", asset.Name)
 	setIfNotNil("modelId", asset.ModelID)
 	setIfNotNil("floorplanId", asset.FloorplanID)
-
-	if asset.FloorplanCoords != nil {
-		setIfNotNil("floorplanCoords.longitude", asset.FloorplanCoords.Longitude)
-		setIfNotNil("floorplanCoords.latitude", asset.FloorplanCoords.Latitude)
-	}
-
 	setIfNotNil("modelUrl", asset.ModelURL)
 	setIfNotNil("type", asset.Type)
 	setIfNotNil("description", asset.Description)
 
-	if len(asset.Attributes) > 0 {
-		for key, attr := range asset.Attributes {
-			valuePath := "attributes." + key + ".value"
-			unitPath := "attributes." + key + ".unit"
-			updateBuilder = updateBuilder.Set(expression.Name(valuePath), expression.Value(attr.Value))
-			if attr.Unit != "" {
-				updateBuilder = updateBuilder.Set(expression.Name(unitPath), expression.Value(attr.Unit))
-			}
-		}
+	for key, attr := range asset.Attributes {
+		basePath := fmt.Sprintf("attributes.%s", key)
+		attrID := uuid.NewString()
+		setIfNotNil(fmt.Sprintf("%s.attributeId", basePath), attrID)
+		setIfNotNil(fmt.Sprintf("%s.name", basePath), attr.Name)
+		setIfNotNil(fmt.Sprintf("%s.value", basePath), attr.Value)
+		setIfNotNil(fmt.Sprintf("%s.unit", basePath), attr.Unit)
+		setIfNotNil(fmt.Sprintf("%s.modelId", basePath), attr.ModelID)
+		setIfNotNil(fmt.Sprintf("%s.assetId", basePath), attr.AssetID)
+		setIfNotNil(fmt.Sprintf("%s.factoryId", basePath), attr.FactoryID)
 	}
 
 	return updateBuilder

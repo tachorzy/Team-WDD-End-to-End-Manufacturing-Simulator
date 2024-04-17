@@ -51,7 +51,7 @@ $env:CGO_ENABLED = "0"
 
 2. Replace `<PATH_TO_LAMBDA_FUNCTION>`, and build the Go application
 ```bash
-go build -o build/bootstrap <PATH_TO_LAMBDA_FUNCTION>/main.go
+go build -o build/bootstrap C:\Users\Cairo\Documents\wingstop_driven_developers\code\backend\api\cmd\assets\update\main.go
 ```
 
 3. Zip the binary with a zip tool

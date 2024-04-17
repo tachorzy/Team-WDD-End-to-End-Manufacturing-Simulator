@@ -13,19 +13,16 @@ const AttributeInputColumn = (props: {
 
     useEffect(() => {
         if (attribute === "" || value === "") return;
-
+    
         const data: Attribute = {
             factoryId,
-            modelId: "123456", // later we will create the id from the backend
+            modelId: "123456",
             name: attribute,
             value,
         };
-        console.log(
-            `Adding new Attribute named: ${attribute} with value: ${value} to the list of attributes`,
-        );
-        setAttributes([...attributes, data]);
-    }, [attribute, value, factoryId, attributes, setAttributes]);
-
+        console.log(`Adding new Attribute named: ${attribute} with value: ${value}`);
+        setAttributes(prevAttributes => [...prevAttributes, data]);
+    }, [attribute, value, factoryId, setAttributes]);
     return (
         <div className="flex flex-col gap-y-3 max-h-[22rem] overflow-y-scroll">
             <h1 className="text-2xl font-semibold text-gray-900">Attributes</h1>

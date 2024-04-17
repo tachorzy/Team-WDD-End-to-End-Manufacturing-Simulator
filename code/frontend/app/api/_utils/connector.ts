@@ -18,9 +18,9 @@ export interface PutConfig<T> {
     payload: T;
 }
 
-export interface DeleteConfig<T>{
+export interface DeleteConfig<T> {
     resource: string;
-   params?: Record<string, string>;
+    params?: Record<string, string>;
 }
 
 class Connector {
@@ -89,6 +89,7 @@ class Connector {
 
         return (await response.json()) as Promise<T>;
     }
+
     async delete<T>({ resource, params }: DeleteConfig<T>): Promise<T> {
         const url = new URL(`${this.baseURL}/${resource}`);
 

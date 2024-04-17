@@ -4,6 +4,7 @@ import { Attribute, Property } from "@/app/api/_utils/types";
 import PropertyInputColumn from "./PropertyInputColumn";
 import AddPropertyButton from "./AddPropertyButton";
 import { Context } from "../CreateModelForm";
+import { BackendConnector,PostConfig } from "@/app/api/_utils/connector";
 
 interface PropertiesFormContext {
     factoryId: string;
@@ -27,6 +28,35 @@ const PropertiesForm = () => {
             generatorType: "",
         },
     ]);
+    const handleSubmit = async () => {
+        contextValue?.nextPage();
+        
+        
+        const uniqueNames: Record<string, boolean> = {};
+    
+       
+        const uniqueProperties = contextValue.properties.filter(property => {
+            if (!uniqueNames[property.name]) {
+                uniqueNames[property.name] = true;
+                return true;
+            }
+            return false;
+        });
+    
+        for (const property of uniqueProperties) {
+            try {
+                const config = await BackendConnector.post<Property>({
+                    resource: "properties",
+                    payload: property
+                });
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
+        }
+    }
+    
+    
 
     return (
         <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
@@ -73,7 +103,7 @@ const PropertiesForm = () => {
             </section>
             <button
                 type="submit"
-                onClick={contextValue?.nextPage}
+                onClick={handleSubmit}
                 className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
             >
                 Next ›

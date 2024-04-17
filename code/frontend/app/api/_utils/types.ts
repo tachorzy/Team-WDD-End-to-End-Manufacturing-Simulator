@@ -28,6 +28,8 @@ export interface Asset {
     description: string;
     imageData?: string;
     factoryId: string;
+    modelId:string;
+    modelUrl:string;
 }
 
 export interface Attribute {

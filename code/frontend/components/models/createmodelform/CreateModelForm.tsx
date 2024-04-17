@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo,useEffect } from "react";
+import uuid from 'react-uuid'
 import { Attribute, Property } from "@/app/api/_utils/types";
 import AttributesForm from "./attributedefinition/AttributesForm";
 import PropertiesForm from "./propertiesdefinition/PropertiesForm";
@@ -10,9 +11,7 @@ export const Context = React.createContext({});
 const CreateModelForm = (props: { factoryId: string }) => {
     const { factoryId } = props;
 
-    console.log(factoryId);
-
-    const modelId = "2024-04-08-9780";
+    const modelId =  uuid();
 
     const initialAttribute = {
         factoryId: "",
@@ -29,12 +28,20 @@ const CreateModelForm = (props: { factoryId: string }) => {
         unit: "",
         generatorType: "",
     };
+    const initialAsset = {
+        assetId:"",
+        factoryId: "",
+        modelId: "",
+        name: "",
+        description: "",
+        modelUrl:"",
+    }
 
     const [attributes, setAttributes] = useState<Attribute[]>([
         initialAttribute,
     ]);
     const [properties, setProperties] = useState<Property[]>([initialProperty]);
-
+ const[asset,setAsset] = useState<Asset>([initialAsset]);
     const [currentPage, setCurrentPage] = useState(1);
 
     const nextPage = () => setCurrentPage(currentPage + 1);
@@ -44,6 +51,8 @@ const CreateModelForm = (props: { factoryId: string }) => {
         () => ({
             factoryId,
             modelId,
+            asset,
+            setAsset,
             attributes,
             setAttributes,
             properties,
@@ -54,6 +63,8 @@ const CreateModelForm = (props: { factoryId: string }) => {
         [
             factoryId,
             modelId,
+            asset,
+            setAsset,
             attributes,
             setAttributes,
             properties,

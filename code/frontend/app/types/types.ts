@@ -28,12 +28,23 @@ export interface Asset {
     description: string;
     image?: string;
     factoryId: string;
+    modelId: string;
+    modelUrl:string;
+    attributes: Attribute[];
+}
+export interface Attribute {
+    attributeId?: string;
+    assetId:string;
+    factoryId: string;
+    modelId: string;
+    name: string;
+    value: string;
 }
 
-export interface Property{
-    propertyId?:string,
-    measurementId:string,
-    name:string,
-    value:number,
-    unit:string,
+export interface Property {
+    propertyId?: string;
+    measurementId: string;
+    name: string;
+    value: number;
+    unit: string;
 }
