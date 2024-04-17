@@ -4,6 +4,7 @@ import RandomGeneratorForm from "./RandomGeneratorForm";
 import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
 import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
 import { Context } from "../CreateModelForm";
+import Link from "next/link";
 
 interface GeneratorFunctionFormContext {
     factoryId: string;
@@ -57,7 +58,9 @@ const GeneratorFunctionForm = () => {
                 type="submit"
                 className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
             >
-                Submit ›
+                <Link href={`/factorydashboard/${contextValue?.factoryId}`}>
+                    Submit ›
+                </Link>
             </button>
         </div>
     );
