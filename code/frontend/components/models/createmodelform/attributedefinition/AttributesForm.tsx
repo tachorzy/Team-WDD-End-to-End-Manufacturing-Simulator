@@ -54,6 +54,7 @@ const AttributesForm = () => {
                         attributes={contextValue?.attributes}
                         setAttributes={contextValue?.setAttributes}
                         factoryId={contextValue?.factoryId}
+                        modelId={contextValue?.modelId}
                         invalidAttribute={invalidAttribute}
                         setInvalidAttribute={setInvalidAttribute}
                     />

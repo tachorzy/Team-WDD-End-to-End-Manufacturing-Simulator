@@ -6,6 +6,7 @@ const AttributeInputColumn = (props: {
     inputFields: Attribute[];
     attributes: Attribute[];
     setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
+    modelId: string;
     factoryId: string;
     invalidAttribute: boolean;
     setInvalidAttribute: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,6 +16,7 @@ const AttributeInputColumn = (props: {
         attributes,
         setAttributes,
         factoryId,
+        modelId,
         invalidAttribute,
         setInvalidAttribute,
     } = props;
@@ -33,7 +35,7 @@ const AttributeInputColumn = (props: {
         debounceTimeout.current = setTimeout(() => {
             const data: Attribute = {
                 factoryId,
-                modelId: "123456", // later we will create the id from the backend
+                modelId, // later we will create the id from the backend
                 name: attribute,
                 value,
             };
