@@ -1,4 +1,4 @@
-import React, { useState,  useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Property, Measurement } from "@/app/api/_utils/types";
 
@@ -16,12 +16,11 @@ const RandomGeneratorForm = (props: {
     const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-
         if (debounceTimeout.current) {
             clearTimeout(debounceTimeout.current);
         }
 
-        const handleData = debounceTimeout.current = setTimeout(() => {
+        debounceTimeout.current = setTimeout(() => {
             const data: Measurement = {
                 measurementId: "test test test test", // REPLACE
                 modelId: "test test test test", // REPLACE
@@ -35,7 +34,6 @@ const RandomGeneratorForm = (props: {
 
             setMeasurements([...measurements, data]);
         }, 500);
-        return () => clearTimeout(handleData)
     }, [frequency, minValue, maxValue]);
 
     return (

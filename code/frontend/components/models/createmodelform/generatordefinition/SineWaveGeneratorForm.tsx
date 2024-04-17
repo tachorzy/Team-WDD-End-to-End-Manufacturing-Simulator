@@ -1,4 +1,4 @@
-import React, { useEffect,  useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Measurement, Property } from "@/app/api/_utils/types";
 
@@ -18,12 +18,11 @@ const SineWaveGeneratorForm = (props: {
     const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-
         if (debounceTimeout.current) {
             clearTimeout(debounceTimeout.current);
         }
 
-        const handleData = debounceTimeout.current = setTimeout(() => {
+        debounceTimeout.current = setTimeout(() => {
             const data: Measurement = {
                 measurementId: "test test test test", // REPLACE
                 modelId: "test test test test", // REPLACE
@@ -40,7 +39,6 @@ const SineWaveGeneratorForm = (props: {
 
             setMeasurements([...measurements, data]);
         }, 500);
-        return () => clearTimeout(handleData)
     }, [frequency, angularFrequency, amplitude, phase, maxValue]);
 
     return (

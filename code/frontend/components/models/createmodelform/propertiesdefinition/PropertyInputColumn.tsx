@@ -30,7 +30,7 @@ const PropertyInputColumn = (props: {
             clearTimeout(debounceTimeout.current);
         }
 
-        const handleData = debounceTimeout.current = setTimeout(() => {
+        debounceTimeout.current = setTimeout(() => {
             const data: Property = {
                 factoryId: "",
                 modelId: "",
@@ -42,7 +42,6 @@ const PropertyInputColumn = (props: {
 
             setProperties([...properties, data]);
         }, 500);
-        return () => clearTimeout(handleData)
     }, [property, unit, generatorFunction, properties, setProperties]);
 
     return (

@@ -30,7 +30,7 @@ const AttributeInputColumn = (props: {
             clearTimeout(debounceTimeout.current);
         }
 
-        const handleData = debounceTimeout.current = setTimeout(() => {
+        debounceTimeout.current = setTimeout(() => {
             const data: Attribute = {
                 factoryId,
                 modelId: "123456", // later we will create the id from the backend
@@ -42,7 +42,6 @@ const AttributeInputColumn = (props: {
             );
             setAttributes([...attributes, data]);
         }, 500);
-        return () => clearTimeout(handleData)
     }, [attribute, value, factoryId, attributes, setAttributes]);
 
     return (

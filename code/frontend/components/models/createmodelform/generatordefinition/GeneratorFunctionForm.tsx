@@ -47,9 +47,11 @@ const GeneratorFunctionForm = () => {
             attributes: contextValue.attributes,
             properties: contextValue.properties,
         };
-        console.log(`newModel: ${JSON.stringify(newModel)}`);
+        console.log(`newModel: ${JSON.stringify(newModel)}\n`);
         contextValue.setModels([...contextValue.models, newModel]);
-        console.log(`models: ${JSON.stringify(contextValue.models)}`);
+        contextValue.models.forEach((model) => {
+            console.log(`\n\nMODEL: ${JSON.stringify(model)}\n`);
+        });
     };
 
     return (
