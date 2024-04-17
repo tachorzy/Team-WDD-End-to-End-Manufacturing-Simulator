@@ -8,12 +8,24 @@ const RandomGeneratorForm = (props: {
     measurements: Measurement[];
     setMeasurements: React.Dispatch<React.SetStateAction<Measurement[]>>;
 }) => {
-    const { propertyIndex, property } = props;
+    const { propertyIndex, property, measurements, setMeasurements } = props;
     const [frequency, setFrequency] = useState<number>(0.0);
     const [minValue, setMinValue] = useState<number>(0.0);
     const [maxValue, setMaxValue] = useState<number>(0.0);
 
     useEffect(() => {
+        const data: Measurement = {
+            measurementId: "test test test test", // REPLACE
+            modelId: "test test test test", // REPLACE
+            factoryId: "test test", //REPLACE
+            lowerBound: minValue,
+            upperBound: maxValue,
+            frequency: frequency,
+            precision: 0.0,
+            generatorFunction: "random"
+        }
+
+        setMeasurements([...measurements, data])
 
     }, [frequency, minValue, maxValue]);
 
