@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Attribute, Property } from "@/app/api/_utils/types";
+import { Attribute, Property, Measurement } from "@/app/api/_utils/types";
 import AttributesForm from "./attributedefinition/AttributesForm";
 import PropertiesForm from "./propertiesdefinition/PropertiesForm";
 import ProgressTracker from "./ProgressTracker";
@@ -30,11 +30,23 @@ const CreateModelForm = (props: { factoryId: string }) => {
         generatorType: "",
     };
 
+    const initialMeasurement = {
+        measurementId: "",
+        modelId: "",
+        factoryId: "",
+        lowerBound: 0.0,
+        upperBound: 0.0,
+        generatorFunction: "",
+        frequency: 0,
+        precision: 0,
+    };
+
+
     const [attributes, setAttributes] = useState<Attribute[]>([
         initialAttribute,
     ]);
     const [properties, setProperties] = useState<Property[]>([initialProperty]);
-
+    const [measurements, setMeasurement] = useState <Measurement[]>([initialMeasurement]);
     const [currentPage, setCurrentPage] = useState(1);
 
     const nextPage = () => setCurrentPage(currentPage + 1);
@@ -48,6 +60,8 @@ const CreateModelForm = (props: { factoryId: string }) => {
             setAttributes,
             properties,
             setProperties,
+            measurements,
+            setMeasurements,
             currentPage,
             nextPage,
         }),
@@ -58,6 +72,8 @@ const CreateModelForm = (props: { factoryId: string }) => {
             setAttributes,
             properties,
             setProperties,
+            measurements,
+            setMeasurements,
             currentPage,
             nextPage,
         ],

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Attribute, Property } from "@/app/api/_utils/types";
+import { Attribute, Property, Measurement } from "@/app/api/_utils/types";
 import RandomGeneratorForm from "./RandomGeneratorForm";
 import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
 import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
@@ -12,6 +12,8 @@ interface GeneratorFunctionFormContext {
     setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
     properties: Property[];
     setProperties: React.Dispatch<React.SetStateAction<Property[]>>;
+    measurements: Measurement[];
+    setMeasurements: React.Dispatch<React.SetStateAction<Measurement[]>>;
     nextPage: () => void;
 }
 
@@ -27,18 +29,24 @@ const GeneratorFunctionForm = () => {
                             <RandomGeneratorForm
                                 propertyIndex={index}
                                 property={property}
+                                measurements={contextValue?.measurements}
+                                setMeasurements={contextValue?.setMeasurements}
                             />
                         )}
                         {property.generatorType === "Sine wave" && (
                             <SineWaveGeneratorForm
                                 propertyIndex={index}
                                 property={property}
+                                measurements={contextValue?.measurements}
+                                setMeasurements={contextValue?.setMeasurements}
                             />
                         )}
                         {property.generatorType === "Sawtooth" && (
                             <SawtoothGeneratorForm
                                 propertyIndex={index}
                                 property={property}
+                                measurements={contextValue?.measurements}
+                                setMeasurements={contextValue?.setMeasurements}
                             />
                         )}
                     </div>

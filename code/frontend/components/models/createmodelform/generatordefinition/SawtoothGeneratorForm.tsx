@@ -1,18 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Property } from "@/app/api/_utils/types";
+import { Property, Measurement } from "@/app/api/_utils/types";
 
 const SawtoothGeneratorForm = (props: {
     propertyIndex: number;
     property: Property;
+    measurements: Measurement[];
+    setMeasurements: React.Dispatch<React.SetStateAction<Measurement[]>>;
 }) => {
-    const { propertyIndex, property } = props;
+    const { propertyIndex, property, measurements, setMeasurements } = props;
     const [frequency, setFrequency] = useState<number>(0.0);
     const [angularFrequency, setAngularFrequency] = useState<number>(0.0);
     const [amplitude, setAmplitude] = useState<number>(0.0);
     const [phase, setPhase] = useState<number>(0.0);
     const [maxValue, setMaxValue] = useState<number>(0.0);
     
+    useEffect(() => {
+        const data: Measurement = { 
+            measurementId: "test test test test", // REPLACE
+            modelId: "test test test test", // REPLACE
+            factoryId: "test test test test", // REPLACE
+            lowerBound: 0.0,
+            upperBound: maxValue,
+            frequency: frequency,
+            angularFrequency: angularFrequency,
+            amplitude: amplitude,
+            phase: phase,
+            precision: 0.0,
+            generatorFunction: "sawtooth"
+        }
+
+        setMeasurements([...measurements, data])
+        
+    }, [frequency, angularFrequency, amplitude, phase, maxValue]);
+
     return (
         <div className="flex flex-col gap-y-3 max-h-72">
             <div>

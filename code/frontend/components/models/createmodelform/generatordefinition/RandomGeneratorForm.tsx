@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Property } from "@/app/api/_utils/types";
+import { Property, Measurement } from "@/app/api/_utils/types";
 
 const RandomGeneratorForm = (props: {
     propertyIndex: number;
     property: Property;
+    measurements: Measurement[];
+    setMeasurements: React.Dispatch<React.SetStateAction<Measurement[]>>;
 }) => {
     const { propertyIndex, property } = props;
     const [frequency, setFrequency] = useState<number>(0.0);

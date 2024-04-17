@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { Property } from "@/app/api/_utils/types";
+import { Measurement, Property } from "@/app/api/_utils/types";
 
 const SineWaveGeneratorForm = (props: {
     propertyIndex: number;
     property: Property;
+    measurements: Measurement[];
+    setMeasurements: React.Dispatch<React.SetStateAction<Measurement[]>>;
 }) => {
     const { propertyIndex, property } = props;
     const [frequency, setFrequency] = useState<number>(0.0);
