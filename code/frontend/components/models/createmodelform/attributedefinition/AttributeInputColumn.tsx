@@ -49,7 +49,7 @@ const AttributeInputColumn = (props: {
                             </h2>
                             <input
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-full"
-                                placeholder="e.g. Model Name"
+                                placeholder="e.g. Serial number"
                                 onChange={(e) => { setAttribute(e.target.value); setInvalidAttribute(false) }}
                             />
                         </div>
@@ -59,7 +59,7 @@ const AttributeInputColumn = (props: {
                             </h2>
                             <input
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-full"
-                                placeholder="e.g. CNC 1"
+                                placeholder="e.g. SN-1234567890"
                                 onChange={(e) => setValue(e.target.value)}
                             />
                         </div>

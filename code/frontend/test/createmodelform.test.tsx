@@ -43,11 +43,13 @@ describe("CreateModelForm", () => {
                 attributes={[initialAttribute]}
                 setAttributes={jest.fn()}
                 factoryId="123456789"
+                invalidAttribute={false}
+                setInvalidAttribute={jest.fn()}
             />,
         );
         const attributeHeader = getByText("Attribute 1");
-        const attributeInput = getByPlaceholderText("e.g. Model Name");
-        const valueInput = getByPlaceholderText("e.g. CNC 1");
+        const attributeInput = getByPlaceholderText("e.g. Serial number");
+        const valueInput = getByPlaceholderText("e.g. SN-1234567890");
 
         expect(attributeHeader).toBeInTheDocument();
         expect(attributeInput).toBeInTheDocument();
