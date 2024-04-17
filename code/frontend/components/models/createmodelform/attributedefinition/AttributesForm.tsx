@@ -18,7 +18,6 @@ export interface AttributesFormContext {
 
 const AttributesForm = () => {
     const contextValue = useContext(Context) as AttributesFormContext;
-    console.log(contextValue);
     const [inputFields, setInputFields] = useState<Attribute[]>([
         { factoryId: "", modelId: "", name: "", value: "" },
     ]);
