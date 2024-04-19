@@ -25,6 +25,9 @@ describe("Blueprint Component", () => {
             description: "Description 1",
             imageData: "assets/images/floorplan.jpg",
             factoryId: "1",
+            modelId: "1",
+            modelUrl: "assets/models/model.glb",
+            floorplanCords: { x: 0, y: 0 },
         };
 
         const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", {
@@ -51,6 +54,9 @@ describe("Blueprint Component", () => {
             description: "Description 1",
             imageData: "assets/images/floorplan.jpg",
             factoryId: "1",
+            modelId: "1",
+            modelUrl: "assets/models/model.glb",
+            floorplanCords: { x: 0, y: 0 },
         };
 
         const mockFile = new File(["(⌐□_□)"], "floorplan.jpg", {

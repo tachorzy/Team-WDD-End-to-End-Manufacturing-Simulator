@@ -32,10 +32,14 @@ describe("AssetBio", () => {
 
     test("should render asset", async () => {
         const asset = {
+            assetId: "1",
             factoryId: "1",
             name: "Asset 1",
             description: "Asset 1 description",
             imageData: "https://www.example.com/image.jpg",
+            modelId: "1",
+            modelUrl:"2",
+            floorplanCords: { x: 0, y: 0 },
         };
 
         const { getByAltText, getByText } = render(<AssetBio asset={asset} />);
@@ -54,10 +58,14 @@ describe("AssetBio", () => {
 
     test("should render asset withouth imageData", async () => {
         const asset = {
+            assetId: "1",
             factoryId: "1",
             name: "Asset 1",
             description: "Asset 1 description",
-            imageData: undefined,
+            imageData: "",
+            modelId: "1",
+            floorplanCords: { x: 0, y: 0 },
+            modelUrl:" "
         };
 
         const { getByAltText, getByText } = render(<AssetBio asset={asset} />);

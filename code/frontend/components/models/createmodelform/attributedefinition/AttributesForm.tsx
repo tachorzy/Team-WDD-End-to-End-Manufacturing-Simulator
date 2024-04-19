@@ -1,18 +1,18 @@
-import React, { useContext, useState,useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 // import Image from "next/image";
-import { Attribute, Property,Asset } from "@/app/api/_utils/types";
+import { Attribute, Property, Asset } from "@/app/api/_utils/types";
+import { BackendConnector } from "@/app/api/_utils/connector";
+import uuid from "react-uuid";
 import AttributeInputColumn from "./AttributeInputColumn";
 import AddAttributeButton from "./AddAttributeButton";
 import NameField from "./NameField";
-import AssetField from "./Assetfield";
+import AssetField from "./AssetField";
 import { Context } from "../CreateModelForm";
-import {BackendConnector } from "@/app/api/_utils/connector";
-import uuid from "react-uuid";
 
 export interface AttributesFormContext {
     factoryId: string;
     modelId: string;
-    asset:Asset;
+    asset: Asset;
     attributes: Attribute[];
     setAsset: React.Dispatch<React.SetStateAction<Asset | undefined>>;
     setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
@@ -21,43 +21,38 @@ export interface AttributesFormContext {
     nextPage: () => void;
 }
 
- 
-
 const AttributesForm = () => {
     const contextValue = useContext(Context) as AttributesFormContext;
     const [inputFields, setInputFields] = useState<Attribute[]>([
-        { factoryId: "", assetId:"",modelId: "", name: "", value: "" },
+        { factoryId: "", assetId: "", modelId: "", name: "", value: "" },
     ]);
-   
+
     const handleSubmit = async () => {
         const { asset, modelId, attributes } = contextValue;
-    
-      
-        const assetId = asset?.assetId || '';
+
+        const assetId = asset?.assetId || "";
         const uniqueNames: Record<string, boolean> = {};
-    
-        const uniqueAttributes = contextValue.attributes.filter(attribute => {
+
+        const uniqueAttributes = contextValue.attributes.filter((attribute) => {
             if (!uniqueNames[attribute.name]) {
                 uniqueNames[attribute.name] = true;
                 return true;
             }
             return false;
         });
-    
-      
+
         for (const attribute of uniqueAttributes) {
             try {
-                
                 const payload = {
-                    ...attribute, 
+                    ...attribute,
                     factoryId: contextValue.factoryId,
-                    assetId: assetId,
+                    assetId,
                     modelId: contextValue.asset.modelId,
                 };
-                
+
                 const config = await BackendConnector.post<Attribute>({
                     resource: "attributes",
-                    payload: payload, 
+                    payload,
                 });
                 console.log(config);
             } catch (e) {
@@ -65,7 +60,6 @@ const AttributesForm = () => {
             }
         }
     };
-    
 
     const [invalidAttribute, setInvalidAttribute] = useState(false);
 
@@ -80,12 +74,9 @@ const AttributesForm = () => {
         contextValue?.nextPage();
     };
 
-    const handleNext =  (
-        event: React.MouseEvent<HTMLButtonElement>,
-    )=> {
-        handleNextPageButton(event); 
-         handleSubmit();  
-        
+    const handleNext = (event: React.MouseEvent<HTMLButtonElement>) => {
+        handleNextPageButton(event);
+        handleSubmit();
     };
 
     return (
@@ -98,6 +89,7 @@ const AttributesForm = () => {
 
                 <NameField
                     modelId={contextValue?.modelId}
+                    assetId={contextValue?.asset?.assetId}
                     factoryId={contextValue?.factoryId}
                     attributes={contextValue?.attributes}
                     setAttributes={contextValue?.setAttributes}
@@ -116,6 +108,7 @@ const AttributesForm = () => {
                         modelId={contextValue?.modelId}
                         invalidAttribute={invalidAttribute}
                         setInvalidAttribute={setInvalidAttribute}
+                        asset={contextValue?.asset}
                     />
                     <AddAttributeButton setInputFields={setInputFields} />
                 </div>
@@ -142,7 +135,7 @@ const AttributesForm = () => {
             <button
                 type="submit"
                 onClick={handleNext}
-                className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
+                className="bg-black text-white p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
             >
                 Next ›
             </button>

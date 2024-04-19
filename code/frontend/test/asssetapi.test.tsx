@@ -46,8 +46,8 @@ describe("BackendConnector", () => {
         it("should fetch assets for a given factory ID", async () => {
             const factoryId = "factory123";
             const mockAssets: Asset[] = [
-                { assetId: "1", name: "Asset 1", factoryId, description: "" },
-                { assetId: "2", name: "Asset 2", factoryId, description: "" },
+                { assetId: "1", name: "Asset 1", factoryId, description: "",modelId:"f", modelUrl:"eee",floorplanCords:{x:0,y:0},imageData:"fsdfdsf" },
+                { assetId: "2", name: "Asset 2", factoryId, description: "" ,modelId:"f", modelUrl:"eee",floorplanCords:{x:0,y:0},imageData:"fsdfdsf"},
             ];
 
             fetchMock.mockResponseOnce(JSON.stringify(mockAssets));

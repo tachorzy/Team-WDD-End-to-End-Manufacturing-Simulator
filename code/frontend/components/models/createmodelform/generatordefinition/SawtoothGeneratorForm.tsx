@@ -25,8 +25,8 @@ const SawtoothGeneratorForm = (props: {
         debounceTimeout.current = setTimeout(() => {
             const data: Measurement = {
                 measurementId: property.measurementId,
-                propertyId:property.propertyId,
-                modelId:  property.modelId,
+                propertyId: property.propertyId,
+                modelId: property.modelId,
                 factoryId: property.factoryId,
                 lowerBound: 0.0,
                 upperBound: maxValue,

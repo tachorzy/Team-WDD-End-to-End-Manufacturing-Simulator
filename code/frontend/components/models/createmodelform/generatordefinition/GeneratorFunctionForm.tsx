@@ -6,8 +6,8 @@ import {
     Model,
 } from "@/app/api/_utils/types";
 import Link from "next/link";
+import { BackendConnector, PostConfig } from "@/app/api/_utils/connector";
 import RandomGeneratorForm from "./RandomGeneratorForm";
-import { BackendConnector,PostConfig } from "@/app/api/_utils/connector";
 import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
 import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
 import { Context } from "../CreateModelForm";
@@ -37,36 +37,41 @@ const GeneratorFunctionForm = () => {
         }
         return false;
     });
- //console.log(uniqueProperties);
- console.log(contextValue.measurements);
- const submitMeasurement = async() =>{
-    const uniquePropertyIds: Record<string, boolean> = {};
-    const filteredMeasurements = contextValue.measurements.filter(measurement => {
-        if (!measurement.propertyId || uniquePropertyIds[measurement.propertyId]) {
-            return false;
-        }
-        uniquePropertyIds[measurement.propertyId] = true;
-        return true;
-    });
+    // console.log(uniqueProperties);
+    console.log(contextValue.measurements);
+    const submitMeasurement = async () => {
+        const uniquePropertyIds: Record<string, boolean> = {};
+        const filteredMeasurements = contextValue.measurements.filter(
+            (measurement) => {
+                if (
+                    !measurement.propertyId ||
+                    uniquePropertyIds[measurement.propertyId]
+                ) {
+                    return false;
+                }
+                uniquePropertyIds[measurement.propertyId] = true;
+                return true;
+            },
+        );
 
-    for(const measurement of filteredMeasurements){
-        try{
-            const config = await BackendConnector.post<Measurement>({
-                resource:"measurements",
-                payload:measurement,
-            });
-        } catch (error) {
-            console.error(error);
-            throw error;
+        for (const measurement of filteredMeasurements) {
+            try {
+                const config = await BackendConnector.post<Measurement>({
+                    resource: "measurements",
+                    payload: measurement,
+                });
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
         }
-    }
-}
+    };
     const handleModelSubmission = (
         event: React.MouseEvent<HTMLButtonElement>,
     ) => {
         event.preventDefault();
         console.log(contextValue.measurements);
-       submitMeasurement();
+        submitMeasurement();
 
         const newModel: Model = {
             factoryId: contextValue.factoryId,
@@ -120,7 +125,7 @@ const GeneratorFunctionForm = () => {
             <button
                 type="submit"
                 onClick={handleModelSubmission}
-                className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
+                className="bg-black text-white p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
             >
                 <Link href={`/factorydashboard/${contextValue?.factoryId}`}>
                     Submit ›

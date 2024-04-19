@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Attribute } from "@/app/api/_utils/types";
+import { Attribute ,Asset} from "@/app/api/_utils/types";
 // import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
 
 const AttributeInputColumn = (props: {
@@ -10,6 +10,7 @@ const AttributeInputColumn = (props: {
     factoryId: string;
     invalidAttribute: boolean;
     setInvalidAttribute: React.Dispatch<React.SetStateAction<boolean>>;
+    asset: Asset
 }) => {
     const {
         inputFields,
@@ -19,6 +20,7 @@ const AttributeInputColumn = (props: {
         modelId,
         invalidAttribute,
         setInvalidAttribute,
+        asset
     } = props;
     const [attribute, setAttribute] = useState("");
     const [value, setValue] = useState("");
@@ -38,6 +40,7 @@ const AttributeInputColumn = (props: {
                 modelId, // later we will create the id from the backend
                 name: attribute,
                 value,
+                assetId:asset.assetId,
             };
             console.log(
                 `Adding new Attribute named: ${attribute} with value: ${value} to the list of attributes`,

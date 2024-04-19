@@ -3,7 +3,8 @@ import {
     Attribute,
     Property,
     Measurement,
-    Model,Asset
+    Model,
+    Asset,
 } from "@/app/api/_utils/types";
 import AttributesForm from "./attributedefinition/AttributesForm";
 import PropertiesForm from "./propertiesdefinition/PropertiesForm";
@@ -15,15 +16,12 @@ export const Context = React.createContext({});
 const CreateModelForm = (props: { factoryId: string }) => {
     const { factoryId } = props;
 
-    
-    
-
     // GENERATE THE ID FROM THE BACKEND!
 
     const modelId = ""; // REPLACE WITH ACTUAL MODEL ID
 
     const [models, setModels] = useState<Model[]>([]);
-    const [asset,setAsset] = useState<Asset|null>(null);
+    const [asset, setAsset] = useState<Asset | null>(null);
 
     const [attributes, setAttributes] = useState<Attribute[]>([]);
     const [properties, setProperties] = useState<Property[]>([]);
@@ -88,7 +86,7 @@ const CreateModelForm = (props: { factoryId: string }) => {
                         <button
                             type="button"
                             onClick={prevPage}
-                            className="bg-black p-2 w-24 rounded-full font-semibold text-lg left-0 bottom-0 absolute mb-4 ml-8"
+                            className="bg-black text-white p-2 w-24 rounded-full font-semibold text-lg left-0 bottom-0 absolute mb-4 ml-8"
                         >
                             ‹ Back
                         </button>

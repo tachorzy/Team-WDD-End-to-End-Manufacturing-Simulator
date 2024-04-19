@@ -3,6 +3,7 @@ import { Attribute } from "@/app/api/_utils/types";
 import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
 
 const NameField = (props: {
+    assetId: string;
     modelId: string;
     factoryId: string;
     attributes: Attribute[];
@@ -11,6 +12,7 @@ const NameField = (props: {
     setInvalidAttribute: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
     const {
+        assetId,
         modelId,
         factoryId,
         attributes,
@@ -31,6 +33,7 @@ const NameField = (props: {
 
         debounceTimeout.current = setTimeout(() => {
             const data: Attribute = {
+                assetId,
                 factoryId,
                 modelId, // later we will create the id from the backend
                 name: "name",

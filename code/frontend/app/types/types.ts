@@ -29,12 +29,12 @@ export interface Asset {
     image?: string;
     factoryId: string;
     modelId: string;
-    modelUrl:string;
+    modelUrl: string;
     attributes: Attribute[];
 }
 export interface Attribute {
     attributeId?: string;
-    assetId:string;
+    assetId: string;
     factoryId: string;
     modelId: string;
     name: string;

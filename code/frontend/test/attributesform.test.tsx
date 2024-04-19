@@ -3,13 +3,23 @@ import { Context } from "@/components/models/createmodelform/CreateModelForm";
 import AttributesForm, {
     AttributesFormContext,
 } from "@/components/models/createmodelform/attributedefinition/AttributesForm";
-import { Attribute } from "@/app/api/_utils/types";
+import { Attribute ,Asset} from "@/app/api/_utils/types";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 const mockSetAttributes = jest.fn();
 const mockNextPage = jest.fn();
-
+const mockSetAsset: React.Dispatch<React.SetStateAction<Asset|undefined>> = jest.fn();
+const mockAssetItem: Asset = {
+    assetId: "1",
+    factoryId: "12323",
+    modelId: "cairoach",
+    name: "cairo",
+    description: "funniest CS major",
+    imageData: "selfie.jpg",
+    modelUrl: "instagram.com/cairoach",
+    floorplanCords: {x:0,y:0},
+}
 // suppresses console.log
 jest.spyOn(global.console, "log").mockImplementation(() => {});
 
@@ -24,6 +34,8 @@ describe("AttributesForm", () => {
             modelId: "123456",
             attributes: [],
             setAttributes: mockSetAttributes,
+            asset:mockAssetItem,
+            setAsset: mockSetAsset,
             properties: [],
             setProperties: jest.fn(),
             nextPage: mockNextPage,
@@ -46,6 +58,8 @@ describe("AttributesForm", () => {
             modelId: "123456",
             attributes: [],
             setAttributes: mockSetAttributes,
+            asset:mockAssetItem,
+            setAsset: mockSetAsset,
             properties: [],
             setProperties: jest.fn(),
             nextPage: mockNextPage,
@@ -57,12 +71,14 @@ describe("AttributesForm", () => {
                 modelId: "123456",
                 name: "name",
                 value: "GOAT 2000",
+                assetId: "XXXXXXXXX",
             },
             {
                 factoryId: "987654321",
                 modelId: "123456",
                 name: "Serial number",
                 value: "SN-0987654321",
+                assetId: "XXXXXXXXX",
             },
         ];
 
@@ -113,6 +129,8 @@ describe("AttributesForm", () => {
             modelId: "123456",
             attributes: [],
             setAttributes: mockSetAttributes,
+            asset:mockAssetItem,
+            setAsset: mockSetAsset,
             properties: [],
             setProperties: jest.fn(),
             nextPage: mockNextPage,
@@ -137,6 +155,8 @@ describe("AttributesForm", () => {
             modelId: "123456",
             attributes: [],
             setAttributes: mockSetAttributes,
+            asset:mockAssetItem,
+            setAsset:mockSetAsset,
             properties: [],
             setProperties: jest.fn(),
             nextPage: mockNextPage,
@@ -169,6 +189,8 @@ describe("AttributesForm", () => {
             factoryId: "987654321",
             modelId: "123456",
             attributes: [],
+            asset:mockAssetItem,
+            setAsset:mockSetAsset,
             setAttributes: mockSetAttributes,
             properties: [],
             setProperties: jest.fn(),
@@ -201,10 +223,26 @@ describe("AttributesForm", () => {
         setTimeoutSpy.mockImplementation(
             () => 123 as unknown as NodeJS.Timeout,
         );
+        const asset = {
+            factoryId: "1",
+            name: "Asset 1",
+            description: "Asset 1 description",
+            imageData: "https://www.example.com/image.jpg",
+            modelId: "1",
+            assetId: "1",
+            modelUrl: "https://www.example.com/model.gltf",
+            floorplanCords:{x:0, y:0}
+        };
+
+      
+
+
 
         const mockContextValue: AttributesFormContext = {
             factoryId: "987654321",
             modelId: "123456",
+            asset:mockAssetItem,
+            setAsset:mockSetAsset,
             attributes: [],
             setAttributes: mockSetAttributes,
             properties: [],

@@ -5,7 +5,8 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
-import AssetInventory from "../components/factorydashboard/floormanager/inventory/AssetInventory";
+import AssetInventory from "../components/factorydashboard/floormanager/inventory/AssetInventory"
+import fetchMock from 'jest-fetch-mock';
 
 fetchMock.enableMocks();
 
@@ -30,7 +31,7 @@ jest.mock(
 
 describe("AssetInventory", () => {
     beforeEach(() => {
-        mockCreateObjectURL.mockClear();
+        (mockCreateObjectURL as jest.Mock).mockClear();
     });
 
     test("should render list of assets", () => {
@@ -38,16 +39,22 @@ describe("AssetInventory", () => {
             {
                 assetId: "1",
                 name: "Asset 1",
+                modelId: "11",
                 description: "Description 1",
                 imageData: "image1.jpg",
                 factoryId: "1",
+                modelUrl: "https://www.example.com/models/model1.gltf",
+                floorplanCords: { x: 0, y: 0 },
             },
             {
                 assetId: "2",
                 name: "Asset 2",
+                modelId: "XX",
                 description: "Description 2",
                 imageData: "image2.jpg",
                 factoryId: "1",
+                modelUrl: "https://www.example.com/models/model1.gltf",
+                floorplanCords: { x: 0, y: 0 },
             },
         ];
 

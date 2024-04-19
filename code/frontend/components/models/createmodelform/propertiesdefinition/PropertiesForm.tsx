@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 // import Image from "next/image";
-import { Attribute, Property ,Asset} from "@/app/api/_utils/types";
+import { Attribute, Property, Asset } from "@/app/api/_utils/types";
+import { BackendConnector, PostConfig } from "@/app/api/_utils/connector";
 import PropertyInputColumn from "./PropertyInputColumn";
 import AddPropertyButton from "./AddPropertyButton";
 import { Context } from "../CreateModelForm";
-import { BackendConnector,PostConfig } from "@/app/api/_utils/connector";
 
 export interface PropertiesFormContext {
     factoryId: string;
@@ -22,9 +22,9 @@ const PropertiesForm = () => {
     const contextValue = useContext(Context) as PropertiesFormContext;
     const [inputFields, setInputFields] = useState<Property[]>([
         {
-            propertyId:"",
+            propertyId: "",
             factoryId: "",
-            assetId:"",
+            assetId: "",
             modelId: "",
             measurementId: "",
             name: "",
@@ -35,30 +35,30 @@ const PropertiesForm = () => {
     console.log(contextValue.asset);
     const handleSubmit = async () => {
         contextValue?.nextPage();
-        
+
         const uniqueNames: Record<string, boolean> = {};
         const updatedProperties: Property[] = [];
-    
-        const uniqueProperties = contextValue.properties.filter(property => {
+
+        const uniqueProperties = contextValue.properties.filter((property) => {
             if (!uniqueNames[property.name]) {
                 uniqueNames[property.name] = true;
                 return true;
             }
             return false;
         });
-    
+
         for (const property of uniqueProperties) {
             try {
                 const payload = {
                     ...property,
                     assetId: contextValue.asset.assetId,
                     factoryId: contextValue.asset.factoryId,
-                }
+                };
                 const config = await BackendConnector.post<Property>({
                     resource: "properties",
-                    payload: payload
+                    payload,
                 });
-    
+
                 if (config) {
                     updatedProperties.push(config);
                 } else {
@@ -69,11 +69,10 @@ const PropertiesForm = () => {
                 updatedProperties.push(property);
             }
         }
-    
+
         contextValue.setProperties(updatedProperties);
-    }
-    
-    
+    };
+
     const [invalidProperty, setInvalidProperty] = useState(false);
 
     const handleNextPageButton = (
@@ -91,10 +90,9 @@ const PropertiesForm = () => {
         }
         contextValue?.nextPage();
     };
-   const  handleNext = ( event: React.MouseEvent<HTMLButtonElement> )=> {
-        handleNextPageButton(event); 
-         handleSubmit();  
-        
+    const handleNext = (event: React.MouseEvent<HTMLButtonElement>) => {
+        handleNextPageButton(event);
+        handleSubmit();
     };
 
     return (
@@ -148,7 +146,7 @@ const PropertiesForm = () => {
             <button
                 type="submit"
                 onClick={handleNext}
-                className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
+                className="bg-black text-white p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
             >
                 Next ›
             </button>

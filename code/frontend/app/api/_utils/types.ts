@@ -26,10 +26,11 @@ export interface Asset {
     assetId: string;
     name: string;
     description: string;
-    imageData?: string;
+    imageData: string;
     factoryId: string;
     modelId:string;
     modelUrl:string;
+    floorplanCords: FloorplanCords;
     
 }
 
@@ -73,4 +74,9 @@ export interface Model {
     factoryId: string;
     attributes: Attribute[];
     properties: Property[];
+}
+
+export interface FloorplanCords {
+    x: number;
+    y: number;
 }

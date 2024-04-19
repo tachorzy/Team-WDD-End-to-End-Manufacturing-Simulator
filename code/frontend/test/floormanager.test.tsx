@@ -164,6 +164,9 @@ describe("FloorManager", () => {
                 description: "Mock Description 2",
                 imageData: "mockImage2.jpg",
                 factoryId: "1",
+                modelId: "1",
+                modelUrl:"ff",
+                floorplanCords: { x: 0, y: 0 },
             };
 
             const addAssetFormOnAddCall = mockAddAssetForm.mock.calls[0] as [

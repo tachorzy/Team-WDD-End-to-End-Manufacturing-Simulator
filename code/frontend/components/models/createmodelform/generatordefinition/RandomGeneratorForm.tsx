@@ -22,9 +22,9 @@ const RandomGeneratorForm = (props: {
 
         debounceTimeout.current = setTimeout(() => {
             const data: Measurement = {
-                measurementId: property.measurementId, 
+                measurementId: property.measurementId,
                 modelId: property.modelId,
-                factoryId: property.factoryId, 
+                factoryId: property.factoryId,
                 propertyId: property.propertyId,
                 lowerBound: minValue,
                 upperBound: maxValue,

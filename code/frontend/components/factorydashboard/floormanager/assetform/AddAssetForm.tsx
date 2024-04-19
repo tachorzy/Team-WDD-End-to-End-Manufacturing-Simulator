@@ -21,6 +21,9 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
         description: "",
         imageData: "",
         factoryId,
+        modelId:"",
+        modelUrl:"",
+        floorplanCords:{x:0,y:0}
     });
     const [assetImageFile, setAssetImageFile] = useState<File | null>(null);
 

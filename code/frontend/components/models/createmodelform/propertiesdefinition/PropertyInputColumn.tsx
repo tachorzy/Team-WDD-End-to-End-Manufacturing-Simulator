@@ -32,6 +32,8 @@ const PropertyInputColumn = (props: {
 
         debounceTimeout.current = setTimeout(() => {
             const data: Property = {
+                propertyId:"",
+                assetId:"",
                 factoryId: "",
                 modelId: "",
                 measurementId: "",

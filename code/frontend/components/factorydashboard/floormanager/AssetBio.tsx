@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
 
 interface AssetBioProps {
-    asset?: Asset | undefined;
+    asset?: Asset ;
 }
 
 const AssetBio: React.FC<AssetBioProps> = ({ asset }) => {

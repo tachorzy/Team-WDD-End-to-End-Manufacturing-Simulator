@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Asset } from "@/app/types/types";
+import { Asset } from "@/app/api/_utils/types";
 
 interface Props {
     uploadedImageUrl: string;
@@ -26,7 +26,12 @@ const InteractiveFloorPlan: React.FC<Props> = ({
                 context.drawImage(image, 0, 0);
                 assets.forEach((asset) => {
                     context.fillStyle = "rgba(0, 100, 255, 0.5)";
-                    context.fillRect(asset.x, asset.y, 50, 50);
+                    context.fillRect(
+                        asset.floorplanCords.x,
+                        asset.floorplanCords.y,
+                        50,
+                        50,
+                    );
                 });
             }
         };
@@ -39,7 +44,7 @@ const InteractiveFloorPlan: React.FC<Props> = ({
         const rect = canvasRef.current?.getBoundingClientRect();
         const x = e.clientX - (rect?.left ?? 0);
         const y = e.clientY - (rect?.top ?? 0);
-        // const newAsset: Asset = { x, y, id: `${Date.now()}`, type: assetType };
+        const newAsset: Asset = { x, y, id: `${Date.now()}`, type: assetType };
         onAssetsChange([...assets, newAsset]);
     };
 

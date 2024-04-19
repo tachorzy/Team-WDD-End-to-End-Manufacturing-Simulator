@@ -62,10 +62,16 @@ describe("AddAssetForm", () => {
 
     test("should call createAsset and onAdd when Create Asset button is clicked", async () => {
         const mockAsset: Asset = {
+            assetId:"mockasset1",
             name: "Asset Mock",
             description: "Asset Mock Description",
             factoryId: "1",
             imageData: "http://example.com/test.png",
+            floorplanCords: {x:0,y:0},
+             modelId: "XXXXXXXXXX",
+             modelUrl: "http://example.com/test.glb",
+             
+
         };
         mockPost.mockResolvedValue(mockAsset);
 

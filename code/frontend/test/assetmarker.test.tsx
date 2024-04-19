@@ -19,6 +19,9 @@ const mockAsset: Asset = {
     description: "Description 1",
     imageData: "https//www.example.com/image.png",
     factoryId: "1",
+    modelId: "1",
+    modelUrl: "https//www.example.com/model.glb",
+    floorplanCords: { x: 0, y: 0 },
 };
 
 describe("AssetMarker Component", () => {

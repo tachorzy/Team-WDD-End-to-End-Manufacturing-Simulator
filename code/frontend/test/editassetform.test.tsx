@@ -12,6 +12,12 @@ const mockAsset = {
     name: "Test Asset",
     description: "Test Description",
     factoryId: "factory123",
+    modelId: "XXXXXXXXXX",
+    modelUrl: "XXXXXXXXXX",
+    assetId: "XXXXXXXXXX",
+    floorplanCords:{x:0,y:0},
+    imageData:" uma is my queen"
+            
 };
 
 const props = {
@@ -75,6 +81,13 @@ describe("Edit factory form ", () => {
                 ...mockAsset,
                 name: newAssetName,
                 description: newAssetDescription,
+                factoryId: "XXXXXXXXXX",
+                modelId: "XXXXXXXXXX",
+                modelUrl: "XXXXXXXXXX",
+                assetId: "XXXXXXXXXX",
+                floorplanCords:{x:0,y:0},
+                imageData:" uma is my queen"
+            },
             },
         };
 
@@ -120,6 +133,12 @@ describe("Edit factory form ", () => {
                 ...mockAsset,
                 name: "",
                 description: "",
+                factoryId: "XXXXXXXXXX",
+                modelId: "XXXXXXXXXX",
+                modelUrl: "XXXXXXXXXX",
+                assetId: "XXXXXXXXXX",
+                floorplanCords:{x:0,y:0},
+                imageData:" uma is my queen"
             },
         };
 

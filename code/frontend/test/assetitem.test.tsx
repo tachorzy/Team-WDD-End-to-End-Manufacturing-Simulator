@@ -18,6 +18,9 @@ describe("AssetItem", () => {
         description: "Description",
         imageData: "image1.png",
         factoryId: "1",
+        modelId: "1",
+        modelUrl: "model1.glb",
+        floorplanCords:{x:0,y:0}
     };
 
     const props = {
@@ -41,7 +44,7 @@ describe("AssetItem", () => {
             ...props,
             asset: {
                 ...mockAsset,
-                imageData: undefined,
+                imageData: "",
             },
         };
 
