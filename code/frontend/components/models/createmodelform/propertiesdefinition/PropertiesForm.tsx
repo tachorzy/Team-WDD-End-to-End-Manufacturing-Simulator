@@ -32,9 +32,9 @@ const PropertiesForm = () => {
             generatorType: "",
         },
     ]);
-    console.log(contextValue.asset);
+    // console.log(contextValue.asset);
     const handleSubmit = async () => {
-        contextValue?.nextPage();
+        console.log("this was called");
 
         const uniqueNames: Record<string, boolean> = {};
         const updatedProperties: Property[] = [];
@@ -47,20 +47,24 @@ const PropertiesForm = () => {
             return false;
         });
 
+        console.log(uniqueProperties);
+
         for (const property of uniqueProperties) {
+            console.log(property);
             try {
                 const payload = {
                     ...property,
                     assetId: contextValue.asset.assetId,
                     factoryId: contextValue.asset.factoryId,
                 };
-                const config = await BackendConnector.post<Property>({
+                const config: PostConfig<Property> = {
                     resource: "properties",
                     payload,
-                });
+                };
+                const reponse = await BackendConnector.post<Property>(config);
 
-                if (config) {
-                    updatedProperties.push(config);
+                if (reponse) {
+                    updatedProperties.push(reponse);
                 } else {
                     updatedProperties.push(property);
                 }
@@ -88,11 +92,12 @@ const PropertiesForm = () => {
             setInvalidProperty(true);
             return;
         }
+        handleSubmit();
         contextValue?.nextPage();
     };
+
     const handleNext = (event: React.MouseEvent<HTMLButtonElement>) => {
         handleNextPageButton(event);
-        handleSubmit();
     };
 
     return (

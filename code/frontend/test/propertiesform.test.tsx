@@ -3,12 +3,31 @@ import { Context } from "@/components/models/createmodelform/CreateModelForm";
 import PropertiesForm, {
     PropertiesFormContext,
 } from "@/components/models/createmodelform/propertiesdefinition/PropertiesForm";
-import { Property } from "@/app/api/_utils/types";
+import { BackendConnector, PostConfig } from "@/app/api/_utils/connector";
+import { Property, Asset } from "@/app/api/_utils/types";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import exp from "constants";
+
+const mockPost = jest.fn();
+BackendConnector.post = mockPost;
 
 const mockSetProperties = jest.fn();
 const mockNextPage = jest.fn();
+
+const mockAsset: Asset = {
+    assetId: "",
+    name: "",
+    description: "",
+    imageData: "",
+    factoryId: "",
+    modelId: "",
+    modelUrl: "",
+    floorplanCords: {
+        x: 0,
+        y: 0,
+    },
+};
 
 describe("Properties Form", () => {
     afterEach(() => {
@@ -22,6 +41,8 @@ describe("Properties Form", () => {
             attributes: [],
             setAttributes: jest.fn(),
             properties: [],
+            asset: mockAsset,
+            setAsset: jest.fn(),
             setProperties: mockSetProperties,
             nextPage: mockNextPage,
         };
@@ -38,18 +59,10 @@ describe("Properties Form", () => {
     });
 
     test("should add properties to the list of properties", async () => {
-        const mockContextValue: PropertiesFormContext = {
-            factoryId: "987654321",
-            modelId: "123456",
-            attributes: [],
-            setAttributes: jest.fn(),
-            properties: [],
-            setProperties: mockSetProperties,
-            nextPage: mockNextPage,
-        };
-
         const expectedProperties: Property[] = [
             {
+                propertyId: "",
+                assetId: "",
                 factoryId: "",
                 modelId: "",
                 measurementId: "",
@@ -58,6 +71,26 @@ describe("Properties Form", () => {
                 generatorType: "Random",
             },
         ];
+        mockPost.mockResolvedValue(expectedProperties);
+
+        const mockExpectedConfig: PostConfig<Property> = {
+            resource: "properties",
+            payload: {
+                ...expectedProperties[0],
+            }
+        };
+
+        const mockContextValue: PropertiesFormContext = {
+            factoryId: "987654321",
+            modelId: "123456",
+            attributes: [],
+            setAttributes: jest.fn(),
+            properties: [],
+            asset: mockAsset,
+            setAsset: jest.fn(),
+            setProperties: mockSetProperties,
+            nextPage: mockNextPage,
+        };
 
         const { getByPlaceholderText, getByRole, getByText } = render(
             <Context.Provider value={mockContextValue}>
@@ -91,15 +124,82 @@ describe("Properties Form", () => {
         });
 
         await waitFor(() => {
-            expect(mockSetProperties).toHaveBeenCalledWith(expectedProperties);
+            expect(mockSetProperties).toHaveBeenLastCalledWith(expectedProperties);
+            mockContextValue.properties.push(expectedProperties[0]); // simulate the change in the context
         });
 
         const submitButton = getByText(/Next/);
         fireEvent.click(submitButton);
 
         await waitFor(() => {
+            expect(mockPost).toHaveBeenCalledWith(mockExpectedConfig);
+            expect(mockSetProperties).toHaveBeenLastCalledWith(expectedProperties);
             expect(mockNextPage).toHaveBeenCalled();
         });
+    });
+
+    test("should add properties with no unique properties to the list of properties", async () => {
+        console.log("this test");
+        const expectedProperties: Property[] = [
+            {
+                propertyId: "",
+                assetId: "",
+                factoryId: "",
+                modelId: "",
+                measurementId: "",
+                name: "Pressure",
+                unit: "Pa",
+                generatorType: "Random",
+            },
+        ];
+        mockPost.mockResolvedValue(expectedProperties[0]);
+
+        const mockExpectedConfig: PostConfig<Property> = {
+            resource: "properties",
+            payload: {
+                ...expectedProperties[0],
+            }
+        };
+
+        const mockContextValue: PropertiesFormContext = {
+            factoryId: "987654321",
+            modelId: "123456",
+            attributes: [],
+            setAttributes: jest.fn(),
+            properties: [
+                ...expectedProperties,
+                {
+                    propertyId: "",
+                    assetId: "",
+                    factoryId: "",
+                    modelId: "",
+                    measurementId: "",
+                    name: "Pressure",
+                    unit: "psi",
+                    generatorType: "Sawtooth",
+                },
+            ],
+            asset: mockAsset,
+            setAsset: jest.fn(),
+            setProperties: mockSetProperties,
+            nextPage: mockNextPage,
+        };
+
+        const { getByPlaceholderText, getByRole, getByText } = render(
+            <Context.Provider value={mockContextValue}>
+                <PropertiesForm />
+            </Context.Provider>,
+        );
+
+        const submitButton = getByText(/Next/);
+        fireEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(mockPost).toHaveBeenCalledWith(mockExpectedConfig);
+            expect(mockSetProperties).toHaveBeenCalledWith(expectedProperties);
+            expect(mockNextPage).toHaveBeenCalled();
+        });
+        console.log("end of test");
     });
 
     test("should add a new property input fields when the 'Add Property' button is clicked", () => {
@@ -109,6 +209,8 @@ describe("Properties Form", () => {
             attributes: [],
             setAttributes: jest.fn(),
             properties: [],
+            asset: mockAsset,
+            setAsset: jest.fn(),
             setProperties: mockSetProperties,
             nextPage: mockNextPage,
         };
@@ -125,7 +227,7 @@ describe("Properties Form", () => {
         expect(getByText("Property 2")).toBeInTheDocument();
     });
 
-    test("should not continue to the next page if the form is not complete", () => {
+    test("should not continue to the next page if the form is not complete", async () => {
         const mockContextValue: PropertiesFormContext = {
             factoryId: "987654321",
             modelId: "123456",
@@ -133,14 +235,18 @@ describe("Properties Form", () => {
             setAttributes: jest.fn(),
             properties: [
                 {
+                    propertyId: "",
+                    assetId: "",
                     factoryId: "",
                     modelId: "",
                     measurementId: "",
-                    name: "Pressure",
-                    unit: "Pa",
+                    name: "",
+                    unit: "",
                     generatorType: "",
                 },
             ],
+            asset: mockAsset,
+            setAsset: jest.fn(),
             setProperties: mockSetProperties,
             nextPage: mockNextPage,
         };
@@ -154,9 +260,103 @@ describe("Properties Form", () => {
         const submitButton = getByText(/Next/);
         fireEvent.click(submitButton);
 
-        expect(
-            getByText("Please fill out all provided input fields."),
-        ).toBeInTheDocument();
-        expect(mockNextPage).not.toHaveBeenCalled();
+        await waitFor(() => {
+            expect(
+                getByText("Please fill out all provided input fields."),
+            ).toBeInTheDocument();
+            expect(mockNextPage).not.toHaveBeenCalled();
+        });
+    });
+
+    test("should log error if the API call fails", async () => {
+        const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
+        const error = new Error("Failed to add property");
+        mockPost.mockRejectedValue(error);
+
+        const expectedProperties: Property[] = [
+            {
+                propertyId: "",
+                assetId: "",
+                factoryId: "",
+                modelId: "",
+                measurementId: "",
+                name: "Pressure",
+                unit: "Pa",
+                generatorType: "Random",
+            },
+        ];
+
+        const mockContextValue: PropertiesFormContext = {
+            factoryId: "987654321",
+            modelId: "123456",
+            attributes: [],
+            setAttributes: jest.fn(),
+            properties: [
+                ...expectedProperties,
+            ],
+            asset: mockAsset,
+            setAsset: jest.fn(),
+            setProperties: mockSetProperties,
+            nextPage: mockNextPage,
+        };
+
+        const { getByText } = render(
+            <Context.Provider value={mockContextValue}>
+                <PropertiesForm />
+            </Context.Provider>,
+        );
+
+        const submitButton = getByText(/Next/);
+        fireEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+            expect(mockSetProperties).toHaveBeenLastCalledWith(expectedProperties);
+        });
+
+        consoleErrorSpy.mockRestore();
+    });
+
+    test("should update properties if response is empty", async () => {
+        mockPost.mockResolvedValue(null);
+
+        const expectedProperties: Property[] = [
+            {
+                propertyId: "",
+                assetId: "",
+                factoryId: "",
+                modelId: "",
+                measurementId: "",
+                name: "Pressure",
+                unit: "Pa",
+                generatorType: "Random",
+            },
+        ];
+
+        const mockContextValue: PropertiesFormContext = {
+            factoryId: "987654321",
+            modelId: "123456",
+            attributes: [],
+            setAttributes: jest.fn(),
+            properties: expectedProperties,
+            asset: mockAsset,
+            setAsset: jest.fn(),
+            setProperties: mockSetProperties,
+            nextPage: mockNextPage,
+        };
+
+        const { getByText } = render(
+            <Context.Provider value={mockContextValue}>
+                <PropertiesForm />
+            </Context.Provider>,
+        );
+
+        const submitButton = getByText(/Next/);
+        fireEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(mockSetProperties).toHaveBeenLastCalledWith(expectedProperties);
+        });
     });
 });

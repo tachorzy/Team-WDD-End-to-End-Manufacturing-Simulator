@@ -8,8 +8,10 @@ const AddPropertyButton = (props: {
     const { setInputFields } = props;
 
     const newProperty = {
+        propertyId: "",
         factoryId: "",
         modelId: "",
+        assetId: "",
         measurementId: "",
         name: "",
         unit: "",
