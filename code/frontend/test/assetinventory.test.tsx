@@ -5,10 +5,7 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { render } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
-import AssetInventory from "../components/factorydashboard/floormanager/inventory/AssetInventory"
-import fetchMock from 'jest-fetch-mock';
-
-fetchMock.enableMocks();
+import AssetInventory from "../components/factorydashboard/floormanager/inventory/AssetInventory";
 
 interface AssetItemProps {
     asset: Asset;
@@ -31,7 +28,7 @@ jest.mock(
 
 describe("AssetInventory", () => {
     beforeEach(() => {
-        (mockCreateObjectURL as jest.Mock).mockClear();
+        jest.clearAllMocks();
     });
 
     test("should render list of assets", () => {

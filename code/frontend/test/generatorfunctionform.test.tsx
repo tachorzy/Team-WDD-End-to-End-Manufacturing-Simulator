@@ -40,7 +40,7 @@ describe("Generator Function Form", () => {
             payload: {
                 ...expectedMeasurement[0],
                 propertyId: "1",
-            }
+            },
         };
 
         const mockContextValue: GeneratorFunctionFormContext = {
@@ -68,7 +68,6 @@ describe("Generator Function Form", () => {
             nextPage: jest.fn(),
         };
 
-        
         const expctedModel: Model[] = [
             {
                 factoryId: mockContextValue.factoryId,
@@ -97,12 +96,10 @@ describe("Generator Function Form", () => {
             expect(mockSetMeasurements).toHaveBeenLastCalledWith(
                 expectedMeasurement,
             );
-            mockContextValue.measurements.push(
-                {
-                    ...expectedMeasurement[0],
-                    propertyId: "1",
-                }
-            );
+            mockContextValue.measurements.push({
+                ...expectedMeasurement[0],
+                propertyId: "1",
+            });
         });
 
         const submitButton = getByText(/Submit/);
@@ -138,7 +135,7 @@ describe("Generator Function Form", () => {
             payload: {
                 ...expectedMeasurement[0],
                 propertyId: "1",
-            }
+            },
         };
 
         const mockContextValue: GeneratorFunctionFormContext = {
@@ -200,12 +197,10 @@ describe("Generator Function Form", () => {
             expect(mockSetMeasurements).toHaveBeenLastCalledWith(
                 expectedMeasurement,
             );
-            mockContextValue.measurements.push(
-                {
-                    ...expectedMeasurement[0],
-                    propertyId: "1",
-                }
-            );
+            mockContextValue.measurements.push({
+                ...expectedMeasurement[0],
+                propertyId: "1",
+            });
         });
 
         const submitButton = getByText(/Submit/);
@@ -241,7 +236,7 @@ describe("Generator Function Form", () => {
             payload: {
                 ...expectedMeasurement[0],
                 propertyId: "1",
-            }
+            },
         };
 
         const mockContextValue: GeneratorFunctionFormContext = {
@@ -303,12 +298,10 @@ describe("Generator Function Form", () => {
             expect(mockSetMeasurements).toHaveBeenLastCalledWith(
                 expectedMeasurement,
             );
-            mockContextValue.measurements.push(
-                {
-                    ...expectedMeasurement[0],
-                    propertyId: "1",
-                }
-            );
+            mockContextValue.measurements.push({
+                ...expectedMeasurement[0],
+                propertyId: "1",
+            });
         });
 
         const submitButton = getByText(/Submit/);
@@ -343,9 +336,9 @@ describe("Generator Function Form", () => {
             resource: "measurements",
             payload: {
                 ...expectedMeasurement[0],
-            }
+            },
         };
-        
+
         const mockContextValue: GeneratorFunctionFormContext = {
             factoryId: "987654321",
             modelId: "123456",
@@ -405,7 +398,7 @@ describe("Generator Function Form", () => {
                 properties: mockContextValue.properties,
             },
         ];
-        
+
         const { getByText } = render(
             <Context.Provider value={mockContextValue}>
                 <GeneratorFunctionForm />
@@ -425,7 +418,9 @@ describe("Generator Function Form", () => {
     });
 
     test("should log an error if the post request fails", async () => {
-        const conolseErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+        const conolseErrorSpy = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => {});
 
         const error = new Error("Failed to post measurement");
         mockPost.mockRejectedValueOnce(error);

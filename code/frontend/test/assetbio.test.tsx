@@ -38,7 +38,7 @@ describe("AssetBio", () => {
             description: "Asset 1 description",
             imageData: "https://www.example.com/image.jpg",
             modelId: "1",
-            modelUrl:"2",
+            modelUrl: "2",
             floorplanCords: { x: 0, y: 0 },
         };
 
@@ -65,7 +65,7 @@ describe("AssetBio", () => {
             imageData: "",
             modelId: "1",
             floorplanCords: { x: 0, y: 0 },
-            modelUrl:" "
+            modelUrl: " ",
         };
 
         const { getByAltText, getByText } = render(<AssetBio asset={asset} />);

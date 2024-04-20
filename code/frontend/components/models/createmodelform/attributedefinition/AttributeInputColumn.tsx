@@ -1,5 +1,5 @@
-    import React, { useEffect, useRef, useState } from "react";
-import { Attribute ,Asset} from "@/app/api/_utils/types";
+import React, { useEffect, useRef, useState } from "react";
+import { Attribute, Asset } from "@/app/api/_utils/types";
 // import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
 
 const AttributeInputColumn = (props: {
@@ -10,7 +10,7 @@ const AttributeInputColumn = (props: {
     factoryId: string;
     invalidAttribute: boolean;
     setInvalidAttribute: React.Dispatch<React.SetStateAction<boolean>>;
-    asset: Asset
+    asset: Asset;
 }) => {
     const {
         inputFields,
@@ -20,7 +20,7 @@ const AttributeInputColumn = (props: {
         modelId,
         invalidAttribute,
         setInvalidAttribute,
-        asset
+        asset,
     } = props;
     const [attribute, setAttribute] = useState("");
     const [value, setValue] = useState("");
@@ -40,20 +40,17 @@ const AttributeInputColumn = (props: {
                 modelId, // later we will create the id from the backend
                 name: attribute,
                 value,
-                assetId:asset.assetId,
+                assetId: asset.assetId,
             };
-            console.log(
-                `Adding new Attribute named: ${attribute} with value: ${value} to the list of attributes`,
-            );
+            // console.log(
+            //     `Adding new Attribute named: ${attribute} with value: ${value} to the list of attributes`,
+            // );
             setAttributes([...attributes, data]);
         }, 500);
     }, [attribute, value, factoryId, attributes, setAttributes]);
 
     return (
-        <div
-            className="flex flex-col gap-y-3 max-h-[22rem] overflow-y-scroll"
-
-        >
+        <div className="flex flex-col gap-y-3 max-h-[22rem] overflow-y-scroll">
             <h1 className="text-2xl font-semibold text-gray-900">Attributes</h1>
             {/* <div className="-ml-3 -mt-2 -mb-2">
                 {invalidAttribute && (

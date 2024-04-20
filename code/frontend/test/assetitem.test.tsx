@@ -7,6 +7,21 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import { Asset } from "@/app/api/_utils/types";
 import AssetItem from "../components/factorydashboard/floormanager/inventory/AssetItem";
 
+global.URL.createObjectURL = jest
+    .fn()
+    .mockReturnValue("http://test.com/test.png");
+
+jest.mock("next/image", () => ({
+    __esModule: true,
+    default: (props: any) => <img alt="" {...props} />,
+}));
+
+global.fetch = jest.fn(() =>
+    Promise.resolve({
+        blob: () => Promise.resolve("mocked blob"),
+    }),
+) as jest.Mock;
+
 describe("AssetItem", () => {
     afterEach(() => {
         jest.clearAllMocks();
@@ -20,7 +35,7 @@ describe("AssetItem", () => {
         factoryId: "1",
         modelId: "1",
         modelUrl: "model1.glb",
-        floorplanCords:{x:0,y:0}
+        floorplanCords: { x: 0, y: 0 },
     };
 
     const props = {

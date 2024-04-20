@@ -16,6 +16,12 @@ const mockAsset: Asset = {
     description: "Mock Description 1",
     imageData: "mockImage1.jpg",
     factoryId: "1",
+    modelId: "test id",
+    modelUrl: " test url",
+    floorplanCords: {
+        x: 0,
+        y: 0,
+    },
 };
 
 jest.mock("@/app/api/_utils/connector", () => ({
@@ -165,7 +171,7 @@ describe("FloorManager", () => {
                 imageData: "mockImage2.jpg",
                 factoryId: "1",
                 modelId: "1",
-                modelUrl:"ff",
+                modelUrl: "ff",
                 floorplanCords: { x: 0, y: 0 },
             };
 

@@ -3,7 +3,11 @@ import { Context } from "@/components/models/createmodelform/CreateModelForm";
 import AttributesForm, {
     AttributesFormContext,
 } from "@/components/models/createmodelform/attributedefinition/AttributesForm";
-import { BackendConnector, GetConfig, PostConfig } from "@/app/api/_utils/connector";
+import {
+    BackendConnector,
+    GetConfig,
+    PostConfig,
+} from "@/app/api/_utils/connector";
 import { Attribute, Asset } from "@/app/api/_utils/types";
 import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -27,8 +31,8 @@ const mockAsset: Asset = {
     imageData: "selfie.jpg",
     modelUrl: "instagram.com/cairoach",
     floorplanCords: {
-        x:0,
-        y:0
+        x: 0,
+        y: 0,
     },
 };
 
@@ -46,7 +50,7 @@ describe("AttributesForm", () => {
         };
 
         const expectedAttributes: Attribute[] = [
-            {   
+            {
                 factoryId: "987654321",
                 modelId: "123456",
                 name: "name",
@@ -92,15 +96,15 @@ describe("AttributesForm", () => {
         );
 
         await waitFor(() => {
-            expect(mockGet).toHaveBeenCalledWith(mockGetConfig) ;
+            expect(mockGet).toHaveBeenCalledWith(mockGetConfig);
             expect(getByText("cairo")).toBeInTheDocument();
         });
 
         act(() => {
-            const assetSelect = getByRole("combobox",);
+            const assetSelect = getByRole("combobox");
             fireEvent.change(assetSelect, { target: { value: "1" } });
         });
-           
+
         await waitFor(() => {
             expect(mockSetAsset).toHaveBeenCalledWith(mockAsset);
             mockContextValue.asset = mockAsset; // simulate the change in the context
@@ -145,7 +149,7 @@ describe("AttributesForm", () => {
 
     test("should add attributes to the list of attributes with duplicate attribute names", async () => {
         const expectedAttributes: Attribute[] = [
-            {   
+            {
                 factoryId: "",
                 modelId: "123456",
                 name: "name",
@@ -215,7 +219,7 @@ describe("AttributesForm", () => {
             modelId: "123456",
             attributes: [],
             setAttributes: mockSetAttributes,
-            asset:mockAsset,
+            asset: mockAsset,
             setAsset: mockSetAsset,
             properties: [],
             setProperties: jest.fn(),
@@ -241,8 +245,8 @@ describe("AttributesForm", () => {
             modelId: "123456",
             attributes: [],
             setAttributes: mockSetAttributes,
-            asset:mockAsset,
-            setAsset:mockSetAsset,
+            asset: mockAsset,
+            setAsset: mockSetAsset,
             properties: [],
             setProperties: jest.fn(),
             nextPage: mockNextPage,
@@ -275,8 +279,8 @@ describe("AttributesForm", () => {
             factoryId: "",
             modelId: "123456",
             attributes: [],
-            asset:mockAsset,
-            setAsset:mockSetAsset,
+            asset: mockAsset,
+            setAsset: mockSetAsset,
             setAttributes: mockSetAttributes,
             properties: [],
             setProperties: jest.fn(),
@@ -313,8 +317,8 @@ describe("AttributesForm", () => {
         const mockContextValue: AttributesFormContext = {
             factoryId: "",
             modelId: "123456",
-            asset:mockAsset,
-            setAsset:mockSetAsset,
+            asset: mockAsset,
+            setAsset: mockSetAsset,
             attributes: [],
             setAttributes: mockSetAttributes,
             properties: [],
@@ -346,7 +350,9 @@ describe("AttributesForm", () => {
     });
 
     test("should log error if failed to fetch assets", async () => {
-        const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+        const consoleErrorSpy = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => {});
 
         const error = new Error("Failed to fetch assets");
         mockGet.mockRejectedValueOnce(error);
@@ -373,13 +379,18 @@ describe("AttributesForm", () => {
             // Wait for useEffect to complete
         });
 
-        expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to fetch assets:", error);
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+            "Failed to fetch assets:",
+            error,
+        );
 
         consoleErrorSpy.mockRestore();
     });
 
     test("should log error if failed to post attribute", async () => {
-        const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+        const consoleErrorSpy = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => {});
 
         const error = new Error("Failed to fetch assets");
         mockPost.mockRejectedValueOnce(error);
@@ -388,7 +399,7 @@ describe("AttributesForm", () => {
             factoryId: "",
             modelId: "123456",
             attributes: [
-                {   
+                {
                     factoryId: "987654321",
                     modelId: "123456",
                     name: "name",
@@ -423,7 +434,7 @@ describe("AttributesForm", () => {
         await act(async () => {
             // Wait for useEffect to complete
         });
-        
+
         expect(consoleErrorSpy).toHaveBeenCalledWith(error);
 
         consoleErrorSpy.mockRestore();

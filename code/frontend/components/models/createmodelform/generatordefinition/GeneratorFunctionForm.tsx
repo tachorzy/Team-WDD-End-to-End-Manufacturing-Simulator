@@ -60,7 +60,8 @@ const GeneratorFunctionForm = () => {
                     resource: "measurements",
                     payload: measurement,
                 };
-                const respone = await BackendConnector.post<Measurement>(config);
+                const respone =
+                    await BackendConnector.post<Measurement>(config);
             } catch (error) {
                 console.error(error);
                 return;

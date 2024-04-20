@@ -6,7 +6,6 @@ import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import EditFactoryForm from "../components/factorydashboard/editFactory";
-import { Factory } from "../app/api/_utils/types";
 
 global.fetch = jest.fn(() =>
     Promise.resolve({

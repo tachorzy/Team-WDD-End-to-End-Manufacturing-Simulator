@@ -12,7 +12,7 @@ const AddAttributeButton = (props: {
         modelId: "",
         name: "",
         value: "",
-        assetId:"",
+        assetId: "",
     };
 
     return (

@@ -8,6 +8,7 @@ import {
     GetConfig,
     PostConfig,
     PutConfig,
+    DeleteConfig,
 } from "@/app/api/_utils/connector";
 
 global.fetch = jest.fn();
@@ -50,6 +51,7 @@ describe("Connector", () => {
             const config: GetConfig = {
                 resource: "mockResource",
             };
+
             const result = await NextServerConnector.get(config);
 
             expect(result).toEqual(mockResponse);
@@ -67,6 +69,7 @@ describe("Connector", () => {
                 resource: "mockResource",
                 params: { key: "value" },
             };
+
             const result = await NextServerConnector.get(config);
 
             expect(result).toEqual(mockResponse);
@@ -190,6 +193,83 @@ describe("Connector", () => {
             );
         });
 
+        test("should successfully delete a resouce", async () => {
+            interface MockType {
+                mockData: string;
+            }
+
+            const mockResponse = { data: "mockData" };
+
+            (global.fetch as jest.Mock).mockResolvedValueOnce({
+                ok: true,
+                json: () => mockResponse,
+            });
+
+            const config: DeleteConfig<MockType> = {
+                resource: "mockResource",
+            };
+
+            const result = await NextServerConnector.delete(config);
+
+            const deleteOptions = {
+                ...fetchOptions,
+                method: "DELETE",
+            };
+
+            expect(result).toEqual(mockResponse);
+            expect(global.fetch).toHaveBeenCalledWith(url, deleteOptions);
+        });
+
+        test("should successfully delete a resouce with search parameters", async () => {
+            interface MockType {
+                mockData: string;
+            }
+
+            const mockResponse = { data: "mockData" };
+
+            (global.fetch as jest.Mock).mockResolvedValueOnce({
+                ok: true,
+                json: () => mockResponse,
+            });
+
+            const config: DeleteConfig<MockType> = {
+                resource: "mockResource",
+                params: { key: "value" },
+            };
+
+            const result = await NextServerConnector.delete(config);
+
+            const deleteOptions = {
+                ...fetchOptions,
+                method: "DELETE",
+            };
+
+            expect(result).toEqual(mockResponse);
+            expect(global.fetch).toHaveBeenCalledWith(
+                `${url}?key=value`,
+                deleteOptions,
+            );
+        });
+
+        test("should throw an error if the delete response is not ok", async () => {
+            interface MockType {
+                mockData: string;
+            }
+
+            const config: DeleteConfig<MockType> = {
+                resource: "mockResource",
+            };
+
+            (global.fetch as jest.Mock).mockResolvedValueOnce({
+                ok: false,
+                statusText: `${config.resource} Not Found`,
+            });
+
+            await expect(NextServerConnector.delete(config)).rejects.toThrow(
+                new Error(`Fetch error: ${config.resource} Not Found`),
+            );
+        });
+
         test("each method should throw TypeError when url is empty", async () => {
             jest.doMock("@/app/api/_utils/constants", () => ({
                 BASE_NEXT_API_URL: undefined,
@@ -222,6 +302,11 @@ describe("Connector", () => {
                 ActualNextServerConnector.put<MockType>({
                     resource: "mockResource",
                     payload: { mockData: "Put this data" },
+                }),
+            ).rejects.toThrow(new TypeError("Invalid URL: /mockResource"));
+            await expect(
+                ActualNextServerConnector.delete<MockType>({
+                    resource: "mockResource",
                 }),
             ).rejects.toThrow(new TypeError("Invalid URL: /mockResource"));
         });
@@ -393,6 +478,83 @@ describe("Connector", () => {
             );
         });
 
+        test("should successfully delete a resouce", async () => {
+            interface MockType {
+                mockData: string;
+            }
+
+            const mockResponse = { data: "mockData" };
+
+            (global.fetch as jest.Mock).mockResolvedValueOnce({
+                ok: true,
+                json: () => mockResponse,
+            });
+
+            const config: DeleteConfig<MockType> = {
+                resource: "mockResource",
+            };
+
+            const result = await BackendConnector.delete(config);
+
+            const deleteOptions = {
+                ...fetchOptions,
+                method: "DELETE",
+            };
+
+            expect(result).toEqual(mockResponse);
+            expect(global.fetch).toHaveBeenCalledWith(url, deleteOptions);
+        });
+
+        test("should successfully delete a resouce with search parameters", async () => {
+            interface MockType {
+                mockData: string;
+            }
+
+            const mockResponse = { data: "mockData" };
+
+            (global.fetch as jest.Mock).mockResolvedValueOnce({
+                ok: true,
+                json: () => mockResponse,
+            });
+
+            const config: DeleteConfig<MockType> = {
+                resource: "mockResource",
+                params: { key: "value" },
+            };
+
+            const result = await BackendConnector.delete(config);
+
+            const deleteOptions = {
+                ...fetchOptions,
+                method: "DELETE",
+            };
+
+            expect(result).toEqual(mockResponse);
+            expect(global.fetch).toHaveBeenCalledWith(
+                `${url}?key=value`,
+                deleteOptions,
+            );
+        });
+
+        test("should throw an error if the delete response is not ok", async () => {
+            interface MockType {
+                mockData: string;
+            }
+
+            const config: DeleteConfig<MockType> = {
+                resource: "mockResource",
+            };
+
+            (global.fetch as jest.Mock).mockResolvedValueOnce({
+                ok: false,
+                statusText: `${config.resource} Not Found`,
+            });
+
+            await expect(BackendConnector.delete(config)).rejects.toThrow(
+                new Error(`Fetch error: ${config.resource} Not Found`),
+            );
+        });
+
         test("each method should throw TypeError when url is empty", async () => {
             jest.doMock("@/app/api/_utils/constants", () => ({
                 BASE_BACKEND_API_URL: undefined,
@@ -425,6 +587,11 @@ describe("Connector", () => {
                 ActualBackendConnector.put<MockType>({
                     resource: "mockResource",
                     payload: { mockData: "Put this data" },
+                }),
+            ).rejects.toThrow(new TypeError("Invalid URL: /mockResource"));
+            await expect(
+                ActualBackendConnector.delete<MockType>({
+                    resource: "mockResource",
                 }),
             ).rejects.toThrow(new TypeError("Invalid URL: /mockResource"));
         });

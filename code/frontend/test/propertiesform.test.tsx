@@ -76,7 +76,7 @@ describe("Properties Form", () => {
             resource: "properties",
             payload: {
                 ...expectedProperties[0],
-            }
+            },
         };
 
         const mockContextValue: PropertiesFormContext = {
@@ -123,7 +123,9 @@ describe("Properties Form", () => {
         });
 
         await waitFor(() => {
-            expect(mockSetProperties).toHaveBeenLastCalledWith(expectedProperties);
+            expect(mockSetProperties).toHaveBeenLastCalledWith(
+                expectedProperties,
+            );
             mockContextValue.properties.push(expectedProperties[0]); // simulate the change in the context
         });
 
@@ -132,7 +134,9 @@ describe("Properties Form", () => {
 
         await waitFor(() => {
             expect(mockPost).toHaveBeenCalledWith(mockExpectedConfig);
-            expect(mockSetProperties).toHaveBeenLastCalledWith(expectedProperties);
+            expect(mockSetProperties).toHaveBeenLastCalledWith(
+                expectedProperties,
+            );
             expect(mockNextPage).toHaveBeenCalled();
         });
     });
@@ -156,7 +160,7 @@ describe("Properties Form", () => {
             resource: "properties",
             payload: {
                 ...expectedProperties[0],
-            }
+            },
         };
 
         const mockContextValue: PropertiesFormContext = {
@@ -266,7 +270,9 @@ describe("Properties Form", () => {
     });
 
     test("should log error if the API call fails", async () => {
-        const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+        const consoleErrorSpy = jest
+            .spyOn(console, "error")
+            .mockImplementation(() => {});
 
         const error = new Error("Failed to add property");
         mockPost.mockRejectedValue(error);
@@ -289,9 +295,7 @@ describe("Properties Form", () => {
             modelId: "123456",
             attributes: [],
             setAttributes: jest.fn(),
-            properties: [
-                ...expectedProperties,
-            ],
+            properties: [...expectedProperties],
             asset: mockAsset,
             setAsset: jest.fn(),
             setProperties: mockSetProperties,
@@ -309,7 +313,9 @@ describe("Properties Form", () => {
 
         await waitFor(() => {
             expect(consoleErrorSpy).toHaveBeenCalledWith(error);
-            expect(mockSetProperties).toHaveBeenLastCalledWith(expectedProperties);
+            expect(mockSetProperties).toHaveBeenLastCalledWith(
+                expectedProperties,
+            );
         });
 
         consoleErrorSpy.mockRestore();
@@ -353,7 +359,9 @@ describe("Properties Form", () => {
         fireEvent.click(submitButton);
 
         await waitFor(() => {
-            expect(mockSetProperties).toHaveBeenLastCalledWith(expectedProperties);
+            expect(mockSetProperties).toHaveBeenLastCalledWith(
+                expectedProperties,
+            );
         });
     });
 });

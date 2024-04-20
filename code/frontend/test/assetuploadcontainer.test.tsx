@@ -50,10 +50,17 @@ describe("AssetUploadContainer", () => {
             type: `image/${filetype}`,
         });
         const prevData: Asset = {
+            assetId: "",
             factoryId: "",
             name: "",
             description: "",
             imageData: "",
+            modelId: "",
+            modelUrl: "",
+            floorplanCords: {
+                x: 0,
+                y: 0,
+            },
         };
 
         const dropInput = getByTestId("drop-input");
