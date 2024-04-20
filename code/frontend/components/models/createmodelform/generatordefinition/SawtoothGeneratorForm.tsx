@@ -39,7 +39,15 @@ const SawtoothGeneratorForm = (props: {
 
             setMeasurements([...measurements, data]);
         }, 500);
-    }, [frequency, angularFrequency, amplitude, phase, maxValue]);
+    }, [
+        frequency,
+        angularFrequency,
+        amplitude,
+        phase,
+        maxValue,
+        measurements,
+        setMeasurements,
+    ]);
 
     return (
         <div className="flex flex-col gap-y-3 max-h-72">

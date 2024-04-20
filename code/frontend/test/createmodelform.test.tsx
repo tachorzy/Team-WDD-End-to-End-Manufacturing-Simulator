@@ -44,7 +44,6 @@ describe("CreateModelForm", () => {
                 setAttributes={jest.fn()}
                 factoryId="123456789"
                 modelId="123456789"
-                invalidAttribute={false}
                 setInvalidAttribute={jest.fn()}
             />,
         );

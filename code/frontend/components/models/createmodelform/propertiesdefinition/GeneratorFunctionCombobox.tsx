@@ -20,7 +20,7 @@ const GeneratorFunctionCombobox = (props: {
 
     useEffect(() => {
         setGeneratorFunction(selectedFunction);
-    }, [selectedFunction]);
+    }, [selectedFunction, setGeneratorFunction]);
 
     return (
         <Combobox value={selectedFunction} onChange={setSelectedFunction}>

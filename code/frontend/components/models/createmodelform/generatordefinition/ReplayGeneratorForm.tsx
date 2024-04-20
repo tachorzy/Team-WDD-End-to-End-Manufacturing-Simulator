@@ -40,7 +40,14 @@ const ReplayGeneratorForm = (props: {
 
             setMeasurements([...measurements, data]);
         }, 500);
-    }, [frequency, minValue, maxValue]);
+    }, [
+        frequency,
+        minValue,
+        maxValue,
+        measurements,
+        sequenceValues,
+        setMeasurements,
+    ]);
 
     return (
         <div className="flex flex-col gap-y-3 max-h-72">

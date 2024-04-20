@@ -55,7 +55,6 @@ const AttributesForm = () => {
                         setAttributes={contextValue?.setAttributes}
                         factoryId={contextValue?.factoryId}
                         modelId={contextValue?.modelId}
-                        invalidAttribute={invalidAttribute}
                         setInvalidAttribute={setInvalidAttribute}
                     />
                     <AddAttributeButton setInputFields={setInputFields} />
