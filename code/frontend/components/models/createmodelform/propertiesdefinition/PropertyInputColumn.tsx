@@ -45,7 +45,10 @@ const PropertyInputColumn = (props: {
     }, [property, unit, generatorFunction, properties, setProperties]);
 
     return (
-        <div className="flex flex-col gap-y-3 max-h-[19rem] overflow-y-scroll">
+        <div
+            className="flex flex-col gap-y-3 max-h-[19rem] overflow-y-scroll"
+            data-testid="property-input"
+        >
             <h1 className="text-2xl font-semibold text-gray-900">Properties</h1>
             <div className="-ml-3 -mt-2 -mb-2">
                 {invalidProperty && (
