@@ -13,7 +13,7 @@ const ReplayGeneratorForm = (props: {
     const [frequency, setFrequency] = useState<number>(0.0);
     const [minValue, setMinValue] = useState<number>(0.0);
     const [maxValue, setMaxValue] = useState<number>(0.0);
-    const [sequenceValues, setSequenceValues] = useState<number[]>([]);
+    const [sequenceValues, setSequenceValues] = useState<{csvData: number[]}>({ csvData: [] });
     const [inputFile, setInputFile] = useState<File | null>(null);
 
     const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -38,6 +38,8 @@ const ReplayGeneratorForm = (props: {
             setMeasurements([...measurements, data]);
         }, 500);
     }, [frequency, minValue, maxValue]);
+
+    console.log(`sequenceValues: ${sequenceValues.csvData}`);
 
     return (
         <div className="flex flex-col gap-y-3 max-h-72">

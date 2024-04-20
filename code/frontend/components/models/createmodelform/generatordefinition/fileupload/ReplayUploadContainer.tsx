@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const ReplayUploadContainer = (props: {
     setInputFile: React.Dispatch<React.SetStateAction<File | null>>;
-    setFormData: React.Dispatch<React.SetStateAction<number[]>>;
+    setFormData: React.Dispatch<React.SetStateAction<{csvData: number[]}>>;
 }) => {
     const { setInputFile, setFormData } = props;
 
@@ -20,7 +20,7 @@ const ReplayUploadContainer = (props: {
                 const data = lines.map(line => line.split(',').map(Number));
                 setFormData((prevData) => ({
                     ...prevData,
-                    csvData: data, // assuming you want to store the CSV data in your form data
+                    csvData: data.flat(), // assuming you want to store the CSV data in your form data
                 }));
             };
             reader.readAsText(file);
