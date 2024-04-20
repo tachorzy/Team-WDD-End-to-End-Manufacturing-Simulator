@@ -37,7 +37,7 @@ const SawtoothGeneratorForm = (props: {
                 precision: 0.0,
                 generatorFunction: "sawtooth",
             };
-            console.log(property);
+            // console.log(property);
             setMeasurements([...measurements, data]);
         }, 500);
     }, [frequency, angularFrequency, amplitude, phase, maxValue]);

@@ -38,7 +38,7 @@ const GeneratorFunctionForm = () => {
         return false;
     });
     // console.log(uniqueProperties);
-    console.log(contextValue.measurements);
+    // console.log(contextValue.measurements);
     const submitMeasurement = async () => {
         const uniquePropertyIds: Record<string, boolean> = {};
         const filteredMeasurements = contextValue.measurements.filter(
@@ -56,21 +56,23 @@ const GeneratorFunctionForm = () => {
 
         for (const measurement of filteredMeasurements) {
             try {
-                const config = await BackendConnector.post<Measurement>({
+                const config: PostConfig<Measurement> = {
                     resource: "measurements",
                     payload: measurement,
-                });
+                };
+                const respone = await BackendConnector.post<Measurement>(config);
             } catch (error) {
                 console.error(error);
-                throw error;
+                return;
             }
         }
     };
+
     const handleModelSubmission = (
         event: React.MouseEvent<HTMLButtonElement>,
     ) => {
         event.preventDefault();
-        console.log(contextValue.measurements);
+        // console.log(contextValue.measurements);
         submitMeasurement();
 
         const newModel: Model = {
@@ -79,7 +81,7 @@ const GeneratorFunctionForm = () => {
             attributes: contextValue.attributes,
             properties: contextValue.properties,
         };
-        console.log(`newModel: ${JSON.stringify(newModel)}\n`);
+        // console.log(`newModel: ${JSON.stringify(newModel)}\n`);
         contextValue.setModels([...contextValue.models, newModel]);
         // contextValue.models.forEach((model) => {
         //     console.log(`\n\nMODEL: ${JSON.stringify(model)}\n`);

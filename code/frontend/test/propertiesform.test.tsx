@@ -7,7 +7,6 @@ import { BackendConnector, PostConfig } from "@/app/api/_utils/connector";
 import { Property, Asset } from "@/app/api/_utils/types";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import exp from "constants";
 
 const mockPost = jest.fn();
 BackendConnector.post = mockPost;
@@ -138,8 +137,7 @@ describe("Properties Form", () => {
         });
     });
 
-    test("should add properties with no unique properties to the list of properties", async () => {
-        console.log("this test");
+    test("should add properties with a duplicate property name to the list of properties", async () => {
         const expectedProperties: Property[] = [
             {
                 propertyId: "",
@@ -185,7 +183,7 @@ describe("Properties Form", () => {
             nextPage: mockNextPage,
         };
 
-        const { getByPlaceholderText, getByRole, getByText } = render(
+        const { getByText } = render(
             <Context.Provider value={mockContextValue}>
                 <PropertiesForm />
             </Context.Provider>,
@@ -199,7 +197,6 @@ describe("Properties Form", () => {
             expect(mockSetProperties).toHaveBeenCalledWith(expectedProperties);
             expect(mockNextPage).toHaveBeenCalled();
         });
-        console.log("end of test");
     });
 
     test("should add a new property input fields when the 'Add Property' button is clicked", () => {

@@ -34,8 +34,6 @@ const PropertiesForm = () => {
     ]);
     // console.log(contextValue.asset);
     const handleSubmit = async () => {
-        console.log("this was called");
-
         const uniqueNames: Record<string, boolean> = {};
         const updatedProperties: Property[] = [];
 
@@ -47,10 +45,7 @@ const PropertiesForm = () => {
             return false;
         });
 
-        console.log(uniqueProperties);
-
         for (const property of uniqueProperties) {
-            console.log(property);
             try {
                 const payload = {
                     ...property,
