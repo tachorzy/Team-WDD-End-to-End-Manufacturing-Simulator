@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+    import React, { useEffect, useRef, useState } from "react";
 import { Attribute ,Asset} from "@/app/api/_utils/types";
 // import ErrorMessage from "@/components/home/searchbar/ErrorMessage";
 
@@ -52,7 +52,7 @@ const AttributeInputColumn = (props: {
     return (
         <div
             className="flex flex-col gap-y-3 max-h-[22rem] overflow-y-scroll"
-            data-testid="attribute-input"
+
         >
             <h1 className="text-2xl font-semibold text-gray-900">Attributes</h1>
             {/* <div className="-ml-3 -mt-2 -mb-2">

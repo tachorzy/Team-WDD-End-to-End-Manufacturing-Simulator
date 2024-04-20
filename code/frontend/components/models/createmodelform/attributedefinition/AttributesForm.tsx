@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 // import Image from "next/image";
 import { Attribute, Property, Asset } from "@/app/api/_utils/types";
-import { BackendConnector } from "@/app/api/_utils/connector";
+import { BackendConnector, PostConfig } from "@/app/api/_utils/connector";
 import uuid from "react-uuid";
 import AttributeInputColumn from "./AttributeInputColumn";
 import AddAttributeButton from "./AddAttributeButton";
@@ -49,12 +49,12 @@ const AttributesForm = () => {
                     assetId,
                     modelId: contextValue.asset.modelId,
                 };
-
-                const config = await BackendConnector.post<Attribute>({
+                const config: PostConfig<Attribute> = {
                     resource: "attributes",
                     payload,
-                });
-                console.log(config);
+                };
+                const response = await BackendConnector.post<Attribute>(config);
+                // console.log(response);
             } catch (e) {
                 console.error(e);
             }
@@ -71,12 +71,12 @@ const AttributesForm = () => {
             setInvalidAttribute(true);
             return;
         }
+        handleSubmit();
         contextValue?.nextPage();
     };
 
     const handleNext = (event: React.MouseEvent<HTMLButtonElement>) => {
         handleNextPageButton(event);
-        handleSubmit();
     };
 
     return (

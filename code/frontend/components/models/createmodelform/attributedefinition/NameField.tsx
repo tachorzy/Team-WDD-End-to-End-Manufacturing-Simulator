@@ -44,7 +44,7 @@ const NameField = (props: {
     }, [name, modelId, factoryId, attributes, setAttributes]);
 
     return (
-        <div className="" data-testid="name-field">
+        <div className="">
             <h1 className="text-2xl font-semibold text-gray-900">Model Name</h1>
             <div className="-ml-3 mb-2">
                 {invalidAttribute && (
