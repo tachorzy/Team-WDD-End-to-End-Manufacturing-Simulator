@@ -40,7 +40,7 @@ const RandomGeneratorForm = (props: {
         <div className="flex flex-col gap-y-3 max-h-72">
             <div>
                 <h1 className="text-2xl font-semibold text-gray-900">
-                    Property {propertyIndex} - {property.name}
+                    Property {propertyIndex+1} - {property.name}
                 </h1>
                 <div className="flex flex-row gap-x-0.5">
                     <Image
