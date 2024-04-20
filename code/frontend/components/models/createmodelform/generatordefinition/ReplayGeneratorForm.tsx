@@ -99,6 +99,12 @@ const ReplayGeneratorForm = (props: {
                     </div>
                 </div>
                 <ReplayUploadContainer setInputFile={setInputFile} setFormData={setSequenceValues}/>
+                {inputFile && (
+                    <div className="flex flex-row text-sm gap-x-2">
+                        <Image src="/icons/check.svg" width={14} height={14} alt="checkmark icon"/>
+                        <h1 className="text-black">{`File accepted! ${inputFile.name}`}</h1>
+                    </div>
+                )}
             </div>
         </div>
     );

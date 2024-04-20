@@ -39,16 +39,16 @@ const ReplayUploadContainer = (props: {
     });
 
     return (
-        <section className="w-[62.5%] h-1/4 flex flex-col gap-y-5">
+        <section className="w-[62.5%] h-1/8 flex flex-col gap-y-5">
             <div
                 {...getRootProps({ className: "dropzone" })}
-                className="group flex flex-col p-4 gap-y-3 items-center justify-center border-MainBlue hover:border-LightBlue transition duration-700 ease-in border-dashed border-4 rounded-2xl cursor-pointer scale-[100.25%] shadow-sm"
+                className="group flex flex-row p-4 gap-x-4 gap-y-3 items-center justify-center border-MainBlue hover:border-LightBlue transition duration-700 ease-in border-dashed border-4 rounded-2xl cursor-pointer scale-[100.25%] shadow-sm"
                 data-testid="dropzone"
             >
                 <input data-testid="drop-input" {...getInputProps()} />
                 <Image
-                    width={30}
-                    height={30}
+                    width={35}
+                    height={35}
                     src="/factorydashboard/upload.svg"
                     alt="upload icon"
                     className="group-hover:animate-pulse-slow transition duration-1000 ease-out"
