@@ -292,6 +292,6 @@ describe("Generator Function Form", () => {
             </Context.Provider>,
         );
 
-        expect(getByText("Property 0 - Pressure")).toBeInTheDocument();
+        expect(getByText("Property 1 - Pressure")).toBeInTheDocument();
     });
 });
