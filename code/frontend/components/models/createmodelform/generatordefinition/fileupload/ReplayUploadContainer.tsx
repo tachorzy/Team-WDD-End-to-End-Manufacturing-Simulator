@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
-import { Asset } from "@/app/api/_utils/types";
 
 const ReplayUploadContainer = (props: {
     setInputFile: React.Dispatch<React.SetStateAction<File | null>>;
@@ -40,10 +39,10 @@ const ReplayUploadContainer = (props: {
     });
 
     return (
-        <section className="w-full h-full flex flex-col gap-y-5">
+        <section className="w-[62.5%] h-1/4 flex flex-col gap-y-5">
             <div
                 {...getRootProps({ className: "dropzone" })}
-                className="group flex flex-col w-[62.5%] h-[30rem] p-4 gap-y-3 items-center justify-center border-MainBlue hover:border-LightBlue transition duration-700 ease-in border-dashed border-4 rounded-2xl cursor-pointer scale-[100.25%] shadow-sm"
+                className="group flex flex-col p-4 gap-y-3 items-center justify-center border-MainBlue hover:border-LightBlue transition duration-700 ease-in border-dashed border-4 rounded-2xl cursor-pointer scale-[100.25%] shadow-sm"
                 data-testid="dropzone"
             >
                 <input data-testid="drop-input" {...getInputProps()} />

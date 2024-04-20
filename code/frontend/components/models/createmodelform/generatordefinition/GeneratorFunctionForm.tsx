@@ -9,6 +9,7 @@ import Link from "next/link";
 import RandomGeneratorForm from "./RandomGeneratorForm";
 import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
 import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
+import ReplayGeneratorForm from "./ReplayGeneratorForm"
 import { Context } from "../CreateModelForm";
 
 interface GeneratorFunctionFormContext {
@@ -82,6 +83,14 @@ const GeneratorFunctionForm = () => {
                                 measurements={contextValue?.measurements}
                                 setMeasurements={contextValue?.setMeasurements}
                             />
+                        )}
+                        {property.generatorType === "Replay" && (
+                            <ReplayGeneratorForm
+                                propertyIndex={index}
+                                property={property}
+                                measurements={contextValue?.measurements}
+                                setMeasurements={contextValue?.setMeasurements}
+                            />   
                         )}
                     </div>
                 ))}

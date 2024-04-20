@@ -96,9 +96,9 @@ const ReplayGeneratorForm = (props: {
                                 placeholder="e.g. 100"
                             />
                         </div>
-                        <ReplayUploadContainer setInputFile={setInputFile} setFormData={setSequenceValues}/>
                     </div>
                 </div>
+                <ReplayUploadContainer setInputFile={setInputFile} setFormData={setSequenceValues}/>
             </div>
         </div>
     );
