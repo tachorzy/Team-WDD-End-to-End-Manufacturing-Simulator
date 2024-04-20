@@ -60,6 +60,7 @@ export interface Measurement {
     angularFrequency?: number;
     amplitude?: number;
     phase?: number;
+    replaySequence?: number[];
 }
 
 export interface Model {
