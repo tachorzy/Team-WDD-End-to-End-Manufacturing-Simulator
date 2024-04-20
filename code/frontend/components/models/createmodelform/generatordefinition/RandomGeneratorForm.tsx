@@ -1,12 +1,40 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { Property } from "@/app/api/_utils/types";
+import { Property, Measurement } from "@/app/api/_utils/types";
 
 const RandomGeneratorForm = (props: {
     propertyIndex: number;
     property: Property;
+    measurements: Measurement[];
+    setMeasurements: React.Dispatch<React.SetStateAction<Measurement[]>>;
 }) => {
-    const { propertyIndex, property } = props;
+    const { propertyIndex, property, measurements, setMeasurements } = props;
+    const [frequency, setFrequency] = useState<number>(0.0);
+    const [minValue, setMinValue] = useState<number>(0.0);
+    const [maxValue, setMaxValue] = useState<number>(0.0);
+
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current);
+        }
+
+        debounceTimeout.current = setTimeout(() => {
+            const data: Measurement = {
+                measurementId: "test test test test", // REPLACE
+                modelId: "test test test test", // REPLACE
+                factoryId: "test test", // REPLACE
+                lowerBound: minValue,
+                upperBound: maxValue,
+                frequency,
+                precision: 0.0,
+                generatorFunction: "random",
+            };
+
+            setMeasurements([...measurements, data]);
+        }, 500);
+    }, [frequency, minValue, maxValue]);
 
     return (
         <div className="flex flex-col gap-y-3 max-h-72">
@@ -33,6 +61,9 @@ const RandomGeneratorForm = (props: {
                             Frequency (ms)
                         </h2>
                         <input
+                            onChange={(e) =>
+                                setFrequency(parseFloat(e.target.value))
+                            }
                             className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                             placeholder="e.g. 60000"
                         />
@@ -43,6 +74,9 @@ const RandomGeneratorForm = (props: {
                                 Minimum value
                             </h2>
                             <input
+                                onChange={(e) =>
+                                    setMinValue(parseFloat(e.target.value))
+                                }
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 0"
                             />
@@ -52,6 +86,9 @@ const RandomGeneratorForm = (props: {
                                 Maximum value
                             </h2>
                             <input
+                                onChange={(e) =>
+                                    setMaxValue(parseFloat(e.target.value))
+                                }
                                 className="bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-11/12"
                                 placeholder="e.g. 100"
                             />

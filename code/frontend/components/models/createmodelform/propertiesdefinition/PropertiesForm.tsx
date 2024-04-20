@@ -5,7 +5,7 @@ import PropertyInputColumn from "./PropertyInputColumn";
 import AddPropertyButton from "./AddPropertyButton";
 import { Context } from "../CreateModelForm";
 
-interface PropertiesFormContext {
+export interface PropertiesFormContext {
     factoryId: string;
     modelId: string;
     attributes: Attribute[];
@@ -27,15 +27,37 @@ const PropertiesForm = () => {
             generatorType: "",
         },
     ]);
+    const [invalidProperty, setInvalidProperty] = useState(false);
+
+    const handleNextPageButton = (
+        event: React.MouseEvent<HTMLButtonElement>,
+    ) => {
+        event.preventDefault();
+        if (
+            contextValue?.properties.length <= 1 &&
+            contextValue?.properties.some(
+                (property) => property.generatorType === "",
+            )
+        ) {
+            setInvalidProperty(true);
+            return;
+        }
+        contextValue?.nextPage();
+    };
 
     return (
-        <div className="flex flex-row gap-x-24 mt-4 gap-y-2">
+        <div
+            className="flex flex-row gap-x-24 mt-4 gap-y-2"
+            data-tesid="properties-form"
+        >
             <form>
                 <div className="flex flex-col w-full gap-y-3">
                     <PropertyInputColumn
                         inputFields={inputFields}
                         properties={contextValue?.properties}
                         setProperties={contextValue?.setProperties}
+                        invalidProperty={invalidProperty}
+                        setInvalidProperty={setInvalidProperty}
                     />
                     <AddPropertyButton setInputFields={setInputFields} />
                 </div>
@@ -73,7 +95,7 @@ const PropertiesForm = () => {
             </section>
             <button
                 type="submit"
-                onClick={contextValue?.nextPage}
+                onClick={handleNextPageButton}
                 className="bg-black p-2 w-24 rounded-full font-semibold text-lg right-0 bottom-0 absolute mb-4 mr-8"
             >
                 Next ›

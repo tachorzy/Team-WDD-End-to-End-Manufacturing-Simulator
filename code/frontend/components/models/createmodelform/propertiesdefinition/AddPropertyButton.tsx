@@ -24,7 +24,7 @@ const AddPropertyButton = (props: {
             }}
             className="flex flex-row items-center justify-center cursor-pointer w-[91.5%] p-2 border-2 border-dashed border-[#494949] border-solid rounded-lg text-[#494949] hover:scale-[101.5%] hover:border-MainBlue transition duration-500 ease-in-out"
         >
-            <div className="flex flex-row">
+            <div className="flex flex-row" data-testid="add-property">
                 <Image
                     src="/icons/add.svg"
                     width={16}

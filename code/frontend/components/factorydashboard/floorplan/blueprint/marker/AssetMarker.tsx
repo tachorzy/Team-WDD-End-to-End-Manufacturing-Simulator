@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Draggable from "react-draggable";
 import { Asset } from "@/app/api/_utils/types";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import MarkerPopups from "./MarkerPopups";
+import { DraggableData, DraggableEvent } from "react-draggable";
 
 interface AssetMarkerProps {
     asset: Asset;
@@ -13,7 +14,10 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [showEditForm, setShowEditForm] = useState(false);
     const [showButtons, setShowButtons] = useState(false);
-
+    const [isDragging, setIsDragging] = useState(false);
+    const [deltaPosition, setDeltaPosition] = useState({ x: 0, y: 0 });
+    const [isCloseToLeft, setIsCloseToLeft] = useState(true);
+    const [floorplanWidth, setFloorplanWidth] = useState(0);
     const handleDelete = () => {
         setShowConfirmDialog(true);
     };
@@ -35,14 +39,40 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
         setShowEditForm(false);
     };
 
+ 
     const handleDraggableClick = () => {
-        setShowButtons(!showButtons);
+        if (!isDragging) {
+            setShowButtons(!showButtons);
+        }
     };
 
+    useEffect(() => {
+        const floorplan = document.querySelector('.floorplan');
+        if (floorplan) {
+            setFloorplanWidth(floorplan.getBoundingClientRect().width);
+        }
+    }, []);
+
+    const handleDrag = (e: DraggableEvent, data: DraggableData) => {
+        setShowButtons(false);
+        setDeltaPosition({ x: data.x, y: data.y });
+        setIsCloseToLeft(data.x < floorplanWidth / 2);
+    }
+
+
     return (
+        
         isDraggableVisible && (
-            <Draggable>
+            <Draggable 
+            cancel=".no-drag" 
+            bounds=".floorplan"
+            onStart={() => setIsDragging(true)}
+            onStop={() => setIsDragging(false)}
+            onDrag={handleDrag}
+           
+              >
                 <div className="group flex flex-col absolute top-0 left-0 z-10 drop-shadow-md items-center">
+                    <div className="text-gray-900">Position: {`(${deltaPosition.x}, ${deltaPosition.y})`}</div>
                     <Image
                         src="/icons/floorplan/asset-marker.svg"
                         width={30}
@@ -56,8 +86,8 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
                         {asset.name}
                     </p>
                     {showButtons && (
-                        <div className="absolute left-full top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-xl p-6 min-w-max w-96 h-auto flex flex-col justify-between">
-                            <div>
+                        <div className={`absolute ${isCloseToLeft ? 'left-full' : 'right-full'} top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-xl p-6 min-w-max w-96 h-auto flex flex-col justify-between no-drag`}>
+                            <div className="">
                                 <h2 className="text-xl font-semibold mb-4 text-gray-900">
                                     Asset Info
                                 </h2>
@@ -71,7 +101,7 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
                                     {asset.description}
                                 </p>
                             </div>
-                            <div className="self-end">
+                            <div className="self-end"  >
                                 <MarkerPopups
                                     handleDelete={handleDelete}
                                     showConfirmDialog={showConfirmDialog}

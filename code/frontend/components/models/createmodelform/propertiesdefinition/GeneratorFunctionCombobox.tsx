@@ -19,12 +19,15 @@ const GeneratorFunctionCombobox = (props: {
               );
 
     useEffect(() => {
-        console.log(`Selected generator function: ${selectedFunction}`);
         setGeneratorFunction(selectedFunction);
     }, [selectedFunction]);
 
     return (
-        <Combobox value={selectedFunction} onChange={setSelectedFunction}>
+        <Combobox
+            value={selectedFunction}
+            onChange={setSelectedFunction}
+            data-testid="combobox-gen-functions"
+        >
             <div className="flex flex-col gap-y-1">
                 <Combobox.Input
                     onChange={(event) => setQuery(event.target.value)}
