@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import FactoryBio from "@/components/factorydashboard/FactoryBio";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import FileUploadContainer from "@/components/factorydashboard/floorplan/uploadcontainer/FileUploadContainer";
 import Blueprint from "@/components/factorydashboard/floorplan/blueprint/Blueprint";
 import FloorManager from "@/components/factorydashboard/floormanager/FloorManager";
 import { GetConfig, NextServerConnector } from "@/app/api/_utils/connector";
-import { Asset, Floorplan } from "@/app/api/_utils/types";
+import { Floorplan } from "@/app/api/_utils/types";
 
 export const Context = React.createContext({});
 

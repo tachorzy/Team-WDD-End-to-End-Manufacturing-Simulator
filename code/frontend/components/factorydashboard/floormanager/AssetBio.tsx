@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
 import Link from "next/link";
@@ -9,10 +9,7 @@ export interface AssetContext {
     setAssets: React.Dispatch<React.SetStateAction<Asset[]>>;
 }
 
-const AssetBio= (props: {
-    factoryId: string;
-    asset: Asset;
-}) => {
+const AssetBio = (props: { factoryId: string; asset: Asset }) => {
     const { factoryId, asset } = props;
 
     const [imageSrc, setImageSrc] = useState("");
