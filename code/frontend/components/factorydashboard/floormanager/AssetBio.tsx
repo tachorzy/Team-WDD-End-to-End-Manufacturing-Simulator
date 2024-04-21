@@ -3,20 +3,18 @@ import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
 import Link from "next/link";
 
-interface AssetBioProps {
-    asset?: Asset | undefined;
-}
-
-
-export interface AssetContext { 
+export interface AssetContext {
     factoryId: string;
     assets: Asset[];
     setAssets: React.Dispatch<React.SetStateAction<Asset[]>>;
 }
 
-const AssetBio: React.FC<AssetBioProps> = (props: { factoryId: string, asset: Asset }) => {
+const AssetBio= (props: {
+    factoryId: string;
+    asset: Asset;
+}) => {
     const { factoryId, asset } = props;
-    
+
     const [imageSrc, setImageSrc] = useState("");
 
     useEffect(() => {
@@ -45,20 +43,20 @@ const AssetBio: React.FC<AssetBioProps> = (props: { factoryId: string, asset: As
                         alt="Asset Image"
                         className="self-center"
                     />
-                    <div className="flex flex-col gap-y-1">
+                    <div className="flex flex-col gap-y-1 relative">
                         <p className="text-DarkBlue font-semibold break-words">
                             {asset.name}
                         </p>
                         <p className="text-[#494949] text-xs break-words">
                             Description: {asset.description}
                         </p>
-                    </div>
-                    <button onClick={() => { contextValue.setAssets(prevAssets => [...prevAssets, asset])}}>
-                        <Link href={`/factorydashboard/${factoryId}/${asset.assetId}`} className="text-MainBlue font-medium ">
-                        Inspect 
+                        <Link
+                            href={`/factorydashboard/${factoryId}/${asset.assetId}`}
+                            className="text-MainBlue font-medium mt-0.5 "
+                        >
+                            Inspect Asset
                         </Link>
-                    </button>
-
+                    </div>
                 </div>
             )}
         </div>

@@ -1,9 +1,8 @@
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import SignUpButton from "./SignUpButton";
 import { Asset } from "@/app/types/types";
-
+import SignUpButton from "./SignUpButton";
 
 const FactoryPageNavbar = (props: { pageId: string; factoryId: string }) => {
     const { pageId, factoryId } = props;

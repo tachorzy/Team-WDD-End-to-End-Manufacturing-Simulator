@@ -5,6 +5,7 @@ import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import AssetBio from "../components/factorydashboard/floormanager/AssetBio";
+import { Asset } from "@/app/types/types";
 
 global.URL.createObjectURL = jest
     .fn()
@@ -27,7 +28,14 @@ describe("AssetBio", () => {
     });
 
     test("should render render without error", () => {
-        render(<AssetBio asset={undefined} />);
+        const asset = {
+            factoryId: "1",
+            name: "Asset 1",
+            description: "Asset 1 description",
+            imageData: "https://www.example.com/image.jpg",
+        };
+
+        render(<AssetBio factoryId={"12345678"} asset={asset as Asset} />);
     });
 
     test("should render asset", async () => {
@@ -38,7 +46,7 @@ describe("AssetBio", () => {
             imageData: "https://www.example.com/image.jpg",
         };
 
-        const { getByAltText, getByText } = render(<AssetBio asset={asset} />);
+        const { getByAltText, getByText } = render(<AssetBio factoryId={asset.factoryId} asset={asset} />);
 
         await waitFor(() => {
             expect(getByAltText("Asset Image")).toHaveAttribute(
@@ -60,7 +68,7 @@ describe("AssetBio", () => {
             imageData: undefined,
         };
 
-        const { getByAltText, getByText } = render(<AssetBio asset={asset} />);
+        const { getByAltText, getByText } = render(<AssetBio factoryId={asset.factoryId} asset={asset} />);
 
         await waitFor(() => {
             expect(getByAltText("Asset Image")).toHaveAttribute(

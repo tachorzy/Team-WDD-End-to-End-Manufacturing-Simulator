@@ -9,7 +9,6 @@ import FloorManager from "@/components/factorydashboard/floormanager/FloorManage
 import { GetConfig, NextServerConnector } from "@/app/api/_utils/connector";
 import { Asset, Floorplan } from "@/app/api/_utils/types";
 
-
 export const Context = React.createContext({});
 
 export default function FactoryDashboard({

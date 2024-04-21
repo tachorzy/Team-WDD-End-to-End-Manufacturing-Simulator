@@ -96,7 +96,7 @@ const FloorManager: React.FC<FloorManagerProps> = ({
                     </button>
                 )}
             </div>
-            <AssetBio factoryId={factoryId as string} asset={selectedAsset as Asset} />
+            <AssetBio factoryId={factoryId} asset={selectedAsset as Asset} />
         </div>
     );
 };
