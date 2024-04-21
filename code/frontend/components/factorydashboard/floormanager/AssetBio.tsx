@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
+import Link from "next/link";
 
 interface AssetBioProps {
     asset?: Asset | undefined;
 }
 
-const AssetBio: React.FC<AssetBioProps> = ({ asset }) => {
+
+export interface AssetContext { 
+    factoryId: string;
+    assets: Asset[];
+    setAssets: React.Dispatch<React.SetStateAction<Asset[]>>;
+}
+
+const AssetBio: React.FC<AssetBioProps> = (props: { factoryId: string, asset: Asset }) => {
+    const { factoryId, asset } = props;
+    
     const [imageSrc, setImageSrc] = useState("");
 
     useEffect(() => {
@@ -43,6 +53,12 @@ const AssetBio: React.FC<AssetBioProps> = ({ asset }) => {
                             Description: {asset.description}
                         </p>
                     </div>
+                    <button onClick={() => { contextValue.setAssets(prevAssets => [...prevAssets, asset])}}>
+                        <Link href={`/factorydashboard/${factoryId}/${asset.assetId}`} className="text-MainBlue font-medium ">
+                        Inspect 
+                        </Link>
+                    </button>
+
                 </div>
             )}
         </div>
