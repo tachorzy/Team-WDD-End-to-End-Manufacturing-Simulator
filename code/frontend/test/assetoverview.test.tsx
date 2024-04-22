@@ -38,7 +38,7 @@ describe("AssetBio", () => {
         render(<AssetOverview asset={asset as Asset} />);
     });
 
-    test("should render asset information", async () => {
+    test("should render asset information", () => {
         const asset = {
             factoryId: "1",
             modelId: "1",
@@ -54,5 +54,4 @@ describe("AssetBio", () => {
         expect(getByText(`${asset.name}`)).toBeInTheDocument();
         expect(getByText(`${asset.modelId}`)).toBeInTheDocument();
     });
-
 });

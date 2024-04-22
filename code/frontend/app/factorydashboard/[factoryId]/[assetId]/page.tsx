@@ -14,8 +14,8 @@ export default function Page({
     const { factoryId, assetId } = params;
 
     const [assets, setAssets] = useState<Asset[]>([]);
-    
-    console.log(`assetId: ${assetId}`)
+
+    console.log(`assetId: ${assetId}`);
 
     useEffect(() => {
         const fetchAssets = async () => {
@@ -36,8 +36,7 @@ export default function Page({
         }
     }, [factoryId]);
 
-    const asset = assets.find((asset) => asset.assetId === assetId);
-    console.log(`asset: ${asset}`)
+    const inspectedAsset = assets.find((asset) => asset.assetId === assetId);
 
     return (
         <main className="flex flex-col bg-[#FAFAFA] min-h-screen mx-auto smooth-scroll">
@@ -45,7 +44,7 @@ export default function Page({
                 <FactoryPageNavbar pageId="Dashboard" factoryId={factoryId} />
             </div>
             <div className="px-32 -mt-[35rem]">
-                <Bento factoryId={factoryId} asset={asset as Asset}></Bento>
+                <Bento factoryId={factoryId} asset={inspectedAsset as Asset} />
             </div>
         </main>
     );

@@ -46,9 +46,7 @@ describe("AssetBio", () => {
             imageData: "https://www.example.com/image.jpg",
         };
 
-        const { getByAltText, getByText } = render(
-            <AssetView asset={asset} />,
-        );
+        const { getByAltText, getByText } = render(<AssetView asset={asset} />);
 
         await waitFor(() => {
             expect(getByAltText("asset image")).toHaveAttribute(
@@ -67,9 +65,7 @@ describe("AssetBio", () => {
             imageData: undefined,
         };
 
-        const { getByAltText, getByText } = render(
-            <AssetView asset={asset} />,
-        );
+        const { getByAltText, getByText } = render(<AssetView asset={asset} />);
 
         await waitFor(() => {
             expect(getByAltText("asset image")).toHaveAttribute(
