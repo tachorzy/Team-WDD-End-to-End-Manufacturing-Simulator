@@ -53,11 +53,11 @@ type Model struct {
 }
 
 type Property struct {
-	PropertyID    string  `json:"propertyId" dynamodbav:"propertyId"`
-	MeasurementID string  `json:"measurementId" dynamodbav:"measurementId"`
-	Name          string  `json:"name" dynamodbav:"name"`
-	Value         float64 `json:"value" dynamodbav:"value"`
-	Unit          string  `json:"unit" dynamodbav:"unit"`
+	PropertyID    string   `json:"propertyId" dynamodbav:"propertyId"`
+	MeasurementID string   `json:"measurementId" dynamodbav:"measurementId"`
+	Name          string   `json:"name" dynamodbav:"name"`
+	Value         *float64 `json:"value,omitempty" dynamodbav:"value"`
+	Unit          string   `json:"unit" dynamodbav:"unit"`
 }
 
 type Measurement struct {

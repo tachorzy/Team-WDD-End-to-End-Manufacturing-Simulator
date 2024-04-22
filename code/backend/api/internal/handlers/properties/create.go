@@ -2,7 +2,6 @@ package properties
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"wdd/api/internal/types"
@@ -56,7 +55,7 @@ func (h Handler) HandleCreatePropertyRequest(ctx context.Context, request events
 			Body:       fmt.Sprintf("Error inserting item: %v", err),
 		}, nil
 	}
-	responseBody, err := json.Marshal(property)
+	responseBody, err := wrappers.JSONMarshal(property)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
