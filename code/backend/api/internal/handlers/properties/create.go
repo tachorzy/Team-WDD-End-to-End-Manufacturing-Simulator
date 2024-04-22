@@ -39,7 +39,7 @@ func (h Handler) HandleCreatePropertyRequest(ctx context.Context, request events
 	av, err := wrappers.MarshalMap(property)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusBadRequest,
+			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,
 			Body:       fmt.Sprintf("Error marshalling: %v", err),
 		}, nil
