@@ -1,7 +1,7 @@
 
 import React from "react";
 import AssetOverview from "./AssetOverview";
-import AssetDisplay from "./AssetDisplay";
+import AssetView from "./AssetView";
 import { Asset } from "@/app/types/types";
 
 const Bento = (props: { factoryId: string, asset: Asset }) => {
@@ -13,7 +13,7 @@ const Bento = (props: { factoryId: string, asset: Asset }) => {
         >
             <div className="flex flex-row gap-x-4">
                 <AssetOverview asset={asset}></AssetOverview>
-                <AssetDisplay asset={asset}></AssetDisplay>
+                <AssetView asset={asset}></AssetView>
             </div>
         </div>
     );

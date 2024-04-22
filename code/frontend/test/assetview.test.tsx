@@ -6,7 +6,7 @@ import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { act } from 'react-dom/test-utils';
 import { Asset } from "@/app/types/types";
-import AssetDisplay from "@/components/assetdashboard/AssetDisplay";
+import AssetView from "@/components/assetdashboard/AssetView";
 
 global.URL.createObjectURL = jest
     .fn()
@@ -36,7 +36,7 @@ describe("AssetBio", () => {
             imageData: "https://www.example.com/image.jpg",
         };
 
-        render(<AssetDisplay asset={asset as Asset} />);
+        render(<AssetView asset={asset as Asset} />);
     });
 
     test("should render asset image in asset view", async () => {
@@ -48,7 +48,7 @@ describe("AssetBio", () => {
         };
 
         const { getByAltText, getByText } = render(
-            <AssetDisplay asset={asset} />,
+            <AssetView asset={asset} />,
         );
 
         await waitFor(() => {
@@ -69,7 +69,7 @@ describe("AssetBio", () => {
         };
 
         const { getByAltText, getByText } = render(
-            <AssetDisplay asset={asset} />,
+            <AssetView asset={asset} />,
         );
 
         await waitFor(() => {

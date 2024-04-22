@@ -3,7 +3,7 @@ import { Asset } from "@/app/types/types";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
-const AssetDisplay = (props: { asset: Asset }) => {
+const AssetView = (props: { asset: Asset }) => {
     const { asset } = props;
     const [imageSrc, setImageSrc] = useState("");
 
@@ -34,4 +34,4 @@ const AssetDisplay = (props: { asset: Asset }) => {
         </div>
     );
 };
-export default AssetDisplay;
+export default AssetView;
