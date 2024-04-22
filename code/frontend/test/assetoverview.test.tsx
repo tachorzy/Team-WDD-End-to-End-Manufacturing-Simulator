@@ -51,8 +51,8 @@ describe("AssetBio", () => {
             <AssetOverview asset={asset} />,
         );
 
-        expect(getByText(`Asset Name: ${asset.name}`)).toBeInTheDocument();
-        expect(getByText(`Asset Model: ${asset.modelId}`)).toBeInTheDocument();
+        expect(getByText(`${asset.name}`)).toBeInTheDocument();
+        expect(getByText(`${asset.modelId}`)).toBeInTheDocument();
     });
 
 });
