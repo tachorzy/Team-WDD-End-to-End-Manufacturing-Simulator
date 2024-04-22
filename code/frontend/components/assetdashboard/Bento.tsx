@@ -9,9 +9,9 @@ const Bento = (props: { factoryId: string, asset: Asset }) => {
 
     return (
         <div
-            className="flex flex-col gap-x-2 mb-3 gap-y-2"
+            className="flex flex-col mb-3 gap-y-4"
         >
-            <div className="flex flex-row">
+            <div className="flex flex-row gap-x-4">
                 <AssetOverview asset={asset}></AssetOverview>
                 <AssetDisplay asset={asset}></AssetDisplay>
             </div>
