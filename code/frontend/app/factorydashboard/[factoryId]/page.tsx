@@ -9,7 +9,6 @@ import FloorManager from "@/components/factorydashboard/floormanager/FloorManage
 import { GetConfig, NextServerConnector } from "@/app/api/_utils/connector";
 import { Floorplan } from "@/app/api/_utils/types";
 
-
 export default function FactoryDashboard({
     params,
 }: {
@@ -78,7 +77,6 @@ export default function FactoryDashboard({
                             />
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </main>
