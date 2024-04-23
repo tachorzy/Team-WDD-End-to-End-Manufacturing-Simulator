@@ -10,6 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
+const AWSREGION = "us-east-2"
+
 func main() {
 	cfg, err := config.LoadDefaultConfig(context.Background(), config.WithRegion(AWSREGION))
 	if err != nil {
