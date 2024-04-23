@@ -41,19 +41,19 @@ func (h Handler) HandleUpdateMeasurementRequest(ctx context.Context, request eve
 	}
 
 	var updateBuilder expression.UpdateBuilder
-	if measurement.Frequency != 0.0 {
+	if measurement.Frequency != nil {
 		updateBuilder = updateBuilder.Set(expression.Name("frequency"), expression.Value(measurement.Frequency))
 	}
 	if measurement.GeneratorFunction != "" {
 		updateBuilder = updateBuilder.Set(expression.Name("generatorFunction"), expression.Value(measurement.GeneratorFunction))
 	}
-	if measurement.LowerBound != 0.0 {
+	if measurement.LowerBound != nil {
 		updateBuilder = updateBuilder.Set(expression.Name("lowerBound"), expression.Value(measurement.LowerBound))
 	}
-	if measurement.UpperBound != 0.0 {
+	if measurement.UpperBound != nil {
 		updateBuilder = updateBuilder.Set(expression.Name("upperBound"), expression.Value(measurement.UpperBound))
 	}
-	if measurement.Precision != 0.0 {
+	if measurement.Precision != nil {
 		updateBuilder = updateBuilder.Set(expression.Name("precision"), expression.Value(measurement.Precision))
 	}
 

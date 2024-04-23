@@ -7,5 +7,6 @@ import (
 const TABLENAME = "Floorplan"
 
 type Handler struct {
-	DynamoDB types.DynamoDBClient
+	DynamoDB   types.DynamoDBClient
+	S3Uploader types.S3Uploader
 }

@@ -2,7 +2,6 @@ package measurements
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"wdd/api/internal/types"
@@ -56,7 +55,7 @@ func (h Handler) HandleCreateMeasurementRequest(ctx context.Context, request eve
 			Body:       fmt.Sprintf("Error inserting item: %v", err),
 		}, nil
 	}
-	responseBody, err := json.Marshal(measurement)
+	responseBody, err := wrappers.JSONMarshal(measurement)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

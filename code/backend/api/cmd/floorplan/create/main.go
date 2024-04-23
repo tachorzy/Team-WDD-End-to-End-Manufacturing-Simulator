@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"wdd/api/internal/handlers/floorplan"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -19,7 +21,10 @@ func main() {
 	}
 
 	dbClient := dynamodb.NewFromConfig(cfg)
-	handler := floorplan.NewCreateFloorPlanHandler(dbClient)
+	s3Client := s3.NewFromConfig(cfg)
+	uploader := manager.NewUploader(s3Client)
+
+	handler := floorplan.NewCreateFloorPlanHandler(dbClient, uploader)
 
 	lambda.Start(handler.HandleCreateFloorPlanRequest)
 }

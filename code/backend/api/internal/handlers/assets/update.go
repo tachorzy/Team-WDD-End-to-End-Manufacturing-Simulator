@@ -3,7 +3,6 @@ package assets
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -14,17 +13,16 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
-	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/google/uuid"
 )
 
-func NewUpdateAssetHandler(db types.DynamoDBClient, s3 types.S3Client) *Handler {
+func NewUpdateAssetHandler(db types.DynamoDBClient, s3Uploader types.S3Uploader) *Handler {
 	return &Handler{
-		DynamoDB: db,
-		S3Client: s3,
+		DynamoDB:   db,
+		S3Uploader: s3Uploader,
 	}
 }
 
@@ -60,12 +58,12 @@ func (h Handler) updateAsset(ctx context.Context, asset *types.Asset) error {
 
 func (h Handler) processAssetUpdates(ctx context.Context, asset *types.Asset) error {
 	if asset.ImageData != "" {
-		if err := processAssetImageUpdate(ctx, asset, h.S3Client); err != nil {
+		if err := processAssetImageUpdate(ctx, asset, h.S3Uploader); err != nil {
 			return err
 		}
 	}
 	if asset.ModelURL != nil {
-		if err := processAssetModelUpdate(ctx, asset, h.S3Client); err != nil {
+		if err := processAssetModelUpdate(ctx, asset, h.S3Uploader); err != nil {
 			return err
 		}
 	}
@@ -111,7 +109,7 @@ func (h Handler) responseInternalServerError(headers map[string]string, err erro
 }
 
 func (h Handler) responseUpdatedAsset(headers map[string]string, asset *types.Asset) (events.APIGatewayProxyResponse, error) {
-	updatedAssetJSON, err := json.Marshal(asset)
+	updatedAssetJSON, err := wrappers.JSONMarshal(asset)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -127,14 +125,11 @@ func (h Handler) responseUpdatedAsset(headers map[string]string, asset *types.As
 	}, nil
 }
 
-func processAssetImageUpdate(ctx context.Context, asset *types.Asset, s3Client types.S3Client) error {
-	actualS3Client := s3Client.(interface{}).(*s3.Client)
-	uploader := manager.NewUploader(actualS3Client)
-
+func processAssetImageUpdate(ctx context.Context, asset *types.Asset, uploader types.S3Uploader) error {
 	if strings.HasPrefix(asset.ImageData, "http://") || strings.HasPrefix(asset.ImageData, "https://") {
 		return nil
 	}
-	decodedData, err := base64.StdEncoding.DecodeString(asset.ImageData)
+	decodedData, err := wrappers.Base64DecodeString(asset.ImageData)
 	if err != nil {
 		return fmt.Errorf("Base64 decode error: %w", err)
 	}
@@ -152,11 +147,8 @@ func processAssetImageUpdate(ctx context.Context, asset *types.Asset, s3Client t
 	asset.ImageData = fmt.Sprintf("https://%s.s3.amazonaws.com/assets/%s.jpg", "wingstopdrivenbucket", asset.AssetID)
 	return nil
 }
-func processAssetModelUpdate(ctx context.Context, asset *types.Asset, s3Client types.S3Client) error {
-	actualS3Client := s3Client.(interface{}).(*s3.Client)
-	uploader := manager.NewUploader(actualS3Client)
-
-	decodedData, err := base64.StdEncoding.DecodeString(*asset.ModelURL)
+func processAssetModelUpdate(ctx context.Context, asset *types.Asset, uploader types.S3Uploader) error {
+	decodedData, err := wrappers.Base64DecodeString(*asset.ModelURL)
 	if err != nil {
 		return fmt.Errorf("Base64 decode error: %w", err)
 	}

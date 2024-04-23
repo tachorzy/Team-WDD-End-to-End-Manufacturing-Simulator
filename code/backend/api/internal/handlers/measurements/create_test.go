@@ -101,9 +101,9 @@ func TestHandleCreateMeasurementRequest_JSONMarshalError(t *testing.T) {
 		Body: `{"frequency":1.0,"generatorFunction":"Function 1","lowerBound":0.0,"upperBound":10.0,"precision":0.1}`,
 	}
 
-	originalMeasurementJSONMarshal := wrappers.JSONMarshal
+	originalJSONMarshal := wrappers.JSONMarshal
 
-	defer func() { wrappers.JSONMarshal = originalMeasurementJSONMarshal }()
+	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
 
 	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
@@ -116,8 +116,8 @@ func TestHandleCreateMeasurementRequest_JSONMarshalError(t *testing.T) {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
-	if response.StatusCode != http.StatusOK {
-		t.Errorf("Expected status code %d for marshalling measurement in JSON format, got %d", http.StatusOK, response.StatusCode)
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d for marshalling measurement in JSON format, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
 
