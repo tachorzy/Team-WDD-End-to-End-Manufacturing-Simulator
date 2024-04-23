@@ -5,7 +5,7 @@ import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Asset } from "@/app/types/types";
-import AssetBio from "../components/factorydashboard/floormanager/AssetBio";
+import AssetView from "@/components/assetdashboard/AssetView";
 
 global.URL.createObjectURL = jest
     .fn()
@@ -27,7 +27,7 @@ describe("AssetBio", () => {
         jest.clearAllMocks();
     });
 
-    test("should render render without error", () => {
+    test("should render without error", () => {
         const asset = {
             factoryId: "1",
             name: "Asset 1",
@@ -35,10 +35,10 @@ describe("AssetBio", () => {
             imageData: "https://www.example.com/image.jpg",
         };
 
-        render(<AssetBio factoryId="12345678" asset={asset as Asset} />);
+        render(<AssetView asset={asset as Asset} />);
     });
 
-    test("should render asset", async () => {
+    test("should render asset image in asset view", async () => {
         const asset = {
             factoryId: "1",
             name: "Asset 1",
@@ -46,23 +46,18 @@ describe("AssetBio", () => {
             imageData: "https://www.example.com/image.jpg",
         };
 
-        const { getByAltText, getByText } = render(
-            <AssetBio factoryId={asset.factoryId} asset={asset} />,
-        );
+        const { getByAltText, getByText } = render(<AssetView asset={asset} />);
 
         await waitFor(() => {
-            expect(getByAltText("Asset Image")).toHaveAttribute(
+            expect(getByAltText("asset image")).toHaveAttribute(
                 "src",
                 "http://test.com/test.png",
             );
-            expect(getByText("Asset 1")).toBeInTheDocument();
-            expect(
-                getByText("Description: Asset 1 description"),
-            ).toBeInTheDocument();
+            expect(getByText("Asset View")).toBeInTheDocument();
         });
     });
 
-    test("should render asset withouth imageData", async () => {
+    test("should render asset without imageData", async () => {
         const asset = {
             factoryId: "1",
             name: "Asset 1",
@@ -70,19 +65,14 @@ describe("AssetBio", () => {
             imageData: undefined,
         };
 
-        const { getByAltText, getByText } = render(
-            <AssetBio factoryId={asset.factoryId} asset={asset} />,
-        );
+        const { getByAltText, getByText } = render(<AssetView asset={asset} />);
 
         await waitFor(() => {
-            expect(getByAltText("Asset Image")).toHaveAttribute(
+            expect(getByAltText("asset image")).toHaveAttribute(
                 "src",
                 "/icons/floorplan/placeholder-asset.svg",
             );
-            expect(getByText("Asset 1")).toBeInTheDocument();
-            expect(
-                getByText("Description: Asset 1 description"),
-            ).toBeInTheDocument();
+            expect(getByText("Asset View")).toBeInTheDocument();
         });
     });
 });

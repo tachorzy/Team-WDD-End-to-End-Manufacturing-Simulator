@@ -306,7 +306,9 @@ describe("Edit factory form ", () => {
             .spyOn(console, "error")
             .mockImplementation(() => {});
 
-        const { getByPlaceholderText, getByText } = render( <EditFactoryForm {...props} />);
+        const { getByPlaceholderText, getByText } = render(
+            <EditFactoryForm {...props} />,
+        );
 
         const nameInput = getByPlaceholderText("Enter factory name");
 

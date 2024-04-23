@@ -24,6 +24,7 @@ export interface Floorplan {
 
 export interface Asset {
     assetId?: string;
+    modelId?: string;
     name: string;
     description: string;
     imageData?: string;
