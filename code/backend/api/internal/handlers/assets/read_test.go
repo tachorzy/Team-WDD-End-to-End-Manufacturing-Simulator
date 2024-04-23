@@ -26,7 +26,7 @@ func TestHandleReadFactoryAssetsRequest_MissingIdError(t *testing.T) {
 	}
 
 	if response.StatusCode != http.StatusBadRequest {
-		t.Errorf("Expected status code %d for missing factoryId, got %d", http.StatusBadRequest, response.StatusCode)
+		t.Errorf("Expected status code %d for missing factoryId or assetId, got %d", http.StatusBadRequest, response.StatusCode)
 	}
 }
 
@@ -138,7 +138,8 @@ func TestHandleReadFactoryAssetsRequest_JSONMarshalError(t *testing.T) {
 	}
 }
 
-func TestHandleReadFactoryAssetsRequest_Success(t *testing.T) {
+//nolint:dupl
+func TestHandleReadFactoryAssetsRequest_WithFactoryId_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			items := []map[string]ddbtypes.AttributeValue{
@@ -159,6 +160,41 @@ func TestHandleReadFactoryAssetsRequest_Success(t *testing.T) {
 
 	request := events.APIGatewayProxyRequest{
 		QueryStringParameters: map[string]string{"factoryId": "Factory 1"},
+	}
+
+	ctx := context.Background()
+	response, err := handler.HandleReadFactoryAssetsRequest(ctx, request)
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		t.Errorf("Expected status code %d for successful read, got %d", http.StatusOK, response.StatusCode)
+	}
+}
+
+//nolint:dupl
+func TestHandleReadFactoryAssetsRequest_WithAssetId_Success(t *testing.T) {
+	mockDDBClient := &mocks.DynamoDBClient{
+		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+			items := []map[string]ddbtypes.AttributeValue{
+				{
+					"assetId":   &ddbtypes.AttributeValueMemberS{Value: "1"},
+					"factoryId": &ddbtypes.AttributeValueMemberS{Value: "Factory 1"},
+				},
+				{
+					"assetId":   &ddbtypes.AttributeValueMemberS{Value: "2"},
+					"factoryId": &ddbtypes.AttributeValueMemberS{Value: "Factory 1"},
+				},
+			}
+			return &dynamodb.QueryOutput{Items: items}, nil
+		},
+	}
+
+	handler := NewReadFactoryAssetsHandler(mockDDBClient)
+
+	request := events.APIGatewayProxyRequest{
+		QueryStringParameters: map[string]string{"assetId": "Asset 1"},
 	}
 
 	ctx := context.Background()

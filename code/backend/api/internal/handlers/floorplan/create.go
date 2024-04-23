@@ -23,9 +23,6 @@ func NewCreateFloorPlanHandler(db types.DynamoDBClient) *Handler {
 	}
 }
 
-// reason: will refactor lator im too tired
-//
-//nolint:cyclop
 func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	headers := map[string]string{
 		"Content-Type":                 "application/json",

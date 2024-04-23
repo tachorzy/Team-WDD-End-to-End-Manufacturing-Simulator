@@ -3,6 +3,7 @@ package assets
 import (
 	"context"
 	"errors"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
@@ -16,9 +17,9 @@ import (
 
 func TestHandleUpdateAssetRequest_BadJSON(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
-	mockS3Client := new(mocks.S3Client)
+	mockS3Uploader := &mocks.S3Uploader{}
 
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Client)
+	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
 
 	request := events.APIGatewayProxyRequest{
 		Body: `{"assetId":1}`,
@@ -38,13 +39,13 @@ func TestHandleUpdateAssetRequest_BadJSON(t *testing.T) {
 
 func TestHandleUpdateAssetRequest_UpdateExpressionBuilderError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
-	mockS3Client := new(mocks.S3Client)
-
-	mockS3Client.PutObjectFunc = func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
-		return &s3.PutObjectOutput{}, nil
+	mockS3Uploader := &mocks.S3Uploader{
+		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
+			return &manager.UploadOutput{}, nil
+		},
 	}
 
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Client)
+	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
 
 	originalUpdateExpressionBuilder := wrappers.UpdateExpressionBuilder
 
@@ -76,13 +77,13 @@ func TestHandleUpdateAssetRequest_UpdateItemError(t *testing.T) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
-	mockS3Client := &mocks.S3Client{
-		PutObjectFunc: func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
-			return &s3.PutObjectOutput{}, nil
+	mockS3Uploader := &mocks.S3Uploader{
+		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
+			return &manager.UploadOutput{}, nil
 		},
 	}
 
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Client)
+	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
 
 	request := events.APIGatewayProxyRequest{
 		Body: `{"assetId": "1", "name": "test", "modelId": "test", "floorplanId": "test", "floorplanCoords": {"longitude": 1.0, "latitude": 1.0}}`,
@@ -107,13 +108,13 @@ func TestHandleUpdateAssetRequest_Success(t *testing.T) {
 		},
 	}
 
-	mockS3Client := &mocks.S3Client{
-		PutObjectFunc: func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
-			return &s3.PutObjectOutput{}, nil
+	mockS3Uploader := &mocks.S3Uploader{
+		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
+			return &manager.UploadOutput{}, nil
 		},
 	}
 
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Client)
+	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
 
 	request := events.APIGatewayProxyRequest{
 		Body: `{"assetId": "1", "name": "test", "modelId": "test", "floorplanId": "test", "floorplanCoords": {"longitude": 1.0, "latitude": 1.0}}`,

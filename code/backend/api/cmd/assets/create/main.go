@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"wdd/api/internal/handlers/assets"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -22,10 +23,10 @@ func main() {
 	}
 
 	dynamoDBClient := dynamodb.NewFromConfig(cfg)
-
 	s3Client := s3.NewFromConfig(cfg)
+	uploader := manager.NewUploader(s3Client)
 
-	handler := assets.NewCreateAssetHandler(dynamoDBClient, s3Client)
+	handler := assets.NewCreateAssetHandler(dynamoDBClient, uploader)
 
 	lambda.Start(handler.HandleCreateAssetRequest)
 }

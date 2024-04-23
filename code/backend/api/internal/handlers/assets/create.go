@@ -3,8 +3,6 @@ package assets
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -13,16 +11,15 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/google/uuid"
 )
 
-func NewCreateAssetHandler(db *dynamodb.Client, s3Client *s3.Client) *Handler {
+func NewCreateAssetHandler(db types.DynamoDBClient, s3Uploader types.S3Uploader) *Handler {
 	return &Handler{
-		DynamoDB: db,
-		S3Client: s3Client,
+		DynamoDB:   db,
+		S3Uploader: s3Uploader,
 	}
 }
 
@@ -37,7 +34,7 @@ func (h Handler) HandleCreateAssetRequest(ctx context.Context, request events.AP
 	asset.AssetID = uuid.NewString()
 	asset.DateCreated = time.Now().Format(time.RFC3339)
 
-	if err := processAssetFiles(ctx, &asset, h.S3Client); err != nil {
+	if err := processAssetFiles(ctx, &asset, h.S3Uploader); err != nil {
 		return apiResponse(http.StatusInternalServerError, err.Error(), headers), nil
 	}
 
@@ -53,7 +50,7 @@ func (h Handler) HandleCreateAssetRequest(ctx context.Context, request events.AP
 		return apiResponse(http.StatusInternalServerError, "Error putting item into DynamoDB: "+err.Error(), headers), nil
 	}
 
-	responseBody, err := json.Marshal(asset)
+	responseBody, err := wrappers.JSONMarshal(asset)
 	if err != nil {
 		return apiResponse(http.StatusInternalServerError, "Error marshalling response body: "+err.Error(), headers), nil
 	}
@@ -61,10 +58,7 @@ func (h Handler) HandleCreateAssetRequest(ctx context.Context, request events.AP
 	return apiResponse(http.StatusOK, string(responseBody), headers), nil
 }
 
-func processAssetFiles(ctx context.Context, asset *types.Asset, s3Client types.S3Client) error {
-	actualS3Client := s3Client.(interface{}).(*s3.Client)
-	uploader := manager.NewUploader(actualS3Client)
-
+func processAssetFiles(ctx context.Context, asset *types.Asset, uploader types.S3Uploader) error {
 	if asset.ImageData != "" {
 		if err := uploadToS3(ctx, asset.ImageData, fmt.Sprintf("assets/%s.jpg", asset.AssetID), "image/jpeg", uploader); err != nil {
 			return fmt.Errorf("failed to upload image: %w", err)
@@ -82,8 +76,8 @@ func processAssetFiles(ctx context.Context, asset *types.Asset, s3Client types.S
 	return nil
 }
 
-func uploadToS3(ctx context.Context, base64Data, key, contentType string, uploader *manager.Uploader) error {
-	decodedData, err := base64.StdEncoding.DecodeString(base64Data)
+func uploadToS3(ctx context.Context, base64Data, key, contentType string, uploader types.S3Uploader) error {
+	decodedData, err := wrappers.Base64DecodeString(base64Data)
 	if err != nil {
 		return fmt.Errorf("Base64 decode error: %w", err)
 	}
