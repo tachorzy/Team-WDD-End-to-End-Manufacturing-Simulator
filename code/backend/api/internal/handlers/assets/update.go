@@ -109,7 +109,7 @@ func (h Handler) responseInternalServerError(headers map[string]string, err erro
 }
 
 func (h Handler) responseUpdatedAsset(headers map[string]string, asset *types.Asset) (events.APIGatewayProxyResponse, error) {
-	updatedAssetJSON, err := json.Marshal(asset)
+	updatedAssetJSON, err := wrappers.JSONMarshal(asset)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
