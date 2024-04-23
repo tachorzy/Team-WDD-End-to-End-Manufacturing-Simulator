@@ -26,3 +26,29 @@ export async function POST(request: Request) {
         );
     }
 }
+
+export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
+
+    const modelId = searchParams.get("id");
+
+    const config: GetConfig = {
+        resource: "models",
+        params: modelId ? { id: modelId } : undefined,
+    };
+
+    try {
+        const data = modelId
+            ? await BackendConnector.get<Model>(config)
+            : await BackendConnector.get<Model[]>(config);
+
+        return new Response(JSON.stringify(data));
+    } catch (error) {
+        console.error(error);
+        return new Response(
+            JSON.stringify({
+                success: false,
+            }),
+        );
+    }
+}
