@@ -8,7 +8,6 @@ const AttributeInputColumn = (props: {
     setAttributes: React.Dispatch<React.SetStateAction<Attribute[]>>;
     modelId: string;
     factoryId: string;
-    invalidAttribute: boolean;
     setInvalidAttribute: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
     const {
@@ -17,7 +16,6 @@ const AttributeInputColumn = (props: {
         setAttributes,
         factoryId,
         modelId,
-        invalidAttribute,
         setInvalidAttribute,
     } = props;
     const [attribute, setAttribute] = useState("");
@@ -44,7 +42,7 @@ const AttributeInputColumn = (props: {
             );
             setAttributes([...attributes, data]);
         }, 500);
-    }, [attribute, value, factoryId, attributes, setAttributes]);
+    }, [attribute, value, factoryId, attributes, setAttributes, modelId]);
 
     return (
         <div

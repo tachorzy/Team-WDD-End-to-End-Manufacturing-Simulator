@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Property, Measurement } from "@/app/api/_utils/types";
+import ReplayUploadContainer from "./fileupload/ReplayUploadContainer";
 
-const RandomGeneratorForm = (props: {
+const ReplayGeneratorForm = (props: {
     propertyIndex: number;
     property: Property;
     measurements: Measurement[];
@@ -12,6 +13,10 @@ const RandomGeneratorForm = (props: {
     const [frequency, setFrequency] = useState<number>(0.0);
     const [minValue, setMinValue] = useState<number>(0.0);
     const [maxValue, setMaxValue] = useState<number>(0.0);
+    const [sequenceValues, setSequenceValues] = useState<{ csvData: number[] }>(
+        { csvData: [] },
+    );
+    const [inputFile, setInputFile] = useState<File | null>(null);
 
     const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -29,12 +34,20 @@ const RandomGeneratorForm = (props: {
                 upperBound: maxValue,
                 frequency,
                 precision: 0.0,
-                generatorFunction: "random",
+                generatorFunction: "replay",
+                replaySequence: sequenceValues.csvData,
             };
 
             setMeasurements([...measurements, data]);
         }, 500);
-    }, [frequency, minValue, maxValue, measurements, setMeasurements]);
+    }, [
+        frequency,
+        minValue,
+        maxValue,
+        measurements,
+        sequenceValues,
+        setMeasurements,
+    ]);
 
     return (
         <div className="flex flex-col gap-y-3 max-h-72">
@@ -95,9 +108,24 @@ const RandomGeneratorForm = (props: {
                         </div>
                     </div>
                 </div>
+                <ReplayUploadContainer
+                    setInputFile={setInputFile}
+                    setFormData={setSequenceValues}
+                />
+                {inputFile && (
+                    <div className="flex flex-row text-sm gap-x-2">
+                        <Image
+                            src="/icons/check.svg"
+                            width={14}
+                            height={14}
+                            alt="checkmark icon"
+                        />
+                        <h1 className="text-black">{`File accepted! ${inputFile.name}`}</h1>
+                    </div>
+                )}
             </div>
         </div>
     );
 };
 
-export default RandomGeneratorForm;
+export default ReplayGeneratorForm;
