@@ -19,7 +19,7 @@ func main() {
 	}
 
 	svc := dynamodb.NewFromConfig(cfg)
-	handler := properties.NewReadPropetyHandler(svc)
+	handler := properties.NewReadPropertyHandler(svc)
 
 	lambda.Start(handler.HandleReadPropertyRequest)
 }

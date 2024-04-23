@@ -50,7 +50,7 @@ func (h Handler) HandleUpdatePropertyRequest(ctx context.Context, request events
 	if property.MeasurementID != "" {
 		updateBuilder = updateBuilder.Set(expression.Name("measurementId"), expression.Value(property.MeasurementID))
 	}
-	if property.Value != 0.0 {
+	if property.Value != nil {
 		updateBuilder = updateBuilder.Set(expression.Name("value"), expression.Value(property.Value))
 	}
 
