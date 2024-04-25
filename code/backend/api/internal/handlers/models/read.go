@@ -37,96 +37,87 @@ func (h Handler) HandleReadModelRequest(ctx context.Context, request events.APIG
 	}
 
 	if ModelID != "" {
-		input := &dynamodb.QueryInput{
-			TableName:              aws.String(TABLENAME),
-			KeyConditionExpression: aws.String("modelId = :modelId"),
-			ExpressionAttributeValues: map[string]ddbtypes.AttributeValue{
-				":modelId": &ddbtypes.AttributeValueMemberS{Value: ModelID},
-			},
-		}
-		result, err := h.DynamoDB.Query(ctx, input)
-		if err != nil {
-			return events.APIGatewayProxyResponse{
-				StatusCode: http.StatusInternalServerError,
-				Headers:    headers,
-				Body:       fmt.Sprintf("Error querying model by ID: %s", err),
-			}, nil
-		}
-
-		if len(result.Items) == 0 {
-			return events.APIGatewayProxyResponse{
-				StatusCode: http.StatusNotFound,
-				Headers:    headers,
-				Body:       fmt.Sprintf("No model found with ID %s", ModelID),
-			}, nil
-		}
-
-		var model types.Model
-		if err = wrappers.UnmarshalMap(result.Items[0], &model); err != nil {
-			return events.APIGatewayProxyResponse{
-				StatusCode: http.StatusInternalServerError,
-				Headers:    headers,
-				Body:       fmt.Sprintf("Error unmarshalling model: %s", err),
-			}, nil
-		}
-
-		modelJSON, err := wrappers.JSONMarshal(model)
-		if err != nil {
-			return events.APIGatewayProxyResponse{
-				StatusCode: http.StatusInternalServerError,
-				Headers:    headers,
-				Body:       fmt.Sprintf("Error marshalling model: %s", err),
-			}, nil
-		}
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusOK,
-			Headers:    headers,
-			Body:       string(modelJSON),
-		}, nil
+		return h.handleModelByID(ctx, ModelID, headers)
 	} else if factoryID != "" {
-		input := &dynamodb.QueryInput{
-			TableName:              aws.String(TABLENAME),
-			IndexName:              aws.String("factoryId"),
-			KeyConditionExpression: aws.String("factoryId = :factoryId"),
-			ExpressionAttributeValues: map[string]ddbtypes.AttributeValue{
-				":factoryId": &ddbtypes.AttributeValueMemberS{Value: factoryID},
-			},
-		}
-		result, err := h.DynamoDB.Query(ctx, input)
-		if err != nil {
-			return events.APIGatewayProxyResponse{
-				StatusCode: http.StatusInternalServerError,
-				Headers:    headers,
-				Body:       fmt.Sprintf("Error querying models by factory ID: %s", err),
-			}, nil
-		}
-
-		var models []types.Model
-		if err = wrappers.UnmarshalListOfMaps(result.Items, &models); err != nil {
-			return events.APIGatewayProxyResponse{
-				StatusCode: http.StatusInternalServerError,
-				Headers:    headers,
-				Body:       fmt.Sprintf("Error unmarshalling results: %s", err),
-			}, nil
-		}
-		modelsJSON, err := wrappers.JSONMarshal(models)
-		if err != nil {
-			return events.APIGatewayProxyResponse{
-				StatusCode: http.StatusInternalServerError,
-				Headers:    headers,
-				Body:       fmt.Sprintf("Error marshalling results: %s", err),
-			}, nil
-		}
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusOK,
-			Headers:    headers,
-			Body:       string(modelsJSON),
-		}, nil
+		return h.handleModelsByFactoryID(ctx, factoryID, headers)
 	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusInternalServerError,
 		Headers:    headers,
 		Body:       "An unexpected error occurred",
+	}, nil
+}
+
+func (h Handler) handleModelByID(ctx context.Context, ModelID string, headers map[string]string) (events.APIGatewayProxyResponse, error) {
+	input := &dynamodb.QueryInput{
+		TableName:              aws.String(TABLENAME),
+		KeyConditionExpression: aws.String("modelId = :modelId"),
+		ExpressionAttributeValues: map[string]ddbtypes.AttributeValue{
+			":modelId": &ddbtypes.AttributeValueMemberS{Value: ModelID},
+		},
+	}
+	result, err := h.DynamoDB.Query(ctx, input)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
+			Body:       fmt.Sprintf("Error querying model by ID: %s", err),
+		}, nil
+	}
+
+	return processQueryResult(result, headers)
+}
+
+func (h Handler) handleModelsByFactoryID(ctx context.Context, factoryID string, headers map[string]string) (events.APIGatewayProxyResponse, error) {
+	input := &dynamodb.QueryInput{
+		TableName:              aws.String(TABLENAME),
+		IndexName:              aws.String("factoryId"),
+		KeyConditionExpression: aws.String("factoryId = :factoryId"),
+		ExpressionAttributeValues: map[string]ddbtypes.AttributeValue{
+			":factoryId": &ddbtypes.AttributeValueMemberS{Value: factoryID},
+		},
+	}
+	result, err := h.DynamoDB.Query(ctx, input)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
+			Body:       fmt.Sprintf("Error querying models by factory ID: %s", err),
+		}, nil
+	}
+
+	return processQueryResult(result, headers)
+}
+
+func processQueryResult(result *dynamodb.QueryOutput, headers map[string]string) (events.APIGatewayProxyResponse, error) {
+	if len(result.Items) == 0 {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusNotFound,
+			Headers:    headers,
+			Body:       "No models found",
+		}, nil
+	}
+
+	var models []types.Model
+	if err := wrappers.UnmarshalListOfMaps(result.Items, &models); err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
+			Body:       fmt.Sprintf("Error unmarshalling results: %s", err),
+		}, nil
+	}
+	modelsJSON, err := wrappers.JSONMarshal(models)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
+			Body:       fmt.Sprintf("Error marshalling results: %s", err),
+		}, nil
+	}
+	return events.APIGatewayProxyResponse{
+		StatusCode: http.StatusOK,
+		Headers:    headers,
+		Body:       string(modelsJSON),
 	}, nil
 }
