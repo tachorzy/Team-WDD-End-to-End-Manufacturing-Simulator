@@ -3,10 +3,11 @@
 import { useState } from "react";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import CreateModelForm from "@/components/models/createmodelform/CreateModelForm";
+import ModelTable from "@/components/factorydashboard/ModelTable";
 
 export default function Page({ params }: { params: { factoryId: string } }) {
     const { factoryId } = params;
-
+    const ASSETTABLE_FACTORYID = "factory-1";
     const [isCreateFormOpen, setIsCreateFormOpen] = useState(true);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -62,6 +63,7 @@ export default function Page({ params }: { params: { factoryId: string } }) {
                 </section> */}
 
                 {isCreateFormOpen && <CreateModelForm factoryId={factoryId} />}
+                <ModelTable factoryId={ASSETTABLE_FACTORYID} />
             </div>
         </main>
     );
