@@ -1,43 +1,47 @@
-import React from "react";
+import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
-import {useState, useEffect} from 'react'
-import {scaleLinear, scaleBand, max, format} from 'd3'
 
-const PropertyChart = (props: { data: number[] }) => {
+interface DataPoint {
+  timeStamp: number;
+  [key: string]: number;
+}
 
-    const [height, setHeight] = useState(0)
-    const [width, setWidth] = useState(0)
-  
-    useEffect(()=>{
-      setHeight(window.innerHeight-100)
-      setWidth(window.innerWidth-100)
-    },[])
+interface PropertyChartProps {
+  data: DataPoint[];
+  unit: string;
+}
 
-    const margin = {top:40, left:300, right:40, bottom:60}
-    const innerWidth = width - margin.left - margin.right
-    const innerHeight = height - margin.top - margin.bottom
-  
-    const xVal = d => d.Population
-    const yVal = d => d.Country
-  
-    const yScale = scaleBand()
-        .domain(data.map(yVal))
-        .range([0,innerHeight])
-        .padding(0.2)
-  
-    const xScale = scaleLinear()
-        .domain([0, max(data,xVal)])
-        .range([0, innerWidth])
-    
-    
-    const xAxisLabelOffset = 40
-    const siFormat = format(".2s");
-    const tickFormat = (tickFormat: number | { valueOf(): number; }) => siFormat(tickFormat).replace('G','B')
+const PropertyChart = ({ data, unit }: PropertyChartProps) => {
+  const ref = useRef<SVGSVGElement>(null);
 
-    return (
-        <div className="flex flex-col mb-3 gap-y-4 w-full h-64 overflow-y-scroll border-2 border-[#E2E4EA] bg-[#FAFAFA] rounded-lg">
+  useEffect(() => {
+    if (!ref.current) return;
 
-        </div>
-    );
+    const svg = d3.select(ref.current)
+      .attr('width', 500)
+      .attr('height', 500);
+
+    const xScale = d3.scaleTime()
+      .domain(d3.extent(data, d => new Date(d.timeStamp)) as [Date, Date])
+      .range([0, 500]);
+
+    const yScale = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d[unit]) || 0])
+      .range([500, 0]);
+
+    const line = d3.line<DataPoint>()
+      .x(d => xScale(new Date(d.timeStamp)))
+      .y(d => yScale(d[unit]));
+
+    svg.append('path')
+      .datum(data)
+      .attr('fill', 'none')
+      .attr('stroke', 'steelblue')
+      .attr('stroke-width', 1.5)
+      .attr('d', line);
+  }, [data, unit]);
+
+  return <svg ref={ref} />;
 };
+
 export default PropertyChart;
