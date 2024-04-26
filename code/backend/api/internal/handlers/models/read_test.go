@@ -18,7 +18,7 @@ func TestHandleReadModelRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	handler := NewReadModelHandler(mockDDBClient)
 	request := events.APIGatewayProxyRequest{
-		QueryStringParameters: map[string]string{"id": "model123"},
+		QueryStringParameters: map[string]string{"modelId": "model123"},
 	}
 
 	mockDDBClient.QueryFunc = func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
@@ -68,15 +68,15 @@ func TestHandleReadModelRequest_MissingParameters(t *testing.T) {
 }
 
 func TestHandleReadModelRequest_DynamoDBQueryError(t *testing.T) {
-	mockDDBClient := &mocks.DynamoDBClient{}
+	mockDDBClient := &mocks.DynamoDBClient{
+		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+			return nil, errors.New("mock dynamodb error")
+		},
+	}
 	handler := NewReadModelHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
-		QueryStringParameters: map[string]string{"id": "model123"},
-	}
-
-	mockDDBClient.QueryFunc = func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-		return nil, errors.New("mock DynamoDB query error")
+		QueryStringParameters: map[string]string{"modelId": "model123"},
 	}
 
 	ctx := context.Background()
@@ -122,7 +122,7 @@ func TestHandleModelsByFactoryID_Success(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := handler.handleModelsByFactoryID(ctx, "factory123", request.Headers)
+	response, err := handler.HandleReadModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error to be returned")
@@ -136,19 +136,19 @@ func TestHandleModelsByFactoryID_Success(t *testing.T) {
 }
 
 func TestHandleModelsByFactoryID_DynamoDBError(t *testing.T) {
-	mockDDBClient := &mocks.DynamoDBClient{}
+	mockDDBClient := &mocks.DynamoDBClient{
+		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+			return nil, errors.New("mock dynamodb error")
+		},
+	}
 	handler := NewReadModelHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
 		QueryStringParameters: map[string]string{"factoryId": "factory123"},
 	}
 
-	mockDDBClient.QueryFunc = func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-		return nil, errors.New("mock DynamoDB error")
-	}
-
 	ctx := context.Background()
-	response, err := handler.handleModelsByFactoryID(ctx, "factory123", request.Headers)
+	response, err := handler.HandleReadModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Did not expect an error, got %v", err)
