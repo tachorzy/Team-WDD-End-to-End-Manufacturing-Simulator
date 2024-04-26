@@ -1,6 +1,5 @@
 import React from "react";
 import PropertyChart from "./PropertyChart";
-import SineWaveChart from "./SineWaveChart";
 
 interface DataPoint {
     timeStamp: number;
