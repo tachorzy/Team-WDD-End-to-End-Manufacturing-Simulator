@@ -61,10 +61,19 @@ const LineChart = ({ data }: PropertyChartProps) => {
         g.append("path")
             .datum(data)
             .attr("d", line)
-            .attr("stroke", "red") // set the line color to red
-            .attr("stroke-width", 2) // set the line thickness to 2
+            .attr("stroke", "red")
+            .attr("stroke-width", 1.5)
             .attr("fill", "none");
 
+        // g.append("g")
+        //     .attr("transform", `translate(0, ${height})`)
+        //     .call(xAxis)
+        //     .selectAll("text")
+        //     .attr("transform", "rotate(-65)") // rotate the ticks 65 degrees counter-clockwise
+        //     .style("text-anchor", "end") // anchor the text at the end, which is now on the top
+        //     .attr("dx", "-.8em") // shift the ticks slightly to the left
+        //     .attr("dy", ".15em"); // shift the ticks slightly down
+            
     }, [data]);
 
     return <div id="chart" className="w-[85%] my-5"></div>;

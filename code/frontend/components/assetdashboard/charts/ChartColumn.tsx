@@ -10,7 +10,7 @@ const ChartColumn = () => {
     const measurements = [1.85, 8.00, 16.25, 12.50, 0, 10.00, 8.75, 8.54, 8.34, 9.25, 10.75, 11.25, 13.45];
 
     const data: DataPoint[] = measurements.map((value, index) => ({
-        timeStamp: Date.now() + index * 1000,
+        timeStamp: Date.now() + index * 60000,
         value
     }));
 
