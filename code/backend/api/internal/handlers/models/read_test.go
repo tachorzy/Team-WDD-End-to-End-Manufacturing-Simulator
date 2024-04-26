@@ -162,19 +162,19 @@ func TestHandleModelsByFactoryID_DynamoDBError(t *testing.T) {
 }
 
 func TestHandleModelsByFactoryID_NoModelsFound(t *testing.T) {
-	mockDDBClient := &mocks.DynamoDBClient{}
+	mockDDBClient := &mocks.DynamoDBClient{
+		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+			return nil, errors.New("mock dynamodb error")
+		},
+	}
 	handler := NewReadModelHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
 		QueryStringParameters: map[string]string{"factoryId": "factory123"},
 	}
 
-	mockDDBClient.QueryFunc = func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-		return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
-	}
-
 	ctx := context.Background()
-	response, err := handler.handleModelsByFactoryID(ctx, "factory123", request.Headers)
+	response, err := handler.HandleReadModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Did not expect an error, got %v", err)
