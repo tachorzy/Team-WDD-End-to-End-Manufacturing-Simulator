@@ -12,8 +12,9 @@ interface PropertyChartProps {
 
 const LineChart = ({ data }: PropertyChartProps) => {
     useEffect(() => {
+        const chartElement = document.getElementById("chart");
+        const width = chartElement ? chartElement.clientWidth : 600;
         const margin = 50;
-        const width = 600 - 2 * margin;
         const height = 300 - 2 * margin;
 
         const svg = d3.select("#chart")
@@ -63,9 +64,10 @@ const LineChart = ({ data }: PropertyChartProps) => {
             .attr("stroke", "red") // set the line color to red
             .attr("stroke-width", 2) // set the line thickness to 2
             .attr("fill", "none");
+
     }, [data]);
 
-    return <div id="chart"></div>;
+    return <div id="chart" className="w-[85%] my-5"></div>;
 };
 
 export default LineChart;
