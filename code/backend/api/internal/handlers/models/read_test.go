@@ -12,52 +12,41 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestHandleReadModelRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	handler := NewReadModelHandler(mockDDBClient)
-
 	request := events.APIGatewayProxyRequest{
 		QueryStringParameters: map[string]string{"id": "model123"},
 	}
-
-	mockDDBClient.QueryFunc = func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-		items := []map[string]types.AttributeValue{
-			{
-				"modelId":     &types.AttributeValueMemberS{Value: "model123"},
-				"factoryId":   &types.AttributeValueMemberS{Value: "factory1"},
-				"dateCreated": &types.AttributeValueMemberS{Value: "2021-07-15"},
-				"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Size"}, &types.AttributeValueMemberS{Value: "Color"}}},
-				"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property1"}, &types.AttributeValueMemberS{Value: "Property2"}}},
-			},
-		}
-		return &dynamodb.QueryOutput{Items: items}, nil
-	}
-
+	mockDDBClient.On("Query", mock.Anything).Return(mockQuerySuccess())
 	ctx := context.Background()
 	response, err := handler.HandleReadModelRequest(ctx, request)
-
-	assert.Nil(t, err, "Expected no error to be returned from the handler")
-	assert.Equal(t, http.StatusOK, response.StatusCode, "Expected HTTP status 200 for successful data retrieval")
-	assert.Contains(t, response.Body, "model123", "Expected data to include model information")
+	assert.Nil(t, err)
+	assert.Equal(t, http.StatusOK, response.StatusCode)
+	assert.Contains(t, response.Body, "model123")
 }
+
 func TestHandleReadModelRequest_MissingParameters(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	handler := NewReadModelHandler(mockDDBClient)
-
-	request := events.APIGatewayProxyRequest{
-		QueryStringParameters: map[string]string{},
-	}
-
+	request := events.APIGatewayProxyRequest{}
 	ctx := context.Background()
 	response, err := handler.HandleReadModelRequest(ctx, request)
-
-	assert.Nil(t, err, "Expected no error to be returned")
-	assert.Equal(t, http.StatusBadRequest, response.StatusCode, "Expected HTTP status 400 for missing parameters")
-	assert.Contains(t, response.Body, "Required parameters are missing", "Expected error message about missing parameters")
+	assert.Nil(t, err)
+	assert.Equal(t, http.StatusBadRequest, response.StatusCode)
+	assert.Contains(t, response.Body, "Required parameters are missing")
 }
 
+func mockQuerySuccess() *dynamodb.QueryOutput {
+	return &dynamodb.QueryOutput{
+		Items: []map[string]types.AttributeValue{
+			{"modelId": &types.AttributeValueMemberS{Value: "model123"}},
+		},
+	}
+}
 func TestHandleReadModelRequest_DynamoDBQueryError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	handler := NewReadModelHandler(mockDDBClient)
