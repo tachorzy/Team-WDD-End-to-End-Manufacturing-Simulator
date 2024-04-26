@@ -7,10 +7,14 @@ interface DataPoint {
 }
 
 const ChartColumn = () => {
-    const measurements = [
-        1.85, 8.0, 16.25, 12.5, 0, 10.0, 8.75, 8.54, 8.34, 9.25, 10.75, 11.25,
-        13.45,
-    ];
+    // testing random data
+    // const measurements = [
+    //     1.85, 8.0, 16.25, 12.5, 0, 10.0, 8.75, 8.54, 8.34, 9.25, 10.75, 11.25,
+    //     13.45,
+    // ];
+
+    // testing a sine wave.
+    const measurements = Array.from({ length: 100 }, (_, i) => Math.sin(i / 10));
 
     const data: DataPoint[] = measurements.map((value, index) => ({
         timeStamp: Date.now() + index * 60000,

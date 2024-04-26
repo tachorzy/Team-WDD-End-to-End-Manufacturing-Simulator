@@ -34,10 +34,9 @@ const LineChart = ({ data }: PropertyChartProps) => {
         .range([0, width])
         .domain(d3.extent(data, (d) => d.timeStamp) as [number, number]);
 
-    const yScale = d3
-        .scaleLinear()
+    const yScale = d3.scaleLinear()
         .range([height, 0])
-        .domain([0, d3.max(data, (d) => d.value) || 0]);
+        .domain(d3.extent(data, d => d.value) as [number, number]);
 
     const xAxis = d3.axisBottom(xScale);
     const yAxis = d3.axisLeft(yScale);
@@ -68,7 +67,7 @@ const LineChart = ({ data }: PropertyChartProps) => {
         g.append("path")
             .datum(data)
             .attr("d", line)
-            .attr("stroke", "red")
+            .attr("stroke", "#892ae8")
             .attr("stroke-width", 1.5)
             .attr("fill", "none");
     }, [data]);
