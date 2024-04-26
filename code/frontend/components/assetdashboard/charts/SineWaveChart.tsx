@@ -11,8 +11,7 @@ interface PropertyChartProps {
     unit: string;
 }
 
-const PropertyChart = ({ data, unit }: PropertyChartProps) => {
-    // const ref = useRef<SVGSVGElement>(null);
+const SineWaveChart = ({ data, unit }: PropertyChartProps) => {
 
     useEffect(() => {
         const margin = 50;
@@ -20,10 +19,12 @@ const PropertyChart = ({ data, unit }: PropertyChartProps) => {
         const height = 300 - 2 * margin;
       
         const svg = d3.select("#chart")
-          .append("svg")
-          .attr("width", width + 2 * margin)
-          .attr("height", height + 2 * margin);
-      
+        .selectAll("svg")
+        .data([data]) // bind the data to the SVG element
+        .join("svg") // enter + update + exit
+        .attr("width", width + 2 * margin)
+        .attr("height", height + 2 * margin);
+        
         const g = svg.append("g")
           .attr("transform", `translate(${margin}, ${margin})`);
       
@@ -64,4 +65,4 @@ const PropertyChart = ({ data, unit }: PropertyChartProps) => {
       return <div id="chart"></div>;
 };
 
-export default PropertyChart;
+export default SineWaveChart;
