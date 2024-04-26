@@ -11,52 +11,59 @@ interface PropertyChartProps {
 }
 
 const LineChart = ({ data }: PropertyChartProps) => {
+    
+    const chartElement = document.getElementById("chart");
+    const width = chartElement ? chartElement.clientWidth : 600;
+    const margin = 50;
+    const height = 300 - 2 * margin;
+
+    const svg = d3
+        .select("#chart")
+        .selectAll("svg")
+        .data([data]) // bind the data to the SVG element
+        .join("svg") // enter + update + exit
+        .attr("width", width + 2 * margin)
+        .attr("height", height + 2 * margin);
+
+    const g = svg
+        .append("g")
+        .attr("transform", `translate(${margin}, ${margin})`);
+
+    const xScale = d3
+        .scaleTime()
+        .range([0, width])
+        .domain(d3.extent(data, (d) => d.timeStamp) as [number, number]);
+
+    const yScale = d3
+        .scaleLinear()
+        .range([height, 0])
+        .domain([0, d3.max(data, (d) => d.value) || 0]);
+
+    const xAxis = d3.axisBottom(xScale);
+    const yAxis = d3.axisLeft(yScale);
+
+    const line = d3
+        .line<DataPoint>()
+        .x((d) => xScale(d.timeStamp))
+        .y((d) => yScale(d.value));
+
+    g.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(xAxis)
+        .attr("class", "text-black")
+        .selectAll("line")
+        .attr("stroke", "black")
+        .attr("stroke-width", 1);
+
+    g.append("g")
+        .call(yAxis)
+        .attr("class", "text-black")
+        .selectAll("line")
+        .attr("class", "text-black")
+        .attr("stroke", "black")
+        .attr("stroke-width", 1);
+
     useEffect(() => {
-        const chartElement = document.getElementById("chart");
-        const width = chartElement ? chartElement.clientWidth : 600;
-        const margin = 50;
-        const height = 300 - 2 * margin;
-
-        const svg = d3.select("#chart")
-            .selectAll("svg")
-            .data([data]) // bind the data to the SVG element
-            .join("svg") // enter + update + exit
-            .attr("width", width + 2 * margin)
-            .attr("height", height + 2 * margin);
-
-        const g = svg.append("g")
-            .attr("transform", `translate(${margin}, ${margin})`);
-
-        const xScale = d3.scaleTime()
-            .range([0, width])
-            .domain(d3.extent(data, d => d.timeStamp) as [number, number]);
-
-        const yScale = d3.scaleLinear()
-            .range([height, 0])
-            .domain([0, d3.max(data, d => d.value) || 0]);
-
-        const xAxis = d3.axisBottom(xScale);
-        const yAxis = d3.axisLeft(yScale);
-
-        const line = d3.line<DataPoint>()
-            .x(d => xScale(d.timeStamp))
-            .y(d => yScale(d.value));
-
-        g.append("g")
-            .attr("transform", `translate(0, ${height})`)
-            .call(xAxis)
-            .attr("class", "text-black")
-            .selectAll("line")
-            .attr("stroke", "black") 
-            .attr("stroke-width", 1); 
-
-        g.append("g")
-            .call(yAxis)
-            .attr("class", "text-black")
-            .selectAll("line") 
-            .attr("class", "text-black")
-            .attr("stroke", "black") 
-            .attr("stroke-width", 1); 
 
         g.append("path")
             .datum(data)
@@ -64,19 +71,9 @@ const LineChart = ({ data }: PropertyChartProps) => {
             .attr("stroke", "red")
             .attr("stroke-width", 1.5)
             .attr("fill", "none");
-
-        // g.append("g")
-        //     .attr("transform", `translate(0, ${height})`)
-        //     .call(xAxis)
-        //     .selectAll("text")
-        //     .attr("transform", "rotate(-65)") // rotate the ticks 65 degrees counter-clockwise
-        //     .style("text-anchor", "end") // anchor the text at the end, which is now on the top
-        //     .attr("dx", "-.8em") // shift the ticks slightly to the left
-        //     .attr("dy", ".15em"); // shift the ticks slightly down
-            
     }, [data]);
 
-    return <div id="chart" className="w-[85%] my-5"></div>;
+    return <div id="chart" className="w-[85%] my-5" />;
 };
 
 export default LineChart;
