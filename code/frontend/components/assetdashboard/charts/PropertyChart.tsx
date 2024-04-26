@@ -3,15 +3,14 @@ import * as d3 from "d3";
 
 interface DataPoint {
     timeStamp: number;
-    [key: string]: number;
+    value: number;
 }
 
 interface PropertyChartProps {
     data: DataPoint[];
-    unit: string;
 }
 
-const LineChart = ({ data, unit }: PropertyChartProps) => {
+const LineChart = ({ data }: PropertyChartProps) => {
     useEffect(() => {
         const margin = 50;
         const width = 600 - 2 * margin;
@@ -33,32 +32,38 @@ const LineChart = ({ data, unit }: PropertyChartProps) => {
 
         const yScale = d3.scaleLinear()
             .range([height, 0])
-            .domain([0, d3.max(data, d => d[unit]) || 0]);
+            .domain([0, d3.max(data, d => d.value) || 0]);
 
         const xAxis = d3.axisBottom(xScale);
         const yAxis = d3.axisLeft(yScale);
 
         const line = d3.line<DataPoint>()
             .x(d => xScale(d.timeStamp))
-            .y(d => yScale(d[unit]));
+            .y(d => yScale(d.value));
 
         g.append("g")
             .attr("transform", `translate(0, ${height})`)
             .call(xAxis)
             .attr("class", "text-black")
-            .selectAll("line, path")
+            .selectAll("line")
             .attr("stroke", "black") 
             .attr("stroke-width", 1); 
 
         g.append("g")
             .call(yAxis)
             .attr("class", "text-black")
-            .selectAll("line, path") 
+            .selectAll("line") 
             .attr("class", "text-black")
             .attr("stroke", "black") 
             .attr("stroke-width", 1); 
 
-    }, [data, unit]);
+        g.append("path")
+            .datum(data)
+            .attr("d", line)
+            .attr("stroke", "red") // set the line color to red
+            .attr("stroke-width", 2) // set the line thickness to 2
+            .attr("fill", "none");
+    }, [data]);
 
     return <div id="chart"></div>;
 };
