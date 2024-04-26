@@ -164,7 +164,7 @@ func TestHandleModelsByFactoryID_DynamoDBError(t *testing.T) {
 func TestHandleModelsByFactoryID_NoModelsFound(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-			return nil, errors.New("mock dynamodb error")
+			return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
 		},
 	}
 	handler := NewReadModelHandler(mockDDBClient)
