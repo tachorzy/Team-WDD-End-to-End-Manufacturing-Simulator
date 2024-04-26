@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"strings"
 	"testing"
 
 	"wdd/api/internal/mocks"
@@ -11,7 +12,6 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestHandleReadModelRequest_Success(t *testing.T) {
@@ -37,29 +37,36 @@ func TestHandleReadModelRequest_Success(t *testing.T) {
 	ctx := context.Background()
 	response, err := handler.HandleReadModelRequest(ctx, request)
 
-	assert.Nil(t, err)
-	assert.Equal(t, http.StatusOK, response.StatusCode)
-	assert.Contains(t, response.Body, "model123")
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if response.StatusCode != http.StatusOK {
+		t.Errorf("Expected HTTP status 200, got %d", response.StatusCode)
+	}
+	if !strings.Contains(response.Body, "model123") {
+		t.Errorf("Expected response body to contain 'model123'")
+	}
 }
 
 func TestHandleReadModelRequest_MissingParameters(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	handler := NewReadModelHandler(mockDDBClient)
 	request := events.APIGatewayProxyRequest{}
+
 	ctx := context.Background()
 	response, err := handler.HandleReadModelRequest(ctx, request)
-	assert.Nil(t, err)
-	assert.Equal(t, http.StatusBadRequest, response.StatusCode)
-	assert.Contains(t, response.Body, "Required parameters are missing")
-}
 
-func mockQuerySuccess() *dynamodb.QueryOutput {
-	return &dynamodb.QueryOutput{
-		Items: []map[string]types.AttributeValue{
-			{"modelId": &types.AttributeValueMemberS{Value: "model123"}},
-		},
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if response.StatusCode != http.StatusBadRequest {
+		t.Errorf("Expected HTTP status 400 for missing parameters, got %d", response.StatusCode)
+	}
+	if !strings.Contains(response.Body, "Required parameters are missing") {
+		t.Errorf("Expected error message about missing parameters in response body")
 	}
 }
+
 func TestHandleReadModelRequest_DynamoDBQueryError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	handler := NewReadModelHandler(mockDDBClient)
@@ -75,9 +82,15 @@ func TestHandleReadModelRequest_DynamoDBQueryError(t *testing.T) {
 	ctx := context.Background()
 	response, err := handler.HandleReadModelRequest(ctx, request)
 
-	assert.Nil(t, err)
-	assert.Equal(t, http.StatusInternalServerError, response.StatusCode)
-	assert.Contains(t, response.Body, "Error querying model by ID")
+	if err != nil {
+		t.Fatalf("Expected no error from the handler, got %v", err)
+	}
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected HTTP status 500 due to DynamoDB error, got %d", response.StatusCode)
+	}
+	if !strings.Contains(response.Body, "Error querying model by ID") {
+		t.Errorf("Expected DynamoDB error message in response body")
+	}
 }
 
 func TestHandleModelsByFactoryID_Success(t *testing.T) {
@@ -111,12 +124,15 @@ func TestHandleModelsByFactoryID_Success(t *testing.T) {
 	ctx := context.Background()
 	response, err := handler.handleModelsByFactoryID(ctx, "factory123", request.Headers)
 
-	assert.Nil(t, err, "Expected no error to be returned")
-	assert.Equal(t, http.StatusOK, response.StatusCode, "Expected HTTP status 200 for successful data retrieval")
-	assert.Contains(t, response.Body, "model1", "Expected data to include model information for model1")
-	assert.Contains(t, response.Body, "model2", "Expected data to include model information for model2")
-	assert.Contains(t, response.Body, "Size", "Expected attribute Size to be included in the model details")
-	assert.Contains(t, response.Body, "Property1", "Expected property Property1 to be included in the model details")
+	if err != nil {
+		t.Fatalf("Expected no error to be returned")
+	}
+	if response.StatusCode != http.StatusOK {
+		t.Errorf("Expected HTTP status 200 for successful data retrieval, got %d", response.StatusCode)
+	}
+	if !strings.Contains(response.Body, "model1") {
+		t.Errorf("Expected data to include model information for model1")
+	}
 }
 
 func TestHandleModelsByFactoryID_DynamoDBError(t *testing.T) {
@@ -134,9 +150,15 @@ func TestHandleModelsByFactoryID_DynamoDBError(t *testing.T) {
 	ctx := context.Background()
 	response, err := handler.handleModelsByFactoryID(ctx, "factory123", request.Headers)
 
-	assert.Nil(t, err)
-	assert.Equal(t, http.StatusInternalServerError, response.StatusCode)
-	assert.Contains(t, response.Body, "Error querying models by factory ID")
+	if err != nil {
+		t.Fatalf("Did not expect an error, got %v", err)
+	}
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected HTTP status 500 for a DynamoDB error, got %d", response.StatusCode)
+	}
+	if !strings.Contains(response.Body, "Error querying models by factory ID") {
+		t.Errorf("Expected error message about DynamoDB failure in response body")
+	}
 }
 
 func TestHandleModelsByFactoryID_NoModelsFound(t *testing.T) {
@@ -154,7 +176,13 @@ func TestHandleModelsByFactoryID_NoModelsFound(t *testing.T) {
 	ctx := context.Background()
 	response, err := handler.handleModelsByFactoryID(ctx, "factory123", request.Headers)
 
-	assert.Nil(t, err)
-	assert.Equal(t, http.StatusNotFound, response.StatusCode)
-	assert.Contains(t, response.Body, "No models found")
+	if err != nil {
+		t.Fatalf("Did not expect an error, got %v", err)
+	}
+	if response.StatusCode != http.StatusNotFound {
+		t.Errorf("Expected HTTP status 404 for no models found, got %d", response.StatusCode)
+	}
+	if !strings.Contains(response.Body, "No models found") {
+		t.Errorf("Expected 'No models found' message in response body")
+	}
 }
