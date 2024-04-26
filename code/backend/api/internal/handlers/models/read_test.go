@@ -18,7 +18,7 @@ func TestHandleReadModelRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	handler := NewReadModelHandler(mockDDBClient)
 	request := events.APIGatewayProxyRequest{
-		QueryStringParameters: map[string]string{"modelId": "model123"},
+		QueryStringParameters: map[string]string{"id": "model123"},
 	}
 
 	mockDDBClient.QueryFunc = func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
