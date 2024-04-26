@@ -70,13 +70,13 @@ func TestHandleReadModelRequest_MissingParameters(t *testing.T) {
 func TestHandleReadModelRequest_DynamoDBQueryError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-			return nil, errors.New("mock dynamodb error")
+			return nil, errors.New("Error querying model by ID")
 		},
 	}
 	handler := NewReadModelHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
-		QueryStringParameters: map[string]string{"modelId": "model123"},
+		QueryStringParameters: map[string]string{"id": "model123"},
 	}
 
 	ctx := context.Background()
