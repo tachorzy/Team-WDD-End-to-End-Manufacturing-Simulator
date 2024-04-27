@@ -47,9 +47,10 @@ type Floorplan struct {
 
 type Model struct {
 	ModelID     string    `json:"modelId" dynamodbav:"modelId"`
+	FactoryID   string    `json:"factoryId" dynamodbav:"factoryId"`
+	DateCreated string    `json:"dateCreated" dynamodbav:"dateCreated"`
 	Attributes  *[]string `json:"attributes,omitempty" dynamobdav:"attributes"`
 	Properties  *[]string `json:"properties,omitempty" dynamodbav:"properties"`
-	DateCreated string    `json:"dateCreated" dynamodbav:"dateCreated"`
 }
 
 type Property struct {
