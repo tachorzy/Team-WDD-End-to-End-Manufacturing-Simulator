@@ -61,6 +61,7 @@ type Property struct {
 	Name          string   `json:"name" dynamodbav:"name"`
 	Value         *float64 `json:"value,omitempty" dynamodbav:"value"`
 	Unit          string   `json:"unit" dynamodbav:"unit"`
+	GeneratorType string   `json:"generatorType" dynamodbav:"generatorType"`
 }
 
 type Measurement struct {
