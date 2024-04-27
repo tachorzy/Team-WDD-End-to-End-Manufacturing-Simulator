@@ -34,12 +34,13 @@ type Asset struct {
 }
 
 type Attribute struct {
-	Name      string `json:"name" dynamodbav:"name"`
-	Value     string `json:"value" dynamodbav:"value"`
-	Unit      string `json:"unit,omitempty" dynamodbav:"unit,omitempty"`
-	ModelID   string `json:"modelId,omitempty" dynamodbav:"modelId,omitempty"`
-	AssetID   string `json:"assetId,omitempty" dynamodbav:"assetId,omitempty"`
-	FactoryID string `json:"factoryId,omitempty" dynamodbav:"factoryId,omitempty"`
+	AttributeID string `json:"attributeId" dynamodbav:"attributeId"`
+	Name        string `json:"name" dynamodbav:"name"`
+	Value       string `json:"value" dynamodbav:"value"`
+	Unit        string `json:"unit,omitempty" dynamodbav:"unit,omitempty"`
+	ModelID     string `json:"modelId,omitempty" dynamodbav:"modelId,omitempty"`
+	AssetID     string `json:"assetId,omitempty" dynamodbav:"assetId,omitempty"`
+	FactoryID   string `json:"factoryId,omitempty" dynamodbav:"factoryId,omitempty"`
 }
 type Floorplan struct {
 	FloorplanID string `json:"floorplanId" dynamodbav:"floorplanId"`
