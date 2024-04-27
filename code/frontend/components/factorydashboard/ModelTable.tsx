@@ -104,6 +104,30 @@ const ModelTable: React.FC<{ factoryId: string }> = ({ factoryId }) => {
                 },
             ],
         },
+        {
+            modelId: "model-3",
+            factoryId: "factory-1",
+            attributes: [],
+            properties: [],
+        },
+        {
+            modelId: "model-4",
+            factoryId: "factory-1",
+            attributes: [],
+            properties: [],
+        },
+        {
+            modelId: "model-5",
+            factoryId: "factory-1",
+            attributes: [],
+            properties: [],
+        },
+        {
+            modelId: "model-6",
+            factoryId: "factory-1",
+            attributes: [],
+            properties: [],
+        },
     ];
 
     // This is actual back end connection
@@ -128,7 +152,7 @@ const ModelTable: React.FC<{ factoryId: string }> = ({ factoryId }) => {
 
     const [assets, setAssets] = useState<Partial<Model>[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const assetsPerPage = 3;
+    const assetsPerPage = 5;
 
     useEffect(() => {
         // Simulating fetching data from the backend
@@ -189,7 +213,10 @@ const ModelTable: React.FC<{ factoryId: string }> = ({ factoryId }) => {
                 >
                     &lt;
                 </button>
-                <span className="px-4 py-2 border rounded bg-blue-500 text-white">
+                <span
+                    className="px-4 py-2 border rounded bg-blue-500 text-white"
+                    data-testid="currentpage"
+                >
                     {currentPage}
                 </span>
                 <button
