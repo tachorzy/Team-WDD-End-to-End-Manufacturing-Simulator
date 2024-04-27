@@ -14,6 +14,8 @@ interface PropertyChartProps {
 
 const LineChart = ({ data }: PropertyChartProps) => {
     useEffect(() => {
+        d3.select("#chart").select("svg").remove();
+
         const chartElement = document.getElementById("chart");
         const width = chartElement ? chartElement.clientWidth : 600;
         const margin = 50;
@@ -81,6 +83,28 @@ const LineChart = ({ data }: PropertyChartProps) => {
             .attr("stroke", "#892ae8")
             .attr("stroke-width", 1.5)
             .attr("fill", "none");
+
+
+    const svgEnter = svg.enter().append("svg");
+    svgEnter.append("path").attr("class", "line");
+    svgEnter.append("g").attr("class", "x-axis");
+    svgEnter.append("g").attr("class", "y-axis");    
+
+// handle the update selection
+    const svgUpdate = svg.merge(svgEnter)
+    .attr("width", width + 2 * margin)
+    .attr("height", height + 2 * margin);
+
+
+    svgUpdate.select(".x-axis")
+    .attr("transform", `translate(0, ${height})`)
+    .call(d3.axisBottom(xScale));
+
+    svgUpdate.select(".y-axis")
+    .call(d3.axisLeft(yScale));
+
+    // handle the exit selection
+    svg.exit().remove();
     }, [data]);
 
     return <div id="chart" className="w-11/12 my-3" />;
