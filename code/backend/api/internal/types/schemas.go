@@ -64,10 +64,14 @@ type Property struct {
 }
 
 type Measurement struct {
-	MeasurementID     string   `json:"measurementId" dynamodbav:"measurementId"`
-	Frequency         *float64 `json:"frequency,omitempty" dynamodbav:"frequency"`
-	GeneratorFunction string   `json:"generatorFunction" dynamodbav:"generatorFunction"`
-	LowerBound        *float64 `json:"lowerBound,omitempty" dynamodbav:"lowerBound"`
-	UpperBound        *float64 `json:"upperBound,omitempty" dynamodbav:"upperBound"`
-	Precision         *float64 `json:"precision,omitempty" dynamodbav:"precision"`
+	MeasurementID     string     `json:"measurementId" dynamodbav:"measurementId"`
+	Frequency         *float64   `json:"frequency,omitempty" dynamodbav:"frequency"`
+	GeneratorFunction string     `json:"generatorFunction" dynamodbav:"generatorFunction"`
+	LowerBound        *float64   `json:"lowerBound,omitempty" dynamodbav:"lowerBound"`
+	UpperBound        *float64   `json:"upperBound,omitempty" dynamodbav:"upperBound"`
+	Precision         *float64   `json:"precision,omitempty" dynamodbav:"precision"`
+	SequenceValues    *[]float64 `json:"sequenceValues,omitempty" dynamodbav:"sequenceValues"`
+	Amplitude         *float64   `json:"amplitude,omitempty" dynamodbav:"amplitude"`
+	AngularFrequency  *float64   `json:"angularFrequency,omitempty" dynamodbav:"angularFrequency"`
+	Phase             *float64   `json:"phase,omitempty" dynamodbav:"phase"`
 }
