@@ -55,6 +55,8 @@ type Model struct {
 type Property struct {
 	PropertyID    string   `json:"propertyId" dynamodbav:"propertyId"`
 	MeasurementID string   `json:"measurementId" dynamodbav:"measurementId"`
+	FactoryID     string   `json:"factoryId" dynamodbav:"factoryId"`
+	ModelID       *string  `json:"modelId,omitempty" dynamodbav:"modelId"`
 	Name          string   `json:"name" dynamodbav:"name"`
 	Value         *float64 `json:"value,omitempty" dynamodbav:"value"`
 	Unit          string   `json:"unit" dynamodbav:"unit"`
