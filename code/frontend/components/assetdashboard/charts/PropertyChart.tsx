@@ -1,10 +1,8 @@
-"use client";
-
 import React, { useEffect } from "react";
 import * as d3 from "d3";
 
 interface DataPoint {
-    timeStamp: number;
+    timeStamp: Date; // changed from number to Date
     value: number;
 }
 
@@ -23,9 +21,7 @@ const LineChart = ({ data }: PropertyChartProps) => {
 
         const svg = d3
             .select("#chart")
-            .selectAll("svg")
-            .data([data]) // bind the data to the SVG element
-            .join("svg") // enter + update + exit
+            .append("svg") // changed from selectAll to append
             .attr("width", width + 2 * margin)
             .attr("height", height + 2 * margin);
 
@@ -36,12 +32,12 @@ const LineChart = ({ data }: PropertyChartProps) => {
         const xScale = d3
             .scaleTime()
             .range([0, width])
-            .domain(d3.extent(data, (d) => d.timeStamp) as [number, number]);
+            .domain(d3.extent(data, (d) => d.timeStamp) as [Date, Date]); // changed from DataPoint["timeStamp"][] to [Date, Date]
 
         const yScale = d3
             .scaleLinear()
             .range([height, 0])
-            .domain(d3.extent(data, (d) => d.value) as [number, number]);
+            .domain(d3.extent(data, (d) => d.value) as [number, number]); // changed from DataPoint["value"][] to [number, number]
 
         const xAxis = d3
             .axisBottom(xScale)
@@ -86,10 +82,8 @@ const LineChart = ({ data }: PropertyChartProps) => {
             .attr("stroke-width", 1.5)
             .attr("fill", "none");
 
+        // handle the enter selection
         const svgEnter = svg.enter().append("svg");
-        svgEnter.append("path").attr("class", "line");
-        svgEnter.append("g").attr("class", "x-axis");
-        svgEnter.append("g").attr("class", "y-axis");
 
         // handle the update selection
         const svgUpdate = svg
@@ -100,9 +94,8 @@ const LineChart = ({ data }: PropertyChartProps) => {
         svgUpdate
             .select(".x-axis")
             .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(xScale));
 
-        svgUpdate.select(".y-axis").call(d3.axisLeft(yScale));
+        svgUpdate.select(".y-axis")
 
         // handle the exit selection
         svg.exit().remove();
@@ -111,4 +104,4 @@ const LineChart = ({ data }: PropertyChartProps) => {
     return <div id="chart" className="w-11/12 my-3" />;
 };
 
-export default LineChart;
+export default LineChart
