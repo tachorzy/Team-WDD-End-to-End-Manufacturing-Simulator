@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as d3 from "d3";
 
 interface DataPoint {
-    timeStamp: Date; // changed from number to Date
+    timeStamp: number; // changed from number to Date
     value: number;
 }
 
@@ -32,7 +32,7 @@ const LineChart = ({ data }: PropertyChartProps) => {
         const xScale = d3
             .scaleTime()
             .range([0, width])
-            .domain(d3.extent(data, (d) => d.timeStamp) as [Date, Date]); // changed from DataPoint["timeStamp"][] to [Date, Date]
+            .domain(d3.extent(data, (d) => d.timeStamp) as [number, number]); // changed from DataPoint["timeStamp"][] to [Date, Date]
 
         const yScale = d3
             .scaleLinear()
