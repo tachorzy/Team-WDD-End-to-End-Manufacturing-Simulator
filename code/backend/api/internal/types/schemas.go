@@ -34,10 +34,13 @@ type Asset struct {
 }
 
 type Attribute struct {
-	Value string `json:"value" dynamodbav:"value"`
-	Unit  string `json:"unit,omitempty" dynamodbav:"unit,omitempty"`
+	Name      string `json:"name" dynamodbav:"name"`
+	Value     string `json:"value" dynamodbav:"value"`
+	Unit      string `json:"unit,omitempty" dynamodbav:"unit,omitempty"`
+	ModelID   string `json:"modelId,omitempty" dynamodbav:"modelId,omitempty"`
+	AssetID   string `json:"assetId,omitempty" dynamodbav:"assetId,omitempty"`
+	FactoryID string `json:"factoryId,omitempty" dynamodbav:"factoryId,omitempty"`
 }
-
 type Floorplan struct {
 	FloorplanID string `json:"floorplanId" dynamodbav:"floorplanId"`
 	FactoryID   string `json:"factoryId" dynamodbav:"factoryId"`
