@@ -1,10 +1,10 @@
 package generators
 
 import (
+	"crypto/rand"
 	"errors"
 	"math"
-	"math/rand"
-	"time"
+	"math/big"
 )
 
 type GeneratorParams struct {
@@ -63,7 +63,17 @@ func (g *ReplayGenerator) Generate(input float64, params GeneratorParams) float6
 type RandomGenerator struct{}
 
 func (g *RandomGenerator) Generate(input float64, params GeneratorParams) float64 {
+	randFloat, _ := cryptoRandFloat64()
+	return params.LowerBound + randFloat*(params.UpperBound-params.LowerBound)
+}
 
-	rand.Seed(time.Now().UnixNano())
-	return params.LowerBound + rand.Float64()*(params.UpperBound-params.LowerBound)
+func cryptoRandFloat64() (float64, error) {
+	var b [8]byte
+	_, err := rand.Read(b[:])
+	if err != nil {
+		return 0, err
+	}
+	num := big.NewInt(0).SetBytes(b[:]).Uint64()
+	f := float64(num) / (1 << 64)
+	return f, nil
 }

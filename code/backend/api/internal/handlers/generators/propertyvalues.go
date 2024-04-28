@@ -48,29 +48,23 @@ func (h *Handler) HandlePropertyValue(ctx context.Context, request events.APIGat
 		}, nil
 	}
 
-	if err != nil {
-		return events.APIGatewayProxyResponse{
-			Body:       fmt.Sprintf("Error: %v", err),
-			StatusCode: http.StatusInternalServerError,
-			Headers:    headers,
-		}, nil
-	}
 	for _, property := range allProperties {
-		newValue, err := generateNewValue(ctx, &property, h.DynamoDB)
+		prop := property
+		newValue, err := generateNewValue(ctx, &prop, h.DynamoDB)
 		if err != nil {
-			log.Printf("Error generating new value: %v", err)
+			log.Printf("Error generating new value for property %s: %v", prop.PropertyID, err)
 			continue
 		}
 
-		propertyData, err := fetchOrCreatePropertyData(ctx, h.DynamoDB, property)
+		propertyData, err := fetchOrCreatePropertyData(ctx, h.DynamoDB, prop)
 		if err != nil {
-			log.Printf("Error generating new value: %v", err)
+			log.Printf("Error fetching or creating property data for property %s: %v", prop.PropertyID, err)
 			continue
 		}
 
 		err = updatePropertyData(ctx, h.DynamoDB, propertyData, newValue)
 		if err != nil {
-			log.Printf("Error generating new value: %v", err)
+			log.Printf("Error updating property data for property %s: %v", prop.PropertyID, err)
 			continue
 		}
 	}
@@ -80,7 +74,6 @@ func (h *Handler) HandlePropertyValue(ctx context.Context, request events.APIGat
 		Headers:    headers,
 		Body:       "Processed all properties successfully",
 	}, nil
-
 }
 
 func fetchOrCreatePropertyData(ctx context.Context, db types.DynamoDBClient, property types.Property) (*types.PropertyData, error) {
@@ -101,8 +94,8 @@ func fetchOrCreatePropertyData(ctx context.Context, db types.DynamoDBClient, pro
 			LastCalculated: property.Value,
 		}
 	} else {
-		if err := wrappers.UnmarshalMap(result.Item, &propertyData); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal item: %v", err)
+		if marsherr := wrappers.UnmarshalMap(result.Item, &propertyData); marsherr != nil {
+			return nil, fmt.Errorf("failed to unmarshal item: %v", marsherr)
 		}
 	}
 	return &propertyData, nil
@@ -129,7 +122,6 @@ func updatePropertyData(ctx context.Context, db types.DynamoDBClient, propertyDa
 		return fmt.Errorf("failed to put item: %v", err)
 	}
 	return nil
-
 }
 func generateNewValue(ctx context.Context, property *types.Property, db types.DynamoDBClient) (float64, error) {
 	if property.MeasurementID == "" {
@@ -143,7 +135,7 @@ func generateNewValue(ctx context.Context, property *types.Property, db types.Dy
 		},
 	}
 
-	result, err := db.GetItem(ctx, getMeasurement)
+	result, err := db.GetItem(ctx, getMeasurement) //line 146
 	if err != nil {
 		return 0, fmt.Errorf("error finding measurement: %s", err)
 	}
@@ -157,9 +149,9 @@ func generateNewValue(ctx context.Context, property *types.Property, db types.Dy
 		return 0, fmt.Errorf("error marshalling measurement: %s", err)
 	}
 
-	value, err := generateMeasurementValue(property, &measurement)
-	if err != nil {
-		return 0, fmt.Errorf("error generating value: %s", err)
+	value, valerr := generateMeasurementValue(property, &measurement)
+	if valerr != nil {
+		return 0, fmt.Errorf("error generating value: %s", valerr)
 	}
 	return value, nil
 }
