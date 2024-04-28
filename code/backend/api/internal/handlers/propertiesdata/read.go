@@ -135,7 +135,6 @@ func processQueryResult(result *dynamodb.QueryOutput, headers map[string]string)
 			Headers:    headers,
 			Body:       "No data found",
 		}, nil
-
 	}
 	var propertyData []types.PropertyData
 	if err := wrappers.UnmarshalListOfMaps(result.Items, &propertyData); err != nil {
