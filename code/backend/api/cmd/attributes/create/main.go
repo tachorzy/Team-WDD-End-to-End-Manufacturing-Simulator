@@ -25,5 +25,4 @@ func main() {
 	handler := attributes.NewCreateAttributeHandler(dynamoDBClient)
 
 	lambda.Start(handler.HandleCreateAttributeRequest)
-
 }
