@@ -9,6 +9,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.13.9
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression v1.7.9
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.16.14
+	github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.36.5
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.30.4
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.53.1
 	github.com/google/uuid v1.6.0
