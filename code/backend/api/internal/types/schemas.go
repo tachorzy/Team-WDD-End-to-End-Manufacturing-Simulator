@@ -68,3 +68,9 @@ type Measurement struct {
 	UpperBound        *float64 `json:"upperBound,omitempty" dynamodbav:"upperBound"`
 	Precision         *float64 `json:"precision,omitempty" dynamodbav:"precision"`
 }
+
+type User struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Name     string `json:"name,omitempty"`
+}
