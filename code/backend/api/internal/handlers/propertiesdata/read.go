@@ -54,16 +54,15 @@ func (h Handler) handlePropertyDataById(ctx context.Context, PropertyID string, 
 			":propertyId": &ddbtypes.AttributeValueMemberS{Value: PropertyID},
 		},
 	}
-	result, err := h.DynamoDB.Query(ctx, input)
-	if err != nil {
+	result, reserr := h.DynamoDB.Query(ctx, input)
+	if reserr != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,
-			Body:       fmt.Sprintf("Error querying database: %v", err),
+			Body:       fmt.Sprintf("Error querying database: %v", reserr),
 		}, nil
 	}
 	return processQueryResult(result, headers)
-
 }
 func (h Handler) handlePropertyDataByModelId(ctx context.Context, ModelID string, headers map[string]string) (events.APIGatewayProxyResponse, error) {
 	input := &dynamodb.QueryInput{
@@ -103,14 +102,14 @@ func (h Handler) handlePropertyDataByModelId(ctx context.Context, ModelID string
 				"propertyId": &ddbtypes.AttributeValueMemberS{Value: propertyId},
 			},
 		}
-		dataResult, err := h.DynamoDB.GetItem(ctx, dataInput)
-		if err != nil {
-			log.Printf("Error retrieving property data for ID %s: %v", propertyId, err)
+		dataResult, reserr := h.DynamoDB.GetItem(ctx, dataInput)
+		if reserr != nil {
+			log.Printf("Error retrieving property data for ID %s: %v", propertyId, reserr)
 			continue
 		}
 		var propertyData types.PropertyData
-		if err := wrappers.UnmarshalMap(dataResult.Item, &propertyData); err != nil {
-			log.Printf("Error unmarshalling property data for ID %s: %v", propertyId, err)
+		if propdataerr := wrappers.UnmarshalMap(dataResult.Item, &propertyData); propdataerr != nil {
+			log.Printf("Error unmarshalling property data for ID %s: %v", propertyId, propdataerr)
 			continue
 		}
 		propertyDatas = append(propertyDatas, propertyData)
@@ -160,5 +159,4 @@ func processQueryResult(result *dynamodb.QueryOutput, headers map[string]string)
 		Headers:    headers,
 		Body:       string(propertyDataJson),
 	}, nil
-
 }
