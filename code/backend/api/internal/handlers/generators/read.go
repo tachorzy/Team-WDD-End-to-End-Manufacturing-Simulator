@@ -15,7 +15,7 @@ import (
 	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewPropertyValuesHandler(db types.DynamoDBClient) *Handler {
+func NewReadCalculations(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
