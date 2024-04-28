@@ -69,5 +69,4 @@ func (h *Handler) HandleCreateAttributeRequest(ctx context.Context, request even
 		Headers:    headers,
 		Body:       string(responseBody),
 	}, nil
-
 }

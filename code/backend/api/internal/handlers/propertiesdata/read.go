@@ -44,7 +44,6 @@ func (h Handler) HandleReadPropertyDataRequest(ctx context.Context, request even
 		Headers:    headers,
 		Body:       "Invalid parameters",
 	}, nil
-
 }
 func (h Handler) handlePropertyDataById(ctx context.Context, PropertyID string, headers map[string]string) (events.APIGatewayProxyResponse, error) {
 	input := &dynamodb.QueryInput{

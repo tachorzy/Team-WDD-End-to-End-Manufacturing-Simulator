@@ -50,15 +50,15 @@ func (h *Handler) HandlePropertyValue(ctx context.Context, request events.APIGat
 
 	for _, property := range allProperties {
 		prop := property
-		newValue, err := generateNewValue(ctx, &prop, h.DynamoDB)
-		if err != nil {
-			log.Printf("Error generating new value for property %s: %v", prop.PropertyID, err)
+		newValue, valerr := generateNewValue(ctx, &prop, h.DynamoDB)
+		if valerr != nil {
+			log.Printf("Error generating new value for property %s: %v", prop.PropertyID, valerr)
 			continue
 		}
 
-		propertyData, err := fetchOrCreatePropertyData(ctx, h.DynamoDB, prop)
-		if err != nil {
-			log.Printf("Error fetching or creating property data for property %s: %v", prop.PropertyID, err)
+		propertyData, err1 := fetchOrCreatePropertyData(ctx, h.DynamoDB, prop)
+		if err1 != nil {
+			log.Printf("Error fetching or creating property data for property %s: %v", prop.PropertyID, err1)
 			continue
 		}
 
@@ -135,7 +135,7 @@ func generateNewValue(ctx context.Context, property *types.Property, db types.Dy
 		},
 	}
 
-	result, err := db.GetItem(ctx, getMeasurement) //line 146
+	result, err := db.GetItem(ctx, getMeasurement)
 	if err != nil {
 		return 0, fmt.Errorf("error finding measurement: %s", err)
 	}
@@ -145,8 +145,8 @@ func generateNewValue(ctx context.Context, property *types.Property, db types.Dy
 	}
 
 	var measurement types.Measurement
-	if err := wrappers.UnmarshalMap(result.Item, &measurement); err != nil {
-		return 0, fmt.Errorf("error marshalling measurement: %s", err)
+	if marsherr := wrappers.UnmarshalMap(result.Item, &measurement); marsherr != nil {
+		return 0, fmt.Errorf("error marshalling measurement: %s", marsherr)
 	}
 
 	value, valerr := generateMeasurementValue(property, &measurement)

@@ -2,12 +2,12 @@ package generators
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"math"
 	"net/http"
-	"wdd/api/internal/wrappers"
-
 	"wdd/api/internal/types"
+	"wdd/api/internal/wrappers"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -15,7 +15,7 @@ import (
 	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func NewReadCalculations(db types.DynamoDBClient) *Handler {
+func NewPropertyValuesHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
@@ -23,108 +23,76 @@ func NewReadCalculations(db types.DynamoDBClient) *Handler {
 
 func (h Handler) HandleReadCalculationsRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	PropertyID := request.QueryStringParameters["propertyId"]
+	headers := standardHeaders()
 
-	headers := map[string]string{
-		"Access-Control-Allow-Origin": "*",
-		"Content-Type":                "application/json",
+	property, err := fetchProperty(ctx, h.DynamoDB, PropertyID)
+	if err != nil {
+		return errorResponse(http.StatusInternalServerError, err.Error(), headers)
 	}
-	getProperty := &dynamodb.GetItemInput{
+
+	measurement, err := fetchMeasurement(ctx, h.DynamoDB, property.MeasurementID)
+	if err != nil {
+		return errorResponse(http.StatusInternalServerError, err.Error(), headers)
+	}
+
+	value, err := generateMeasurementValue(property, measurement)
+	if err != nil {
+		return errorResponse(http.StatusInternalServerError, err.Error(), headers)
+	}
+
+	return jsonResponse(map[string]interface{}{"value": value}, headers)
+}
+
+func fetchProperty(ctx context.Context, db types.DynamoDBClient, propertyID string) (*types.Property, error) {
+	getPropertyInput := &dynamodb.GetItemInput{
 		TableName: aws.String(PROPERTYTABLE),
 		Key: map[string]ddbtypes.AttributeValue{
-			"propertyId": &ddbtypes.AttributeValueMemberS{Value: PropertyID},
+			"propertyId": &ddbtypes.AttributeValueMemberS{Value: propertyID},
 		},
 	}
 
-	result, err := h.DynamoDB.GetItem(ctx, getProperty)
+	getPropertyOutput, err := db.GetItem(ctx, getPropertyInput)
 	if err != nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusInternalServerError,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Error finding property: %s", err),
-		}, nil
+		return nil, fmt.Errorf("error finding property: %s", err)
 	}
-
-	if result.Item == nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusNotFound,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Property with ID %s not found", PropertyID),
-		}, nil
+	if getPropertyOutput.Item == nil {
+		return nil, fmt.Errorf("property with ID %s not found", propertyID)
 	}
 
 	var property types.Property
-	if err := wrappers.UnmarshalMap(result.Item, &property); err != nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusInternalServerError,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Error marshalling property: %s", err),
-		}, nil
+	err = wrappers.UnmarshalMap(getPropertyOutput.Item, &property)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling property: %s", err)
 	}
-	if property.MeasurementID == "" {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusNotFound,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Property with ID %s has no measurement", PropertyID),
-		}, nil
-	}
-	getMeasurement := &dynamodb.GetItemInput{
+
+	return &property, nil
+}
+
+func fetchMeasurement(ctx context.Context, db types.DynamoDBClient, measurementID string) (*types.Measurement, error) {
+	getMeasurementInput := &dynamodb.GetItemInput{
 		TableName: aws.String(MEASUREMENTTABLE),
 		Key: map[string]ddbtypes.AttributeValue{
-			"measurementId": &ddbtypes.AttributeValueMemberS{Value: property.MeasurementID},
+			"measurementId": &ddbtypes.AttributeValueMemberS{Value: measurementID},
 		},
 	}
-	result, err = h.DynamoDB.GetItem(ctx, getMeasurement)
+
+	getMeasurementOutput, err := db.GetItem(ctx, getMeasurementInput)
 	if err != nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusInternalServerError,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Error finding measurement: %s", err),
-		}, nil
+		return nil, fmt.Errorf("error finding measurement: %s", err)
 	}
-	if result.Item == nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusNotFound,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Measurement with ID %s not found", property.MeasurementID),
-		}, nil
+	if getMeasurementOutput.Item == nil {
+		return nil, fmt.Errorf("measurement with ID %s not found", measurementID)
 	}
+
 	var measurement types.Measurement
-	if err := wrappers.UnmarshalMap(result.Item, &measurement); err != nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusInternalServerError,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Error marshalling measurement: %s", err),
-		}, nil
-	}
-	if measurement.GeneratorFunction == "" {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusNotFound,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Measurement with ID %s has no generator function", property.MeasurementID),
-		}, nil
-	}
-
-	value, error := generateMeasurementValue(&property, &measurement)
-	if error != nil {
-		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusInternalServerError,
-			Headers:    headers,
-			Body:       fmt.Sprintf("Error generating measurement value: %s", error),
-		}, nil
-	}
-	responseData := map[string]interface{}{"value": value}
-	responseBody, err := wrappers.JSONMarshal(responseData)
+	err = wrappers.UnmarshalMap(getMeasurementOutput.Item, &measurement)
 	if err != nil {
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusInternalServerError, Headers: headers, Body: fmt.Sprintf("Error marshalling response: %s", err)}, nil
+		return nil, fmt.Errorf("error marshalling measurement: %s", err)
 	}
 
-	return events.APIGatewayProxyResponse{
-		StatusCode: http.StatusOK,
-		Headers:    headers,
-		Body:       string(responseBody),
-	}, nil
-
+	return &measurement, nil
 }
+
 func generateMeasurementValue(property *types.Property, measurement *types.Measurement) (float64, error) {
 	gen, err := NewGenerator(property.GeneratorType)
 	if err != nil {
@@ -146,6 +114,32 @@ func generateMeasurementValue(property *types.Property, measurement *types.Measu
 	return value, nil
 }
 
+func standardHeaders() map[string]string {
+	return map[string]string{
+		"Access-Control-Allow-Origin": "*",
+		"Content-Type":                "application/json",
+	}
+}
+
+func errorResponse(statusCode int, msg string, headers map[string]string) (events.APIGatewayProxyResponse, error) {
+	return events.APIGatewayProxyResponse{
+		StatusCode: statusCode,
+		Headers:    headers,
+		Body:       msg,
+	}, nil
+}
+
+func jsonResponse(data interface{}, headers map[string]string) (events.APIGatewayProxyResponse, error) {
+	responseBody, err := json.Marshal(data)
+	if err != nil {
+		return events.APIGatewayProxyResponse{StatusCode: http.StatusInternalServerError, Headers: headers, Body: fmt.Sprintf("Error marshalling response: %s", err)}, nil
+	}
+	return events.APIGatewayProxyResponse{
+		StatusCode: http.StatusOK,
+		Headers:    headers,
+		Body:       string(responseBody),
+	}, nil
+}
 func getDefaultFloat(value *float64, defaultVal float64) float64 {
 	if value != nil {
 		return *value
