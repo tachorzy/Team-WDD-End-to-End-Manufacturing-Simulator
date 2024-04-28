@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import * as d3 from "d3";
 
-interface DataPoint {
+export interface DataPoint {
     timeStamp: number; // changed from number to Date
     value: number;
 }
