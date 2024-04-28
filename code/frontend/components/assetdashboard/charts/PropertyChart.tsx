@@ -101,7 +101,7 @@ const LineChart = ({ data }: PropertyChartProps) => {
         svg.exit().remove();
     }, [data]);
 
-    return <div id="chart" className="w-11/12 my-3" />;
+    return <div id="chart" className="w-11/12 my-3" data-testid="property chart"/>;
 };
 
 export default LineChart

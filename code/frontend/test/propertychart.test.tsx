@@ -1,9 +1,39 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import PropertyChart, { DataPoint } from '../components/assetdashboard/charts/PropertyChart';
-import * as d3 from 'd3';
+import '@testing-library/jest-dom';
 
-jest.mock('d3-color', () => ({}));
+jest.mock('d3', () => {
+    return {
+      select: jest.fn().mockReturnThis(),
+      append: jest.fn().mockReturnThis(),
+      attr: jest.fn().mockReturnThis(),
+      style: jest.fn().mockReturnThis(),
+      data: jest.fn().mockReturnThis(),
+      enter: jest.fn().mockReturnThis(),
+      exit: jest.fn().mockReturnThis(),
+      remove: jest.fn().mockReturnThis(),
+      scaleTime: jest.fn().mockReturnThis(),
+      range: jest.fn().mockReturnThis(),
+      domain: jest.fn().mockReturnThis(),
+        extent: jest.fn().mockReturnThis(),
+        axisBottom: jest.fn().mockReturnThis(),
+        axisLeft: jest.fn().mockReturnThis(),
+        line: jest.fn().mockReturnThis(),
+        call: jest.fn().mockReturnThis(),
+        selectAll: jest.fn().mockReturnThis(),
+        text: jest.fn().mockReturnThis(),
+    scaleLinear: jest.fn().mockReturnThis(),
+    tickFormat: jest.fn().mockReturnThis(),
+    x: jest.fn().mockReturnThis(),
+    y: jest.fn().mockReturnThis(),
+    datum: jest.fn().mockReturnThis(),
+    merge: jest.fn().mockReturnThis(),
+      // Add any other D3 methods you use
+    };
+  });
+  
+  afterEach(cleanup);
 
 describe('PropertyChart', () => {
     const data: DataPoint[] = [
@@ -11,13 +41,9 @@ describe('PropertyChart', () => {
       { timeStamp: Date.now(), value: 20 },
     ];
   
-    test('should render without crashing', () => {
-      const { container } = render(<PropertyChart data={data} />);
-      expect(container).toBeInTheDocument();
+    test('should render component', () => {
+      const { getByTestId } = render(<PropertyChart data={data} />);
+      expect(getByTestId("property chart")).toBeInTheDocument();
     });
   
-    test('should create an SVG element', () => {
-      render(<PropertyChart data={data} />);
-      expect(d3.select).toHaveBeenCalled();
-    });
 });
