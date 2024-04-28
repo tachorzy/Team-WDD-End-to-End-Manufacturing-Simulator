@@ -17,15 +17,15 @@ export async function GET(request: Request) {
                 resource: "assets",
                 params: { factoryId },
             };
-            const assets = await BackendConnector.get<Model[]>(config);
-            return new Response(JSON.stringify(assets));
+            const models = await BackendConnector.get<Model[]>(config);
+            return new Response(JSON.stringify(models));
         }
         if (modelId) {
             const config: GetConfig = {
                 resource: "models",
             };
-            const asset = await BackendConnector.get<Model>(config);
-            return new Response(JSON.stringify(asset));
+            const model = await BackendConnector.get<Model>(config);
+            return new Response(JSON.stringify(model));
         }
         return new Response(
             JSON.stringify({
