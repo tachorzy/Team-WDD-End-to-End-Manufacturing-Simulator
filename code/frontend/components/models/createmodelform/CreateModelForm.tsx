@@ -15,11 +15,7 @@ export const Context = React.createContext({});
 const CreateModelForm = (props: { factoryId: string }) => {
     const { factoryId } = props;
 
-    console.log(factoryId);
-
-    // GENERATE THE ID FROM THE BACKEND!
-
-    const modelId = "2024-04-08-9780"; // REPLACE WITH ACTUAL MODEL ID
+    const modelId = "";
 
     const [models, setModels] = useState<Model[]>([]);
 
