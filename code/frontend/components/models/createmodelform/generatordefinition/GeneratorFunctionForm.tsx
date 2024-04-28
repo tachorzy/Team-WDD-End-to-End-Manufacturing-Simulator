@@ -11,6 +11,7 @@ import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
 import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
 import ReplayGeneratorForm from "./ReplayGeneratorForm";
 import { Context } from "../CreateModelForm";
+import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
 
 export interface GeneratorFunctionFormContext {
     factoryId: string;
@@ -38,7 +39,7 @@ const GeneratorFunctionForm = () => {
         return false;
     });
 
-    const handleModelSubmission = (
+    const handleModelSubmission = async (
         event: React.MouseEvent<HTMLButtonElement>,
     ) => {
         event.preventDefault();
@@ -48,11 +49,17 @@ const GeneratorFunctionForm = () => {
             attributes: contextValue.attributes,
             properties: contextValue.properties,
         };
-        console.log(`newModel: ${JSON.stringify(newModel)}\n`);
-        contextValue.setModels([...contextValue.models, newModel]);
-        // contextValue.models.forEach((model) => {
-        //     console.log(`\n\nMODEL: ${JSON.stringify(model)}\n`);
-        // });
+
+        try {
+            const config: PostConfig<Model> = {
+                resource: "models",
+                payload: newModel,
+            };
+            const model  = await BackendConnector.post<Model>(config);
+            contextValue.setModels([...contextValue.models, model]);
+        } catch (error) {
+            console.error("Failed to add model", error);
+        }
     };
 
     return (
