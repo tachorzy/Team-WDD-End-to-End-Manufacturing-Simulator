@@ -80,3 +80,13 @@ type Measurement struct {
 	AngularFrequency  *float64   `json:"angularFrequency,omitempty" dynamodbav:"angularFrequency"`
 	Phase             *float64   `json:"phase,omitempty" dynamodbav:"phase"`
 }
+
+type PropertyData struct {
+	PropertyID     string           `json:"propertyId" dynamodbav:"propertyId"`
+	Values         map[string]Value `json:"values" dynamodbav:"values"`
+	LastCalculated *float64         `json:"lastCalculated" dynamodbav:"lastCalculated"`
+}
+type Value struct {
+	Date  string  `json:"date" dynamodbav:"date"`
+	Value float64 `json:"value" dynamodbav:"value"`
+}

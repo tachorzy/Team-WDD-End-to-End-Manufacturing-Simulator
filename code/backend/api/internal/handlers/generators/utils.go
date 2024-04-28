@@ -6,6 +6,7 @@ import (
 
 const PROPERTYTABLE = "Property"
 const MEASUREMENTTABLE = "Measurement"
+const PROPERTYDATA = "PropertyData"
 
 type Handler struct {
 	DynamoDB types.DynamoDBClient
