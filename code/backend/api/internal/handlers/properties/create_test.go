@@ -96,15 +96,14 @@ func TestHandleCreatePropertyRequest_JSONMarshalError(t *testing.T) {
 
 	handler := NewCreatePropertyHandler(mockDDBClient)
 
-	request := events.APIGatewayProxyRequest{
-		Body: `{"propertyId": "1", "measurementId":"1", "name":"test", "value":1.0, "unit":"feet"}`,
-	}
-
 	originalJSONMarshal := wrappers.JSONMarshal
 	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
+	request := events.APIGatewayProxyRequest{
+		Body: `{"propertyId": "1", "measurementId":"1", "name":"test", "value":1.0, "unit":"feet"}`,
+	}
 	ctx := context.Background()
 	response, err := handler.HandleCreatePropertyRequest(ctx, request)
 
