@@ -98,7 +98,7 @@ func TestHandleCreateMeasurementRequest_JSONMarshalError(t *testing.T) {
 	handler := NewCreateMeasurementHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
-		Body: `{"frequency":1.0,"generatorFunction":"Function 1","lowerBound":0.0,"upperBound":10.0,"precision":0.1}`,
+		Body: `{"frequency":1,"generatorFunction":"Function 1","lowerBound":0.0,"upperBound":10.0,"precision":0.1}`,
 	}
 
 	originalJSONMarshal := wrappers.JSONMarshal
