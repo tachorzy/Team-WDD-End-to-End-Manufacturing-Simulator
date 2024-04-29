@@ -11,21 +11,17 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func NewCreateFloorPlanHandler(db types.DynamoDBClient) *Handler {
+func NewCreateFloorPlanHandler(db types.DynamoDBClient, s3Uploader types.S3Uploader) *Handler {
 	return &Handler{
-		DynamoDB: db,
+		DynamoDB:   db,
+		S3Uploader: s3Uploader,
 	}
 }
 
-// reason: will refactor lator im too tired
-//
-//nolint:cyclop
 func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	headers := map[string]string{
 		"Content-Type":                 "application/json",
@@ -47,21 +43,14 @@ func (h Handler) HandleCreateFloorPlanRequest(ctx context.Context, request event
 	decodedImageData, err := wrappers.Base64DecodeString(floorplan.ImageData)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusBadRequest,
+			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,
 			Body:       fmt.Sprintf("Error decoding image data: %s", err.Error()),
 		}, nil
 	}
 
-	cfg, err := config.LoadDefaultConfig(ctx)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, fmt.Errorf("error loading AWS config: %w", err)
-	}
-	s3Client := s3.NewFromConfig(cfg)
-
 	imageFileName := fmt.Sprintf("floorplans/%s.jpg", floorplan.FloorplanID)
-	uploader := manager.NewUploader(s3Client)
-	_, err = uploader.Upload(ctx, &s3.PutObjectInput{
+	_, err = h.S3Uploader.Upload(ctx, &s3.PutObjectInput{
 		Bucket:      aws.String("wingstopdrivenbucket"),
 		Key:         aws.String(imageFileName),
 		Body:        bytes.NewReader(decodedImageData),

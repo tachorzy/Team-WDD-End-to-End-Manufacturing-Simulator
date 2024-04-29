@@ -3,41 +3,40 @@ package assets
 import (
 	"context"
 	"errors"
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
 	"wdd/api/internal/wrappers"
-
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func TestHandleUpdateAssetRequest_BadJSON(t *testing.T) {
+func TestHandleCreateAssetRequest_BadJSON(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	mockS3Uploader := &mocks.S3Uploader{}
 
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
+	handler := NewCreateAssetHandler(mockDDBClient, mockS3Uploader)
 
 	request := events.APIGatewayProxyRequest{
 		Body: `{"assetId":1}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateAssetRequest(ctx, request)
+	response, err := handler.HandleCreateAssetRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
 	if response.StatusCode != http.StatusBadRequest {
-		t.Errorf("Expected StatusCode %d for bad JSON, got %d", http.StatusBadRequest, response.StatusCode)
+		t.Errorf("Expected status code %d for bad JSON, got %d", http.StatusBadRequest, response.StatusCode)
 	}
 }
 
-func TestHandleUpdateAssetRequest_WithImage_Base64DecodeStringError(t *testing.T) {
+func TestHandleCreateAssetRequest_Base64DecodeStringError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	mockS3Uploader := &mocks.S3Uploader{}
 
@@ -49,44 +48,14 @@ func TestHandleUpdateAssetRequest_WithImage_Base64DecodeStringError(t *testing.T
 		return nil, errors.New("base64 decode error")
 	}
 
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
+	handler := NewCreateAssetHandler(mockDDBClient, mockS3Uploader)
 
 	request := events.APIGatewayProxyRequest{
-		Body: `{"assetId": "1", "name": "test", "modelId": "test", "floorplanId": "test", "floorplanCoords": {"longitude": 1.0, "latitude": 1.0}, "imageData": "image"}`,
+		Body: `{"assetId": "1", "name": "test", "modelId": "test", "floorplanId": "test", "floorplanCoords": {"longitude": 1.0, "latitude": 1.0}, "imageData": "image", "modelUrl": "url"}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateAssetRequest(ctx, request)
-
-	if err != nil {
-		t.Fatalf("Expected no error, got %v", err)
-	}
-
-	if response.StatusCode != http.StatusInternalServerError {
-		t.Errorf("Expected status code %d for base64 decode string, got %d", http.StatusInternalServerError, response.StatusCode)
-	}
-}
-
-func TestHandleUpdateAssetRequest_WithModel_Base64DecodeStringError(t *testing.T) {
-	mockDDBClient := &mocks.DynamoDBClient{}
-	mockS3Uploader := &mocks.S3Uploader{}
-
-	originalBase64DecodeString := wrappers.Base64DecodeString
-
-	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
-
-	wrappers.Base64DecodeString = func(s string) ([]byte, error) {
-		return nil, errors.New("base64 decode error")
-	}
-
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
-
-	request := events.APIGatewayProxyRequest{
-		Body: `{"assetId": "1", "name": "test", "modelId": "test", "floorplanId": "test", "floorplanCoords": {"longitude": 1.0, "latitude": 1.0}, "modelUrl": "url"}`,
-	}
-
-	ctx := context.Background()
-	response, err := handler.HandleUpdateAssetRequest(ctx, request)
+	response, err := handler.HandleCreateAssetRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -98,7 +67,7 @@ func TestHandleUpdateAssetRequest_WithModel_Base64DecodeStringError(t *testing.T
 }
 
 //nolint:dupl
-func TestHandleUpdateAssetRequest_UploadImageError(t *testing.T) {
+func TestHandleCreateAssetRequest_UploadImageError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	mockS3Uploader := &mocks.S3Uploader{
 		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
@@ -106,7 +75,7 @@ func TestHandleUpdateAssetRequest_UploadImageError(t *testing.T) {
 		},
 	}
 
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
+	handler := NewCreateAssetHandler(mockDDBClient, mockS3Uploader)
 
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
@@ -119,7 +88,7 @@ func TestHandleUpdateAssetRequest_UploadImageError(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateAssetRequest(ctx, request)
+	response, err := handler.HandleCreateAssetRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -131,7 +100,7 @@ func TestHandleUpdateAssetRequest_UploadImageError(t *testing.T) {
 }
 
 //nolint:dupl
-func TestHandleUpdateAssetRequest_UploadModelError(t *testing.T) {
+func TestHandleCreateAssetRequest_UploadModelError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	mockS3Uploader := &mocks.S3Uploader{
 		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
@@ -139,7 +108,7 @@ func TestHandleUpdateAssetRequest_UploadModelError(t *testing.T) {
 		},
 	}
 
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
+	handler := NewCreateAssetHandler(mockDDBClient, mockS3Uploader)
 
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
@@ -152,7 +121,7 @@ func TestHandleUpdateAssetRequest_UploadModelError(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateAssetRequest(ctx, request)
+	response, err := handler.HandleCreateAssetRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -163,7 +132,7 @@ func TestHandleUpdateAssetRequest_UploadModelError(t *testing.T) {
 	}
 }
 
-func TestHandleUpdateAssetRequest_UpdateExpressionBuilderError(t *testing.T) {
+func TestHandleCreateAssetRequest_MarshalMapError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	mockS3Uploader := &mocks.S3Uploader{
 		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
@@ -171,39 +140,39 @@ func TestHandleUpdateAssetRequest_UpdateExpressionBuilderError(t *testing.T) {
 		},
 	}
 
+	handler := NewCreateAssetHandler(mockDDBClient, mockS3Uploader)
+
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
 	wrappers.Base64DecodeString = func(s string) ([]byte, error) {
 		return []byte(""), nil
 	}
 
-	originalUpdateExpressionBuilder := wrappers.UpdateExpressionBuilder
-	defer func() { wrappers.UpdateExpressionBuilder = originalUpdateExpressionBuilder }()
-	wrappers.UpdateExpressionBuilder = func(expression.UpdateBuilder) (expression.Expression, error) {
-		return expression.Expression{}, errors.New("update expression error")
+	originalMarshalMap := wrappers.MarshalMap
+	defer func() { wrappers.MarshalMap = originalMarshalMap }()
+	wrappers.MarshalMap = func(interface{}) (map[string]ddbtypes.AttributeValue, error) {
+		return nil, errors.New("mock marshalmap error")
 	}
-
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
 
 	request := events.APIGatewayProxyRequest{
 		Body: `{"assetId": "1", "name": "test", "modelId": "test", "floorplanId": "test", "floorplanCoords": {"longitude": 1.0, "latitude": 1.0}, "imageData": "image", "modelUrl": "url"}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateAssetRequest(ctx, request)
+	response, err := handler.HandleCreateAssetRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
 	if response.StatusCode != http.StatusInternalServerError {
-		t.Errorf("Expected StatusCode %d for building update expression, got %d", http.StatusInternalServerError, response.StatusCode)
+		t.Errorf("Expected status code %d for marshalling asset to DynamoDB format, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
 
-func TestHandleUpdateAssetRequest_UpdateItemError(t *testing.T) {
+func TestHandleCreateAssetRequest_PutItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
+		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -213,42 +182,43 @@ func TestHandleUpdateAssetRequest_UpdateItemError(t *testing.T) {
 		},
 	}
 
+	handler := NewCreateAssetHandler(mockDDBClient, mockS3Uploader)
+
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
 	wrappers.Base64DecodeString = func(s string) ([]byte, error) {
 		return []byte(""), nil
 	}
 
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
-
 	request := events.APIGatewayProxyRequest{
 		Body: `{"assetId": "1", "name": "test", "modelId": "test", "floorplanId": "test", "floorplanCoords": {"longitude": 1.0, "latitude": 1.0}, "imageData": "image", "modelUrl": "url"}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateAssetRequest(ctx, request)
+	response, err := handler.HandleCreateAssetRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
 	if response.StatusCode != http.StatusInternalServerError {
-		t.Errorf("Expected StatusCode %d for DynamoDB update item error, got %d", http.StatusInternalServerError, response.StatusCode)
+		t.Errorf("Expected status code %d for DynamoDB put item error, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
 
-func TestHandleUpdateAssetRequest_JSONMarshalError(t *testing.T) {
+func TestHandleCreateAssetRequest_JSONMarshalError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
-			return &dynamodb.UpdateItemOutput{}, nil
+		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+			return &dynamodb.PutItemOutput{}, nil
 		},
 	}
-
 	mockS3Uploader := &mocks.S3Uploader{
 		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
 			return &manager.UploadOutput{}, nil
 		},
 	}
+
+	handler := NewCreateAssetHandler(mockDDBClient, mockS3Uploader)
 
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
@@ -262,33 +232,12 @@ func TestHandleUpdateAssetRequest_JSONMarshalError(t *testing.T) {
 		return nil, errors.New("mock marshal error")
 	}
 
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
 	request := events.APIGatewayProxyRequest{
-		Body: `{
-			"assetId": "1", 
-			"name": "test", 
-			"modelId": "test", 
-			"floorplanId": "test", 
-			"floorplanCoords": {
-				"longitude": 1.0, 
-				"latitude": 1.0
-			}, 
-			"imageData": "image", 
-			"modelUrl": "url", 
-			"attributes": {
-				"attribute1": {
-					"value":"test" 
-				},
-				"attribute2": {
-					"value":"test",
-					"unit":"test" 
-				}
-			}
-		}`,
+		Body: `{"assetId": "1", "name": "test", "modelId": "test", "floorplanId": "test", "floorplanCoords": {"longitude": 1.0, "latitude": 1.0}, "imageData": "image", "modelUrl": "url"}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateAssetRequest(ctx, request)
+	response, err := handler.HandleCreateAssetRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -299,19 +248,19 @@ func TestHandleUpdateAssetRequest_JSONMarshalError(t *testing.T) {
 	}
 }
 
-//nolint:dupl
-func TestHandleUpdateAssetRequest_WithImagePrefix_Success(t *testing.T) {
+func TestHandleCreateAssetRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
-			return &dynamodb.UpdateItemOutput{}, nil
+		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+			return &dynamodb.PutItemOutput{}, nil
 		},
 	}
-
 	mockS3Uploader := &mocks.S3Uploader{
 		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
 			return &manager.UploadOutput{}, nil
 		},
 	}
+
+	handler := NewCreateAssetHandler(mockDDBClient, mockS3Uploader)
 
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
@@ -319,97 +268,18 @@ func TestHandleUpdateAssetRequest_WithImagePrefix_Success(t *testing.T) {
 		return []byte(""), nil
 	}
 
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
-
 	request := events.APIGatewayProxyRequest{
-		Body: `{
-			"assetId": "1", 
-			"name": "test", 
-			"modelId": "test", 
-			"floorplanId": "test", 
-			"floorplanCoords": {
-				"longitude": 1.0, 
-				"latitude": 1.0
-			}, 
-			"imageData": "https://image", 
-			"attributes": {
-				"attribute1": {
-					"value":"test" 
-				},
-				"attribute2": {
-					"value":"test",
-					"unit":"test" 
-				}
-			}
-		}`,
+		Body: `{"assetId": "1", "name": "test", "modelId": "test", "floorplanId": "test", "floorplanCoords": {"longitude": 1.0, "latitude": 1.0}, "imageData": "image", "modelUrl": "url"}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleUpdateAssetRequest(ctx, request)
+	response, err := handler.HandleCreateAssetRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
 	if response.StatusCode != http.StatusOK {
-		t.Errorf("Expected StatusCode %d for successful update, got %d", http.StatusOK, response.StatusCode)
-	}
-}
-
-//nolint:dupl
-func TestHandleUpdateAssetRequest_Success(t *testing.T) {
-	mockDDBClient := &mocks.DynamoDBClient{
-		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
-			return &dynamodb.UpdateItemOutput{}, nil
-		},
-	}
-
-	mockS3Uploader := &mocks.S3Uploader{
-		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
-			return &manager.UploadOutput{}, nil
-		},
-	}
-
-	originalBase64DecodeString := wrappers.Base64DecodeString
-	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
-	wrappers.Base64DecodeString = func(s string) ([]byte, error) {
-		return []byte(""), nil
-	}
-
-	handler := NewUpdateAssetHandler(mockDDBClient, mockS3Uploader)
-
-	request := events.APIGatewayProxyRequest{
-		Body: `{
-			"assetId": "1", 
-			"name": "test", 
-			"modelId": "test", 
-			"floorplanId": "test", 
-			"floorplanCoords": {
-				"longitude": 1.0, 
-				"latitude": 1.0
-			}, 
-			"imageData": "image", 
-			"modelUrl": "url", 
-			"attributes": {
-				"attribute1": {
-					"value":"test" 
-				},
-				"attribute2": {
-					"value":"test",
-					"unit":"test" 
-				}
-			}
-		}`,
-	}
-
-	ctx := context.Background()
-	response, err := handler.HandleUpdateAssetRequest(ctx, request)
-
-	if err != nil {
-		t.Fatalf("Expected no error, got %v", err)
-	}
-
-	if response.StatusCode != http.StatusOK {
-		t.Errorf("Expected StatusCode %d for successful update, got %d", http.StatusOK, response.StatusCode)
+		t.Errorf("Expected status code %d for successful creation, got %d", http.StatusOK, response.StatusCode)
 	}
 }

@@ -47,9 +47,10 @@ type Floorplan struct {
 
 type Model struct {
 	ModelID     string    `json:"modelId" dynamodbav:"modelId"`
+	FactoryID   string    `json:"factoryId" dynamodbav:"factoryId"`
+	DateCreated string    `json:"dateCreated" dynamodbav:"dateCreated"`
 	Attributes  *[]string `json:"attributes,omitempty" dynamobdav:"attributes"`
 	Properties  *[]string `json:"properties,omitempty" dynamodbav:"properties"`
-	DateCreated string    `json:"dateCreated" dynamodbav:"dateCreated"`
 }
 
 type Property struct {
@@ -61,10 +62,16 @@ type Property struct {
 }
 
 type Measurement struct {
-	MeasurementID     string  `json:"measurementId" dynamodbav:"measurementId"`
-	Frequency         float64 `json:"frequency" dynamodbav:"frequency"`
-	GeneratorFunction string  `json:"generatorFunction" dynamodbav:"generatorFunction"`
-	LowerBound        float64 `json:"lowerBound" dynamodbav:"lowerBound"`
-	UpperBound        float64 `json:"upperBound" dynamodbav:"upperBound"`
-	Precision         float64 `json:"precision" dynamodbav:"precision"`
+	MeasurementID     string   `json:"measurementId" dynamodbav:"measurementId"`
+	Frequency         *float64 `json:"frequency,omitempty" dynamodbav:"frequency"`
+	GeneratorFunction string   `json:"generatorFunction" dynamodbav:"generatorFunction"`
+	LowerBound        *float64 `json:"lowerBound,omitempty" dynamodbav:"lowerBound"`
+	UpperBound        *float64 `json:"upperBound,omitempty" dynamodbav:"upperBound"`
+	Precision         *float64 `json:"precision,omitempty" dynamodbav:"precision"`
+}
+
+type User struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Name     string `json:"name,omitempty"`
 }

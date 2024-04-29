@@ -1,4 +1,4 @@
-package measurements
+package models
 
 import (
 	"context"
@@ -13,33 +13,32 @@ import (
 	"github.com/google/uuid"
 )
 
-func NewCreateMeasurementHandler(db types.DynamoDBClient) *Handler {
+func NewCreateModelHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
 }
 
-func (h Handler) HandleCreateMeasurementRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var measurement types.Measurement
-
+func (h Handler) HandleCreateModelRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	var model types.Model
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",
 		"Content-Type":                "application/json",
 	}
 
-	if err := wrappers.JSONUnmarshal([]byte(request.Body), &measurement); err != nil {
+	if err := wrappers.JSONUnmarshal([]byte(request.Body), &model); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
 			Headers:    headers,
 			Body:       fmt.Sprintf("Error unmarshalling: %v", err),
 		}, nil
 	}
-	measurement.MeasurementID = uuid.NewString()
+	model.ModelID = uuid.NewString()
 
-	av, err := wrappers.MarshalMap(measurement)
+	av, err := wrappers.MarshalMap(model)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
-			StatusCode: http.StatusBadRequest,
+			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,
 			Body:       fmt.Sprintf("Error marshalling: %v", err),
 		}, nil
@@ -55,7 +54,7 @@ func (h Handler) HandleCreateMeasurementRequest(ctx context.Context, request eve
 			Body:       fmt.Sprintf("Error inserting item: %v", err),
 		}, nil
 	}
-	responseBody, err := wrappers.JSONMarshal(measurement)
+	responseBody, err := wrappers.JSONMarshal(model)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,

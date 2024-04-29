@@ -1,4 +1,4 @@
-package measurements
+package models
 
 import (
 	"context"
@@ -13,17 +13,19 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func TestHandleCreateMeasurementRequest_BadJSON(t *testing.T) {
+func TestHandleCreateModel_BadJSON(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
-
-	handler := NewCreateMeasurementHandler(mockDDBClient)
-
+	handler := NewCreateModelHandler(mockDDBClient)
 	request := events.APIGatewayProxyRequest{
-		Body: `{"frequency":"1.0", "generatorFunction": "Function 1", "lowerBound":"0.0", "upperBound":"10.0", "precision":"0.1"}`,
+		Body: `{
+			"modelId":123,
+			 "factoryId":456, 
+			 "dateCreated":"2024-04-25T14:48:00Z",
+			  "attributes":["blah", "blah", "idk"}},
+			   "properties"}`,
 	}
-
 	ctx := context.Background()
-	response, err := handler.HandleCreateMeasurementRequest(ctx, request)
+	response, err := handler.HandleCreateModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -33,11 +35,10 @@ func TestHandleCreateMeasurementRequest_BadJSON(t *testing.T) {
 		t.Errorf("Expected status code %d for bad JSON, got %d", http.StatusBadRequest, response.StatusCode)
 	}
 }
-
-func TestHandleCreateMeasurementRequest_MarshalMapError(t *testing.T) {
+func TestHandleCreateModelRequest_MarshalMapError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 
-	handler := NewCreateMeasurementHandler(mockDDBClient)
+	handler := NewCreateModelHandler(mockDDBClient)
 
 	originalMarshalMap := wrappers.MarshalMap
 
@@ -48,36 +49,48 @@ func TestHandleCreateMeasurementRequest_MarshalMapError(t *testing.T) {
 	}
 
 	request := events.APIGatewayProxyRequest{
-		Body: `{"frequency":1.0,"generatorFunction":"Function 1","lowerBound":0.0,"upperBound":10.0,"precision":0.1}`,
+		Body: `{
+            "modelId": "test-id",
+            "factoryId": "factory-id",
+            "dateCreated": "2024-04-25T14:48:00Z",
+            "attributes": ["Size", "Color", "Weight"],
+            "properties": ["Property1", "Property2"]
+        }`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleCreateMeasurementRequest(ctx, request)
+	response, err := handler.HandleCreateModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
-	if response.StatusCode != http.StatusBadRequest {
-		t.Errorf("Expected status code %d for marshalling measurement to DynamoDB format, got %d", http.StatusBadRequest, response.StatusCode)
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d for marshalling model to DynamoDB format, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
 
-func TestHandleCreateMeasurementRequest_PutItemError(t *testing.T) {
+func TestHandleCreateModelRequest_PutItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
 
-	handler := NewCreateMeasurementHandler(mockDDBClient)
+	handler := NewCreateModelHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
-		Body: `{"frequency":1.0,"generatorFunction":"Function 1","lowerBound":0.0,"upperBound":10.0,"precision":0.1}`,
+		Body: `{
+		    "modelId": "unique-id",
+		    "factoryId": "factory-id",
+		    "dateCreated": "2021-10-01T12:00:00Z",
+		    "attributes": ["Size", "Color"],
+		    "properties": ["Durability", "Design"]
+		}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleCreateMeasurementRequest(ctx, request)
+	response, err := handler.HandleCreateModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -88,54 +101,66 @@ func TestHandleCreateMeasurementRequest_PutItemError(t *testing.T) {
 	}
 }
 
-func TestHandleCreateMeasurementRequest_JSONMarshalError(t *testing.T) {
+func TestHandleCreateModelRequest_JSONMarshalError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
 	}
 
-	handler := NewCreateMeasurementHandler(mockDDBClient)
+	handler := NewCreateModelHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
-		Body: `{"frequency":1.0,"generatorFunction":"Function 1","lowerBound":0.0,"upperBound":10.0,"precision":0.1}`,
+		Body: `{
+		    "modelId": "unique-id",
+		    "factoryId": "factory-id",
+		    "dateCreated": "2021-10-01T12:00:00Z",
+		    "attributes": ["Size", "Color"],
+		    "properties": ["Durability", "Design"]
+		}`,
 	}
 
-	originalJSONMarshal := wrappers.JSONMarshal
+	originalModelJSONMarshal := wrappers.JSONMarshal
 
-	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
+	defer func() { wrappers.JSONMarshal = originalModelJSONMarshal }()
 
 	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleCreateMeasurementRequest(ctx, request)
+	response, err := handler.HandleCreateModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
 	if response.StatusCode != http.StatusInternalServerError {
-		t.Errorf("Expected status code %d for marshalling measurement in JSON format, got %d", http.StatusInternalServerError, response.StatusCode)
+		t.Errorf("Expected status code %d for marshalling model in JSON format, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
 
-func TestHandleCreateMeasurementRequest_Success(t *testing.T) {
+func TestHandleCreateModelRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
 	}
 
-	handler := NewCreateMeasurementHandler(mockDDBClient)
+	handler := NewCreateModelHandler(mockDDBClient)
 
 	request := events.APIGatewayProxyRequest{
-		Body: `{"frequency":1.0,"generatorFunction":"Function 1","lowerBound":0.0,"upperBound":10.0,"precision":0.1}`,
+		Body: `{
+		    "modelId": "unique-id",
+		    "factoryId": "factory-id",
+		    "dateCreated": "2021-10-01T12:00:00Z",
+		    "attributes": ["Size", "Color"],
+		    "properties": ["Durability", "Design"]
+		}`,
 	}
 
 	ctx := context.Background()
-	response, err := handler.HandleCreateMeasurementRequest(ctx, request)
+	response, err := handler.HandleCreateModelRequest(ctx, request)
 
 	if err != nil {
 		t.Fatalf("Did not expect an error, got %v", err)

@@ -7,6 +7,6 @@ import (
 const TABLENAME = "Asset"
 
 type Handler struct {
-	DynamoDB types.DynamoDBClient
-	S3Client types.S3Client
+	DynamoDB   types.DynamoDBClient
+	S3Uploader types.S3Uploader
 }
