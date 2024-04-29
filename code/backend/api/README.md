@@ -54,7 +54,6 @@ Mac:
 export GOOS="linux"
 export GOARCH="amd64"
 export CGO_ENABLED="0"
-
 ```
 
 2. Replace `<PATH_TO_LAMBDA_FUNCTION>`, and build the Go application
