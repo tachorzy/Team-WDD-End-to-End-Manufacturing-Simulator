@@ -15,6 +15,25 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
+func ValidQueryItems() []map[string]types.AttributeValue {
+	return []map[string]types.AttributeValue{
+		{
+			"modelId":     &types.AttributeValueMemberS{Value: "model1"},
+			"factoryId":   &types.AttributeValueMemberS{Value: "test123"},
+			"dateCreated": &types.AttributeValueMemberS{Value: "2021-07-15"},
+			"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Size"}, &types.AttributeValueMemberS{Value: "Color"}}},
+			"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property1"}, &types.AttributeValueMemberS{Value: "Property2"}}},
+		},
+		{
+			"modelId":     &types.AttributeValueMemberS{Value: "model2"},
+			"factoryId":   &types.AttributeValueMemberS{Value: "factory123"},
+			"dateCreated": &types.AttributeValueMemberS{Value: "2022-01-01"},
+			"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Weight"}, &types.AttributeValueMemberS{Value: "Material"}}},
+			"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property3"}, &types.AttributeValueMemberS{Value: "Property4"}}},
+		},
+	}
+}
+
 func TestHandleReadModelRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	handler := NewReadModelHandler(mockDDBClient)
@@ -97,23 +116,7 @@ func TestHandleReadModelRequest_DynamoDBQueryError(t *testing.T) {
 func TestHandleReadModelRequest_UnmarshalListOfMapsError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-			items := []map[string]types.AttributeValue{
-				{
-					"modelId":     &types.AttributeValueMemberS{Value: "model1"},
-					"factoryId":   &types.AttributeValueMemberS{Value: "factory123"},
-					"dateCreated": &types.AttributeValueMemberS{Value: "2021-07-15"},
-					"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Size"}, &types.AttributeValueMemberS{Value: "Color"}}},
-					"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property1"}, &types.AttributeValueMemberS{Value: "Property2"}}},
-				},
-				{
-					"modelId":     &types.AttributeValueMemberS{Value: "model2"},
-					"factoryId":   &types.AttributeValueMemberS{Value: "factory123"},
-					"dateCreated": &types.AttributeValueMemberS{Value: "2022-01-01"},
-					"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Weight"}, &types.AttributeValueMemberS{Value: "Material"}}},
-					"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property3"}, &types.AttributeValueMemberS{Value: "Property4"}}},
-				},
-			}
-			return &dynamodb.QueryOutput{Items: items}, nil
+			return &dynamodb.QueryOutput{Items: ValidQueryItems()}, nil
 		},
 	}
 	handler := NewReadModelHandler(mockDDBClient)
@@ -145,23 +148,7 @@ func TestHandleReadModelRequest_UnmarshalListOfMapsError(t *testing.T) {
 func TestHandleReadModelRequest_JSONMarshal(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-			items := []map[string]types.AttributeValue{
-				{
-					"modelId":     &types.AttributeValueMemberS{Value: "model1"},
-					"factoryId":   &types.AttributeValueMemberS{Value: "factory123"},
-					"dateCreated": &types.AttributeValueMemberS{Value: "2021-07-15"},
-					"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Size"}, &types.AttributeValueMemberS{Value: "Color"}}},
-					"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property1"}, &types.AttributeValueMemberS{Value: "Property2"}}},
-				},
-				{
-					"modelId":     &types.AttributeValueMemberS{Value: "model2"},
-					"factoryId":   &types.AttributeValueMemberS{Value: "factory123"},
-					"dateCreated": &types.AttributeValueMemberS{Value: "2022-01-01"},
-					"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Weight"}, &types.AttributeValueMemberS{Value: "Material"}}},
-					"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property3"}, &types.AttributeValueMemberS{Value: "Property4"}}},
-				},
-			}
-			return &dynamodb.QueryOutput{Items: items}, nil
+			return &dynamodb.QueryOutput{Items: ValidQueryItems()}, nil
 		},
 	}
 	handler := NewReadModelHandler(mockDDBClient)
@@ -192,24 +179,7 @@ func TestHandleReadModelRequest_JSONMarshal(t *testing.T) {
 func TestHandleReadModelRequest_WithFactoryID_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-			items := []map[string]types.AttributeValue{
-				{
-					"modelId":     &types.AttributeValueMemberS{Value: "model1"},
-					"factoryId":   &types.AttributeValueMemberS{Value: "factory123"},
-					"dateCreated": &types.AttributeValueMemberS{Value: "2021-07-15"},
-					"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Size"}, &types.AttributeValueMemberS{Value: "Color"}}},
-					"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property1"}, &types.AttributeValueMemberS{Value: "Property2"}}},
-				},
-				{
-					"modelId":     &types.AttributeValueMemberS{Value: "model2"},
-					"factoryId":   &types.AttributeValueMemberS{Value: "factory123"},
-					"dateCreated": &types.AttributeValueMemberS{Value: "2022-01-01"},
-					"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Weight"}, &types.AttributeValueMemberS{Value: "Material"}}},
-					"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property3"}, &types.AttributeValueMemberS{Value: "Property4"}}},
-				},
-			}
-			return &dynamodb.QueryOutput{Items: items}, nil
-
+			return &dynamodb.QueryOutput{Items: ValidQueryItems()}, nil
 		},
 	}
 	handler := NewReadModelHandler(mockDDBClient)
