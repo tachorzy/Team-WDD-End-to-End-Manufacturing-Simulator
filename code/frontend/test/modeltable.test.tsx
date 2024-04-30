@@ -7,12 +7,11 @@ import { BackendConnector } from "@/app/api/_utils/connector";
 import ModelTable from "../components/factorydashboard/ModelTable";
 import "@testing-library/jest-dom";
 
-jest.mock('@/app/api/_utils/connector', () => ({
+jest.mock("@/app/api/_utils/connector", () => ({
     BackendConnector: {
-      get: jest.fn()
+        get: jest.fn(),
     },
-    GetConfig: {} // Mock GetConfig if needed
-  }));
+}));
 // Mock console.error as a jest.fn() to make it a mock function
 console.error = jest.fn();
 
@@ -48,12 +47,11 @@ describe("ModelTable component", () => {
                 factoryId: "someFactoryId",
             },
         ];
-        mockedBackendConnector.get.mockResolvedValueOnce(testData);
+        const mockedResponse =
+            mockedBackendConnector.get.mockResolvedValueOnce(testData);
         render(<ModelTable factoryId="someFactoryId" />);
 
-        await waitFor(() =>
-            expect(mockedBackendConnector.get).toHaveBeenCalledTimes(1),
-        );
+        await waitFor(() => expect(mockedResponse).toHaveBeenCalledTimes(1));
 
         // Assert data is rendered correctly
         expect(screen.getByText("Model ID")).toBeInTheDocument();
@@ -195,12 +193,11 @@ describe("ModelTable component", () => {
                 properties: [],
             },
         ];
-        mockedBackendConnector.get.mockResolvedValueOnce(testData);
+        const mockedResponse =
+            mockedBackendConnector.get.mockResolvedValueOnce(testData);
         render(<ModelTable factoryId="someFactoryId" />);
 
-        await waitFor(() =>
-            expect(mockedBackendConnector.get).toHaveBeenCalledTimes(1),
-        );
+        await waitFor(() => expect(mockedResponse).toHaveBeenCalledTimes(1));
 
         // Mock clicking next page
         fireEvent.click(screen.getByText(">"));
@@ -213,57 +210,58 @@ describe("ModelTable component", () => {
         expect(screen.getByTestId("currentpage").textContent).toBe("1");
     });
 
-    test('should log error message when fetching models fails', async () => {
-        const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-
-        // Mock BackendConnector.get to throw an error
-        require('@/app/api/_utils/connector').BackendConnector.get.mockRejectedValueOnce('Fetch error');
-
+    test("should log error message when fetching models fails", async () => {
         render(<ModelTable factoryId="someFactoryId" />);
 
-        // Wait for the error message to be logged
-        await waitFor(() => {
-            expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to fetch models:', 'Fetch error');
-        });
+        mockedBackendConnector.get.mockRejectedValueOnce("Fetch error");
 
-        consoleErrorSpy.mockRestore();
+        await waitFor(() => {
+            expect(console.error).toHaveBeenCalledWith(
+                "Failed to fetch models:",
+                "Fetch error",
+            );
+        });
     });
-    
-    test('should render without error when modelId is null or undefined', () => {
+
+    test("should render without error when modelId is null or undefined", () => {
         const testData = [
-            { modelId: null, factoryId: 'factory-1' },
-            { modelId: undefined, factoryId: 'factory-1' },
+            { modelId: null, factoryId: "factory-1" },
+            { modelId: undefined, factoryId: "factory-1" },
         ];
 
         // Render the ModelTable component for each test data item
-        testData.forEach(data => {
-            const { container } = render(<ModelTable factoryId={data.factoryId} />);
+        testData.forEach((data) => {
+            const { container } = render(
+                <ModelTable factoryId={data.factoryId} />,
+            );
             // Assert that the component renders without errors
             expect(container).toBeTruthy();
         });
     });
 
-    test('should apply background color to even-numbered modelIds', () => {
+    test("should apply background color to even-numbered modelIds", () => {
         const testData = [
-            { modelId: 1, factoryId: 'factory-1' },
-            { modelId: 2, factoryId: 'factory-1' },
-            { modelId: 3, factoryId: 'factory-1' },
-            { modelId: 4, factoryId: 'factory-1' },
-            { modelId: 5, factoryId: 'factory-1' },
+            { modelId: 1, factoryId: "factory-1" },
+            { modelId: 2, factoryId: "factory-1" },
+            { modelId: 3, factoryId: "factory-1" },
+            { modelId: 4, factoryId: "factory-1" },
+            { modelId: 5, factoryId: "factory-1" },
         ];
 
         const { container } = render(<ModelTable factoryId="factory-1" />);
-        
+
         testData.forEach((data, index) => {
-            const trElement = container.querySelector(`tr:nth-child(${index + 1})`);
+            const trElement = container.querySelector(
+                `tr:nth-child(${index + 1})`,
+            );
             // Check if trElement is not null before making assertions
             if (trElement !== null) {
                 expect(trElement).toBeInTheDocument();
 
                 if (data.modelId % 2 === 0) {
-                    expect(trElement).toHaveClass('bg-gray-100');
+                    expect(trElement).toHaveClass("bg-gray-100");
                 } else {
-                    expect(trElement).not.toHaveClass('bg-gray-100');
+                    expect(trElement).not.toHaveClass("bg-gray-100");
                 }
             }
         });
