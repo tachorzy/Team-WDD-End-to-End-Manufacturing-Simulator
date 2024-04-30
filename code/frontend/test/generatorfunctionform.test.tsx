@@ -43,9 +43,9 @@ describe("Generator Function Form", () => {
 
         const expectedMeasurement: Measurement[] = [
             {
-                measurementId: "test test test test",
-                modelId: "test test test test",
-                factoryId: "test test",
+                measurementId: "",
+                modelId: "",
+                factoryId: "",
                 lowerBound: 0,
                 upperBound: 100,
                 frequency: 10000,
@@ -118,9 +118,9 @@ describe("Generator Function Form", () => {
 
         const expectedMeasurement: Measurement[] = [
             {
-                measurementId: "test test test test",
-                modelId: "test test test test",
-                factoryId: "test test test test",
+                measurementId: "",
+                modelId: "",
+                factoryId: "",
                 lowerBound: 0.0,
                 upperBound: 100,
                 frequency: 10000,
@@ -202,9 +202,9 @@ describe("Generator Function Form", () => {
 
         const expectedMeasurement: Measurement[] = [
             {
-                measurementId: "test test test test",
-                modelId: "test test test test",
-                factoryId: "test test test test",
+                measurementId: "",
+                modelId: "",
+                factoryId: "",
                 lowerBound: 0.0,
                 upperBound: 100,
                 frequency: 10000,
