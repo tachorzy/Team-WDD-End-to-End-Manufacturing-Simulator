@@ -30,6 +30,15 @@ func (h Handler) HandleCreateModelRequest(ctx context.Context, request events.AP
 		return responseWithError(http.StatusBadRequest, headers, fmt.Sprintf("Error unmarshalling: %v", err))
 	}
 	model.ModelID = uuid.NewString()
+	if model.Properties != nil {
+		for i := range *model.Properties {
+			property := &(*model.Properties)[i]
+			if property.Value != nil && *property.Value == 0 {
+				one := 1.0
+				property.Value = &one
+			}
+		}
+	}
 
 	if err := insertItem(ctx, h.DynamoDB, model, TABLENAME); err != nil {
 		return responseWithError(http.StatusInternalServerError, headers, fmt.Sprintf("Error inserting model: %v", err))
