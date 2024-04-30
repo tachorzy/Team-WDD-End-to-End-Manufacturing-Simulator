@@ -69,4 +69,5 @@ export interface Model {
     factoryId: string;
     attributes: Attribute[];
     properties: Property[];
+    measurements: Measurement[];
 }

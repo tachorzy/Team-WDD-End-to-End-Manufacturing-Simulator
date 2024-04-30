@@ -48,6 +48,7 @@ const GeneratorFunctionForm = () => {
             modelId: contextValue.modelId,
             attributes: contextValue.attributes,
             properties: contextValue.properties,
+            measurements: contextValue.measurements,
         };
 
         try {

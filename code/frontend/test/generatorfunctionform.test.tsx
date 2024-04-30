@@ -60,6 +60,7 @@ describe("Generator Function Form", () => {
                 modelId: mockContextValue.modelId,
                 attributes: mockContextValue.attributes,
                 properties: mockContextValue.properties,
+                measurements: mockContextValue.measurements,
             },
         ];
 
@@ -89,7 +90,6 @@ describe("Generator Function Form", () => {
         fireEvent.click(submitButton);
 
         mockPost.mockResolvedValue(expectedModel);
-
     });
 
     test("should add measurments for the Sine Wave Generator", async () => {
@@ -138,6 +138,7 @@ describe("Generator Function Form", () => {
                 modelId: mockContextValue.modelId,
                 attributes: mockContextValue.attributes,
                 properties: mockContextValue.properties,
+                measurements: mockContextValue.measurements,
             },
         ];
 
@@ -173,7 +174,6 @@ describe("Generator Function Form", () => {
         fireEvent.click(submitButton);
 
         mockPost.mockResolvedValue(expectedModel);
-
     });
 
     test("should add measurments for the Sawtooth Generator", async () => {
@@ -222,6 +222,7 @@ describe("Generator Function Form", () => {
                 modelId: mockContextValue.modelId,
                 attributes: mockContextValue.attributes,
                 properties: mockContextValue.properties,
+                measurements: mockContextValue.measurements,
             },
         ];
 
@@ -257,7 +258,6 @@ describe("Generator Function Form", () => {
         fireEvent.click(submitButton);
 
         mockPost.mockResolvedValue(expectedModel);
-
     });
 
     test("should handle no unique properties", () => {
