@@ -6,12 +6,12 @@ import {
     Model,
 } from "@/app/api/_utils/types";
 import Link from "next/link";
+import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
 import RandomGeneratorForm from "./RandomGeneratorForm";
 import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
 import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
 import ReplayGeneratorForm from "./ReplayGeneratorForm";
 import { Context } from "../CreateModelForm";
-import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
 
 export interface GeneratorFunctionFormContext {
     factoryId: string;
@@ -55,7 +55,7 @@ const GeneratorFunctionForm = () => {
                 resource: "models",
                 payload: newModel,
             };
-            const model  = await BackendConnector.post<Model>(config);
+            const model = await BackendConnector.post<Model>(config);
             contextValue.setModels([...contextValue.models, model]);
         } catch (error) {
             console.error("Failed to add model", error);

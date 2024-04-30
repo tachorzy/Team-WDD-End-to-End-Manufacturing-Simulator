@@ -1,4 +1,4 @@
-const esModules = ['d3', 'd3-array'].join('|');
+const esModules = ["d3", "d3-array"].join("|");
 
 module.exports = {
     testEnvironment: "jsdom",
@@ -12,7 +12,7 @@ module.exports = {
     },
     moduleNameMapper: {
         "^@/(.*)$": "<rootDir>/$1",
-        'd3': '<rootDir>/node_modules/d3/dist/d3.min.js',
+        d3: "<rootDir>/node_modules/d3/dist/d3.min.js",
     },
     transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
 };

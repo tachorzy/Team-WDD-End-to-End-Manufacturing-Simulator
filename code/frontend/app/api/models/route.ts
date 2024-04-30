@@ -5,7 +5,6 @@ import {
 } from "@/app/api/_utils/connector";
 import { Model } from "@/app/api/_utils/types";
 
-
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const factoryId = searchParams.get("factoryId");
