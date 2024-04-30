@@ -14,8 +14,8 @@ describe("Navbar Component", () => {
         expect(getByText("Home")).toBeInTheDocument();
         expect(getByText("Gateways")).toBeInTheDocument();
         expect(getByText("Assets")).toBeInTheDocument();
-        expect(getByText("Login")).toBeInTheDocument();
-        expect(getByText("Sign Up")).toBeInTheDocument();
+        expect(getByText("Login / Sign Up")).toBeInTheDocument();
+
         expect(getByAltText("brand")).toBeInTheDocument();
     });
 
