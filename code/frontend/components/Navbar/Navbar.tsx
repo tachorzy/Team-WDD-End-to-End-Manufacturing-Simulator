@@ -1,9 +1,11 @@
 "use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import SignUpButton from "./SignUpButton";
 import { signIn } from "next-auth/react";
+import SignUpButton from "./SignUpButton";
+
 interface NavbarProps {
     pageId: string;
 }
@@ -54,10 +56,12 @@ const Navbar = (props: NavbarProps) => {
                     </h1>
                 </Link>
                 <button
-                 className="group text-lg font-medium text-[#494949] cursor-pointer"
-                onClick={() => {
-                    signIn();
-                }}>
+                    type="button"
+                    className="group text-lg font-medium text-[#494949] cursor-pointer"
+                    onClick={() => {
+                        signIn();
+                    }}
+                >
                     Login Button
                 </button>
             </div>

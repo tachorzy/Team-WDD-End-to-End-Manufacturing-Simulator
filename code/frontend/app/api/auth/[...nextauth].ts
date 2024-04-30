@@ -7,26 +7,30 @@ const authOptions: NextAuthOptions = {
     },
     providers: [
         CredintialsProvider({
-             name: 'Credentials',
+            name: "Credentials",
             type: "credentials",
             credentials: {
-                email: { label: "Username", type: "text", placeholder: "jsmith" },
-                password: { label: "Password", type: "password" }
-              },
-              async authorize(credentials, req) {
+                email: {
+                    label: "Username",
+                    type: "text",
+                    placeholder: "jsmith",
+                },
+                password: { label: "Password", type: "password" },
+            },
+            authorize(credentials, req) {
                 const { email, password } = credentials as {
-                    email: string, 
-                    password: string
+                    email: string;
+                    password: string;
                 };
                 if (email !== "admin" || password !== "admin") {
                     return null;
                 }
-                return {id: 1, name: "Admin", email: "admin"};
+                return { id: 1, name: "Admin", email: "admin" };
             },
         }),
     ],
     pages: {
-        signIn: '/auth/signin',
+        signIn: "/auth/signin",
     },
 };
 export default NextAuth(authOptions);
