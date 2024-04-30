@@ -4,31 +4,15 @@ import GeneratorFunctionForm, {
     GeneratorFunctionFormContext,
 } from "@/components/models/createmodelform/generatordefinition/GeneratorFunctionForm";
 import { Measurement, Model } from "@/app/api/_utils/types";
+import { BackendConnector } from "@/app/api/_utils/connector";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 const mockSetModels = jest.fn();
 const mockSetMeasurements = jest.fn();
 
-jest.mock("../app/api/models/route", () => ({
-    post: jest.fn(() =>
-        Promise.resolve({
-            factoryId: "987654321",
-            modelId: "123456",
-            attributes: [],
-            properties: [
-                {
-                    factoryId: "",
-                    modelId: "",
-                    measurementId: "",
-                    name: "TEMP",
-                    unit: "C",
-                    generatorType: "Random",
-                },
-            ],
-        }),
-    ),
-}));
+const mockPost = jest.fn();
+BackendConnector.post = mockPost;
 
 jest.spyOn(global.console, "log").mockImplementation(() => {});
 
@@ -70,7 +54,7 @@ describe("Generator Function Form", () => {
             },
         ];
 
-        const expctedModel: Model[] = [
+        const expectedModel: Model[] = [
             {
                 factoryId: mockContextValue.factoryId,
                 modelId: mockContextValue.modelId,
@@ -104,9 +88,8 @@ describe("Generator Function Form", () => {
         const submitButton = getByText(/Submit/);
         fireEvent.click(submitButton);
 
-        // await waitFor(() => {
-        //     expect(mockSetModels).toHaveBeenCalledWith(expctedModel);
-        // });
+        mockPost.mockResolvedValue(expectedModel);
+
     });
 
     test("should add measurments for the Sine Wave Generator", async () => {
@@ -149,7 +132,7 @@ describe("Generator Function Form", () => {
             },
         ];
 
-        const expctedModel: Model[] = [
+        const expectedModel: Model[] = [
             {
                 factoryId: mockContextValue.factoryId,
                 modelId: mockContextValue.modelId,
@@ -189,9 +172,8 @@ describe("Generator Function Form", () => {
         const submitButton = getByText(/Submit/);
         fireEvent.click(submitButton);
 
-        // await waitFor(() => {
-        //     expect(mockSetModels).toHaveBeenCalledWith(expect.arrayContaining([expect.objectContaining({ factoryId: 'testFactoryId', modelId: 'testModelId' })]));
-        // })
+        mockPost.mockResolvedValue(expectedModel);
+
     });
 
     test("should add measurments for the Sawtooth Generator", async () => {
@@ -234,7 +216,7 @@ describe("Generator Function Form", () => {
             },
         ];
 
-        const expctedModel: Model[] = [
+        const expectedModel: Model[] = [
             {
                 factoryId: mockContextValue.factoryId,
                 modelId: mockContextValue.modelId,
@@ -274,9 +256,8 @@ describe("Generator Function Form", () => {
         const submitButton = getByText(/Submit/);
         fireEvent.click(submitButton);
 
-        // await waitFor(() => {
-        //     expect(mockSetModels).toHaveBeenCalledWith(expctedModel);
-        // });
+        mockPost.mockResolvedValue(expectedModel);
+
     });
 
     test("should handle no unique properties", () => {
