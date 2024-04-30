@@ -39,7 +39,6 @@ type Attribute struct {
 	Value       string `json:"value" dynamodbav:"value"`
 	Unit        string `json:"unit,omitempty" dynamodbav:"unit,omitempty"`
 	ModelID     string `json:"modelId,omitempty" dynamodbav:"modelId,omitempty"`
-	AssetID     string `json:"assetId,omitempty" dynamodbav:"assetId,omitempty"`
 	FactoryID   string `json:"factoryId,omitempty" dynamodbav:"factoryId,omitempty"`
 }
 type Floorplan struct {
@@ -50,11 +49,12 @@ type Floorplan struct {
 }
 
 type Model struct {
-	ModelID     string    `json:"modelId" dynamodbav:"modelId"`
-	FactoryID   string    `json:"factoryId" dynamodbav:"factoryId"`
-	DateCreated string    `json:"dateCreated" dynamodbav:"dateCreated"`
-	Attributes  *[]string `json:"attributes,omitempty" dynamobdav:"attributes"`
-	Properties  *[]string `json:"properties,omitempty" dynamodbav:"properties"`
+	ModelID      string         `json:"modelId" dynamodbav:"modelId"`
+	FactoryID    string         `json:"factoryId" dynamodbav:"factoryId"`
+	DateCreated  string         `json:"dateCreated" dynamodbav:"dateCreated"`
+	Attributes   *[]Attribute   `json:"attributes,omitempty" dynamobdav:"attributes"`
+	Properties   *[]Property    `json:"properties,omitempty" dynamodbav:"properties"`
+	Measurements *[]Measurement `json:"measurements,omitempty" dynamodbav:"measurements"`
 }
 
 type Property struct {

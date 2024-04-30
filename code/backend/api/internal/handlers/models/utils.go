@@ -5,6 +5,9 @@ import (
 )
 
 const TABLENAME = "Model"
+const PROPERTYTABLE = "Property"
+const ATTRIBUTETABLE = "Attribute"
+const MEASUREMENTTABLE = "Measurement"
 
 type Handler struct {
 	DynamoDB types.DynamoDBClient
