@@ -29,26 +29,28 @@ export interface GeneratorFunctionFormContext {
 
 const GeneratorFunctionForm = () => {
     const contextValue = useContext(Context) as GeneratorFunctionFormContext;
-    const uniqueNames: Record<string, boolean> = {};
 
-    const uniqueProperties = contextValue.properties.filter((property) => {
-        if (!uniqueNames[property.name]) {
-            uniqueNames[property.name] = true;
-            return true;
-        }
-        return false;
-    });
+    const uniqueAttributes: Attribute[] = Array.from(
+        new Set(contextValue.attributes.map((a) => JSON.stringify(a))),
+    ).map((str) => JSON.parse(str) as Attribute);
+    const uniqueProperties: Property[] = Array.from(
+        new Set(contextValue.properties.map((p) => JSON.stringify(p))),
+    ).map((str) => JSON.parse(str) as Property);
+    const uniqueMeasurements: Measurement[] = Array.from(
+        new Set(contextValue.measurements.map((m) => JSON.stringify(m))),
+    ).map((str) => JSON.parse(str) as Measurement);
 
     const handleModelSubmission = async (
         event: React.MouseEvent<HTMLButtonElement>,
     ) => {
         event.preventDefault();
+        uniqueMeasurements.shift();
         const newModel: Model = {
             factoryId: contextValue.factoryId,
             modelId: contextValue.modelId,
-            attributes: contextValue.attributes,
-            properties: contextValue.properties,
-            measurements: contextValue.measurements,
+            attributes: uniqueAttributes,
+            properties: uniqueProperties,
+            measurements: uniqueMeasurements,
         };
 
         try {
