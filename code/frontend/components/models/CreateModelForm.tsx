@@ -64,10 +64,6 @@ const CreateModelForm: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            <AddedModelCharacteristic
-                                characteristic="Attribute"
-                                setCharacteristic={setAttributes}
-                            />
                         </div>
 
                         <div className="flex flex-col gap-y-3 w-1/2">
@@ -94,10 +90,6 @@ const CreateModelForm: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            <AddedModelCharacteristic
-                                characteristic="Property"
-                                setCharacteristic={setProperties}
-                            />
                         </div>
                     </section>
                 </div>
