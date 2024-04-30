@@ -38,15 +38,9 @@ func (h Handler) HandleReadModelRequest(ctx context.Context, request events.APIG
 
 	if ModelID != "" {
 		return h.handleModelByID(ctx, ModelID, headers)
-	} else if factoryID != "" {
-		return h.handleModelsByFactoryID(ctx, factoryID, headers)
 	}
 
-	return events.APIGatewayProxyResponse{
-		StatusCode: http.StatusInternalServerError,
-		Headers:    headers,
-		Body:       "An unexpected error occurred",
-	}, nil
+	return h.handleModelsByFactoryID(ctx, factoryID, headers)
 }
 
 func (h Handler) handleModelByID(ctx context.Context, ModelID string, headers map[string]string) (events.APIGatewayProxyResponse, error) {
