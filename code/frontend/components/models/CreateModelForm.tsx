@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import AddedModelCharacteristic from "./AddedModelCharacteristic";
 
 // interface CreateModelFormProps {
 //     onClose: () => void;
