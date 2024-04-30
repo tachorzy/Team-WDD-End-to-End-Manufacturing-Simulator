@@ -1,8 +1,9 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import SignUpButton from "./SignUpButton";
-
+import { signIn } from "next-auth/react";
 interface NavbarProps {
     pageId: string;
 }
@@ -52,6 +53,13 @@ const Navbar = (props: NavbarProps) => {
                         <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-MainBlue" />
                     </h1>
                 </Link>
+                <button
+                 className="group text-lg font-medium text-[#494949] cursor-pointer"
+                onClick={() => {
+                    signIn();
+                }}>
+                    Login Button
+                </button>
             </div>
         </div>
     );
