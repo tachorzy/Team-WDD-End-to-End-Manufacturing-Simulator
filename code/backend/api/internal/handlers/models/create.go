@@ -70,11 +70,12 @@ func handlePropertiesAndMeasurements(ctx context.Context, h Handler, model types
 		for index, property := range *model.Properties {
 			property.ModelID = &model.ModelID
 			property.PropertyID = uuid.NewString()
+			property.MeasurementID = uuid.NewString()
 			one := 1.0
 			property.Value = &one
 			if index < len(*model.Measurements) {
 				measurement := (*model.Measurements)[index]
-				measurement.MeasurementID = property.PropertyID
+				measurement.MeasurementID = property.MeasurementID
 				if err := insertItem(ctx, h.DynamoDB, measurement, MEASUREMENTTABLE); err != nil {
 					return responseWithError(http.StatusInternalServerError, headers, fmt.Sprintf("Error inserting measurement: %v", err))
 				}
