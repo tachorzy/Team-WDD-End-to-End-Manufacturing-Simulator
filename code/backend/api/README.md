@@ -38,15 +38,22 @@ go tool cover -html="build/coverage.out" -o build/coverage.html
 
 TBA ( SAM for local testing )
 
-## Manual Deployment (Windows)
+## Manual Deployment
 
 Follow these steps and run the commands in Powershell:
 
 1. Set environment variables for Linux build
+Windows:
 ```bash
 $env:GOOS = "linux"
 $env:GOARCH = "amd64"
 $env:CGO_ENABLED = "0"
+```
+Mac:
+```bash
+export GOOS="linux"
+export GOARCH="amd64"
+export CGO_ENABLED="0"
 ```
 
 2. Replace `<PATH_TO_LAMBDA_FUNCTION>`, and build the Go application
@@ -55,8 +62,13 @@ go build -o build/bootstrap <PATH_TO_LAMBDA_FUNCTION>/main.go
 ```
 
 3. Zip the binary with a zip tool
+Windows:
 ```bash
 ~\Go\Bin\build-lambda-zip.exe -o build/bootstrap.zip build/bootstrap
+```
+Mac:
+```bash
+zip -j build/bootstrap.zip build/bootstrap
 ```
 
 4. Upload the zip file to the target lambda function

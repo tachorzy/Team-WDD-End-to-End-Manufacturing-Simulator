@@ -24,9 +24,9 @@ const SineWaveGeneratorForm = (props: {
 
         debounceTimeout.current = setTimeout(() => {
             const data: Measurement = {
-                measurementId: "test test test test", // REPLACE
-                modelId: "test test test test", // REPLACE
-                factoryId: "test test test test", // REPLACE
+                measurementId: "", // REPLACE
+                modelId: "", // REPLACE
+                factoryId: "", // REPLACE
                 lowerBound: 0.0,
                 upperBound: maxValue,
                 frequency,

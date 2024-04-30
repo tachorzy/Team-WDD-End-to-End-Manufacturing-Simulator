@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+	"wdd/api/internal/wrappers"
 
 	"wdd/api/internal/mocks"
 
@@ -13,6 +14,25 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
+
+func ValidQueryItems() []map[string]types.AttributeValue {
+	return []map[string]types.AttributeValue{
+		{
+			"modelId":     &types.AttributeValueMemberS{Value: "model1"},
+			"factoryId":   &types.AttributeValueMemberS{Value: "test123"},
+			"dateCreated": &types.AttributeValueMemberS{Value: "2021-07-15"},
+			"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Size"}, &types.AttributeValueMemberS{Value: "Color"}}},
+			"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property1"}, &types.AttributeValueMemberS{Value: "Property2"}}},
+		},
+		{
+			"modelId":     &types.AttributeValueMemberS{Value: "model2"},
+			"factoryId":   &types.AttributeValueMemberS{Value: "factory123"},
+			"dateCreated": &types.AttributeValueMemberS{Value: "2022-01-01"},
+			"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Weight"}, &types.AttributeValueMemberS{Value: "Material"}}},
+			"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property3"}, &types.AttributeValueMemberS{Value: "Property4"}}},
+		},
+	}
+}
 
 func TestHandleReadModelRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
@@ -93,32 +113,79 @@ func TestHandleReadModelRequest_DynamoDBQueryError(t *testing.T) {
 	}
 }
 
-func TestHandleModelsByFactoryID_Success(t *testing.T) {
-	mockDDBClient := &mocks.DynamoDBClient{}
+func TestHandleReadModelRequest_UnmarshalListOfMapsError(t *testing.T) {
+	mockDDBClient := &mocks.DynamoDBClient{
+		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+			return &dynamodb.QueryOutput{Items: ValidQueryItems()}, nil
+		},
+	}
 	handler := NewReadModelHandler(mockDDBClient)
+
+	originalUnmarshalListOfMaps := wrappers.UnmarshalListOfMaps
+
+	defer func() { wrappers.UnmarshalListOfMaps = originalUnmarshalListOfMaps }()
+
+	wrappers.UnmarshalListOfMaps = func([]map[string]types.AttributeValue, interface{}) error {
+		return errors.New("mock error")
+	}
 
 	request := events.APIGatewayProxyRequest{
 		QueryStringParameters: map[string]string{"factoryId": "factory123"},
 	}
 
-	mockDDBClient.QueryFunc = func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
-		items := []map[string]types.AttributeValue{
-			{
-				"modelId":     &types.AttributeValueMemberS{Value: "model1"},
-				"factoryId":   &types.AttributeValueMemberS{Value: "factory123"},
-				"dateCreated": &types.AttributeValueMemberS{Value: "2021-07-15"},
-				"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Size"}, &types.AttributeValueMemberS{Value: "Color"}}},
-				"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property1"}, &types.AttributeValueMemberS{Value: "Property2"}}},
-			},
-			{
-				"modelId":     &types.AttributeValueMemberS{Value: "model2"},
-				"factoryId":   &types.AttributeValueMemberS{Value: "factory123"},
-				"dateCreated": &types.AttributeValueMemberS{Value: "2022-01-01"},
-				"attributes":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Weight"}, &types.AttributeValueMemberS{Value: "Material"}}},
-				"properties":  &types.AttributeValueMemberL{Value: []types.AttributeValue{&types.AttributeValueMemberS{Value: "Property3"}, &types.AttributeValueMemberS{Value: "Property4"}}},
-			},
-		}
-		return &dynamodb.QueryOutput{Items: items}, nil
+	ctx := context.Background()
+	response, err := handler.HandleReadModelRequest(ctx, request)
+
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d for unmarshalling list of models in DynamoDB format, got %d", http.StatusInternalServerError, response.StatusCode)
+	}
+}
+
+func TestHandleReadModelRequest_JSONMarshal(t *testing.T) {
+	mockDDBClient := &mocks.DynamoDBClient{
+		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+			return &dynamodb.QueryOutput{Items: ValidQueryItems()}, nil
+		},
+	}
+	handler := NewReadModelHandler(mockDDBClient)
+
+	originalFactoryJSONMarshal := wrappers.JSONMarshal
+
+	defer func() { wrappers.JSONMarshal = originalFactoryJSONMarshal }()
+
+	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+		return nil, errors.New("mock marshal error")
+	}
+
+	request := events.APIGatewayProxyRequest{
+		QueryStringParameters: map[string]string{"factoryId": "factory123"},
+	}
+
+	ctx := context.Background()
+	response, err := handler.HandleReadModelRequest(ctx, request)
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d for marshalling model in JSON format, got %d", http.StatusInternalServerError, response.StatusCode)
+	}
+}
+
+func TestHandleReadModelRequest_WithFactoryID_Success(t *testing.T) {
+	mockDDBClient := &mocks.DynamoDBClient{
+		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+			return &dynamodb.QueryOutput{Items: ValidQueryItems()}, nil
+		},
+	}
+	handler := NewReadModelHandler(mockDDBClient)
+
+	request := events.APIGatewayProxyRequest{
+		QueryStringParameters: map[string]string{"factoryId": "factory123"},
 	}
 
 	ctx := context.Background()
@@ -135,7 +202,7 @@ func TestHandleModelsByFactoryID_Success(t *testing.T) {
 	}
 }
 
-func TestHandleModelsByFactoryID_DynamoDBError(t *testing.T) {
+func TestHandleReadModelRequest_WithFactoryID_DynamoDBError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			return nil, errors.New("mock dynamodb error")
@@ -161,7 +228,7 @@ func TestHandleModelsByFactoryID_DynamoDBError(t *testing.T) {
 	}
 }
 
-func TestHandleModelsByFactoryID_NoModelsFound(t *testing.T) {
+func TestHandleReadModelRequest_WithFactoryID_NoModelsFound(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
 		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil

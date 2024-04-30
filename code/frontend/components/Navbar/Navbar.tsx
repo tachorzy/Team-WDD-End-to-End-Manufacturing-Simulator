@@ -46,13 +46,12 @@ const Navbar = (props: NavbarProps) => {
                 ))}
             </div>
             <div className="flex flex-row gap-x-6 items-center justify-center">
-                <Link href="/">
-                    <h1 className="group text-lg font-medium text-[#494949]">
-                        Login
+                <Link href="/userauth">
+                    <h1 className="group text-lg font-medium text-[#494949] cursor-pointer">
+                        Login / Sign Up
                         <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-MainBlue" />
                     </h1>
                 </Link>
-                <SignUpButton />
             </div>
         </div>
     );

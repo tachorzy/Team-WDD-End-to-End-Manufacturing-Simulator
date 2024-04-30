@@ -51,6 +51,7 @@ const FactoryBio = (props: { factoryId: string }) => {
 
     const latitude = Number(factory?.location?.latitude);
     const longitude = Number(factory?.location?.longitude);
+    let callNumber = 0;
 
     useEffect(() => {
         // TODO: move to next/server api
@@ -71,8 +72,9 @@ const FactoryBio = (props: { factoryId: string }) => {
             }
         };
 
-        if (latitude && longitude) {
+        if (latitude && longitude && callNumber === 0) {
             fetchLocation();
+            callNumber += 1;
         }
     });
 

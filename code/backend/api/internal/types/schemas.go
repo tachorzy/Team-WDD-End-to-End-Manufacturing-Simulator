@@ -90,3 +90,9 @@ type Value struct {
 	Date  string  `json:"date" dynamodbav:"date"`
 	Value float64 `json:"value" dynamodbav:"value"`
 }
+
+type User struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Name     string `json:"name,omitempty"`
+}
