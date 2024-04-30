@@ -11,6 +11,7 @@ jest.mock("@/app/api/_utils/connector", () => ({
     BackendConnector: {
         get: jest.fn(),
     },
+    GetConfig: {}, // Mock GetConfig if needed
 }));
 // Mock console.error as a jest.fn() to make it a mock function
 console.error = jest.fn();
@@ -47,11 +48,11 @@ describe("ModelTable component", () => {
                 factoryId: "someFactoryId",
             },
         ];
-        const mockedResponse =
+        const mockeResponse =
             mockedBackendConnector.get.mockResolvedValueOnce(testData);
         render(<ModelTable factoryId="someFactoryId" />);
 
-        await waitFor(() => expect(mockedResponse).toHaveBeenCalledTimes(1));
+        await waitFor(() => expect(mockeResponse).toHaveBeenCalledTimes(1));
 
         // Assert data is rendered correctly
         expect(screen.getByText("Model ID")).toBeInTheDocument();
@@ -211,16 +212,26 @@ describe("ModelTable component", () => {
     });
 
     test("should log error message when fetching models fails", async () => {
+        const consoleErrorSpy = jest
+            .spyOn(console, "error")
+            .mockImplementation();
+
+        // Mock BackendConnector.get to throw an error
+        (BackendConnector.get as jest.Mock).mockRejectedValueOnce(
+            "Fetch error",
+        );
+
         render(<ModelTable factoryId="someFactoryId" />);
 
-        mockedBackendConnector.get.mockRejectedValueOnce("Fetch error");
-
+        // Wait for the error message to be logged
         await waitFor(() => {
-            expect(console.error).toHaveBeenCalledWith(
+            expect(consoleErrorSpy).toHaveBeenCalledWith(
                 "Failed to fetch models:",
                 "Fetch error",
             );
         });
+
+        consoleErrorSpy.mockRestore();
     });
 
     test("should render without error when modelId is null or undefined", () => {
