@@ -30,15 +30,6 @@ func (h Handler) HandleCreateModelRequest(ctx context.Context, request events.AP
 		return responseWithError(http.StatusBadRequest, headers, fmt.Sprintf("Error unmarshalling: %v", err))
 	}
 	model.ModelID = uuid.NewString()
-	if model.Properties != nil {
-		for i := range *model.Properties {
-			property := &(*model.Properties)[i]
-			if property.Value != nil && *property.Value == 0 {
-				one := 1.0
-				property.Value = &one
-			}
-		}
-	}
 
 	if err := insertItem(ctx, h.DynamoDB, model, TABLENAME); err != nil {
 		return responseWithError(http.StatusInternalServerError, headers, fmt.Sprintf("Error inserting model: %v", err))
@@ -79,6 +70,8 @@ func handlePropertiesAndMeasurements(ctx context.Context, h Handler, model types
 		for index, property := range *model.Properties {
 			property.ModelID = &model.ModelID
 			property.PropertyID = uuid.NewString()
+			one := 1.0
+			property.Value = &one
 			if index < len(*model.Measurements) {
 				measurement := (*model.Measurements)[index]
 				measurement.MeasurementID = property.PropertyID
