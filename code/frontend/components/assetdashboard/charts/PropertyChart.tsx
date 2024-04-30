@@ -93,15 +93,17 @@ const LineChart = ({ data }: PropertyChartProps) => {
 
         svgUpdate
             .select(".x-axis")
-            .attr("transform", `translate(0, ${height})`)
+            .attr("transform", `translate(0, ${height})`);
 
-        svgUpdate.select(".y-axis")
+        svgUpdate.select(".y-axis");
 
         // handle the exit selection
         svg.exit().remove();
     }, [data]);
 
-    return <div id="chart" className="w-11/12 my-3" data-testid="property chart"/>;
+    return (
+        <div id="chart" className="w-11/12 my-3" data-testid="property chart" />
+    );
 };
 
-export default LineChart
+export default LineChart;

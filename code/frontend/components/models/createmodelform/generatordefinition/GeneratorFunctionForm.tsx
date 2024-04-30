@@ -6,6 +6,7 @@ import {
     Model,
 } from "@/app/api/_utils/types";
 import Link from "next/link";
+import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
 import RandomGeneratorForm from "./RandomGeneratorForm";
 import SineWaveGeneratorForm from "./SineWaveGeneratorForm";
 import SawtoothGeneratorForm from "./SawtoothGeneratorForm";
@@ -28,31 +29,40 @@ export interface GeneratorFunctionFormContext {
 
 const GeneratorFunctionForm = () => {
     const contextValue = useContext(Context) as GeneratorFunctionFormContext;
-    const uniqueNames: Record<string, boolean> = {};
 
-    const uniqueProperties = contextValue.properties.filter((property) => {
-        if (!uniqueNames[property.name]) {
-            uniqueNames[property.name] = true;
-            return true;
-        }
-        return false;
-    });
+    const uniqueAttributes: Attribute[] = Array.from(
+        new Set(contextValue.attributes.map((a) => JSON.stringify(a))),
+    ).map((str) => JSON.parse(str) as Attribute);
+    const uniqueProperties: Property[] = Array.from(
+        new Set(contextValue.properties.map((p) => JSON.stringify(p))),
+    ).map((str) => JSON.parse(str) as Property);
+    const uniqueMeasurements: Measurement[] = Array.from(
+        new Set(contextValue.measurements.map((m) => JSON.stringify(m))),
+    ).map((str) => JSON.parse(str) as Measurement);
 
-    const handleModelSubmission = (
+    const handleModelSubmission = async (
         event: React.MouseEvent<HTMLButtonElement>,
     ) => {
         event.preventDefault();
+        uniqueMeasurements.shift();
         const newModel: Model = {
             factoryId: contextValue.factoryId,
             modelId: contextValue.modelId,
-            attributes: contextValue.attributes,
-            properties: contextValue.properties,
+            attributes: uniqueAttributes,
+            properties: uniqueProperties,
+            measurements: uniqueMeasurements,
         };
-        console.log(`newModel: ${JSON.stringify(newModel)}\n`);
-        contextValue.setModels([...contextValue.models, newModel]);
-        // contextValue.models.forEach((model) => {
-        //     console.log(`\n\nMODEL: ${JSON.stringify(model)}\n`);
-        // });
+
+        try {
+            const config: PostConfig<Model> = {
+                resource: "models",
+                payload: newModel,
+            };
+            const model = await BackendConnector.post<Model>(config);
+            contextValue.setModels([...contextValue.models, model]);
+        } catch (error) {
+            console.error("Failed to add model", error);
+        }
     };
 
     return (
