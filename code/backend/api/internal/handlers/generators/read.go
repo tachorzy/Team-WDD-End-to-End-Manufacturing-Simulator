@@ -22,25 +22,7 @@ func NewReadCalculations(db types.DynamoDBClient) *Handler {
 }
 
 func (h Handler) HandleReadCalculationsRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	PropertyID := request.QueryStringParameters["propertyId"]
-	headers := standardHeaders()
-
-	property, err := fetchProperty(ctx, h.DynamoDB, PropertyID)
-	if err != nil {
-		return errorResponse(http.StatusInternalServerError, err.Error(), headers)
-	}
-
-	measurement, err := fetchMeasurement(ctx, h.DynamoDB, property.MeasurementID)
-	if err != nil {
-		return errorResponse(http.StatusInternalServerError, err.Error(), headers)
-	}
-
-	value, err := generateMeasurementValue(property, measurement)
-	if err != nil {
-		return errorResponse(http.StatusInternalServerError, err.Error(), headers)
-	}
-
-	return jsonResponse(map[string]interface{}{"value": value}, headers)
+	return events.APIGatewayProxyResponse{}, nil
 }
 
 func fetchProperty(ctx context.Context, db types.DynamoDBClient, propertyID string) (*types.Property, error) {
@@ -93,7 +75,7 @@ func fetchMeasurement(ctx context.Context, db types.DynamoDBClient, measurementI
 	return &measurement, nil
 }
 
-func generateMeasurementValue(property *types.Property, measurement *types.Measurement) (float64, error) {
+func generateMeasurementValue(property *types.Property, propertyData *types.PropertyData, measurement *types.Measurement) (float64, error) {
 	gen, err := NewGenerator(property.GeneratorType)
 	if err != nil {
 		return 0, fmt.Errorf("error creating generator: %v", err)
@@ -110,7 +92,7 @@ func generateMeasurementValue(property *types.Property, measurement *types.Measu
 		SequenceValues:   measurement.SequenceValues,
 	}
 
-	value := gen.Generate(*property.Value, params)
+	value := gen.Generate(*propertyData.LastCalculated, params)
 	return value, nil
 }
 

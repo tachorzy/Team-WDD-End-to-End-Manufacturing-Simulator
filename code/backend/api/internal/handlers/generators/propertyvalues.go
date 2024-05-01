@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"math"
 	"net/http"
 	"time"
 	"wdd/api/internal/wrappers"
@@ -26,6 +27,7 @@ func (h *Handler) HandlePropertyValue(ctx context.Context, request events.APIGat
 		"Access-Control-Allow-Origin": "*",
 		"Content-Type":                "application/json",
 	}
+
 	input := &dynamodb.ScanInput{
 		TableName: aws.String(PROPERTYTABLE),
 	}
@@ -50,18 +52,21 @@ func (h *Handler) HandlePropertyValue(ctx context.Context, request events.APIGat
 
 	for _, property := range allProperties {
 		prop := property
-		newValue, valerr := generateNewValue(ctx, &prop, h.DynamoDB)
-		if valerr != nil {
-			log.Printf("Error generating new value for property %s: %v", prop.PropertyID, valerr)
-			continue
-		}
-
+		log.Printf("Attempting to fetch/create PropertyData for property ID: %s", prop.PropertyID)
 		propertyData, err1 := fetchOrCreatePropertyData(ctx, h.DynamoDB, prop)
 		if err1 != nil {
 			log.Printf("Error fetching or creating property data for property %s: %v", prop.PropertyID, err1)
 			continue
 		}
+		log.Printf("PropertyData fetched/created: %+v", propertyData)
 
+		newValue, valerr := generateNewValue(ctx, &prop, propertyData, h.DynamoDB)
+		if valerr != nil {
+			log.Printf("Error generating new value for property %s: %v", prop.PropertyID, valerr)
+			continue
+		}
+
+		log.Printf("Updating PropertyData with new value: %f", newValue)
 		err = updatePropertyData(ctx, h.DynamoDB, propertyData, newValue)
 		if err != nil {
 			log.Printf("Error updating property data for property %s: %v", prop.PropertyID, err)
@@ -84,7 +89,7 @@ func fetchOrCreatePropertyData(ctx context.Context, db types.DynamoDBClient, pro
 	}
 	result, err := db.GetItem(ctx, input)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get item: %v", err)
+		return nil, fmt.Errorf("failed to get item for PropertyID %s: %v", property.PropertyID, err)
 	}
 	var propertyData types.PropertyData
 	if result.Item == nil {
@@ -93,14 +98,26 @@ func fetchOrCreatePropertyData(ctx context.Context, db types.DynamoDBClient, pro
 			Values:         make(map[string]types.Value),
 			LastCalculated: property.Value,
 		}
+		av, marshalErr := wrappers.MarshalMap(propertyData)
+		if marshalErr != nil {
+			return nil, fmt.Errorf("failed to marshal new PropertyData: %v", marshalErr)
+		}
+		putInput := &dynamodb.PutItemInput{
+			TableName: aws.String(PROPERTYDATA),
+			Item:      av,
+		}
+		_, putErr := db.PutItem(ctx, putInput)
+		if putErr != nil {
+			return nil, fmt.Errorf("failed to create new PropertyData for PropertyID %s: %v", property.PropertyID, putErr)
+		}
 	} else {
-		if marsherr := wrappers.UnmarshalMap(result.Item, &propertyData); marsherr != nil {
-			return nil, fmt.Errorf("failed to unmarshal item: %v", marsherr)
+		if unmarshalErr := wrappers.UnmarshalMap(result.Item, &propertyData); unmarshalErr != nil {
+			return nil, fmt.Errorf("failed to unmarshal existing PropertyData: %v", unmarshalErr)
 		}
 	}
+
 	return &propertyData, nil
 }
-
 func updatePropertyData(ctx context.Context, db types.DynamoDBClient, propertyData *types.PropertyData, newValue float64) error {
 	timestamp := time.Now().Format(time.RFC3339)
 	propertyData.Values[timestamp] = types.Value{
@@ -123,35 +140,33 @@ func updatePropertyData(ctx context.Context, db types.DynamoDBClient, propertyDa
 	}
 	return nil
 }
-func generateNewValue(ctx context.Context, property *types.Property, db types.DynamoDBClient) (float64, error) {
-	if property.MeasurementID == "" {
-		return 0, fmt.Errorf("property with ID %s has no measurement", property.PropertyID)
-	}
-
-	getMeasurement := &dynamodb.GetItemInput{
-		TableName: aws.String(MEASUREMENTTABLE),
-		Key: map[string]ddbtypes.AttributeValue{
-			"measurementId": &ddbtypes.AttributeValueMemberS{Value: property.MeasurementID},
-		},
-	}
-
-	result, err := db.GetItem(ctx, getMeasurement)
+func generateNewValue(ctx context.Context, property *types.Property, propertyData *types.PropertyData, db types.DynamoDBClient) (float64, error) {
+	measurement, err := fetchMeasurement(ctx, db, property.MeasurementID)
 	if err != nil {
-		return 0, fmt.Errorf("error finding measurement: %s", err)
+		return 0, fmt.Errorf("error retrieving measurement for property %s: %v", property.PropertyID, err)
 	}
 
-	if result.Item == nil {
-		return 0, fmt.Errorf("measurement with ID %s not found", property.MeasurementID)
+	generator, err := NewGenerator(property.GeneratorType)
+	if err != nil {
+		return 0, fmt.Errorf("error creating generator for property %s: %v", property.PropertyID, err)
 	}
 
-	var measurement types.Measurement
-	if marsherr := wrappers.UnmarshalMap(result.Item, &measurement); marsherr != nil {
-		return 0, fmt.Errorf("error marshalling measurement: %s", marsherr)
+	lastValue := 1.0
+	if propertyData.LastCalculated != nil {
+		lastValue = *propertyData.LastCalculated
 	}
 
-	value, valerr := generateMeasurementValue(property, &measurement)
-	if valerr != nil {
-		return 0, fmt.Errorf("error generating value: %s", valerr)
+	params := GeneratorParams{
+		Frequency:        getDefaultFloat(measurement.Frequency, 1.0),
+		LowerBound:       getDefaultFloat(measurement.LowerBound, 0.0),
+		UpperBound:       getDefaultFloat(measurement.UpperBound, 1.0),
+		Precision:        getDefaultFloat(measurement.Precision, 0.01),
+		Amplitude:        getDefaultFloat(measurement.Amplitude, 1.0),
+		AngularFrequency: getDefaultFloat(measurement.AngularFrequency, 2*math.Pi),
+		Phase:            getDefaultFloat(measurement.Phase, 0),
+		SequenceValues:   measurement.SequenceValues,
 	}
-	return value, nil
+
+	newValue := generator.Generate(lastValue, params)
+	return newValue, nil
 }
