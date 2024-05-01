@@ -73,13 +73,13 @@ export interface Model {
     measurements: Measurement[];
 }
 
-export interface Value { 
-    date: Date;
+export interface DataPoint {
+    date: string;
     value: number;
 }
 
 export interface PropertyData {
     propertyId: string;
-    values: Value[];
+    values: { [key: string]: DataPoint };  
     lastCalculated: number;
 }

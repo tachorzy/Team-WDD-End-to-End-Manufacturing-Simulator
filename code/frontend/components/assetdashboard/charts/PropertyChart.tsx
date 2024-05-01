@@ -1,13 +1,11 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as d3 from "d3";
-import { Property, PropertyData, Value } from "@/app/api/_utils/types";
+import { Property, PropertyData,Value } from "@/app/api/_utils/types";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 
 const LineChart = (props: { property: Property }) => {
     const [data, setData] = useState<Value[]>([]);
-    const [propertyData, setPropertyData] = useState<PropertyData[]>([]);
     const { property } = props;
-
     const propertyId = property.propertyId as string;
 
     useEffect(() => {
@@ -15,114 +13,87 @@ const LineChart = (props: { property: Property }) => {
             try {
                 const config: GetConfig = {
                     resource: "properties/data",
-                    params: { propertyId },
+                    params: { id: propertyId },
                 };
-                const fetchedData =
-                    await BackendConnector.get<Value>(config);
-                setData((prevData) => [...prevData, fetchedData]);
+                const responseArray = await BackendConnector.get<PropertyData[]>(config);
+                if (responseArray.length === 0) {
+                    console.error("Response array is empty");
+                    return; 
+                }
+                const response = responseArray[0]; 
+                const values = response.values;
+                console.log("Values Object:", values); 
+
+                if (!values || Object.keys(values).length === 0) {
+                    console.error("No data available or values are empty");
+                    return; 
+                }
+
+                const formattedData = Object.keys(values).map((key: string) => ({
+                    date: new Date(key), 
+                    value: values[key].value  
+                }));
+                setData(formattedData);
             } catch (error) {
                 console.error("Failed to fetch property data:", error);
             }
         };
-
-        if (propertyId) {
-            fetchPropertyData();
-        }
-    }, [data, propertyId]);
+    
+        fetchPropertyData();
+    }, [propertyId]);
 
     useEffect(() => {
+        if (!data.length) {
+            console.log("Data array is empty, no chart to render");
+            return; 
+        }
+
+        const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+        const width = 960 - margin.left - margin.right;
+        const height = 500 - margin.top - margin.bottom;
+    
         d3.select(`#chart-${property.name}`).select("svg").remove();
-
-        const chartElement = document.getElementById("chart");
-        const width = chartElement ? chartElement.clientWidth : 600;
-        const margin = 50;
-        const height = 240 - 2 * margin;
-
-        const svg = d3
-            .select(`#chart-${property.name}`)
-            .append("svg") // changed from selectAll to append
-            .attr("width", width + 2 * margin)
-            .attr("height", height + 2 * margin);
-
-        const g = svg
+    
+        const svg = d3.select(`#chart-${property.name}`)
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
             .append("g")
-            .attr("transform", `translate(${margin}, ${margin})`);
-
-        const xScale = d3
-            .scaleTime()
-            .range([0, width])
-            .domain(d3.extent(data, (d) => d.date) as [Date, Date]); // changed from DataPoint["timeStamp"][] to [Date, Date]
-
-        const yScale = d3
-            .scaleLinear()
-            .range([height, 0])
-            .domain(d3.extent(data, (d) => d.value) as [number, number]); // changed from DataPoint["value"][] to [number, number]
-
-        const xAxis = d3
-            .axisBottom(xScale)
-            .tickFormat((d, i) => d3.timeFormat("%I:%M %p")(d as Date));
-
-        const yAxis = d3.axisLeft(yScale);
-
-        const line = d3
-            .line<Value>()
-            .x((d) => xScale(d.date))
-            .y((d) => yScale(d.value));
-
-        g.append("g")
+            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+    
+        const xScale = d3.scaleTime()
+            .domain(d3.extent(data, d => d.date))
+            .range([0, width]);
+    
+        const yScale = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.value) || 0])
+            .range([height, 0]);
+    
+        svg.append("g")
             .attr("transform", `translate(0, ${height})`)
-            .call(xAxis)
-            .attr("class", "text-[#494949]")
-            .selectAll("line")
-            .attr("stroke", "#494949")
-            .attr("stroke-width", 0.5);
-
-        g.append("g")
-            .call(yAxis)
-            .attr("class", "text-[#494949]")
-            .selectAll("line")
-            .attr("class", "#494949")
-            .attr("stroke", "#494949")
-            .attr("stroke-width", 0.5);
-
-        g.append("text")
-            .attr("class", "text-[#494949] text-xs")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin)
-            .attr("x", 0 - height / 2)
-            .attr("dy", "1em")
-            .style("text-anchor", "middle")
-            .text(`${property.name} (${property.unit})`);
-
-        g.append("path")
+            .call(d3.axisBottom(xScale));
+    
+        svg.append("g")
+            .call(d3.axisLeft(yScale));
+    
+        const line = d3.line<Value>()
+            .x(d => xScale(d.date))
+            .y(d => yScale(d.value))
+            .curve(d3.curveMonotoneX);
+    
+        svg.append("path")
             .datum(data)
+            .attr("class", "line")
             .attr("d", line)
-            .attr("stroke", "#892ae8")
-            .attr("stroke-width", 1.5)
-            .attr("fill", "none");
+            .attr("fill", "none")
+            .attr("stroke", "steelblue")
+            .attr("stroke-width", 2);
 
-        const svgEnter = svg.enter().append("svg");
-
-        const svgUpdate = svg
-            .merge(svgEnter)
-            .attr("width", width + 2 * margin)
-            .attr("height", height + 2 * margin);
-
-        svgUpdate
-            .select(".x-axis")
-            .attr("transform", `translate(0, ${height})`);
-
-        svgUpdate.select(".y-axis");
-
-        svg.exit().remove();
-    }, [data]);
+    }, [data]); 
+    
 
     return (
-        <div
-            id={`chart-${property.name}`}
-            className="w-11/12 my-3"
-            data-testid="property chart"
-        />
+        <div id={`chart-${property.name}`} className="w-11/12 my-3" data-testid="property-chart" />
     );
 };
 
