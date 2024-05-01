@@ -20,10 +20,16 @@ func NewRegisterHandler(cognito types.Cognito) *Handler {
 }
 
 func (h Handler) HandleRegisterRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	headers := map[string]string{
+		"Access-Control-Allow-Origin": "*",
+		"Content-Type":                "application/json",
+	}
+
 	var user types.User
 	if err := wrappers.JSONUnmarshal([]byte(request.Body), &user); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
+			Headers:    headers,
 			Body:       fmt.Sprintf("Error parsing JSON body: %s", err.Error()),
 		}, nil
 	}
@@ -44,6 +50,7 @@ func (h Handler) HandleRegisterRequest(ctx context.Context, request events.APIGa
 	if _, err := h.Cognito.SignUp(ctx, signUpInput); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
 			Body:       fmt.Sprintf("Error creating user in Cognito: %s", err.Error()),
 		}, nil
 	}
@@ -54,11 +61,13 @@ func (h Handler) HandleRegisterRequest(ctx context.Context, request events.APIGa
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
+			Headers:    headers,
 			Body:       fmt.Sprintf("Error marshalling: %v", err),
 		}, nil
 	}
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
+		Headers:    headers,
 		Body:       string(responseBody),
 	}, nil
 }
