@@ -63,7 +63,7 @@ export default function Page({ params }: { params: { factoryId: string } }) {
                 </section> */}
 
                 {isCreateFormOpen && <CreateModelForm factoryId={factoryId} />}
-                <ModelTable factoryId={ASSETTABLE_FACTORYID} />
+                <ModelTable factoryId={factoryId} />
             </div>
         </main>
     );
