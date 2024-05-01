@@ -41,16 +41,25 @@ func (h Handler) HandleUpdateModelRequest(ctx context.Context, request events.AP
 
 	var updateBuilder expression.UpdateBuilder
 
+	if model.FactoryID != "" {
+		updateBuilder = updateBuilder.Set(expression.Name("factoryId"), expression.Value(model.FactoryID))
+	}
+
 	if model.Attributes != nil {
-		// Dereference the pointer to access the underlying slice
 		for _, attr := range *model.Attributes {
-			updateBuilder = updateBuilder.Add(expression.Name("attributes"), expression.Value(attr))
+			updateBuilder = updateBuilder.Set(expression.Name("attributes"), expression.Value(attr))
 		}
 	}
 
 	if model.Properties != nil {
 		for _, prop := range *model.Properties {
-			updateBuilder = updateBuilder.Add(expression.Name("properties"), expression.Value(prop))
+			updateBuilder = updateBuilder.Set(expression.Name("properties"), expression.Value(prop))
+		}
+	}
+
+	if model.Measurements != nil {
+		for _, prop := range *model.Measurements {
+			updateBuilder = updateBuilder.Set(expression.Name("measurements"), expression.Value(prop))
 		}
 	}
 
