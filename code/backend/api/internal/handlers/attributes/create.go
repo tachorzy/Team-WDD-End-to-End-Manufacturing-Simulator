@@ -1,8 +1,7 @@
-package properties
+package attributes
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"wdd/api/internal/types"
@@ -14,60 +13,59 @@ import (
 	"github.com/google/uuid"
 )
 
-func NewCreatePropertyHandler(db types.DynamoDBClient) *Handler {
+func NewCreateAttributeHandler(db types.DynamoDBClient) *Handler {
 	return &Handler{
 		DynamoDB: db,
 	}
 }
 
-func (h Handler) HandleCreatePropertyRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	var property types.Property
+func (h *Handler) HandleCreateAttributeRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	var attribute types.Attribute
 
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",
 		"Content-Type":                "application/json",
 	}
-
-	if err := wrappers.JSONUnmarshal([]byte(request.Body), &property); err != nil {
+	if err := wrappers.JSONUnmarshal([]byte(request.Body), &attribute); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
 			Headers:    headers,
-			Body:       fmt.Sprintf("Error unmarshalling: %v", err),
+			Body:       fmt.Sprintf("Error parsing JSON body: %s", err.Error()),
 		}, nil
 	}
-	property.PropertyID = uuid.NewString()
-	property.MeasurementID = uuid.NewString()
+	attribute.AttributeID = uuid.NewString()
 
-	av, err := wrappers.MarshalMap(property)
-	if err != nil {
+	av, error := wrappers.MarshalMap(attribute)
+	if error != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,
-			Body:       fmt.Sprintf("Error marshalling: %v", err),
+			Body:       fmt.Sprintf("Error marshalling attribute: %s", error.Error()),
 		}, nil
 	}
+
 	input := &dynamodb.PutItemInput{
 		Item:      av,
 		TableName: aws.String(TABLENAME),
 	}
-	if _, err = h.DynamoDB.PutItem(ctx, input); err != nil {
+
+	if _, err := h.DynamoDB.PutItem(ctx, input); err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,
-			Body:       fmt.Sprintf("Error inserting item: %v", err),
+			Body:       fmt.Sprintf("Error inserting attribute: %s", err.Error()),
 		}, nil
 	}
-	responseBody, err := json.Marshal(property)
+	responseBody, err := wrappers.JSONMarshal(attribute)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,
-			Body:       fmt.Sprintf("Error marshalling: %v", err),
+			Body:       fmt.Sprintf("Error marshalling asset: %s", err.Error()),
 		}, nil
 	}
-
 	return events.APIGatewayProxyResponse{
-		StatusCode: http.StatusOK,
+		StatusCode: http.StatusCreated,
 		Headers:    headers,
 		Body:       string(responseBody),
 	}, nil

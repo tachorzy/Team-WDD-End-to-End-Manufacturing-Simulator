@@ -94,24 +94,19 @@ func TestHandleCreateMeasurementRequest_JSONMarshalError(t *testing.T) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
 	}
-
 	handler := NewCreateMeasurementHandler(mockDDBClient)
+	originalJSONMarshal := wrappers.JSONMarshal
+	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
+	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+		return nil, errors.New("mock marshal error")
+	}
 
 	request := events.APIGatewayProxyRequest{
 		Body: `{"frequency":1.0,"generatorFunction":"Function 1","lowerBound":0.0,"upperBound":10.0,"precision":0.1}`,
 	}
 
-	originalJSONMarshal := wrappers.JSONMarshal
-
-	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
-
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
-		return nil, errors.New("mock marshal error")
-	}
-
 	ctx := context.Background()
 	response, err := handler.HandleCreateMeasurementRequest(ctx, request)
-
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}

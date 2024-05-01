@@ -24,11 +24,12 @@ export interface Floorplan {
 
 export interface Asset {
     assetId?: string;
-    modelId?: string;
     name: string;
     description: string;
     imageData?: string;
     factoryId: string;
+    modelUrl?:string;
+    modelId?:string;
 }
 
 export interface Attribute {
