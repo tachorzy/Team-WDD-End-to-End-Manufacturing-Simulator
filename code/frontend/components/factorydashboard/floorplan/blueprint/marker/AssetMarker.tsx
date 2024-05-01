@@ -81,10 +81,10 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
                     </p>
                     {showButtons && (
                         <div
-                            className={`absolute ${isCloseToLeft ? "left-full" : "right-full"} top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-xl px-4 p-3 w-72 h-32 overflow-y-scroll flex flex-col justify-between no-drag`}
+                            className={`absolute ${isCloseToLeft ? "left-full" : "right-full"} top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-xl px-4 p-3 w-64 h-36 overflow-y-scroll flex flex-col justify-between no-drag`}
                         >
                             <div className="flex flex-col gap-y-1">
-                                <h2 className="text-xs font-medium text-MainBlue border-b-gray-200 border-b-[1.5px] pb-0.5 w-4/5">
+                                <h2 className="text-xs font-medium text-MainBlue border-b-gray-200 border-b-[1.5px] pb-0.5 w-11/12">
                                     Asset Info
                                 </h2>
                                 <h2
@@ -101,7 +101,7 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
                                 </p>
 
                             </div>
-                            <div className="self-end">
+                            <div className="border-t-gray-200 border-t-[1.5px] pt-1 w-11/12 mt-1">
                                 <MarkerPopups
                                     handleDelete={handleDelete}
                                     showConfirmDialog={showConfirmDialog}

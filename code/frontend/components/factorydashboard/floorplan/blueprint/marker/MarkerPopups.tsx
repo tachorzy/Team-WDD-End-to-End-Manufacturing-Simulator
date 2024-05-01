@@ -36,8 +36,8 @@ const AssetPopups: React.FC<AssetPopupsProps> = ({
                 >
                     <Image
                         src="/icons/garbage.svg"
-                        width={20}
-                        height={20}
+                        width={18}
+                        height={18}
                         alt="delete icon"
                         className="select-none"
                     />
@@ -64,8 +64,8 @@ const AssetPopups: React.FC<AssetPopupsProps> = ({
                 >
                     <Image
                         src="/icons/edit.svg"
-                        width={25}
-                        height={25}
+                        width={22}
+                        height={22}
                         alt="edit icon"
                         className="select-none"
                     />
