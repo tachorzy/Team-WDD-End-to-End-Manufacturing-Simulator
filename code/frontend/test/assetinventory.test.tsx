@@ -57,6 +57,7 @@ describe("AssetInventory", () => {
                 assets={mockAssets}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
+                activeNavItem={"CNC"}
             />,
         );
 
@@ -73,6 +74,7 @@ describe("AssetInventory", () => {
                 assets={assets}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
+                activeNavItem={"CNC"}
             />,
         );
 
@@ -85,6 +87,7 @@ describe("AssetInventory", () => {
                 assets={undefined}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
+                activeNavItem={"CNC"}
             />,
         );
 
