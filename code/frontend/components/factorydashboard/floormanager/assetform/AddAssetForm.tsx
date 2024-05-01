@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
 import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
 import AssetUploadContainer from "./AssetUploadContainer";
+import ModelCombobox from "./SelectAssetModel";
 
 export interface AddAssetFormProps {
     onClose: () => void;
@@ -23,6 +24,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
         factoryId,
     });
     const [assetImageFile, setAssetImageFile] = useState<File | null>(null);
+    const [modelId, setModelId] = useState<string>("");
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -93,6 +95,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
                         onChange={handleInputChange}
                     />
                 </div>
+                <ModelCombobox factoryId={factoryId} setModelId={setModelId}/>
                 <div className="flex flex-row gap-x-0 w-full my-2">
                     <div className="w-80 h-48 ">
                         <AssetUploadContainer
