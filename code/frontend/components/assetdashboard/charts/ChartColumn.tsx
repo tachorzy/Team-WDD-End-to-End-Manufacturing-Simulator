@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
-import { Property } from "@/app/api/_utils/types";
+import { Property, PropertyData, Value } from "@/app/api/_utils/types";
 import PropertyChart from "./PropertyChart";
-
-interface PropertyData {
-    date: number;
-    value: number;
-}
 
 const ChartColumn = (props: { factoryId: string; modelId: string }) => {
     const [properties, setProperties] = useState<Property[]>([]);

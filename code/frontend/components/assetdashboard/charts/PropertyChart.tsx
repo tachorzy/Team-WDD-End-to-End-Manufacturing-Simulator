@@ -1,12 +1,7 @@
 import React, { use, useEffect, useState } from "react";
 import * as d3 from "d3";
-import { Property } from "@/app/api/_utils/types";
+import { Property, PropertyData, Value } from "@/app/api/_utils/types";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
-
-export interface PropertyData {
-    date: number; // changed from number to Date
-    value: number;
-}
 
 const LineChart = (props: { property: Property }) => {
     const [data, setData] = useState<PropertyData[]>([]);
@@ -55,12 +50,12 @@ const LineChart = (props: { property: Property }) => {
         const xScale = d3
             .scaleTime()
             .range([0, width])
-            .domain(d3.extent(data, (d) => d.date) as [number, number]);
+            .domain(d3.extent(data, (d) => d.lastCalculated) as [number, number]);
 
         const yScale = d3
             .scaleLinear()
             .range([height, 0])
-            .domain(d3.extent(data, (d) => d.value) as [number, number]);
+            .domain(d3.extent(data, (d) => d.values) as [number, number]);
 
         const xAxis = d3
             .axisBottom(xScale)
@@ -70,7 +65,7 @@ const LineChart = (props: { property: Property }) => {
 
         const line = d3
             .line<PropertyData>()
-            .x((d) => xScale(d.date))
+            .x((d) => xScale(d.lastCalculated))
             .y((d) => yScale(d.value));
 
         g.append("g")
