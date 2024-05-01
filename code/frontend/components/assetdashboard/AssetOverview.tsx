@@ -6,7 +6,6 @@ const AssetOverview = (props: { asset: Asset }) => {
 
     const assetName = asset?.name;
     const assetModel = asset?.modelId;
-    const assetDescription = asset?.description;
 
     return (
         <div className="flex flex-col items-center gap-x-2 mb-3 gap-y-2 border-2 border-[#E2E4EA] bg-[#FAFAFA] rounded-lg pt-4 w-80 h-64">
