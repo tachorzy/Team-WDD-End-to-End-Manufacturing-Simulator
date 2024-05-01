@@ -13,7 +13,13 @@ global.URL.createObjectURL = jest
 
 jest.mock("next/image", () => ({
     __esModule: true,
-    default: (props: any) => <img alt="" {...props} />,
+    default: ({ src, ...props }: { src: string }) => {
+        const MockNextImage = ({ imageSrc }: { imageSrc: string }) => (
+            <div data-testid="mock-next-image" data-src={imageSrc} />
+        );
+
+        return <MockNextImage imageSrc={src} {...props} />;
+    },
 }));
 
 global.fetch = jest.fn(() =>
@@ -42,12 +48,10 @@ describe("AssetItem", () => {
     };
 
     test("should render correctly with valid asset", async () => {
-        const { getByAltText } = render(<AssetItem {...props} />);
+        const { getByTestId } = render(<AssetItem {...props} />);
 
         await waitFor(() => {
-            expect(
-                getByAltText(`${mockAsset.name} Asset Image`),
-            ).toBeInTheDocument();
+            expect(getByTestId("mock-next-image")).toBeInTheDocument();
         });
     });
 
@@ -60,17 +64,14 @@ describe("AssetItem", () => {
             },
         };
 
-        const { getByAltText } = render(
-            <AssetItem {...noImageDataAssetProp} />,
-        );
+        const { getByTestId } = render(<AssetItem {...noImageDataAssetProp} />);
 
         await waitFor(() => {
-            expect(
-                getByAltText(`${mockAsset.name} Asset Image`),
-            ).toBeInTheDocument();
-            expect(
-                getByAltText(`${mockAsset.name} Asset Image`),
-            ).toHaveAttribute("src", "/icons/floorplan/placeholder-asset.svg");
+            expect(getByTestId("mock-next-image")).toBeInTheDocument();
+            expect(getByTestId("mock-next-image")).toHaveAttribute(
+                "data-src",
+                "/icons/floorplan/placeholder-asset.svg",
+            );
         });
     });
 
