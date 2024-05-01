@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
-import { Asset } from "@/app/api/_utils/types";
+import { Asset, Model } from "@/app/api/_utils/types";
 import AssetInventory from "./inventory/AssetInventory";
 import AddAssetForm from "./assetform/AddAssetForm";
 import InventoryNavBar from "./inventory/InventoryNavBar";
@@ -57,7 +57,7 @@ const FloorManager: React.FC<FloorManagerProps> = ({
                 />
                 <h2 className="text-xl font-semibold">Floor Manager</h2>
             </div>
-            <InventoryNavBar />
+            <InventoryNavBar factoryId={factoryId}/>
             {!showAddAssetForm && (
                 <AssetInventory
                     assets={assets}
