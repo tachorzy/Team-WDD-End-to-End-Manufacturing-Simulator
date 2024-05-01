@@ -21,32 +21,23 @@ const ChartColumn = (props: { factoryId: string, modelId: string}) => {
     const modelId = props.modelId;
 
     useEffect(() => {
-        const fetchModels = async () => {
+      const fetchPropertybyModel = async () => {
           try {
-            const response = await fetch(`awsendpointurl/properties/data?modelId=${modelId}`);
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const newProperties = await response.json();
-            setProperties(newProperties);
-            newProperties.array.forEach((property: DataPoint) => {
-                setData((prevData) => [
-                    ...prevData,
-                    {
-                        date: property.date,
-                        value: property.value,
-                    },
-                ]);
-            });
+              const config: GetConfig = {
+                  resource: "properties",
+                  params: { modelId },
+              };
+              const fetchedProperties = await BackendConnector.get<Property[]>(config);
+              setProperties(fetchedProperties );
           } catch (error) {
-            console.error("Failed to fetch assets:", error);
+              console.error("Failed to fetch models:", error);
           }
-        };
-    
-        if (modelId) {
-          fetchModels();
-        }
-      }, [modelId]); 
+      };
+
+      if (modelId) {
+          fetchPropertybyModel ();
+      }
+  }, [modelId]);
 
     return (
         <div className="flex flex-col mb-3 pl-5 gap-y-3 w-full h-64 overflow-y-scroll border-2 border-[#E2E4EA] bg-[#FAFAFA] rounded-lg">

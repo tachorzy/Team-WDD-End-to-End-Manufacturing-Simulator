@@ -13,7 +13,7 @@ interface PropertyChartProps {
 
 const LineChart = (props: { data: DataPoint[], property: Property }) => {
 
-    const data = props.data;
+    const { data, property } = props;
 
     useEffect(() => {
         d3.select("#chart").select("svg").remove();
@@ -77,7 +77,7 @@ const LineChart = (props: { data: DataPoint[], property: Property }) => {
             .attr("x", 0 - height / 2)
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text("Value");
+            .text(property.name);
 
         g.append("path")
             .datum(data)
