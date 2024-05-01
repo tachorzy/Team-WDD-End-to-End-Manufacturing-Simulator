@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React from "react";
 import FactoryPageNavbar from "@/components/Navbar/FactoryPageNavbar";
 import CreateModelForm from "@/components/models/createmodelform/CreateModelForm";
 import ModelTable from "@/components/factorydashboard/ModelTable";
@@ -16,7 +16,7 @@ export default function Page({ params }: { params: { factoryId: string } }) {
                     factoryId={factoryId}
                 />
                 <div className="flex flex-col gap-y-16">
-                    <CreateModelForm factoryId={factoryId} />  
+                    <CreateModelForm factoryId={factoryId} />
                     <ModelTable factoryId={factoryId} />
                 </div>
             </div>

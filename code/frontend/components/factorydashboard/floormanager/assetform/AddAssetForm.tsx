@@ -38,7 +38,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
             [name]: value,
         }));
     };
-    
+
     const handleAddAsset = async () => {
         try {
             const config: PostConfig<Asset> = {

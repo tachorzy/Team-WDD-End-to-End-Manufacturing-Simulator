@@ -12,7 +12,10 @@ const FactoryPageNavbar = (props: { pageId: string; factoryId: string }) => {
             label: "Factory Floor",
             link: `/factorydashboard/${factoryId}`,
         },
-        { label: "Dashboard", link: `/factorydashboard/${factoryId}/assetdashboard` },
+        {
+            label: "Dashboard",
+            link: `/factorydashboard/${factoryId}/assetdashboard`,
+        },
         {
             label: "Asset Models",
             link: `/factorydashboard/${factoryId}/assetmodels`,
