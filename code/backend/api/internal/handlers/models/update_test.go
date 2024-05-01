@@ -3,8 +3,6 @@ package models
 import (
 	"context"
 	"errors"
-
-	// "fmt"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
@@ -114,5 +112,3 @@ func TestHandleUpdateModelRequest_Success(t *testing.T) {
 		t.Errorf("Expected StatusCode %d for successful update, got %d", http.StatusBadRequest, response.StatusCode)
 	}
 }
-
-//fail
