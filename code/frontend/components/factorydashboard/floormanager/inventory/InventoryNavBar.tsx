@@ -3,7 +3,11 @@ import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
-const InventoryNavBar = (props: { factoryId: string, activeNavItem: string, setActiveNavItem: React.Dispatch<React.SetStateAction<string>> }) => {
+const InventoryNavBar = (props: {
+    factoryId: string;
+    activeNavItem: string;
+    setActiveNavItem: React.Dispatch<React.SetStateAction<string>>;
+}) => {
     const [models, setModels] = useState<Model[]>([]);
 
     const { factoryId, activeNavItem, setActiveNavItem } = props;
@@ -17,7 +21,7 @@ const InventoryNavBar = (props: { factoryId: string, activeNavItem: string, setA
                 };
                 const newModels = await BackendConnector.get<Model[]>(config);
                 setModels(newModels);
-                setActiveNavItem(newModels[0].attributes[0].value)
+                setActiveNavItem(newModels[0].modelId);
             } catch (error) {
                 console.error("Failed to fetch models:", error);
             }
@@ -28,11 +32,13 @@ const InventoryNavBar = (props: { factoryId: string, activeNavItem: string, setA
         }
     }, [factoryId]);
 
-
     return (
         <div className="flex self-start flex-row gap-x-3">
             {models.length === 0 && (
-                <Link href={`/factorydashboard/${factoryId}/assetmodels`} className="flex flex-row gap-x-1 align-middle px-1 py-0.5 font-bold hover:bg-red-50 text-xs text-red-600 hover:text-[#494949] rounded-sm">
+                <Link
+                    href={`/factorydashboard/${factoryId}/assetmodels`}
+                    className="flex flex-row gap-x-1 align-middle px-1 py-0.5 font-bold hover:bg-red-50 text-xs text-red-600 hover:text-[#494949] rounded-sm"
+                >
                     <p className="group text-red-300 text-xs font-bold">
                         No models found <span className="font-bold">+</span>
                     </p>

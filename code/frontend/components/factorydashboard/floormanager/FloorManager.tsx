@@ -58,12 +58,17 @@ const FloorManager: React.FC<FloorManagerProps> = ({
                 />
                 <h2 className="text-xl font-semibold">Floor Manager</h2>
             </div>
-            <InventoryNavBar factoryId={factoryId} activeNavItem={activeNavItem} setActiveNavItem={setActiveNavItem}/>
+            <InventoryNavBar
+                factoryId={factoryId}
+                activeNavItem={activeNavItem}
+                setActiveNavItem={setActiveNavItem}
+            />
             {!showAddAssetForm && (
                 <AssetInventory
                     assets={assets}
                     setSelectedAsset={setSelectedAsset}
                     selectedAsset={selectedAsset}
+                    activeNavItem={activeNavItem}
                 />
             )}
 

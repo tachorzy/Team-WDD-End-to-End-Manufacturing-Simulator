@@ -4,9 +4,9 @@
 import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import InventoryNavBar from "../components/factorydashboard/floormanager/inventory/InventoryNavBar";
 import { BackendConnector } from "@/app/api/_utils/connector";
 import { Attribute, Factory, Model } from "@/app/api/_utils/types";
+import InventoryNavBar from "../components/factorydashboard/floormanager/inventory/InventoryNavBar";
 
 const mockSetModels = jest.fn();
 const mockSetActiveNavItem = jest.fn();
@@ -16,11 +16,16 @@ BackendConnector.post = mockPost;
 
 describe("InventoryNavBar", () => {
     test("should prompt user to create models if there are no pre-existing models.", () => {
-        const { getByText } = render(<InventoryNavBar factoryId={"1234"} activeNavItem="" setActiveNavItem={jest.fn()}/>);
+        const { getByText } = render(
+            <InventoryNavBar
+                factoryId="1234"
+                activeNavItem=""
+                setActiveNavItem={jest.fn()}
+            />,
+        );
         expect(getByText("No models found")).toBeInTheDocument();
-        expect(getByText("No models found")).toHaveClass("text-red-300")
+        expect(getByText("No models found")).toHaveClass("text-red-300");
     });
-
 
     // failing test cases:
 
@@ -44,9 +49,9 @@ describe("InventoryNavBar", () => {
     //         expectedModels.push(mockModel);
 
     //         mockPost.mockResolvedValue(expectedModels);
-            
+
     //         const { getByText } = render(<InventoryNavBar factoryId={"f95b2506-33e1-4aad-a319-880e518164ef"}/>);
-            
+
     //         await waitFor(() => {
     //             expect(mockPost).toHaveBeenCalledWith(expectedModels);
     //             const modelButton = getByText(`${label}`);
