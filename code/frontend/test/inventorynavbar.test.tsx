@@ -16,7 +16,7 @@ BackendConnector.post = mockPost;
 
 describe("InventoryNavBar", () => {
     test("should prompt user to create models if there are no pre-existing models.", () => {
-        const { getByText } = render(<InventoryNavBar factoryId={"1234"} />);
+        const { getByText } = render(<InventoryNavBar factoryId={"1234"} activeNavItem="" setActiveNavItem={jest.fn()}/>);
         expect(getByText("No models found")).toBeInTheDocument();
         expect(getByText("No models found")).toHaveClass("text-red-300")
     });

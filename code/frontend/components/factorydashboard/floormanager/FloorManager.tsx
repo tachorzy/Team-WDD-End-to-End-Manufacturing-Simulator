@@ -21,6 +21,7 @@ const FloorManager: React.FC<FloorManagerProps> = ({
     const [assets, setAssets] = useState<Asset[]>([]);
     const [showAddAssetForm, setShowAddAssetForm] = useState(false);
     const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
+    const [activeNavItem, setActiveNavItem] = useState("");
 
     useEffect(() => {
         const fetchAssets = async () => {
@@ -57,7 +58,7 @@ const FloorManager: React.FC<FloorManagerProps> = ({
                 />
                 <h2 className="text-xl font-semibold">Floor Manager</h2>
             </div>
-            <InventoryNavBar factoryId={factoryId} />
+            <InventoryNavBar factoryId={factoryId} activeNavItem={activeNavItem} setActiveNavItem={setActiveNavItem}/>
             {!showAddAssetForm && (
                 <AssetInventory
                     assets={assets}

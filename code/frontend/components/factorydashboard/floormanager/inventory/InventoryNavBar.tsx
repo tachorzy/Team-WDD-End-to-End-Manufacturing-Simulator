@@ -3,11 +3,10 @@ import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
-const InventoryNavBar = (props: { factoryId: string }) => {
-    const [activeNavItem, setActiveNavItem] = useState("CNC Models");
+const InventoryNavBar = (props: { factoryId: string, activeNavItem: string, setActiveNavItem: React.Dispatch<React.SetStateAction<string>> }) => {
     const [models, setModels] = useState<Model[]>([]);
 
-    const { factoryId } = props;
+    const { factoryId, activeNavItem, setActiveNavItem } = props;
 
     useEffect(() => {
         const fetchModels = async () => {
@@ -18,6 +17,7 @@ const InventoryNavBar = (props: { factoryId: string }) => {
                 };
                 const newModels = await BackendConnector.get<Model[]>(config);
                 setModels(newModels);
+                setActiveNavItem(newModels[0].attributes[0].value)
             } catch (error) {
                 console.error("Failed to fetch models:", error);
             }
@@ -27,6 +27,7 @@ const InventoryNavBar = (props: { factoryId: string }) => {
             fetchModels();
         }
     }, [factoryId]);
+
 
     return (
         <div className="flex self-start flex-row gap-x-3">
