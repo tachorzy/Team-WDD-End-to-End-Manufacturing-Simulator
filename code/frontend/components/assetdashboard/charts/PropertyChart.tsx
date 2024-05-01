@@ -41,7 +41,7 @@ const LineChart = ({ data }: PropertyChartProps) => {
 
         const xAxis = d3
             .axisBottom(xScale)
-            .tickFormat((d, i) => d3.timeFormat("%I:%M %p")(d as Date));
+            .tickFormat((d) => d3.timeFormat("%I:%M %p")(d as Date));
 
         const yAxis = d3.axisLeft(yScale);
 
