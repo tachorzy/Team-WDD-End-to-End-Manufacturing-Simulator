@@ -170,3 +170,33 @@ func generateNewValue(ctx context.Context, property *types.Property, propertyDat
 	newValue := generator.Generate(lastValue, params)
 	return newValue, nil
 }
+func getDefaultFloat(value *float64, defaultVal float64) float64 {
+	if value != nil {
+		return *value
+	}
+	return defaultVal
+}
+func fetchMeasurement(ctx context.Context, db types.DynamoDBClient, measurementID string) (*types.Measurement, error) {
+	getMeasurementInput := &dynamodb.GetItemInput{
+		TableName: aws.String(MEASUREMENTTABLE),
+		Key: map[string]ddbtypes.AttributeValue{
+			"measurementId": &ddbtypes.AttributeValueMemberS{Value: measurementID},
+		},
+	}
+
+	getMeasurementOutput, err := db.GetItem(ctx, getMeasurementInput)
+	if err != nil {
+		return nil, fmt.Errorf("error finding measurement: %s", err)
+	}
+	if getMeasurementOutput.Item == nil {
+		return nil, fmt.Errorf("measurement with ID %s not found", measurementID)
+	}
+
+	var measurement types.Measurement
+	err = wrappers.UnmarshalMap(getMeasurementOutput.Item, &measurement)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling measurement: %s", err)
+	}
+
+	return &measurement, nil
+}

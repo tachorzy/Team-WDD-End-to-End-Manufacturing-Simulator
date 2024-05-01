@@ -36,7 +36,7 @@ const FileUploadContainer = (props: {
                     const base64String = reader.result?.toString().split(",")[1];
                     setFormData((prevData) => ({
                         ...prevData,
-                        modelData: base64String as string,  
+                        modelUrl: base64String as string,  
                     }));
                 };
                 reader.readAsDataURL(file);
