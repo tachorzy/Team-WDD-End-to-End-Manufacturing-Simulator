@@ -4,7 +4,7 @@ import AssetOverview from "./AssetOverview";
 import AssetView from "./AssetView";
 
 const Bento = (props: { factoryId: string; asset: Asset }) => {
-    const { factoryId, asset } = props;
+    const { asset } = props;
 
     return (
         <div className="flex flex-col mb-3 gap-y-4">
