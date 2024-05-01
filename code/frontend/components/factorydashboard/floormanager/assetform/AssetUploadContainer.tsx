@@ -14,9 +14,10 @@ const FileUploadContainer = (props: {
 
     const onDrop = useCallback(
         (acceptedFiles: File[]) => {
-            console.log("Files dropped:", acceptedFiles)
+            console.log("Files dropped:", acceptedFiles);
             const file = acceptedFiles[0];
-            console.log("file type:" ,file.type);
+            console.log("file type:", file.type);
+    
             if (file.type.startsWith("image/")) {
                 setAssetImageFile(file);
                 const reader = new FileReader();
@@ -30,10 +31,20 @@ const FileUploadContainer = (props: {
                 reader.readAsDataURL(file);
             } else if (file.name.endsWith(".glb")) {
                 setAssetModelFile(file);
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const base64String = reader.result?.toString().split(",")[1];
+                    setFormData((prevData) => ({
+                        ...prevData,
+                        modelData: base64String as string,  
+                    }));
+                };
+                reader.readAsDataURL(file);
             }
         },
-        [setFormData, setAssetImageFile]
+        [setFormData, setAssetImageFile, setAssetModelFile]
     );
+    
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {

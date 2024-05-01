@@ -4,6 +4,7 @@ import { Asset } from "@/app/api/_utils/types";
 import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
 import AssetUploadContainer from "./AssetUploadContainer";
 import ModelViewer from "@/components/models/createmodelform/modelrender/ModelViewer";
+import ModelField from "./modelField";
 
 export interface AddAssetFormProps {
     onClose: () => void;
@@ -22,9 +23,12 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
         description: "",
         imageData: "",
         factoryId,
+        modelId:"",
+        modelUrl:""
     });
     const [assetImageFile, setAssetImageFile] = useState<File | null>(null);
     const [assetModelFile, setAssetModelFile] = useState<File | null>(null);  
+    const [modelId,setModelId] = useState<String|null>(null);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -94,12 +98,17 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
                         className="w-full px-4 py-2 rounded-lg border border-gray-800 focus:outline-none focus:border-indigo-500 text-gray-900"
                         onChange={handleInputChange}
                     />
+                    
+                </div>
+                <div className="mb-4">
+                    <ModelField factoryId={factoryId} setModelId={setModelId} setFormData={setFormData}
+                        />
                 </div>
                 <div className="flex flex-row gap-x-0 w-full my-2">
                     <div className="w-80 h-48 ">
                         <AssetUploadContainer
                             setAssetImageFile={setAssetImageFile}
-                            setAssetModelFile={setAssetModelFile}  e
+                            setAssetModelFile={setAssetModelFile}  
                             setFormData={setFormData}
                         />
                     </div>
@@ -117,7 +126,9 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
                             />
                         )}
                         {assetModelFile && (
-                            <ModelViewer file={assetModelFile} />
+                               <div style={{ width: '200px', height: '200px',marginLeft:'-10px' }}>
+                               <ModelViewer file={assetModelFile} />
+                           </div>
                         )}
                     </div>
                 </div>
