@@ -6,6 +6,8 @@ import Bento from "@/components/assetdashboard/Bento";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 import { Asset } from "@/app/types/types";
 import ChartColumn from "@/components/assetdashboard/charts/ChartColumn";
+import AssetTable from "@/components/factorydashboard/floormanager/AssetTable";
+
 
 export default function Page({
     params,
@@ -44,10 +46,18 @@ export default function Page({
             <div className="flex flex-col bg-[url('/background/Grid.svg')] min-h-screen rounded-3xl bg-opacity-[15%]">
                 <FactoryPageNavbar pageId="Dashboard" factoryId={factoryId} />
             </div>
-            <div className="flex flex-col px-32 my-2 -mt-[35rem]">
-                <Bento factoryId={factoryId} asset={inspectedAsset as Asset} />
-                <ChartColumn />
-            </div>
+            {inspectedAsset === undefined ? 
+                ( 
+                    <AssetTable factoryId={factoryId}/>
+                )
+                : 
+                (
+                    <div className="flex flex-col px-32 my-2 -mt-[35rem]">
+                        <Bento factoryId={factoryId} asset={inspectedAsset as Asset} />
+                        <ChartColumn />
+                    </div>
+                )
+            }
         </main>
     );
 }
