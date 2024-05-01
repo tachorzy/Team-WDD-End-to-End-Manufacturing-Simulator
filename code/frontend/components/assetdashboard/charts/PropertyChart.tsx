@@ -125,7 +125,11 @@ const LineChart = (props: { property: Property }) => {
     }, [data]);
 
     return (
-        <div id={`chart-${property.name}`} className="w-11/12 my-3" data-testid="property chart" />
+        <div
+            id={`chart-${property.name}`}
+            className="w-11/12 my-3"
+            data-testid="property chart"
+        />
     );
 };
 

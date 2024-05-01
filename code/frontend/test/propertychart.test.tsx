@@ -1,10 +1,10 @@
 import React from "react";
 import { render, cleanup } from "@testing-library/react";
+import { Property } from "@/app/api/_utils/types";
 import PropertyChart, {
     PropertyData,
 } from "../components/assetdashboard/charts/PropertyChart";
 import "@testing-library/jest-dom";
-import { Property } from "@/app/api/_utils/types";
 
 jest.mock("d3", () => ({
     select: jest.fn().mockReturnThis(),
@@ -49,8 +49,7 @@ const mockProperty: Property = {
     // value: 50,
     // timestamp: Date.now(),
     // factoryId: "1",
-}
-
+};
 
 describe("PropertyChart", () => {
     const data: PropertyData[] = [
@@ -59,7 +58,9 @@ describe("PropertyChart", () => {
     ];
 
     test("should render component", () => {
-        const { getByTestId } = render(<PropertyChart property={mockProperty}/>);
+        const { getByTestId } = render(
+            <PropertyChart property={mockProperty} />,
+        );
         expect(getByTestId("property chart")).toBeInTheDocument();
     });
 });
