@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 import { Asset } from "@/app/api/_utils/types";
@@ -49,27 +48,29 @@ const AssetTable: React.FC<{ factoryId: string }> = ({ factoryId }) => {
                 <tbody>
                     {currentAssets.map((asset, index) => (
                         <tr
-                        key={asset.assetId}
-                        className={`border-t border-gray-200 ${index % 2 === 0 ? "bg-gray-100" : ""}`}
-                    >
-                        <td className="px-4 py-2 text-center flex justify-center items-center">
-                            <img
-                                src={
-                                    asset.imageData ||
-                                    "/icons/floorplan/placeholder-asset.svg"
-                                }
-                                alt="Asset"
-                                className="w-20 h-20 object-cover"
-                            />
-                        </td>
-                        <td className="px-4 py-2 text-DarkBlue font-semibold break-words text-center">
-                            {asset.name}
-                        </td>
-                        <td className="px-4 py-2 text-[#494949] text-xs break-words text-center">
-                            Description: {asset.description}
-                        </td>
-                        <td className="px-4 py-2 text-center">{asset.factoryId}</td>
-                    </tr>
+                            key={asset.assetId}
+                            className={`border-t border-gray-200 ${index % 2 === 0 ? "bg-gray-100" : ""}`}
+                        >
+                            <td className="px-4 py-2 text-center flex justify-center items-center">
+                                <img
+                                    src={
+                                        asset.imageData ||
+                                        "/icons/floorplan/placeholder-asset.svg"
+                                    }
+                                    alt="Asset"
+                                    className="w-20 h-20 object-cover"
+                                />
+                            </td>
+                            <td className="px-4 py-2 text-DarkBlue font-semibold break-words text-center">
+                                {asset.name}
+                            </td>
+                            <td className="px-4 py-2 text-[#494949] text-xs break-words text-center">
+                                Description: {asset.description}
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                                {asset.factoryId}
+                            </td>
+                        </tr>
                     ))}
                 </tbody>
             </table>
@@ -82,7 +83,10 @@ const AssetTable: React.FC<{ factoryId: string }> = ({ factoryId }) => {
                 >
                     &lt;
                 </button>
-                <span className="px-4 py-2 border rounded bg-blue-500 text-white">
+                <span
+                    className="px-4 py-2 border rounded bg-blue-500 text-white"
+                    data-testid="currentpage"
+                >
                     {currentPage}
                 </span>
                 <button
