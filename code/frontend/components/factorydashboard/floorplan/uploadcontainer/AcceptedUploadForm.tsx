@@ -49,6 +49,8 @@ const AcceptedUploadForm = (props: {
                             imageData: base64Image,
                         },
                     };
+
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const data =
                         await NextServerConnector.post<Floorplan>(config);
                 } catch (error) {

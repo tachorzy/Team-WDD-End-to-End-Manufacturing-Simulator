@@ -12,6 +12,7 @@ const AssetOverview = (props: { asset: Asset }) => {
     const assetModelId = asset?.modelId;
     const assetDescription = asset?.description;
 
+
     const factoryId = asset?.factoryId;
 
     useEffect(() => {

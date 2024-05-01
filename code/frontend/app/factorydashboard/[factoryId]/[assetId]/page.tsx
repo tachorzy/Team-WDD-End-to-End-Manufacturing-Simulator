@@ -65,6 +65,11 @@ export default function Page({
                     </div>
                 )
             }
+
+            <div className="flex flex-col px-32 my-2 -mt-[35rem]">
+                <Bento asset={inspectedAsset as Asset} />
+                <ChartColumn />
+            </div>
         </main>
     );
 }

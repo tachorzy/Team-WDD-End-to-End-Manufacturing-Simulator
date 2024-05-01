@@ -3,7 +3,6 @@ import "@testing-library/jest-dom";
 import { render, waitFor, fireEvent, screen } from "@testing-library/react";
 import { BackendConnector } from "@/app/api/_utils/connector";
 import AssetTable from "@/components/factorydashboard/floormanager/AssetTable";
-import { mode } from "d3";
 
 jest.mock("@/app/api/_utils/connector", () => ({
     BackendConnector: {

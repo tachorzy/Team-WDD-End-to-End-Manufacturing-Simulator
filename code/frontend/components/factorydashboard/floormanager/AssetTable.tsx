@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 import { Asset } from "@/app/api/_utils/types";
+import Image from "next/image";
 
 const AssetTable: React.FC<{ factoryId: string }> = ({ factoryId }) => {
     const [assets, setAssets] = useState<Partial<Asset>[]>([]);
@@ -52,11 +53,13 @@ const AssetTable: React.FC<{ factoryId: string }> = ({ factoryId }) => {
                             className={`border-t border-gray-200 ${index % 2 === 0 ? "bg-gray-100" : ""}`}
                         >
                             <td className="px-4 py-2 text-center flex justify-center items-center">
-                                <img
+                                <Image
                                     src={
                                         asset.imageData ||
                                         "/icons/floorplan/placeholder-asset.svg"
                                     }
+                                    width={30}
+                                    height={30}
                                     alt="Asset"
                                     className="w-20 h-20 object-cover"
                                 />
