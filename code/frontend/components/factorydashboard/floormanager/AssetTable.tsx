@@ -42,7 +42,7 @@ const AssetTable: React.FC<{ factoryId: string }> = ({ factoryId }) => {
                         <th className="px-4 py-2">Image</th>
                         <th className="px-4 py-2">Name</th>
                         <th className="px-4 py-2">Description</th>
-                        <th className="px-4 py-2">Factory ID</th>
+                        <th className="px-4 py-2">Model ID</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,7 +68,7 @@ const AssetTable: React.FC<{ factoryId: string }> = ({ factoryId }) => {
                                 Description: {asset.description}
                             </td>
                             <td className="px-4 py-2 text-center">
-                                {asset.factoryId}
+                                {asset.modelId}
                             </td>
                         </tr>
                     ))}

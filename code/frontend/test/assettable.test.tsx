@@ -3,6 +3,7 @@ import "@testing-library/jest-dom";
 import { render, waitFor, fireEvent, screen } from "@testing-library/react";
 import { BackendConnector } from "@/app/api/_utils/connector";
 import AssetTable from "@/components/factorydashboard/floormanager/AssetTable";
+import { mode } from "d3";
 
 jest.mock("@/app/api/_utils/connector", () => ({
     BackendConnector: {
@@ -29,6 +30,7 @@ describe("AssetTable component", () => {
                 name: "Asset 1",
                 description: "Description of Asset 1",
                 factoryId: "Factory 1",
+                modelId: "Model 1",
             },
             // Add similar data for remaining assets
         ];
@@ -41,14 +43,14 @@ describe("AssetTable component", () => {
         // Assert data is rendered correctly
         expect(screen.getByText("Image")).toBeInTheDocument();
         expect(screen.getByText("Description")).toBeInTheDocument();
-        expect(screen.getByText("Factory ID")).toBeInTheDocument();
+        expect(screen.getByText("Model ID")).toBeInTheDocument();
 
         // You can add more specific assertions here to check if the data is displayed correctly
         expect(screen.getByText("Asset 1")).toBeInTheDocument();
         expect(
             screen.getByText("Description: Description of Asset 1"),
         ).toBeInTheDocument();
-        expect(screen.getByText("Factory 1")).toBeInTheDocument();
+        expect(screen.getByText("Model 1")).toBeInTheDocument();
     });
 
     test("should paginate data correctly", async () => {
@@ -58,6 +60,7 @@ describe("AssetTable component", () => {
                 name: "Asset 1",
                 description: "Description of Asset 1",
                 factoryId: "Factory 1",
+                modelId: "Model 1",
                 // Add other necessary properties for testing
             },
             {
@@ -65,6 +68,7 @@ describe("AssetTable component", () => {
                 name: "Asset 2",
                 description: "Description of Asset 2",
                 factoryId: "Factory 1",
+                modelId: "Model 1",
                 // Add other necessary properties for testing
             },
             {
@@ -72,6 +76,7 @@ describe("AssetTable component", () => {
                 name: "Asset 3",
                 description: "Description of Asset 3",
                 factoryId: "Factory 1",
+                modelId: "Model 1",
                 // Add other necessary properties for testing
             },
             {
@@ -79,6 +84,7 @@ describe("AssetTable component", () => {
                 name: "Asset 4",
                 description: "Description of Asset 4",
                 factoryId: "Factory 1",
+                modelId: "Model 1",
                 // Add other necessary properties for testing
             },
             {
@@ -86,6 +92,7 @@ describe("AssetTable component", () => {
                 name: "Asset 5",
                 description: "Description of Asset 5",
                 factoryId: "Factory 1",
+                modelId: "Model 1",
                 // Add other necessary properties for testing
             },
             {
@@ -93,6 +100,7 @@ describe("AssetTable component", () => {
                 name: "Asset 6",
                 description: "Description of Asset 6",
                 factoryId: "Factory 1",
+                modelId: "Model 1",
                 // Add other necessary properties for testing
             },
         ];
