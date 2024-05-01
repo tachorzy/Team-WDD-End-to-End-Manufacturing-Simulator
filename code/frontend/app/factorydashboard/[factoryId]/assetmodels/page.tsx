@@ -7,9 +7,9 @@ import ModelTable from "@/components/factorydashboard/ModelTable";
 
 export default function Page({ params }: { params: { factoryId: string } }) {
     const { factoryId } = params;
-    const ASSETTABLE_FACTORYID = "factory-1";
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isCreateFormOpen, setIsCreateFormOpen] = useState(true);
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     return (
         <main className="flex flex-col bg-[#FAFAFA] min-h-screen mx-auto smooth-scroll">
