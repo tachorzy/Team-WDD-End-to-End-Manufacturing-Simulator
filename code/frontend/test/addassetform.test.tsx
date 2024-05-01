@@ -65,7 +65,9 @@ describe("AddAssetForm", () => {
             name: "Asset Mock",
             description: "Asset Mock Description",
             factoryId: "1",
-            imageData: "http://example.com/test.png",
+            imageData: "",
+            modelId: "",
+            modelUrl: "",
         };
         mockPost.mockResolvedValue(mockAsset);
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Model,Attribute,Asset } from "@/app/api/_utils/types";
+import { Model, Attribute, Asset } from "@/app/api/_utils/types";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 
 interface ModelFieldProps {
@@ -8,7 +8,11 @@ interface ModelFieldProps {
     setFormData: React.Dispatch<React.SetStateAction<Asset>>;
 }
 
-const ModelField: React.FC<ModelFieldProps> = ({ factoryId, setModelId ,setFormData}) => {
+const ModelField: React.FC<ModelFieldProps> = ({
+    factoryId,
+    setModelId,
+    setFormData,
+}) => {
     const [models, setModels] = useState<Model[]>([]);
     const [selectedModelId, setSelectedModelId] = useState("");
 
@@ -19,7 +23,8 @@ const ModelField: React.FC<ModelFieldProps> = ({ factoryId, setModelId ,setFormD
                     resource: "models",
                     params: { factoryId },
                 };
-                const fetchedModels = await BackendConnector.get<Model[]>(config);
+                const fetchedModels =
+                    await BackendConnector.get<Model[]>(config);
                 setModels(fetchedModels);
             } catch (error) {
                 console.error("Failed to fetch models:", error);
@@ -31,18 +36,20 @@ const ModelField: React.FC<ModelFieldProps> = ({ factoryId, setModelId ,setFormD
         }
     }, [factoryId]);
 
-    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectChange = (
+        event: React.ChangeEvent<HTMLSelectElement>,
+    ) => {
         const newModelId = event.target.value;
         setSelectedModelId(newModelId);
         setModelId(newModelId);
         setFormData((prevData) => ({
             ...prevData,
-            modelId: newModelId as string,
+            modelId: newModelId,
         }));
     };
 
-    const findModelName = (attributes:Attribute[]) => {
-        const nameAttribute = attributes.find(attr => attr.name === "name");
+    const findModelName = (attributes: Attribute[]) => {
+        const nameAttribute = attributes.find((attr) => attr.name === "name");
         return nameAttribute ? nameAttribute.value : "";
     };
 
@@ -56,13 +63,12 @@ const ModelField: React.FC<ModelFieldProps> = ({ factoryId, setModelId ,setFormD
                 onChange={handleSelectChange}
                 className="form-select bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-full"
             >
-                <option value="" disabled>Select a model</option>
+                <option value="" disabled>
+                    Select a model
+                </option>
                 {models.map((model) => (
-                    <option
-                        key={model.modelId}
-                        value={model.modelId}
-                    >
-                        {findModelName(model.attributes)} 
+                    <option key={model.modelId} value={model.modelId}>
+                        {findModelName(model.attributes)}
                     </option>
                 ))}
             </select>

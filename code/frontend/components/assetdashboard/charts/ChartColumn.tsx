@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
-import { Property, PropertyData, Value } from "@/app/api/_utils/types";
+import { Property, PropertyData } from "@/app/api/_utils/types";
 import PropertyChart from "./PropertyChart";
 
 const ChartColumn = (props: { factoryId: string; modelId: string }) => {

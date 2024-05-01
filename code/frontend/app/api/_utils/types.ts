@@ -28,8 +28,8 @@ export interface Asset {
     description: string;
     imageData?: string;
     factoryId: string;
-    modelUrl?:string;
-    modelId?:string;
+    modelUrl?: string;
+    modelId?: string;
 }
 
 export interface Attribute {
@@ -80,6 +80,11 @@ export interface DataPoint {
 
 export interface PropertyData {
     propertyId: string;
-    values: { [key: string]: DataPoint };  
+    values: { [key: string]: DataPoint };
     lastCalculated: number;
+}
+
+export interface Value {
+    date: string;
+    value: number;
 }

@@ -3,55 +3,42 @@ import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
 
-
 const FileUploadContainer = (props: {
     setAssetImageFile: React.Dispatch<React.SetStateAction<File | null>>;
     setFormData: React.Dispatch<React.SetStateAction<Asset>>;
-    setAssetModelFile: React.Dispatch<React.SetStateAction<File | null>>;
 }) => {
-    const { setAssetImageFile, setFormData,setAssetModelFile } = props;
-    
+    const { setAssetImageFile, setFormData } = props;
 
     const onDrop = useCallback(
         (acceptedFiles: File[]) => {
             console.log("Files dropped:", acceptedFiles);
             const file = acceptedFiles[0];
             console.log("file type:", file.type);
-    
+
             if (file.type.startsWith("image/")) {
                 setAssetImageFile(file);
                 const reader = new FileReader();
                 reader.onloadend = () => {
-                    const base64String = reader.result?.toString().split(",")[1];
+                    const base64String = reader.result
+                        ?.toString()
+                        .split(",")[1];
                     setFormData((prevData) => ({
                         ...prevData,
                         imageData: base64String as string,
                     }));
                 };
                 reader.readAsDataURL(file);
-            } else if (file.name.endsWith(".glb")) {
-                setAssetModelFile(file);
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const base64String = reader.result?.toString().split(",")[1];
-                    setFormData((prevData) => ({
-                        ...prevData,
-                        modelUrl: base64String as string,  
-                    }));
-                };
-                reader.readAsDataURL(file);
             }
         },
-        [setFormData, setAssetImageFile, setAssetModelFile]
+        [setFormData, setAssetImageFile],
     );
-    
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
             "image/jpeg": [],
             "image/png": [],
             "image/svg+xml": [],
-            "model/gltf-binary": [".glb"] 
+            "model/gltf-binary": [".glb"],
         },
         maxFiles: 1,
         maxSize: 8000000,
