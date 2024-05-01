@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
-import { Asset, Model } from "@/app/api/_utils/types";
+import { Asset } from "@/app/api/_utils/types";
 import AssetInventory from "./inventory/AssetInventory";
 import AddAssetForm from "./assetform/AddAssetForm";
 import InventoryNavBar from "./inventory/InventoryNavBar";

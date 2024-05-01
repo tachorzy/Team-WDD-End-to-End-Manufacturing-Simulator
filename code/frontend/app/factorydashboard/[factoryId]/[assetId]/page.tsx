@@ -45,7 +45,7 @@ export default function Page({
                 <FactoryPageNavbar pageId="Dashboard" factoryId={factoryId} />
             </div>
             <div className="flex flex-col px-32 my-2 -mt-[35rem]">
-                <Bento factoryId={factoryId} asset={inspectedAsset as Asset} />
+                <Bento asset={inspectedAsset as Asset} />
                 <ChartColumn />
             </div>
         </main>

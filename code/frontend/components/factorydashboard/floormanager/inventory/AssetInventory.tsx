@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Asset, Model } from "@/app/api/_utils/types";
-import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
+import React from "react";
+import { Asset } from "@/app/api/_utils/types";
+
 import AssetItem from "./AssetItem";
 
 interface AssetInventoryProps {

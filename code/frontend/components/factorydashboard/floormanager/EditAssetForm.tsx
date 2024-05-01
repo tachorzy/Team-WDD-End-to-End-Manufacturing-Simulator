@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
-import {
-    BackendConnector,
-    PutConfig,
-    NextServerConnector,
-} from "@/app/api/_utils/connector";
+import { BackendConnector } from "@/app/api/_utils/connector";
 
 interface EditAssetProps {
     asset: Asset;
@@ -24,6 +20,7 @@ const EditAssetForm: React.FC<EditAssetProps> = ({ asset, closeEditForm }) => {
         };
 
         try {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const updatedAsset = await BackendConnector.put<Asset>({
                 resource: "assets",
                 payload: updatedAssetData,
