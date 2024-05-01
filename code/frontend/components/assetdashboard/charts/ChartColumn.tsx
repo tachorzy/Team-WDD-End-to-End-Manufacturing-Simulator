@@ -11,11 +11,6 @@ interface PropertyData {
 const ChartColumn = (props: { factoryId: string; modelId: string }) => {
     const [properties, setProperties] = useState<Property[]>([]);
     const [data, setData] = useState<PropertyData[]>([]);
-    // there is mock data for now
-    // const [measurements, setMeasurements] = useState([
-    //     1.85, 8.0, 16.25, 12.5, 0, 10.0, 8.75, 8.54, 8.34, 9.25, 10.75, 11.25,
-    //     13.45,
-    // ]);
 
     const { factoryId } = props;
     const { modelId } = props;
@@ -42,9 +37,12 @@ const ChartColumn = (props: { factoryId: string; modelId: string }) => {
 
     return (
         <div className="flex flex-col mb-3 pl-5 gap-y-3 w-full h-64 overflow-y-scroll border-2 border-[#E2E4EA] bg-[#FAFAFA] rounded-lg">
-            {properties.map((property) => (
-                <PropertyChart property={property} />
-            ))}
+          {properties.map((property, index) => (
+            <div key={index}>
+              <h1 className="text-black">{property.name}</h1>
+              <PropertyChart property={property} />
+            </div>
+          ))}
         </div>
     );
 };

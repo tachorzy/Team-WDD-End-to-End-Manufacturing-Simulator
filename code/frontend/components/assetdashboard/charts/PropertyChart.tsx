@@ -43,7 +43,7 @@ const LineChart = (props: { property: Property }) => {
         const height = 240 - 2 * margin;
 
         const svg = d3
-            .select("#chart")
+            .select(`#chart-${property.name}`)
             .append("svg") // changed from selectAll to append
             .attr("width", width + 2 * margin)
             .attr("height", height + 2 * margin);
@@ -125,7 +125,7 @@ const LineChart = (props: { property: Property }) => {
     }, [data]);
 
     return (
-        <div id="chart" className="w-11/12 my-3" data-testid="property chart" />
+        <div id={`chart-${property.name}`} className="w-11/12 my-3" data-testid="property chart" />
     );
 };
 
