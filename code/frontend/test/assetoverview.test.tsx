@@ -47,11 +47,12 @@ describe("AssetBio", () => {
             imageData: "https://www.example.com/image.jpg",
         };
 
-        const { getByAltText, getByText } = render(
+        const { getByText } = render(
             <AssetOverview asset={asset} />,
         );
 
         expect(getByText(`${asset.name}`)).toBeInTheDocument();
-        expect(getByText(`${asset.modelId}`)).toBeInTheDocument();
+        expect(getByText("Asset Model:")).toBeInTheDocument();
+        expect(getByText("Asset Properties:")).toBeInTheDocument();
     });
 });
