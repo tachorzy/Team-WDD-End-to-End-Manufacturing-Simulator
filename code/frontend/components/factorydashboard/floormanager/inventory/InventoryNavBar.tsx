@@ -1,21 +1,13 @@
 import { Model } from "@/app/api/_utils/types";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 const InventoryNavBar = (props: { factoryId: string }) => {
     const [activeNavItem, setActiveNavItem] = useState("CNC Models");
     const [models, setModels] = useState<Model[]>([]);
 
     const { factoryId } = props;
-
-    const navbarLinks = [
-        { label: "CNC Models", link: "" },
-        {
-            label: "Stamping Models",
-            link: "",
-        },
-        { label: "EDM Models", link: "" },
-    ];
 
     useEffect(() => {
         const fetchModels = async () => {
@@ -38,6 +30,13 @@ const InventoryNavBar = (props: { factoryId: string }) => {
 
     return (
         <div className="flex self-start flex-row gap-x-3">
+            {models.length === 0 && (
+                <Link href={`/factorydashboard/${factoryId}/assetmodels`} className="flex flex-row gap-x-1 align-middle px-1 py-0.5 font-bold hover:bg-red-50 text-xs text-red-600 hover:text-[#494949] rounded-sm">
+                    <p className="group text-red-300 text-xs font-bold">
+                        No models available <span className="font-bold">+</span>
+                    </p>
+                </Link>
+            )}
             {models.map((model, id) => (
                 <button
                     key={id}
