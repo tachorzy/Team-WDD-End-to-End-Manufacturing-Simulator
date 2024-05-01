@@ -1,7 +1,7 @@
 import React from "react";
 import { render, cleanup } from "@testing-library/react";
 import PropertyChart, {
-    DataPoint,
+    PropertyData,
 } from "../components/assetdashboard/charts/PropertyChart";
 import "@testing-library/jest-dom";
 
@@ -36,9 +36,9 @@ jest.mock("d3", () => ({
 afterEach(cleanup);
 
 describe("PropertyChart", () => {
-    const data: DataPoint[] = [
-        { timeStamp: Date.now(), value: 10 },
-        { timeStamp: Date.now(), value: 20 },
+    const data: PropertyData[] = [
+        { date: Date.now(), value: 10 },
+        { date: Date.now(), value: 20 },
     ];
 
     test("should render component", () => {

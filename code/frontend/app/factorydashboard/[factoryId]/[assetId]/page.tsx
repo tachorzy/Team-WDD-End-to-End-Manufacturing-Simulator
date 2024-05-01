@@ -46,7 +46,10 @@ export default function Page({
             </div>
             <div className="flex flex-col px-32 my-2 -mt-[35rem]">
                 <Bento factoryId={factoryId} asset={inspectedAsset as Asset} />
-                <ChartColumn factoryId={factoryId} modelId={inspectedAsset?.modelId as string}/>
+                <ChartColumn
+                    factoryId={factoryId}
+                    modelId={inspectedAsset?.modelId as string}
+                />
             </div>
         </main>
     );

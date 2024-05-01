@@ -1,19 +1,38 @@
-import React, { useEffect } from "react";
+import React, { use, useEffect, useState } from "react";
 import * as d3 from "d3";
 import { Property } from "@/app/api/_utils/types";
+import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 
-export interface DataPoint {
-    date: Date; // changed from number to Date
+export interface PropertyData {
+    date: number; // changed from number to Date
     value: number;
 }
 
-interface PropertyChartProps {
-    data: DataPoint[];
-}
+const LineChart = (props: { property: Property }) => {
+    const [data, setData] = useState<PropertyData[]>([]);
+    const { property } = props;
 
-const LineChart = (props: { data: DataPoint[], property: Property }) => {
+    const propertyId = property.propertyId as string;
 
-    const { data, property } = props;
+    useEffect(() => {
+        const fetchPropertyData = async () => {
+            try {
+                const config: GetConfig = {
+                    resource: "properties/data",
+                    params: { propertyId },
+                };
+                const fetchedData =
+                    await BackendConnector.get<PropertyData>(config);
+                setData((prevData) => [...prevData, fetchedData]);
+            } catch (error) {
+                console.error("Failed to fetch property data:", error);
+            }
+        };
+
+        if (propertyId) {
+            fetchPropertyData();
+        }
+    }, [data, propertyId]);
 
     useEffect(() => {
         d3.select("#chart").select("svg").remove();
@@ -37,7 +56,7 @@ const LineChart = (props: { data: DataPoint[], property: Property }) => {
             .scaleTime()
             .range([0, width])
             .domain(d3.extent(data, (d) => d.date) as [number, number]);
-        
+
         const yScale = d3
             .scaleLinear()
             .range([height, 0])
@@ -50,7 +69,7 @@ const LineChart = (props: { data: DataPoint[], property: Property }) => {
         const yAxis = d3.axisLeft(yScale);
 
         const line = d3
-            .line<DataPoint>()
+            .line<PropertyData>()
             .x((d) => xScale(d.date))
             .y((d) => yScale(d.value));
 
