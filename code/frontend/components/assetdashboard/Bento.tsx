@@ -3,7 +3,7 @@ import { Asset } from "@/app/types/types";
 import AssetOverview from "./AssetOverview";
 import AssetView from "./AssetView";
 
-const Bento = (props: {  asset: Asset }) => {
+const Bento = (props: { asset: Asset }) => {
     const { asset } = props;
 
     return (
