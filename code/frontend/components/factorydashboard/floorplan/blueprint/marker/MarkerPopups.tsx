@@ -3,7 +3,7 @@ import { Asset } from "@/app/api/_utils/types";
 import Popup from "reactjs-popup";
 import Image from "next/image";
 import EditAssetForm from "@/components/factorydashboard/floormanager/EditAssetForm";
-import DeletionConfirmation from "./DeletionConformation";
+import DeletionConfirmation from "./DeletionConfirmation";
 
 interface AssetPopupsProps {
     handleDelete: (event?: SyntheticEvent<Element, Event>) => void;
@@ -26,7 +26,7 @@ const AssetPopups: React.FC<AssetPopupsProps> = ({
     closeEditForm,
     asset,
 }) => (
-    <div>
+    <div className="flex flex-row baseline-middle gap-x-0.5">
         <Popup
             trigger={
                 <button
@@ -36,8 +36,8 @@ const AssetPopups: React.FC<AssetPopupsProps> = ({
                 >
                     <Image
                         src="/icons/garbage.svg"
-                        width={10}
-                        height={10}
+                        width={20}
+                        height={20}
                         alt="delete icon"
                         className="select-none"
                     />
@@ -64,8 +64,8 @@ const AssetPopups: React.FC<AssetPopupsProps> = ({
                 >
                     <Image
                         src="/icons/edit.svg"
-                        width={30}
-                        height={30}
+                        width={25}
+                        height={25}
                         alt="edit icon"
                         className="select-none"
                     />
