@@ -10,25 +10,25 @@ const LineChart = (props: { property: Property }) => {
 
     const propertyId = property.propertyId as string;
 
-    // useEffect(() => {
-    //     const fetchPropertyData = async () => {
-    //         try {
-    //             const config: GetConfig = {
-    //                 resource: "properties/data",
-    //                 params: { propertyId },
-    //             };
-    //             const fetchedData =
-    //                 await BackendConnector.get<Value>(config);
-    //             setData((prevData) => [...prevData, fetchedData]);
-    //         } catch (error) {
-    //             console.error("Failed to fetch property data:", error);
-    //         }
-    //     };
+    useEffect(() => {
+        const fetchPropertyData = async () => {
+            try {
+                const config: GetConfig = {
+                    resource: "properties/data",
+                    params: { propertyId },
+                };
+                const fetchedData =
+                    await BackendConnector.get<Value>(config);
+                setData((prevData) => [...prevData, fetchedData]);
+            } catch (error) {
+                console.error("Failed to fetch property data:", error);
+            }
+        };
 
-    //     if (propertyId) {
-    //         fetchPropertyData();
-    //     }
-    // }, [data, propertyId]);
+        if (propertyId) {
+            fetchPropertyData();
+        }
+    }, [data, propertyId]);
 
     useEffect(() => {
         d3.select(`#chart-${property.name}`).select("svg").remove();
