@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import {
     Attribute,
     Property,
@@ -24,8 +24,14 @@ const CreateModelForm = (props: { factoryId: string }) => {
     const [measurements, setMeasurements] = useState<Measurement[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const nextPage = () => setCurrentPage(currentPage + 1);
-    const prevPage = () => setCurrentPage(currentPage - 1);
+    const nextPage = useCallback(
+        () => setCurrentPage(currentPage + 1),
+        [currentPage],
+    );
+    const prevPage = useCallback(
+        () => setCurrentPage(currentPage - 1),
+        [currentPage],
+    );
 
     const contextValue = useMemo(
         () => ({
@@ -57,7 +63,6 @@ const CreateModelForm = (props: { factoryId: string }) => {
             nextPage,
         ],
     );
-
     return (
         <Context.Provider value={contextValue}>
             <div className="items-center justify-center ml-32">
