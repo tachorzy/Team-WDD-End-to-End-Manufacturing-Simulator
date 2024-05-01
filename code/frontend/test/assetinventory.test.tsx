@@ -42,7 +42,7 @@ describe("AssetInventory", () => {
                 description: "Description 1",
                 imageData: "image1.jpg",
                 factoryId: "1",
-                modelId: "1"
+                modelId: "1",
             },
             {
                 assetId: "2",
@@ -50,7 +50,7 @@ describe("AssetInventory", () => {
                 description: "Description 2",
                 imageData: "image2.jpg",
                 factoryId: "1",
-                modelId: "2"
+                modelId: "2",
             },
             {
                 assetId: "2",
@@ -58,7 +58,7 @@ describe("AssetInventory", () => {
                 description: "Description 2",
                 imageData: "image2.jpg",
                 factoryId: "1",
-                modelId: "1"
+                modelId: "1",
             },
         ];
 
@@ -67,13 +67,15 @@ describe("AssetInventory", () => {
                 assets={mockAssets}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
-                activeNavItem={"1"}
+                activeNavItem="1"
             />,
         );
 
-        mockAssets.filter((asset) => asset.modelId === "1").forEach((asset) => {
-            expect(getByText(asset.name)).toBeInTheDocument();
-        });
+        mockAssets
+            .filter((asset) => asset.modelId === "1")
+            .forEach((asset) => {
+                expect(getByText(asset.name)).toBeInTheDocument();
+            });
     });
 
     test("should render No assets available when assets array is empty", () => {
@@ -84,7 +86,7 @@ describe("AssetInventory", () => {
                 assets={assets}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
-                activeNavItem={"CNC"}
+                activeNavItem="CNC"
             />,
         );
 
@@ -97,7 +99,7 @@ describe("AssetInventory", () => {
                 assets={undefined}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
-                activeNavItem={"CNC"}
+                activeNavItem="CNC"
             />,
         );
 

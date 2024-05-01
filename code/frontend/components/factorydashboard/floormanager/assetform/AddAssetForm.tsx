@@ -26,8 +26,8 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
         modelId: "",
     });
     const [assetImageFile, setAssetImageFile] = useState<File | null>(null);
-    const [assetModelFile, setAssetModelFile] = useState<File | null>(null);
-    const [modelId, setModelId] = useState<string | null>(null);
+    const [assetModelFile] = useState<File | null>(null);
+    const [setModelId] = useState<string | null>(null);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
