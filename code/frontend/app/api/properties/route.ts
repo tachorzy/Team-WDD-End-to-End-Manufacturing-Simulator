@@ -28,11 +28,11 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = new URL("awsendpointurl/properties/data");
 
     const propertyId = searchParams.get("id");
     const config: GetConfig = {
-        resource: "factories",
+        resource: "properties",
         params: propertyId ? { id: propertyId } : undefined,
     };
 

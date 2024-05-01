@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import * as d3 from "d3";
+import { Property } from "@/app/api/_utils/types";
 
 export interface DataPoint {
-    timeStamp: number; // changed from number to Date
+    date: Date; // changed from number to Date
     value: number;
 }
 
@@ -10,7 +11,10 @@ interface PropertyChartProps {
     data: DataPoint[];
 }
 
-const LineChart = ({ data }: PropertyChartProps) => {
+const LineChart = (props: { data: DataPoint[], property: Property }) => {
+
+    const data = props.data;
+
     useEffect(() => {
         d3.select("#chart").select("svg").remove();
 
@@ -32,12 +36,12 @@ const LineChart = ({ data }: PropertyChartProps) => {
         const xScale = d3
             .scaleTime()
             .range([0, width])
-            .domain(d3.extent(data, (d) => d.timeStamp) as [number, number]); // changed from DataPoint["timeStamp"][] to [Date, Date]
-
+            .domain(d3.extent(data, (d) => d.date) as [number, number]);
+        
         const yScale = d3
             .scaleLinear()
             .range([height, 0])
-            .domain(d3.extent(data, (d) => d.value) as [number, number]); // changed from DataPoint["value"][] to [number, number]
+            .domain(d3.extent(data, (d) => d.value) as [number, number]);
 
         const xAxis = d3
             .axisBottom(xScale)
@@ -47,7 +51,7 @@ const LineChart = ({ data }: PropertyChartProps) => {
 
         const line = d3
             .line<DataPoint>()
-            .x((d) => xScale(d.timeStamp))
+            .x((d) => xScale(d.date))
             .y((d) => yScale(d.value));
 
         g.append("g")
