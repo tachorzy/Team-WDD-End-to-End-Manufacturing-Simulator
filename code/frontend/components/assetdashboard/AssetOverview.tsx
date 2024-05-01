@@ -53,7 +53,7 @@ const AssetOverview = (props: { asset: Asset }) => {
                     <span className="font-semibold">Asset Name:</span> {assetName}
                 </h1>
                 <div className="font-medium text-xs text-[#494949] leading-relaxed">
-                    <span className="font-semibold">Model:</span> {assetModel?.attributes[0].value}
+                    <span className="font-semibold">Asset Model:</span> {assetModel?.attributes[0].value}
                     {assetModel?.attributes.map((attribute, index) => {
                         if (index === 0) return;
 
