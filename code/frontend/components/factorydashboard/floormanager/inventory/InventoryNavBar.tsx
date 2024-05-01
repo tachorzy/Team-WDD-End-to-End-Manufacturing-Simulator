@@ -20,8 +20,15 @@ const InventoryNavBar = (props: {
                     params: { factoryId },
                 };
                 const newModels = await BackendConnector.get<Model[]>(config);
-                setModels(newModels);
-                setActiveNavItem(newModels[0].modelId);
+
+                // Check if newModels is defined and has at least one element
+                if (newModels && newModels.length > 0) {
+                    setModels(newModels);
+                    setActiveNavItem(newModels[0].modelId);
+                } else {
+                    // Handle the case when newModels is undefined or an empty array
+                    console.error("No models returned from backend");
+                }
             } catch (error) {
                 console.error("Failed to fetch models:", error);
             }
@@ -30,7 +37,7 @@ const InventoryNavBar = (props: {
         if (factoryId) {
             fetchModels();
         }
-    }, [factoryId]);
+    }, [factoryId, setActiveNavItem]);
 
     return (
         <div className="flex self-start flex-row gap-x-3">
