@@ -172,7 +172,6 @@ func TestHandleCreateAssetRequest_MarshalMapError(t *testing.T) {
 }
 
 func TestHandleCreateAssetRequest_PutItemError(t *testing.T) {
-
 	mockDDBClient := &mocks.DynamoDBClient{
 		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
