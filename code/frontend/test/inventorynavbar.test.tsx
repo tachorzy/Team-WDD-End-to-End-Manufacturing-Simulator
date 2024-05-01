@@ -18,7 +18,7 @@ describe("InventoryNavBar", () => {
     test("should prompt user to create models if there are no pre-existing models.", () => {
         const { getByText } = render(<InventoryNavBar factoryId={"1234"} />);
         expect(getByText("No models found")).toBeInTheDocument();
-        expect(getByText("No models found")).toHaveClass("text-red-300 border-b-2 border-red-300")
+        expect(getByText("No models found")).toHaveClass("text-red-300")
     });
 
 

@@ -33,7 +33,7 @@ const InventoryNavBar = (props: { factoryId: string }) => {
             {models.length === 0 && (
                 <Link href={`/factorydashboard/${factoryId}/assetmodels`} className="flex flex-row gap-x-1 align-middle px-1 py-0.5 font-bold hover:bg-red-50 text-xs text-red-600 hover:text-[#494949] rounded-sm">
                     <p className="group text-red-300 text-xs font-bold">
-                        No models available <span className="font-bold">+</span>
+                        No models found <span className="font-bold">+</span>
                     </p>
                 </Link>
             )}
