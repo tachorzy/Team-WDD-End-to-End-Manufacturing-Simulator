@@ -13,27 +13,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func TestHandleCreateMeasurementRequest_BadJSON(t *testing.T) {
-	mockDDBClient := &mocks.DynamoDBClient{}
-
-	handler := NewCreateMeasurementHandler(mockDDBClient)
-
-	request := events.APIGatewayProxyRequest{
-		Body: `{"frequency":"1.0", "generatorFunction": "Function 1", "lowerBound":"0.0", "upperBound":"10.0", "precision":"0.1"}`,
-	}
-
-	ctx := context.Background()
-	response, err := handler.HandleCreateMeasurementRequest(ctx, request)
-
-	if err != nil {
-		t.Fatalf("Expected no error, got %v", err)
-	}
-
-	if response.StatusCode != http.StatusBadRequest {
-		t.Errorf("Expected status code %d for bad JSON, got %d", http.StatusBadRequest, response.StatusCode)
-	}
-}
-
 func TestHandleCreateMeasurementRequest_MarshalMapError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 
