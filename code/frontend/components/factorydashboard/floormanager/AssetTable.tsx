@@ -36,7 +36,7 @@ const AssetTable: React.FC<{ factoryId: string }> = ({ factoryId }) => {
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     return (
-        <div className="p-4">
+        <div className="p-4 h-full">
             <table className="table-auto w-full text-gray-600 bg-white">
                 <thead>
                     <tr>

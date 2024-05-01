@@ -27,8 +27,8 @@ const AssetView = (props: { asset: Asset }) => {
             <div className="py-2 p-8 gap-y-1">
                 <Image
                     src={imageSrc}
-                    width={300}
-                    height={300}
+                    width={200}
+                    height={200}
                     alt="asset image"
                 />
             </div>
