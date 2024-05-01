@@ -25,20 +25,6 @@ describe("ModelTable component", () => {
         jest.clearAllMocks();
     });
 
-    /*
-    test("should render loading state while fetching data", async () => {
-        mockedBackendConnector.get.mockResolvedValueOnce([]);
-        render(<ModelTable factoryId="someFactoryId" />);
-
-        expect(screen.getByText(/loading/i)).toBeInTheDocument();
-
-        // Wait for data to be loaded
-        await waitFor(() =>
-            expect(mockedBackendConnector.get).toHaveBeenCalledTimes(1),
-        );
-    });
-    */
-
     test("should render data correctly", async () => {
         const testData = [
             {
