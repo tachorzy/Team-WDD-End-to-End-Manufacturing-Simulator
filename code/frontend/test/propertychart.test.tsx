@@ -1,7 +1,8 @@
 import React from "react";
 import { render, cleanup } from "@testing-library/react";
+import { Property } from "@/app/api/_utils/types";
 import PropertyChart, {
-    DataPoint,
+    PropertyData,
 } from "../components/assetdashboard/charts/PropertyChart";
 import "@testing-library/jest-dom";
 
@@ -35,14 +36,31 @@ jest.mock("d3", () => ({
 
 afterEach(cleanup);
 
+const mockProperty: Property = {
+    propertyId: "1",
+    modelId: "1",
+    factoryId: "1",
+    measurementId: "1",
+    generatorType: "random",
+    name: "property",
+    unit: "unit",
+    // min: 1,
+    // max: 100,
+    // value: 50,
+    // timestamp: Date.now(),
+    // factoryId: "1",
+};
+
 describe("PropertyChart", () => {
-    const data: DataPoint[] = [
-        { timeStamp: Date.now(), value: 10 },
-        { timeStamp: Date.now(), value: 20 },
+    const data: PropertyData[] = [
+        { date: Date.now(), value: 10 },
+        { date: Date.now(), value: 20 },
     ];
 
     test("should render component", () => {
-        const { getByTestId } = render(<PropertyChart data={data} />);
+        const { getByTestId } = render(
+            <PropertyChart property={mockProperty} />,
+        );
         expect(getByTestId("property chart")).toBeInTheDocument();
     });
 });

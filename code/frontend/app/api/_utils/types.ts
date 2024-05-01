@@ -72,3 +72,14 @@ export interface Model {
     properties: Property[];
     measurements: Measurement[];
 }
+
+export interface Value { 
+    date: Date;
+    value: number;
+}
+
+export interface PropertyData {
+    propertyId: string;
+    values: Value[];
+    lastCalculated: number;
+}

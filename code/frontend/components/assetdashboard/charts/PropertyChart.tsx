@@ -1,18 +1,37 @@
-import React, { useEffect } from "react";
+import React, { use, useEffect, useState } from "react";
 import * as d3 from "d3";
+import { Property, PropertyData, Value } from "@/app/api/_utils/types";
+import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 
-export interface DataPoint {
-    timeStamp: number; // changed from number to Date
-    value: number;
-}
+const LineChart = (props: { property: Property }) => {
+    const [data, setData] = useState<Value[]>([]);
+    const [propertyData, setPropertyData] = useState<PropertyData[]>([]);
+    const { property } = props;
 
-interface PropertyChartProps {
-    data: DataPoint[];
-}
+    const propertyId = property.propertyId as string;
 
-const LineChart = ({ data }: PropertyChartProps) => {
     useEffect(() => {
-        d3.select("#chart").select("svg").remove();
+        const fetchPropertyData = async () => {
+            try {
+                const config: GetConfig = {
+                    resource: "properties/data",
+                    params: { propertyId },
+                };
+                const fetchedData =
+                    await BackendConnector.get<Value>(config);
+                setData((prevData) => [...prevData, fetchedData]);
+            } catch (error) {
+                console.error("Failed to fetch property data:", error);
+            }
+        };
+
+        if (propertyId) {
+            fetchPropertyData();
+        }
+    }, [data, propertyId]);
+
+    useEffect(() => {
+        d3.select(`#chart-${property.name}`).select("svg").remove();
 
         const chartElement = document.getElementById("chart");
         const width = chartElement ? chartElement.clientWidth : 600;
@@ -20,7 +39,7 @@ const LineChart = ({ data }: PropertyChartProps) => {
         const height = 240 - 2 * margin;
 
         const svg = d3
-            .select("#chart")
+            .select(`#chart-${property.name}`)
             .append("svg") // changed from selectAll to append
             .attr("width", width + 2 * margin)
             .attr("height", height + 2 * margin);
@@ -32,7 +51,7 @@ const LineChart = ({ data }: PropertyChartProps) => {
         const xScale = d3
             .scaleTime()
             .range([0, width])
-            .domain(d3.extent(data, (d) => d.timeStamp) as [number, number]); // changed from DataPoint["timeStamp"][] to [Date, Date]
+            .domain(d3.extent(data, (d) => d.date) as [Date, Date]); // changed from DataPoint["timeStamp"][] to [Date, Date]
 
         const yScale = d3
             .scaleLinear()
@@ -46,8 +65,8 @@ const LineChart = ({ data }: PropertyChartProps) => {
         const yAxis = d3.axisLeft(yScale);
 
         const line = d3
-            .line<DataPoint>()
-            .x((d) => xScale(d.timeStamp))
+            .line<Value>()
+            .x((d) => xScale(d.date))
             .y((d) => yScale(d.value));
 
         g.append("g")
@@ -73,7 +92,7 @@ const LineChart = ({ data }: PropertyChartProps) => {
             .attr("x", 0 - height / 2)
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text("Value");
+            .text(`${property.name} (${property.unit})`);
 
         g.append("path")
             .datum(data)
@@ -82,10 +101,8 @@ const LineChart = ({ data }: PropertyChartProps) => {
             .attr("stroke-width", 1.5)
             .attr("fill", "none");
 
-        // handle the enter selection
         const svgEnter = svg.enter().append("svg");
 
-        // handle the update selection
         const svgUpdate = svg
             .merge(svgEnter)
             .attr("width", width + 2 * margin)
@@ -97,12 +114,15 @@ const LineChart = ({ data }: PropertyChartProps) => {
 
         svgUpdate.select(".y-axis");
 
-        // handle the exit selection
         svg.exit().remove();
     }, [data]);
 
     return (
-        <div id="chart" className="w-11/12 my-3" data-testid="property chart" />
+        <div
+            id={`chart-${property.name}`}
+            className="w-11/12 my-3"
+            data-testid="property chart"
+        />
     );
 };
 
