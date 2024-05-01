@@ -17,12 +17,12 @@ describe("Navbar Component", () => {
         const passwordInputs = screen.getAllByPlaceholderText(/Password/i);
         expect(passwordInputs.length).toBe(2);
 
-        const passwordInstruction = screen.getByText(/Password must be longer than 10 characters and contain a special character./i);
+        const passwordInstruction = screen.getByText(
+            /Password must be longer than 10 characters and contain a special character./i,
+        );
         expect(passwordInstruction).toBeInTheDocument();
 
         const buttonElement = screen.getByText(/Sign Up/i);
         expect(buttonElement).toBeInTheDocument();
     });
-
-
 });

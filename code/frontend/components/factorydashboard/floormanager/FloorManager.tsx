@@ -57,7 +57,7 @@ const FloorManager: React.FC<FloorManagerProps> = ({
                 />
                 <h2 className="text-xl font-semibold">Floor Manager</h2>
             </div>
-            <InventoryNavBar factoryId={factoryId}/>
+            <InventoryNavBar factoryId={factoryId} />
             {!showAddAssetForm && (
                 <AssetInventory
                     assets={assets}
