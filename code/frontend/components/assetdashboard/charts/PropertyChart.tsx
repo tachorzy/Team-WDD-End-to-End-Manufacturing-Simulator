@@ -4,33 +4,34 @@ import { Property, PropertyData, Value } from "@/app/api/_utils/types";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 
 const LineChart = (props: { property: Property }) => {
-    const [data, setData] = useState<PropertyData[]>([]);
+    const [data, setData] = useState<Value[]>([]);
+    const [propertyData, setPropertyData] = useState<PropertyData[]>([]);
     const { property } = props;
 
     const propertyId = property.propertyId as string;
 
-    useEffect(() => {
-        const fetchPropertyData = async () => {
-            try {
-                const config: GetConfig = {
-                    resource: "properties/data",
-                    params: { propertyId },
-                };
-                const fetchedData =
-                    await BackendConnector.get<PropertyData>(config);
-                setData((prevData) => [...prevData, fetchedData]);
-            } catch (error) {
-                console.error("Failed to fetch property data:", error);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchPropertyData = async () => {
+    //         try {
+    //             const config: GetConfig = {
+    //                 resource: "properties/data",
+    //                 params: { propertyId },
+    //             };
+    //             const fetchedData =
+    //                 await BackendConnector.get<Value>(config);
+    //             setData((prevData) => [...prevData, fetchedData]);
+    //         } catch (error) {
+    //             console.error("Failed to fetch property data:", error);
+    //         }
+    //     };
 
-        if (propertyId) {
-            fetchPropertyData();
-        }
-    }, [data, propertyId]);
+    //     if (propertyId) {
+    //         fetchPropertyData();
+    //     }
+    // }, [data, propertyId]);
 
     useEffect(() => {
-        d3.select("#chart").select("svg").remove();
+        d3.select(`#chart-${property.name}`).select("svg").remove();
 
         const chartElement = document.getElementById("chart");
         const width = chartElement ? chartElement.clientWidth : 600;
@@ -50,12 +51,12 @@ const LineChart = (props: { property: Property }) => {
         const xScale = d3
             .scaleTime()
             .range([0, width])
-            .domain(d3.extent(data, (d) => d.lastCalculated) as [number, number]);
+            .domain(d3.extent(data, (d) => d.date) as [Date, Date]); // changed from DataPoint["timeStamp"][] to [Date, Date]
 
         const yScale = d3
             .scaleLinear()
             .range([height, 0])
-            .domain(d3.extent(data, (d) => d.values) as [number, number]);
+            .domain(d3.extent(data, (d) => d.value) as [number, number]); // changed from DataPoint["value"][] to [number, number]
 
         const xAxis = d3
             .axisBottom(xScale)
@@ -64,8 +65,8 @@ const LineChart = (props: { property: Property }) => {
         const yAxis = d3.axisLeft(yScale);
 
         const line = d3
-            .line<PropertyData>()
-            .x((d) => xScale(d.lastCalculated))
+            .line<Value>()
+            .x((d) => xScale(d.date))
             .y((d) => yScale(d.value));
 
         g.append("g")
@@ -91,7 +92,7 @@ const LineChart = (props: { property: Property }) => {
             .attr("x", 0 - height / 2)
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text(property.name);
+            .text(`${property.name} (${property.unit})`);
 
         g.append("path")
             .datum(data)
@@ -100,10 +101,8 @@ const LineChart = (props: { property: Property }) => {
             .attr("stroke-width", 1.5)
             .attr("fill", "none");
 
-        // handle the enter selection
         const svgEnter = svg.enter().append("svg");
 
-        // handle the update selection
         const svgUpdate = svg
             .merge(svgEnter)
             .attr("width", width + 2 * margin)
@@ -115,7 +114,6 @@ const LineChart = (props: { property: Property }) => {
 
         svgUpdate.select(".y-axis");
 
-        // handle the exit selection
         svg.exit().remove();
     }, [data]);
 

@@ -34,7 +34,6 @@ const ChartColumn = (props: { factoryId: string; modelId: string }) => {
         <div className="flex flex-col mb-3 pl-5 gap-y-3 w-full h-64 overflow-y-scroll border-2 border-[#E2E4EA] bg-[#FAFAFA] rounded-lg">
             {properties.map((property, index) => (
                 <div key={index}>
-                    <h1 className="text-black">{property.name}</h1>
                     <PropertyChart property={property} />
                 </div>
             ))}

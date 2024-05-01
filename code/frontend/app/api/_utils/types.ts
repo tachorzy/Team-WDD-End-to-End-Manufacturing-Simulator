@@ -73,7 +73,7 @@ export interface Model {
 }
 
 export interface Value { 
-    date: string;
+    date: Date;
     value: number;
 }
 
