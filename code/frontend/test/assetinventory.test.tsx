@@ -34,7 +34,7 @@ describe("AssetInventory", () => {
         mockCreateObjectURL.mockClear();
     });
 
-    test("should render list of assets", () => {
+    test("should render list of assets by model", () => {
         const mockAssets: Asset[] = [
             {
                 assetId: "1",
@@ -42,6 +42,7 @@ describe("AssetInventory", () => {
                 description: "Description 1",
                 imageData: "image1.jpg",
                 factoryId: "1",
+                modelId: "1"
             },
             {
                 assetId: "2",
@@ -49,6 +50,15 @@ describe("AssetInventory", () => {
                 description: "Description 2",
                 imageData: "image2.jpg",
                 factoryId: "1",
+                modelId: "2"
+            },
+            {
+                assetId: "2",
+                name: "Asset 2",
+                description: "Description 2",
+                imageData: "image2.jpg",
+                factoryId: "1",
+                modelId: "1"
             },
         ];
 
@@ -57,10 +67,11 @@ describe("AssetInventory", () => {
                 assets={mockAssets}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
+                activeNavItem={"1"}
             />,
         );
 
-        mockAssets.forEach((asset) => {
+        mockAssets.filter((asset) => asset.modelId === "1").forEach((asset) => {
             expect(getByText(asset.name)).toBeInTheDocument();
         });
     });
@@ -73,6 +84,7 @@ describe("AssetInventory", () => {
                 assets={assets}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
+                activeNavItem={"CNC"}
             />,
         );
 
@@ -85,6 +97,7 @@ describe("AssetInventory", () => {
                 assets={undefined}
                 setSelectedAsset={jest.fn()}
                 selectedAsset={null}
+                activeNavItem={"CNC"}
             />,
         );
 
