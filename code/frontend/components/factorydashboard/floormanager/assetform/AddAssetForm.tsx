@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
 import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
 import AssetUploadContainer from "./AssetUploadContainer";
+import ModelViewer from "@/components/models/createmodelform/modelrender/ModelViewer";
 
 export interface AddAssetFormProps {
     onClose: () => void;
@@ -23,6 +24,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
         factoryId,
     });
     const [assetImageFile, setAssetImageFile] = useState<File | null>(null);
+    const [assetModelFile, setAssetModelFile] = useState<File | null>(null);  
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -31,7 +33,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
             [name]: value,
         }));
     };
-
+    console.log(assetModelFile);
     const handleAddAsset = async () => {
         try {
             const config: PostConfig<Asset> = {
@@ -97,14 +99,15 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
                     <div className="w-80 h-48 ">
                         <AssetUploadContainer
                             setAssetImageFile={setAssetImageFile}
+                            setAssetModelFile={setAssetModelFile}  e
                             setFormData={setFormData}
                         />
                     </div>
                     <div className="absolute flex flex-col justify-center items-center right-0">
                         <h1 className="text-sm font-medium text-center mr-16">
-                            Asset Image Preview:
+                            Asset Preview:
                         </h1>
-                        {assetImageFile && (
+                        {assetImageFile && !assetModelFile && (
                             <Image
                                 src={URL.createObjectURL(assetImageFile)}
                                 width={120}
@@ -113,32 +116,32 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
                                 alt="Asset"
                             />
                         )}
+                        {assetModelFile && (
+                            <ModelViewer file={assetModelFile} />
+                        )}
                     </div>
                 </div>
 
-                <div>
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            handleAddAsset();
-                        }}
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleAddAsset();
+                    }}
+                >
+                    <button
+                        type="submit"
+                        className="inline-flex items-center rounded-md m-2 bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50  border border-gray-800"
                     >
-                        <button
-                            type="submit"
-                            onSubmit={handleAddAsset}
-                            className="inline-flex items-center rounded-md m-2 bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50  border border-gray-800"
-                        >
-                            Create Asset
-                        </button>
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="inline-flex items-center rounded-md m-2 bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50  border border-gray-800"
-                        >
-                            Cancel
-                        </button>
-                    </form>
-                </div>
+                        Create Asset
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="inline-flex items-center rounded-md m-2 bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50  border border-gray-800"
+                    >
+                        Cancel
+                    </button>
+                </form>
             </div>
         </div>
     );
