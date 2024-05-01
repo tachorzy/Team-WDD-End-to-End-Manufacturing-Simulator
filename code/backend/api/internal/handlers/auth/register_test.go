@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
+	"wdd/api/internal/wrappers"
 )
 
 func TestHandleRegisterRequest_BadJSON(t *testing.T) {
@@ -53,6 +54,39 @@ func TestHandleRegisterRequest_SignUpError(t *testing.T) {
 
 	if response.StatusCode != http.StatusInternalServerError {
 		t.Errorf("Expected status code %d for Cognito sign up error, got %d", http.StatusInternalServerError, response.StatusCode)
+	}
+}
+
+func TestHandleRegisterRequest_JSONMarshalError(t *testing.T) {
+	mockCognitoClient := &mocks.CognitoClient{
+		SignUpFunc: func(ctx context.Context, params *cognito.SignUpInput, optFns ...func(*cognito.Options)) (*cognito.SignUpOutput, error) {
+			return &cognito.SignUpOutput{}, nil
+		},
+	}
+
+	handler := NewRegisterHandler(mockCognitoClient)
+
+	originalJSONMarshal := wrappers.JSONMarshal
+
+	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
+
+	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+		return nil, errors.New("mock marshal error")
+	}
+
+	request := events.APIGatewayProxyRequest{
+		Body: `{"username":"test", "password":"test", "name": "test"}`,
+	}
+
+	ctx := context.Background()
+	response, err := handler.HandleRegisterRequest(ctx, request)
+
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected status code %d for marshalling user in JSON format, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
 

@@ -48,8 +48,17 @@ func (h Handler) HandleRegisterRequest(ctx context.Context, request events.APIGa
 		}, nil
 	}
 
+	responseBody, err := wrappers.JSONMarshal(map[string]interface{}{
+		"message": "Register successfully",
+	})
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Body:       fmt.Sprintf("Error marshalling: %v", err),
+		}, nil
+	}
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
-		Body:       "Register successfully",
+		Body:       string(responseBody),
 	}, nil
 }
