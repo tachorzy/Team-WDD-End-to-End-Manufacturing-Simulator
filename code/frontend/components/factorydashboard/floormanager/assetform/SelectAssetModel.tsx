@@ -32,6 +32,12 @@ const ModelCombobox = (props: {
         }
     }, [factoryId]);
 
+    useEffect(() => {
+        const model = models.filter((model) => model.attributes[0].value === selectedModel)[0];
+        const selectedModelId = model?.modelId
+        setModelId(selectedModelId);
+    }, [selectedModel, setModelId]);
+
     const filteredModels =
         query === ""
             ? models
@@ -55,7 +61,7 @@ const ModelCombobox = (props: {
                     {filteredModels.map((model) => (
                         <Combobox.Option
                             key={model.modelId}
-                            value={model.modelId}
+                            value={model.attributes[0].value}
                             className="text-sm hover:bg-gray-100 pl-3 p-1.5 cursor-pointer"
                         >
                             {model.attributes[0].value}
