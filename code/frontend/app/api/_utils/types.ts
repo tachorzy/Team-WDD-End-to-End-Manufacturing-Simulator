@@ -71,3 +71,9 @@ export interface Model {
     properties: Property[];
     measurements: Measurement[];
 }
+
+export interface User {
+    // Email
+    username: string;
+    password: string;
+}
