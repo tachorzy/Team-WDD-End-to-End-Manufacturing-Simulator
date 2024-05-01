@@ -6,6 +6,7 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Asset } from "@/app/api/_utils/types";
 import { BackendConnector } from "@/app/api/_utils/connector";
+import { act } from "react-dom/test-utils";
 import AddAssetForm, {
     AddAssetFormProps,
 } from "../components/factorydashboard/floormanager/assetform/AddAssetForm";
@@ -60,57 +61,57 @@ describe("AddAssetForm", () => {
         expect(getByText("Cancel")).toBeInTheDocument();
     });
 
-    // FAILING TEST CASE
+    test("should call createAsset and onAdd when Create Asset button is clicked", async () => {
+        const mockAsset: Asset = {
+            name: "Asset Mock",
+            description: "Asset Mock Description",
+            factoryId: "1",
 
-    // test("should call createAsset and onAdd when Create Asset button is clicked", async () => {
-    //     const mockAsset: Asset = {
-    //         name: "Asset Mock",
-    //         description: "Asset Mock Description",
-    //         factoryId: "1",
-    //         modelId: "2",
-    //         imageData: "http://example.com/test.png",
-    //     };
-    //     mockPost.mockResolvedValue(mockAsset);
+            imageData: "http://example.com/test.png",
+        };
+        mockPost.mockResolvedValue(mockAsset);
 
-    //     const mockFormData = {
-    //         ...mockAsset,
-    //         assetId: "",
-    //     };
+        const mockFormData = {
+            ...mockAsset,
+            assetId: "",
+            modelId: "2",
+        };
 
-    //     const { getByText, getByPlaceholderText } = render(
-    //         <AddAssetForm {...props} />,
-    //     );
+        const { getByText, getByPlaceholderText } = render(
+            <AddAssetForm {...props} />,
+        );
 
-    //     fireEvent.change(getByPlaceholderText("Name"), {
-    //         target: { value: "Asset Mock" },
-    //     });
-    //     fireEvent.change(getByPlaceholderText("Description"), {
-    //         target: { value: "Asset Mock Description" },
-    //     });
+        fireEvent.change(getByPlaceholderText("Name"), {
+            target: { value: "Asset Mock" },
+        });
+        fireEvent.change(getByPlaceholderText("Description"), {
+            target: { value: "Asset Mock Description" },
+        });
 
-    //     const setFormDataMockCall = mockAssetUploadContainer.mock
-    //         .calls[0] as [
-    //             { setFormData: (callback: (prevData: Asset) => Asset) => void },
-    //         ];
-    //     setFormDataMockCall[0].setFormData((prevData) => ({
-    //         ...prevData,
-    //         imageData: "http://example.com/test.png",
-    //     }));
+        act(() => {
+            const setFormDataMockCall = mockAssetUploadContainer.mock
+                .calls[0] as [
+                { setFormData: (callback: (prevData: Asset) => Asset) => void },
+            ];
+            setFormDataMockCall[0].setFormData((prevData) => ({
+                ...prevData,
+                imageData: "http://example.com/test.png",
+                modelId: "2",
+            }));
+        });
+        await waitFor(() => {
+            fireEvent.click(getByText("Create Asset"));
 
-    //     await waitFor(() => {
+            const fetchExpected = {
+                resource: "assets",
+                payload: mockFormData,
+            };
 
-    //         fireEvent.click(getByText("Create Asset"));
-
-    //         const fetchExpected = {
-    //             resource: "assets",
-    //             payload: mockFormData,
-    //         };
-
-    //         expect(mockPost).toHaveBeenCalledWith(fetchExpected);
-    //         expect(mockOnAdd).toHaveBeenCalledWith(mockAsset);
-    //         expect(mockOnClose).toHaveBeenCalled();
-    //     });
-    // });
+            expect(mockPost).toHaveBeenCalledWith(fetchExpected);
+            expect(mockOnAdd).toHaveBeenCalledWith(mockAsset);
+            expect(mockOnClose).toHaveBeenCalled();
+        });
+    });
 
     test("should log failuer on creating asset", async () => {
         const error = new Error("Failed to add asset");

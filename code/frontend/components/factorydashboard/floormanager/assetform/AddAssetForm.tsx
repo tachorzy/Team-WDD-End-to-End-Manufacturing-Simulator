@@ -26,7 +26,9 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
         modelId: "",
     });
     const [assetImageFile, setAssetImageFile] = useState<File | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [assetModelFile, setAssetModelFile] = useState<File | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [modelId, setModelId] = useState<string | null>(null);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +103,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
                 <div className="mb-4">
                     <ModelField
                         factoryId={factoryId}
-                        setModelId={setModelId}
+                        setModelId={(id: string | null) => setModelId(id)}
                         setFormData={setFormData}
                     />
                 </div>
