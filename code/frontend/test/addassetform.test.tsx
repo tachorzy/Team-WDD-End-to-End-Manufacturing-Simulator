@@ -31,6 +31,19 @@ jest.mock(
     },
 );
 
+const mockModelField = jest.fn();
+jest.mock(
+    "../components/factorydashboard/floormanager/assetform/ModelField",
+    () => {
+        const MockModelFieldr = (props: any) => {
+            mockModelField(props);
+            return <div data-testid="model-field" />;
+        };
+        MockModelFieldr.displayName = "ModelField";
+        return MockModelFieldr;
+    },
+);
+
 const mockOnClose = jest.fn();
 const mockOnAdd = jest.fn();
 const props: AddAssetFormProps = {
@@ -55,6 +68,7 @@ describe("AddAssetForm", () => {
         expect(getByPlaceholderText("Name")).toHaveValue("");
         expect(getByPlaceholderText("Description")).toBeInTheDocument();
         expect(getByPlaceholderText("Description")).toHaveValue("");
+        expect(getByTestId("model-field")).toBeInTheDocument();
         expect(getByTestId("asset-upload-container")).toBeInTheDocument();
         expect(getByText("Asset Preview:")).toBeInTheDocument();
         expect(getByText("Create Asset")).toBeInTheDocument();
