@@ -17,8 +17,6 @@ export default function Page({
 
     const [assets, setAssets] = useState<Asset[]>([]);
 
-    console.log(`assetId: ${assetId}`);
-
     useEffect(() => {
         const fetchAssets = async () => {
             try {
@@ -60,7 +58,7 @@ export default function Page({
                 : 
                 (
                     <div className="flex flex-col px-32 my-2 -mt-[35rem]">
-                        <Bento factoryId={factoryId} asset={inspectedAsset as Asset} />
+                        <Bento asset={inspectedAsset as Asset} />
                         <ChartColumn />
                     </div>
                 )
