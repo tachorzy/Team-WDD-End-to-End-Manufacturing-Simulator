@@ -62,12 +62,13 @@ const ModelField: React.FC<ModelFieldProps> = ({
                 value={selectedModelId}
                 onChange={handleSelectChange}
                 className="form-select bg-gray-200 p-3 rounded-lg placeholder-gray-400 text-[#494949] w-full"
+                data-testid="model-select" 
             >
                 <option value="" disabled>
                     Select a model
                 </option>
                 {models.map((model) => (
-                    <option key={model.modelId} value={model.modelId}>
+                    <option key={model.modelId} value={model.modelId} data-testid={`model-option-${model.modelId}`} >
                         {findModelName(model.attributes)}
                     </option>
                 ))}
