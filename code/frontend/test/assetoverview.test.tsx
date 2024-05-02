@@ -11,7 +11,9 @@ import { BackendConnector } from "@/app/api/_utils/connector";
 const mockGet = jest.fn();
 BackendConnector.get = mockGet;
 
-const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+const consoleErrorSpy = jest
+    .spyOn(console, "error")
+    .mockImplementation(() => {});
 
 const mockModel: Model[] = [
     {
@@ -31,7 +33,7 @@ const mockModel: Model[] = [
                 modelId: "1",
                 name: "Serial Number",
                 value: "SN-1243-541",
-            }
+            },
         ],
         properties: [
             {
@@ -101,7 +103,9 @@ describe("AssetOverview", () => {
         render(<AssetOverview asset={asset} />);
 
         await waitFor(() => {
-            expect(consoleErrorSpy).toHaveBeenCalledWith("No models returned from backend");
+            expect(consoleErrorSpy).toHaveBeenCalledWith(
+                "No models returned from backend",
+            );
         });
     });
 
@@ -122,7 +126,10 @@ describe("AssetOverview", () => {
         render(<AssetOverview asset={asset} />);
 
         await waitFor(() => {
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to fetch models:", new Error("Could not find models"));
+            expect(consoleErrorSpy).toHaveBeenCalledWith(
+                "Failed to fetch models:",
+                new Error("Could not find models"),
+            );
         });
     });
 });
