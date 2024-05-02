@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     try {
         if (factoryId) {
             const config: GetConfig = {
-                resource: "assets",
+                resource: "models",
                 params: { factoryId },
             };
             const models = await BackendConnector.get<Model[]>(config);

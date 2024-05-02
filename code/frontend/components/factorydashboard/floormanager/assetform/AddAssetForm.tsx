@@ -3,7 +3,8 @@ import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
 import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
 import AssetUploadContainer from "./AssetUploadContainer";
-import ModelField from "./modelField";
+// import ModelViewer from "@/components/models/createmodelform/modelrender/ModelViewer";
+import ModelField from "./ModelField";
 
 export interface AddAssetFormProps {
     onClose: () => void;
@@ -26,6 +27,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
         modelUrl: "",
     });
     const [assetImageFile, setAssetImageFile] = useState<File | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [modelId, setModelId] = useState<string | null>(null);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +37,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
             [name]: value,
         }));
     };
+    
     const handleAddAsset = async () => {
         try {
             const config: PostConfig<Asset> = {
@@ -99,7 +102,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
                 <div className="mb-4">
                     <ModelField
                         factoryId={factoryId}
-                        setModelId={setModelId}
+                        setModelId={(id: string | null) => setModelId(id)}
                         setFormData={setFormData}
                     />
                 </div>
@@ -114,7 +117,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
                         <h1 className="text-sm font-medium text-center mr-16">
                             Asset Preview:
                         </h1>
-                        {assetImageFile && (
+                        {assetImageFile &&  (
                             <Image
                                 src={URL.createObjectURL(assetImageFile)}
                                 width={120}

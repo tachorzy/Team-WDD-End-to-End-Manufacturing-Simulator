@@ -16,11 +16,6 @@ jest.mock("@/app/api/_utils/connector", () => ({
 
 global.fetch = jest.fn();
 
-jest.mock("next/image", () => ({
-    __esModule: true,
-    default: (props: any) => <img alt="" {...props} />,
-}));
-
 const mockEditFactoryForm = jest.fn();
 jest.mock("../components/factorydashboard/editFactory", () => {
     const MockEditFactoryForm = (props: any) => {

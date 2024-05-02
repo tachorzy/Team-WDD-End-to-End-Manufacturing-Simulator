@@ -5,7 +5,6 @@ import SignUpButton from "./SignUpButton";
 
 const FactoryPageNavbar = (props: { pageId: string; factoryId: string }) => {
     const { pageId, factoryId } = props;
-    console.log(`pageId: ${pageId}, factoryId: ${factoryId}`);
 
     const navbarLinks = [
         { label: "Home", link: "/" },
@@ -13,7 +12,7 @@ const FactoryPageNavbar = (props: { pageId: string; factoryId: string }) => {
             label: "Factory Floor",
             link: `/factorydashboard/${factoryId}`,
         },
-        { label: "Dashboard", link: `/factorydashboard/${factoryId}` },
+        { label: "Dashboard", link: `/factorydashboard/${factoryId}/assetdashboard` },
         {
             label: "Asset Models",
             link: `/factorydashboard/${factoryId}/assetmodels`,

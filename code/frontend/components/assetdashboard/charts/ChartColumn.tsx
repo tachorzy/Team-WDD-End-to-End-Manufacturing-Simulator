@@ -31,7 +31,7 @@ const ChartColumn = (props: { factoryId: string; modelId: string }) => {
     }, [modelId]);
 
     return (
-        <div className="flex flex-col mb-3 pl-5 gap-y-3 w-full h-64 overflow-y-scroll border-2 border-[#E2E4EA] bg-[#FAFAFA] rounded-lg">
+        <div className="flex flex-col mb-3 pl-5 gap-y-3 w-full h-64  border-2 border- bg-[#FAFAFA] rounded-lg">
             {properties.map((property, index) => (
                 <div key={index}>
                     <PropertyChart property={property} />

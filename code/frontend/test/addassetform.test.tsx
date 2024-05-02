@@ -6,6 +6,7 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Asset } from "@/app/api/_utils/types";
 import { BackendConnector } from "@/app/api/_utils/connector";
+import { act } from "react-dom/test-utils";
 import AddAssetForm, {
     AddAssetFormProps,
 } from "../components/factorydashboard/floormanager/assetform/AddAssetForm";
@@ -27,6 +28,19 @@ jest.mock(
         };
         MockAssetUploadContainer.displayName = "AssetUploadContainer";
         return MockAssetUploadContainer;
+    },
+);
+
+const mockModelField = jest.fn();
+jest.mock(
+    "../components/factorydashboard/floormanager/assetform/ModelField",
+    () => {
+        const MockModelFieldr = (props: any) => {
+            mockModelField(props);
+            return <div data-testid="model-field" />;
+        };
+        MockModelFieldr.displayName = "ModelField";
+        return MockModelFieldr;
     },
 );
 
@@ -54,8 +68,9 @@ describe("AddAssetForm", () => {
         expect(getByPlaceholderText("Name")).toHaveValue("");
         expect(getByPlaceholderText("Description")).toBeInTheDocument();
         expect(getByPlaceholderText("Description")).toHaveValue("");
+        expect(getByTestId("model-field")).toBeInTheDocument();
         expect(getByTestId("asset-upload-container")).toBeInTheDocument();
-        expect(getByText("Asset Image Preview:")).toBeInTheDocument();
+        expect(getByText("Asset Preview:")).toBeInTheDocument();
         expect(getByText("Create Asset")).toBeInTheDocument();
         expect(getByText("Cancel")).toBeInTheDocument();
     });
@@ -65,15 +80,21 @@ describe("AddAssetForm", () => {
             name: "Asset Mock",
             description: "Asset Mock Description",
             factoryId: "1",
+<<<<<<< HEAD
             imageData: "",
             modelId: "",
             modelUrl: "",
+=======
+
+            imageData: "http://example.com/test.png",
+>>>>>>> f4478efcf2d79b1a877b741dd8bdd48097b4042d
         };
         mockPost.mockResolvedValue(mockAsset);
 
         const mockFormData = {
             ...mockAsset,
             assetId: "",
+            modelId: "2",
         };
 
         const { getByText, getByPlaceholderText } = render(
@@ -87,7 +108,7 @@ describe("AddAssetForm", () => {
             target: { value: "Asset Mock Description" },
         });
 
-        await waitFor(() => {
+        act(() => {
             const setFormDataMockCall = mockAssetUploadContainer.mock
                 .calls[0] as [
                 { setFormData: (callback: (prevData: Asset) => Asset) => void },
@@ -95,7 +116,10 @@ describe("AddAssetForm", () => {
             setFormDataMockCall[0].setFormData((prevData) => ({
                 ...prevData,
                 imageData: "http://example.com/test.png",
+                modelId: "2",
             }));
+        });
+        await waitFor(() => {
             fireEvent.click(getByText("Create Asset"));
 
             const fetchExpected = {

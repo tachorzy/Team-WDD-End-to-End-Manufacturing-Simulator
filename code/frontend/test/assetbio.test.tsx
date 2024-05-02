@@ -4,7 +4,6 @@
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Asset } from "@/app/types/types";
 import AssetBio from "../components/factorydashboard/floormanager/AssetBio";
 
 global.URL.createObjectURL = jest
@@ -13,7 +12,13 @@ global.URL.createObjectURL = jest
 
 jest.mock("next/image", () => ({
     __esModule: true,
-    default: (props: any) => <img alt="" {...props} />,
+    default: ({ src, ...props }: { src: string }) => {
+        const MockNextImage = ({ imageSrc }: { imageSrc: string }) => (
+            <div data-testid="mock-next-image" data-src={imageSrc} />
+        );
+
+        return <MockNextImage imageSrc={src} {...props} />;
+    },
 }));
 
 global.fetch = jest.fn(() =>
@@ -27,17 +32,6 @@ describe("AssetBio", () => {
         jest.clearAllMocks();
     });
 
-    test("should render render without error", () => {
-        const asset = {
-            factoryId: "1",
-            name: "Asset 1",
-            description: "Asset 1 description",
-            imageData: "https://www.example.com/image.jpg",
-        };
-
-        render(<AssetBio factoryId="12345678" asset={asset as Asset} />);
-    });
-
     test("should render asset", async () => {
         const asset = {
             factoryId: "1",
@@ -46,13 +40,13 @@ describe("AssetBio", () => {
             imageData: "https://www.example.com/image.jpg",
         };
 
-        const { getByAltText, getByText } = render(
+        const { getByTestId, getByText } = render(
             <AssetBio factoryId={asset.factoryId} asset={asset} />,
         );
 
         await waitFor(() => {
-            expect(getByAltText("Asset Image")).toHaveAttribute(
-                "src",
+            expect(getByTestId("mock-next-image")).toHaveAttribute(
+                "data-src",
                 "http://test.com/test.png",
             );
             expect(getByText("Asset 1")).toBeInTheDocument();
@@ -70,13 +64,13 @@ describe("AssetBio", () => {
             imageData: undefined,
         };
 
-        const { getByAltText, getByText } = render(
+        const { getByTestId, getByText } = render(
             <AssetBio factoryId={asset.factoryId} asset={asset} />,
         );
 
         await waitFor(() => {
-            expect(getByAltText("Asset Image")).toHaveAttribute(
-                "src",
+            expect(getByTestId("mock-next-image")).toHaveAttribute(
+                "data-src",
                 "/icons/floorplan/placeholder-asset.svg",
             );
             expect(getByText("Asset 1")).toBeInTheDocument();
