@@ -1,13 +1,12 @@
-package models
+package generators
 
 import (
 	"wdd/api/internal/types"
 )
 
-const TABLENAME = "Model"
 const PROPERTYTABLE = "Property"
-const ATTRIBUTETABLE = "Attribute"
 const MEASUREMENTTABLE = "Measurement"
+const PROPERTYDATA = "PropertyData"
 
 type Handler struct {
 	DynamoDB types.DynamoDBClient

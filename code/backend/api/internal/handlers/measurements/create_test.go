@@ -65,7 +65,7 @@ func TestHandleCreateMeasurementRequest_MarshalMapError(t *testing.T) {
 
 func TestHandleCreateMeasurementRequest_PutItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -90,28 +90,23 @@ func TestHandleCreateMeasurementRequest_PutItemError(t *testing.T) {
 
 func TestHandleCreateMeasurementRequest_JSONMarshalError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
 	}
-
 	handler := NewCreateMeasurementHandler(mockDDBClient)
+	originalJSONMarshal := wrappers.JSONMarshal
+	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
+	wrappers.JSONMarshal = func(_ interface{}) ([]byte, error) {
+		return nil, errors.New("mock marshal error")
+	}
 
 	request := events.APIGatewayProxyRequest{
 		Body: `{"frequency":1.0,"generatorFunction":"Function 1","lowerBound":0.0,"upperBound":10.0,"precision":0.1}`,
 	}
 
-	originalJSONMarshal := wrappers.JSONMarshal
-
-	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
-
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
-		return nil, errors.New("mock marshal error")
-	}
-
 	ctx := context.Background()
 	response, err := handler.HandleCreateMeasurementRequest(ctx, request)
-
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
@@ -123,7 +118,7 @@ func TestHandleCreateMeasurementRequest_JSONMarshalError(t *testing.T) {
 
 func TestHandleCreateMeasurementRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
 	}

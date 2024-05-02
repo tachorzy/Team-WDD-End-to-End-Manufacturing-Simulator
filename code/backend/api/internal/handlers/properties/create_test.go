@@ -3,13 +3,14 @@ package properties
 import (
 	"context"
 	"errors"
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
 	"wdd/api/internal/wrappers"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
 func TestHandleCreatePropertyRequest_BadJSON(t *testing.T) {
@@ -64,7 +65,7 @@ func TestHandleCreatePropertyRequest_MarshalMapError(t *testing.T) {
 
 func TestHandleCreatePropertyRequest_PutItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -86,28 +87,23 @@ func TestHandleCreatePropertyRequest_PutItemError(t *testing.T) {
 		t.Errorf("Expected status code %d for DynamoDB put item error, got %d", http.StatusInternalServerError, response.StatusCode)
 	}
 }
-
 func TestHandleCreatePropertyRequest_JSONMarshalError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
 	}
 
 	handler := NewCreatePropertyHandler(mockDDBClient)
 
+	originalJSONMarshal := wrappers.JSONMarshal
+	wrappers.JSONMarshal = func(_ interface{}) ([]byte, error) {
+		return nil, errors.New("mock marshal error")
+	}
+	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
 	request := events.APIGatewayProxyRequest{
 		Body: `{"propertyId": "1", "measurementId":"1", "name":"test", "value":1.0, "unit":"feet"}`,
 	}
-
-	originalFactoryJSONMarshal := wrappers.JSONMarshal
-
-	defer func() { wrappers.JSONMarshal = originalFactoryJSONMarshal }()
-
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
-		return nil, errors.New("mock marshal error")
-	}
-
 	ctx := context.Background()
 	response, err := handler.HandleCreatePropertyRequest(ctx, request)
 
@@ -122,7 +118,7 @@ func TestHandleCreatePropertyRequest_JSONMarshalError(t *testing.T) {
 
 func TestHandleCreatePropertyRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
 	}
