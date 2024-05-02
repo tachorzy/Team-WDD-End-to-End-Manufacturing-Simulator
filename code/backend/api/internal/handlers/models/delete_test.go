@@ -3,11 +3,12 @@ package models
 import (
 	"context"
 	"errors"
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
 func TestHandleDeleteModelRequest_MissingModelId(t *testing.T) {
@@ -32,7 +33,7 @@ func TestHandleDeleteModelRequest_MissingModelId(t *testing.T) {
 
 func TestHandleDeleteModelRequest_DeleteItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		DeleteItemFunc: func(ctx context.Context, params *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
+		DeleteItemFunc: func(_ context.Context, _ *dynamodb.DeleteItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
 			return nil, errors.New("mock DynamoDB error")
 		},
 	}
@@ -58,7 +59,7 @@ func TestHandleDeleteModelRequest_DeleteItemError(t *testing.T) {
 
 func TestHandleDeleteModelRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		DeleteItemFunc: func(ctx context.Context, params *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
+		DeleteItemFunc: func(_ context.Context, _ *dynamodb.DeleteItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
 			return &dynamodb.DeleteItemOutput{}, nil
 		},
 	}

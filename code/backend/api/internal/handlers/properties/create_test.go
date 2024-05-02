@@ -65,7 +65,7 @@ func TestHandleCreatePropertyRequest_MarshalMapError(t *testing.T) {
 
 func TestHandleCreatePropertyRequest_PutItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -89,7 +89,7 @@ func TestHandleCreatePropertyRequest_PutItemError(t *testing.T) {
 }
 func TestHandleCreatePropertyRequest_JSONMarshalError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
 	}
@@ -97,7 +97,7 @@ func TestHandleCreatePropertyRequest_JSONMarshalError(t *testing.T) {
 	handler := NewCreatePropertyHandler(mockDDBClient)
 
 	originalJSONMarshal := wrappers.JSONMarshal
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(_ interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
@@ -118,7 +118,7 @@ func TestHandleCreatePropertyRequest_JSONMarshalError(t *testing.T) {
 
 func TestHandleCreatePropertyRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
 	}

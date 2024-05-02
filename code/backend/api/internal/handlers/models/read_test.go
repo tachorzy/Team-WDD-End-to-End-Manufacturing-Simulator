@@ -41,7 +41,7 @@ func TestHandleReadModelRequest_Success(t *testing.T) {
 		QueryStringParameters: map[string]string{"id": "model123"},
 	}
 
-	mockDDBClient.QueryFunc = func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+	mockDDBClient.QueryFunc = func(_ context.Context, _ *dynamodb.QueryInput, _ ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 		items := []map[string]types.AttributeValue{
 			{
 				"modelId":     &types.AttributeValueMemberS{Value: "model123"},
@@ -89,7 +89,7 @@ func TestHandleReadModelRequest_MissingParameters(t *testing.T) {
 
 func TestHandleReadModelRequest_DynamoDBQueryError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+		QueryFunc: func(_ context.Context, _ *dynamodb.QueryInput, _ ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			return nil, errors.New("Error querying model by ID")
 		},
 	}
@@ -115,7 +115,7 @@ func TestHandleReadModelRequest_DynamoDBQueryError(t *testing.T) {
 
 func TestHandleReadModelRequest_UnmarshalListOfMapsError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+		QueryFunc: func(_ context.Context, _ *dynamodb.QueryInput, _ ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			return &dynamodb.QueryOutput{Items: ValidQueryItems()}, nil
 		},
 	}
@@ -147,7 +147,7 @@ func TestHandleReadModelRequest_UnmarshalListOfMapsError(t *testing.T) {
 
 func TestHandleReadModelRequest_JSONMarshal(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+		QueryFunc: func(_ context.Context, _ *dynamodb.QueryInput, _ ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			return &dynamodb.QueryOutput{Items: ValidQueryItems()}, nil
 		},
 	}
@@ -157,7 +157,7 @@ func TestHandleReadModelRequest_JSONMarshal(t *testing.T) {
 
 	defer func() { wrappers.JSONMarshal = originalFactoryJSONMarshal }()
 
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(_ interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
@@ -178,7 +178,7 @@ func TestHandleReadModelRequest_JSONMarshal(t *testing.T) {
 
 func TestHandleReadModelRequest_WithFactoryID_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+		QueryFunc: func(_ context.Context, _ *dynamodb.QueryInput, _ ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			return &dynamodb.QueryOutput{Items: ValidQueryItems()}, nil
 		},
 	}
@@ -204,7 +204,7 @@ func TestHandleReadModelRequest_WithFactoryID_Success(t *testing.T) {
 
 func TestHandleReadModelRequest_WithFactoryID_DynamoDBError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+		QueryFunc: func(_ context.Context, _ *dynamodb.QueryInput, _ ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -230,7 +230,7 @@ func TestHandleReadModelRequest_WithFactoryID_DynamoDBError(t *testing.T) {
 
 func TestHandleReadModelRequest_WithFactoryID_NoModelsFound(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+		QueryFunc: func(_ context.Context, _ *dynamodb.QueryInput, _ ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			return &dynamodb.QueryOutput{Items: []map[string]types.AttributeValue{}}, nil
 		},
 	}

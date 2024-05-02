@@ -21,7 +21,7 @@ func NewPropertyValuesHandler(db types.DynamoDBClient) *Handler {
 		DynamoDB: db,
 	}
 }
-func (h *Handler) HandlePropertyValue(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (h *Handler) HandlePropertyValue(ctx context.Context, _ events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",
 		"Content-Type":                "application/json",

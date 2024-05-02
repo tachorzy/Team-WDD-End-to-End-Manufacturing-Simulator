@@ -65,7 +65,7 @@ func TestHandleUpdateModelRequest_UpdateExpressionBuilderError(t *testing.T) {
 
 func TestHandleUpdateModelRequest_UpdateItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
+		UpdateItemFunc: func(_ context.Context, _ *dynamodb.UpdateItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -90,7 +90,7 @@ func TestHandleUpdateModelRequest_UpdateItemError(t *testing.T) {
 
 func TestHandleUpdateModelRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
+		UpdateItemFunc: func(_ context.Context, _ *dynamodb.UpdateItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
 			return &dynamodb.UpdateItemOutput{}, nil
 		},
 	}

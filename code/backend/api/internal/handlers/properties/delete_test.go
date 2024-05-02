@@ -3,11 +3,12 @@ package properties
 import (
 	"context"
 	"errors"
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
 func TestHandleDeletePropertyRequest_MissingPropertyId(t *testing.T) {
@@ -32,7 +33,7 @@ func TestHandleDeletePropertyRequest_MissingPropertyId(t *testing.T) {
 
 func TestHandleDeletePropertyRequest_DeleteItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		DeleteItemFunc: func(ctx context.Context, params *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
+		DeleteItemFunc: func(_ context.Context, _ *dynamodb.DeleteItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
 			return nil, errors.New("mock DynamoDB error")
 		},
 	}
@@ -58,7 +59,7 @@ func TestHandleDeletePropertyRequest_DeleteItemError(t *testing.T) {
 
 func TestHandleDeletePropertyRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		DeleteItemFunc: func(ctx context.Context, params *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
+		DeleteItemFunc: func(_ context.Context, _ *dynamodb.DeleteItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
 			return &dynamodb.DeleteItemOutput{}, nil
 		},
 	}

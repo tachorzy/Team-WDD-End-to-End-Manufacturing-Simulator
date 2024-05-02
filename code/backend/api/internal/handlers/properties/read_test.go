@@ -3,18 +3,19 @@ package properties
 import (
 	"context"
 	"errors"
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
 	"wdd/api/internal/wrappers"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
 func TestHandleReadPropertyRequest_WithoutId_ScanError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+		ScanFunc: func(_ context.Context, _ *dynamodb.ScanInput, _ ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -35,7 +36,7 @@ func TestHandleReadPropertyRequest_WithoutId_ScanError(t *testing.T) {
 
 func TestHandleReadPropertyRequest_WithoutId_UnmarshalListOfMapsError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+		ScanFunc: func(_ context.Context, _ *dynamodb.ScanInput, _ ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			items := []map[string]ddbtypes.AttributeValue{
 				{
 					"propertyId":    &ddbtypes.AttributeValueMemberS{Value: "Test ID"},
@@ -71,7 +72,7 @@ func TestHandleReadPropertyRequest_WithoutId_UnmarshalListOfMapsError(t *testing
 
 func TestHandleReadPropertyRequest_WithoutId_JSONMarshalError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+		ScanFunc: func(_ context.Context, _ *dynamodb.ScanInput, _ ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			items := []map[string]ddbtypes.AttributeValue{
 				{
 					"propertyId":    &ddbtypes.AttributeValueMemberS{Value: "Test ID"},
@@ -88,7 +89,7 @@ func TestHandleReadPropertyRequest_WithoutId_JSONMarshalError(t *testing.T) {
 
 	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
 
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(_ interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
@@ -107,7 +108,7 @@ func TestHandleReadPropertyRequest_WithoutId_JSONMarshalError(t *testing.T) {
 
 func TestHandleReadPropertyRequest_WithoutId_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+		ScanFunc: func(_ context.Context, _ *dynamodb.ScanInput, _ ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			items := []map[string]ddbtypes.AttributeValue{
 				{
 					"propertyId":    &ddbtypes.AttributeValueMemberS{Value: "Test ID"},
@@ -135,7 +136,7 @@ func TestHandleReadPropertyRequest_WithoutId_Success(t *testing.T) {
 
 func TestHandleReadPropertyRequest_WithId_GetItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+		GetItemFunc: func(_ context.Context, _ *dynamodb.GetItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -158,7 +159,7 @@ func TestHandleReadPropertyRequest_WithId_GetItemError(t *testing.T) {
 
 func TestHandleReadPropertyRequest_WithId_ItemNotFound(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+		GetItemFunc: func(_ context.Context, _ *dynamodb.GetItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			return &dynamodb.GetItemOutput{
 				Item: nil,
 			}, nil
@@ -184,7 +185,7 @@ func TestHandleReadPropertyRequest_WithId_ItemNotFound(t *testing.T) {
 
 func TestHandleReadPropertyRequest_WithId_UnmarshalMapError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+		GetItemFunc: func(_ context.Context, _ *dynamodb.GetItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			item := map[string]ddbtypes.AttributeValue{
 				"propertyId":    &ddbtypes.AttributeValueMemberS{Value: "Test ID"},
 				"measurementId": &ddbtypes.AttributeValueMemberS{Value: "Test ID"},
@@ -220,7 +221,7 @@ func TestHandleReadPropertyRequest_WithId_UnmarshalMapError(t *testing.T) {
 
 func TestHandleReadPropertyRequest_WithId_JSONMarshalError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+		GetItemFunc: func(_ context.Context, _ *dynamodb.GetItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			item := map[string]ddbtypes.AttributeValue{
 				"propertyId":    &ddbtypes.AttributeValueMemberS{Value: "Test ID"},
 				"measurementId": &ddbtypes.AttributeValueMemberS{Value: "Test ID"},
@@ -235,7 +236,7 @@ func TestHandleReadPropertyRequest_WithId_JSONMarshalError(t *testing.T) {
 
 	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
 
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(_ interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
@@ -256,7 +257,7 @@ func TestHandleReadPropertyRequest_WithId_JSONMarshalError(t *testing.T) {
 
 func TestHandleReadPropertyRequest_WithId_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+		GetItemFunc: func(_ context.Context, _ *dynamodb.GetItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			item := map[string]ddbtypes.AttributeValue{
 				"propertyId":    &ddbtypes.AttributeValueMemberS{Value: "Test ID"},
 				"measurementId": &ddbtypes.AttributeValueMemberS{Value: "Test ID"},
