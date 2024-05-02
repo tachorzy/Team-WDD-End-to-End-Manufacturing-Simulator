@@ -1,7 +1,7 @@
-import React from "react";
-import { render, act, screen } from "@testing-library/react";
+import React from 'react';
+import { render, act, screen} from '@testing-library/react';
+import ModelField from '../components/factorydashboard/floormanager/assetform/ModelField';
 import { BackendConnector } from "@/app/api/_utils/connector";
-import ModelField from "../components/factorydashboard/floormanager/assetform/ModelField";
 import "@testing-library/jest-dom";
 
 jest.mock("@/app/api/_utils/connector", () => ({
@@ -15,74 +15,62 @@ const mockedBackendConnector = BackendConnector as jest.Mocked<
     typeof BackendConnector
 >;
 
-describe("ModelField", () => {
+describe('ModelField', () => {
+
     afterEach(() => {
         jest.clearAllMocks();
     });
-
-    test("fetches models when factoryId changes", () => {
-        const factoryId = "someFactoryId";
+    
+    test('fetches models when factoryId changes', async () => {
+        const factoryId = 'someFactoryId';
         const setModelId = jest.fn();
         const setFormData = jest.fn();
-        const mockModels = [
-            {
-                modelId: "model-1",
-                attributes: [{ name: "attr1", value: "value1" }],
-                properties: [{ name: "prop1", unit: "unit1" }],
-                factoryId: "someFactoryId",
-            },
-        ];
+        const mockModels = [ {
+            modelId: "model-1",
+            attributes: [{ name: "attr1", value: "value1" }],
+            properties: [{ name: "prop1", unit: "unit1" }],
+            factoryId: "someFactoryId",
+        },];
         mockedBackendConnector.get.mockResolvedValueOnce(mockModels);
-
-        act(() => {
+        // eslint-disable-next-line @typescript-eslint/require-await    
+        await act(async () => {
             render(
                 <ModelField
                     factoryId={factoryId}
                     setModelId={setModelId}
                     setFormData={setFormData}
-                />,
+                />
             );
         });
 
-        // Ensure the select element is present
-        const selectElement = screen.getByTestId("model-select");
+        const selectElement = screen.getByTestId('model-select');
         expect(selectElement).toBeInTheDocument();
 
-        // Ensure the option with value 'model-1' is present
-        const optionElement = screen.getByTestId("model-option-model-1");
+        const optionElement = screen.getByTestId('model-option-model-1');
         expect(optionElement).toBeInTheDocument();
     });
 
-    test("logs error message when fetching models fails", () => {
-        const factoryId = "someFactoryId";
-        const setModelId = jest.fn();
-        const setFormData = jest.fn();
-        const consoleErrorSpy = jest
-            .spyOn(console, "error")
-            .mockImplementation();
+    test('logs error message when fetching models fails', async () => {
+        const factoryId = 'someFactoryId';
+        const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
 
-        // Mock BackendConnector.get to return a rejected promise
-        mockedBackendConnector.get.mockRejectedValueOnce(
-            new Error("Failed to fetch models"),
-        );
-
-        act(() => {
+     
+        mockedBackendConnector.get.mockRejectedValueOnce(new Error('Failed to fetch models'));
+        // eslint-disable-next-line @typescript-eslint/require-await
+        await act(async () => {
             render(
                 <ModelField
                     factoryId={factoryId}
-                    setModelId={setModelId}
-                    setFormData={setFormData}
-                />,
+                    setModelId={() => {}}
+                    setFormData={() => {}}
+                />
             );
         });
 
-        // Ensure that console.error was called with the expected message
-        expect(consoleErrorSpy).toHaveBeenCalledWith(
-            "Failed to fetch models:",
-            expect.any(Error),
-        );
+        expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to fetch models:', expect.any(Error));
 
-        // Clean up
         consoleErrorSpy.mockRestore();
     });
+
+    
 });
