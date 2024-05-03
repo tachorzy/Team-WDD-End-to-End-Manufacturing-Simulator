@@ -16,7 +16,7 @@ export default function Page({ params }: { params: { factoryId: string } }) {
                     factoryId={factoryId}
                 />
                 <div className="flex flex-col gap-y-16">
-                    <CreateModelForm factoryId={factoryId} />  
+                    <CreateModelForm factoryId={factoryId} />
                     <ModelTable factoryId={factoryId} />
                 </div>
             </div>

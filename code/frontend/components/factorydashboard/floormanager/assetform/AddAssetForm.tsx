@@ -36,7 +36,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
             [name]: value,
         }));
     };
-    
+
     const handleAddAsset = async () => {
         try {
             const config: PostConfig<Asset> = {
@@ -116,7 +116,7 @@ const AddAssetForm: React.FC<AddAssetFormProps> = ({
                         <h1 className="text-sm font-medium text-center mr-16">
                             Asset Preview:
                         </h1>
-                        {assetImageFile &&  (
+                        {assetImageFile && (
                             <Image
                                 src={URL.createObjectURL(assetImageFile)}
                                 width={120}

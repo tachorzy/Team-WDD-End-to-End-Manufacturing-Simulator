@@ -4,14 +4,12 @@ import React, { useEffect, useState } from "react";
 
 const AssetOverview = (props: { asset: Asset }) => {
     const { asset } = props;
-    
-    const [models, setModels] = useState<Model[]>([]);
 
+    const [models, setModels] = useState<Model[]>([]);
 
     const assetName = asset?.name;
     const assetModelId = asset?.modelId;
     const assetDescription = asset?.description;
-
 
     const factoryId = asset?.factoryId;
 
@@ -41,8 +39,9 @@ const AssetOverview = (props: { asset: Asset }) => {
         }
     }, [factoryId]);
 
-    const assetModel = models.filter((model) => model.modelId === assetModelId)[0];
-
+    const assetModel = models.filter(
+        (model) => model.modelId === assetModelId,
+    )[0];
 
     return (
         <div className="flex flex-col items-center gap-x-2 mb-3 gap-y-2 border-2 border-[#E2E4EA] bg-[#FAFAFA] rounded-lg pt-4 w-80 h-64 overflow-y-scroll">
@@ -51,30 +50,35 @@ const AssetOverview = (props: { asset: Asset }) => {
             </h1>
             <div className="mt-2 gap-y-2 px-2 ">
                 <h1 className="font-medium text-xs text-[#494949] leading-relaxed">
-                    <span className="font-semibold">Asset Name:</span> {assetName}
+                    <span className="font-semibold">Asset Name:</span>{" "}
+                    {assetName}
                 </h1>
                 <div className="font-medium text-xs text-[#494949] leading-relaxed">
-                    <span className="font-semibold">Asset Model:</span> {assetModel?.attributes[0].value}
+                    <span className="font-semibold">Asset Model:</span>{" "}
+                    {assetModel?.attributes[0].value}
                     {assetModel?.attributes.map((attribute, index) => {
                         if (index === 0) return;
 
                         return (
-                            <div> 
-                                <span className="font-semibold">{attribute.name}</span>
+                            <div>
+                                <span className="font-semibold">
+                                    {attribute.name}
+                                </span>
                                 {attribute.value}
                             </div>
                         );
                     })}
                     <details className="font-bold text-xs text-[#494949] leading-relaxed">
-                        <summary className="font-bold underline">Asset Properties:</summary>
+                        <summary className="font-bold underline">
+                            Asset Properties:
+                        </summary>
                         {assetModel?.properties.map((property) => (
                             <ul>
                                 <li className="font-semibold list-disc list-inside pl-3">{`${property.name} (${property.unit})`}</li>
                             </ul>
                         ))}
-                    </details>                    
+                    </details>
                 </div>
-
             </div>
         </div>
     );

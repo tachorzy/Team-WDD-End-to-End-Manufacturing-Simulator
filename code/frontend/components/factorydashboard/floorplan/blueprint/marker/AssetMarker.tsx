@@ -94,12 +94,15 @@ const AssetMarker: React.FC<AssetMarkerProps> = ({ asset }) => {
                                     {asset.name}
                                 </h2>
                                 <div className="text-xs text-gray-900">
-                                    Position: {`(${deltaPosition.x}, ${deltaPosition.y})`}
+                                    Position:{" "}
+                                    {`(${deltaPosition.x}, ${deltaPosition.y})`}
                                 </div>
                                 <p className="text-xs text-gray-800">
-                                    <span className="font-semibold">Description:</span> {asset.description}
+                                    <span className="font-semibold">
+                                        Description:
+                                    </span>{" "}
+                                    {asset.description}
                                 </p>
-
                             </div>
                             <div className="border-t-gray-200 border-t-[1.5px] pt-1 w-11/12 mt-1">
                                 <MarkerPopups
