@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import * as d3 from "d3";
-import { Property, PropertyData, Value } from "@/app/api/_utils/types";
+import {
+    Property,
+    PropertyData,
+    Value,
+    DataPoint,
+} from "@/app/api/_utils/types";
 import { BackendConnector, GetConfig } from "@/app/api/_utils/connector";
 
 const LineChart = (props: { property: Property }) => {
-    const [data, setData] = useState<Value[]>([]);
+    const [data, setData] = useState<DataPoint[]>([]);
     const { property } = props;
     const propertyId = property.propertyId as string;
 
