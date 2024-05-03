@@ -33,7 +33,7 @@ jest.mock(
 
 const mockModelField = jest.fn();
 jest.mock(
-    "../components/factorydashboard/floormanager/assetform/ModelField",
+    "../components/factorydashboard/floormanager/assetform/modelField",
     () => {
         const MockModelFieldr = (props: any) => {
             mockModelField(props);
