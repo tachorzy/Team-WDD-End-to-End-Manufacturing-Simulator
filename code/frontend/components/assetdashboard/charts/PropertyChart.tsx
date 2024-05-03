@@ -56,7 +56,7 @@ const LineChart = (props: { property: Property }) => {
             return;
         }
     
-        const validData = data.filter(d => d.date && !isNaN(new Date(d.date).valueOf())); 
+        const validData = data.filter(d => d.date && !Number.isNaN(new Date(d.date).valueOf())); 
     
         const margin = { top: 20, right: 30, bottom: 40, left: 50 };
         const width = 960 - margin.left - margin.right;
