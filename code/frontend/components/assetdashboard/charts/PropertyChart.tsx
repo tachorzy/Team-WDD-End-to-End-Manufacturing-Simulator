@@ -72,7 +72,7 @@ const LineChart = (props: { property: Property }) => {
 
         const xScale = d3
             .scaleTime()
-            .domain(d3.extent(data, (d) => d.date))
+            .domain(d3.extent(data, (d) => d.date as Date))
             .range([0, width]);
 
         const yScale = d3
@@ -87,8 +87,8 @@ const LineChart = (props: { property: Property }) => {
         svg.append("g").call(d3.axisLeft(yScale));
 
         const line = d3
-            .line<Value>()
-            .x((d) => xScale(d.date))
+            .line<DataPoint>()
+            .x((d) => xScale(d.date as Date))
             .y((d) => yScale(d.value))
             .curve(d3.curveMonotoneX);
 
