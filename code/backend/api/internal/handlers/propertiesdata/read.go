@@ -103,12 +103,12 @@ func (h Handler) handlePropertyDataByModelID(ctx context.Context, ModelID string
 		}
 		dataResult, reserr := h.DynamoDB.GetItem(ctx, dataInput)
 		if reserr != nil {
-			log.Printf("Error retrieving property data for ID %s: %v", propertyId, reserr)
+			log.Printf("Error retrieving property data for ID %s: %v", propertyID, reserr)
 			continue
 		}
 		var propertyData types.PropertyData
 		if propdataerr := wrappers.UnmarshalMap(dataResult.Item, &propertyData); propdataerr != nil {
-			log.Printf("Error unmarshalling property data for ID %s: %v", propertyId, propdataerr)
+			log.Printf("Error unmarshalling property data for ID %s: %v", propertyID, propdataerr)
 			continue
 		}
 		propertyDatas = append(propertyDatas, propertyData)
