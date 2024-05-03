@@ -3,7 +3,6 @@ import Image from "next/image";
 import { Asset } from "@/app/api/_utils/types";
 import { PostConfig, BackendConnector } from "@/app/api/_utils/connector";
 import AssetUploadContainer from "./AssetUploadContainer";
-// import ModelViewer from "@/components/models/createmodelform/modelrender/ModelViewer";
 import ModelField from "./ModelField";
 
 export interface AddAssetFormProps {
