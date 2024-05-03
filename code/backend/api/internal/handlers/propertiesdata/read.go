@@ -34,9 +34,9 @@ func (h Handler) HandleReadPropertyDataRequest(ctx context.Context, request even
 			Body:       "Required parameters are missing",
 		}, nil
 	} else if PropertyID != "" {
-		return h.handlePropertyDataById(ctx, PropertyID, headers)
+		return h.handlePropertyDataByID(ctx, PropertyID, headers)
 	} else if ModelID != "" {
-		return h.handlePropertyDataByModelId(ctx, ModelID, headers)
+		return h.handlePropertyDataByModelID(ctx, ModelID, headers)
 	}
 
 	return events.APIGatewayProxyResponse{
@@ -45,7 +45,7 @@ func (h Handler) HandleReadPropertyDataRequest(ctx context.Context, request even
 		Body:       "Invalid parameters",
 	}, nil
 }
-func (h Handler) handlePropertyDataById(ctx context.Context, PropertyID string, headers map[string]string) (events.APIGatewayProxyResponse, error) {
+func (h Handler) handlePropertyDataByID(ctx context.Context, PropertyID string, headers map[string]string) (events.APIGatewayProxyResponse, error) {
 	input := &dynamodb.QueryInput{
 		TableName:              aws.String(TABLENAME),
 		KeyConditionExpression: aws.String("propertyId = :propertyId"),
@@ -63,7 +63,7 @@ func (h Handler) handlePropertyDataById(ctx context.Context, PropertyID string, 
 	}
 	return processQueryResult(result, headers)
 }
-func (h Handler) handlePropertyDataByModelId(ctx context.Context, ModelID string, headers map[string]string) (events.APIGatewayProxyResponse, error) {
+func (h Handler) handlePropertyDataByModelID(ctx context.Context, ModelID string, headers map[string]string) (events.APIGatewayProxyResponse, error) {
 	input := &dynamodb.QueryInput{
 		TableName:              aws.String(PROPERTYTABLE),
 		IndexName:              aws.String("ModelIdIndex"),
@@ -88,17 +88,17 @@ func (h Handler) handlePropertyDataByModelId(ctx context.Context, ModelID string
 		}, nil
 	}
 
-	propertyIds := make([]string, 0)
+	propertyIDs := make([]string, 0)
 	for _, item := range result.Items {
-		propertyId := item["propertyId"].(*ddbtypes.AttributeValueMemberS).Value
-		propertyIds = append(propertyIds, propertyId)
+		propertyID := item["propertyId"].(*ddbtypes.AttributeValueMemberS).Value
+		propertyIDs = append(propertyIDs, propertyID)
 	}
 	propertyDatas := make([]types.PropertyData, 0)
-	for _, propertyId := range propertyIds {
+	for _, propertyID := range propertyIDs {
 		dataInput := &dynamodb.GetItemInput{
 			TableName: aws.String(TABLENAME),
 			Key: map[string]ddbtypes.AttributeValue{
-				"propertyId": &ddbtypes.AttributeValueMemberS{Value: propertyId},
+				"propertyId": &ddbtypes.AttributeValueMemberS{Value: propertyID},
 			},
 		}
 		dataResult, reserr := h.DynamoDB.GetItem(ctx, dataInput)
@@ -113,7 +113,7 @@ func (h Handler) handlePropertyDataByModelId(ctx context.Context, ModelID string
 		}
 		propertyDatas = append(propertyDatas, propertyData)
 	}
-	propertyDatasJson, err := wrappers.JSONMarshal(propertyDatas)
+	propertyDatasJSON, err := wrappers.JSONMarshal(propertyDatas)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -124,7 +124,7 @@ func (h Handler) handlePropertyDataByModelId(ctx context.Context, ModelID string
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Headers:    headers,
-		Body:       string(propertyDatasJson),
+		Body:       string(propertyDatasJSON),
 	}, nil
 }
 
@@ -144,7 +144,7 @@ func processQueryResult(result *dynamodb.QueryOutput, headers map[string]string)
 			Body:       fmt.Sprintf("Error unmarshalling data: %v", err),
 		}, nil
 	}
-	propertyDataJson, err := wrappers.JSONMarshal(propertyData)
+	propertyDataJSON, err := wrappers.JSONMarshal(propertyData)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -155,6 +155,6 @@ func processQueryResult(result *dynamodb.QueryOutput, headers map[string]string)
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Headers:    headers,
-		Body:       string(propertyDataJson),
+		Body:       string(propertyDataJSON),
 	}, nil
 }

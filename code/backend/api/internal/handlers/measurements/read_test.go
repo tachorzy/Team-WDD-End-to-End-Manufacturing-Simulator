@@ -1,5 +1,6 @@
 package measurements
 
+//nolint:all
 import (
 	"context"
 	"errors"
@@ -15,7 +16,7 @@ import (
 
 func TestHandleReadMeasurementRequest_WithoutID_ScanError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+		ScanFunc: func(_ context.Context, _ *dynamodb.ScanInput, _ ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -36,7 +37,7 @@ func TestHandleReadMeasurementRequest_WithoutID_ScanError(t *testing.T) {
 
 func TestHandleReadMeasurementRequest_WithoutID_UnmarshalListOfMapsError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+		ScanFunc: func(_ context.Context, _ *dynamodb.ScanInput, _ ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			items := []map[string]types.AttributeValue{
 				{
 					"measurementId":     &types.AttributeValueMemberS{Value: "Test ID"},
@@ -75,7 +76,7 @@ func TestHandleReadMeasurementRequest_WithoutID_UnmarshalListOfMapsError(t *test
 
 func TestHandleReadMeasurementRequest_WithoutId_JSONMarshalError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+		ScanFunc: func(_ context.Context, _ *dynamodb.ScanInput, _ ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			items := []map[string]types.AttributeValue{
 				{
 					"measurementId":     &types.AttributeValueMemberS{Value: "Test ID"},
@@ -95,7 +96,7 @@ func TestHandleReadMeasurementRequest_WithoutId_JSONMarshalError(t *testing.T) {
 
 	defer func() { wrappers.JSONMarshal = originalMeasurementJSONMarshal }()
 
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(_ interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
@@ -114,7 +115,7 @@ func TestHandleReadMeasurementRequest_WithoutId_JSONMarshalError(t *testing.T) {
 
 func TestHandleReadMeasurementRequest_WithoutId_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		ScanFunc: func(ctx context.Context, params *dynamodb.ScanInput, optFns ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
+		ScanFunc: func(_ context.Context, _ *dynamodb.ScanInput, _ ...func(*dynamodb.Options)) (*dynamodb.ScanOutput, error) {
 			items := []map[string]types.AttributeValue{
 				{
 					"measurementId":     &types.AttributeValueMemberS{Value: "Test ID"},
@@ -145,7 +146,7 @@ func TestHandleReadMeasurementRequest_WithoutId_Success(t *testing.T) {
 
 func TestHandleReadMeasurementRequest_WithId_GetItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+		GetItemFunc: func(_ context.Context, _ *dynamodb.GetItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -168,7 +169,7 @@ func TestHandleReadMeasurementRequest_WithId_GetItemError(t *testing.T) {
 
 func TestHandleReadMeasurementRequest_WithId_ItemNotFound(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+		GetItemFunc: func(_ context.Context, _ *dynamodb.GetItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			return &dynamodb.GetItemOutput{
 				Item: nil,
 			}, nil
@@ -194,7 +195,7 @@ func TestHandleReadMeasurementRequest_WithId_ItemNotFound(t *testing.T) {
 
 func TestHandleReadMeasurementRequest_WithId_UnmarshalMapError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+		GetItemFunc: func(_ context.Context, _ *dynamodb.GetItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			item := map[string]types.AttributeValue{
 				"measurementId":     &types.AttributeValueMemberS{Value: "1"},
 				"frequency":         &types.AttributeValueMemberN{Value: "1.0"},
@@ -212,7 +213,7 @@ func TestHandleReadMeasurementRequest_WithId_UnmarshalMapError(t *testing.T) {
 
 	defer func() { wrappers.UnmarshalMap = originalUnmarshalMap }()
 
-	wrappers.UnmarshalMap = func(m map[string]types.AttributeValue, v interface{}) error {
+	wrappers.UnmarshalMap = func(_ map[string]types.AttributeValue, _ interface{}) error {
 		return errors.New("mock error")
 	}
 
@@ -233,7 +234,7 @@ func TestHandleReadMeasurementRequest_WithId_UnmarshalMapError(t *testing.T) {
 
 func TestHandleReadMeasurementRequest_WithId_JSONMarshalError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+		GetItemFunc: func(_ context.Context, _ *dynamodb.GetItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			item := map[string]types.AttributeValue{
 				"measurementId":     &types.AttributeValueMemberS{Value: "1"},
 				"frequency":         &types.AttributeValueMemberN{Value: "1.0"},
@@ -251,7 +252,7 @@ func TestHandleReadMeasurementRequest_WithId_JSONMarshalError(t *testing.T) {
 
 	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
 
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(_ interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
@@ -272,7 +273,7 @@ func TestHandleReadMeasurementRequest_WithId_JSONMarshalError(t *testing.T) {
 
 func TestHandleReadMeasurementRequest_WithId_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		GetItemFunc: func(ctx context.Context, params *dynamodb.GetItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
+		GetItemFunc: func(_ context.Context, _ *dynamodb.GetItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.GetItemOutput, error) {
 			item := map[string]types.AttributeValue{
 				"measurementId":     &types.AttributeValueMemberS{Value: "1"},
 				"frequency":         &types.AttributeValueMemberN{Value: "1.0"},

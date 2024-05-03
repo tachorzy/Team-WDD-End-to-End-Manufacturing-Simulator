@@ -1,14 +1,16 @@
 package auth
 
+//nolint:all
 import (
 	"context"
 	"errors"
-	"github.com/aws/aws-lambda-go/events"
-	cognito "github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
 	"wdd/api/internal/wrappers"
+
+	"github.com/aws/aws-lambda-go/events"
+	cognito "github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider"
 )
 
 func TestHandleLoginRequest_BadJSON(t *testing.T) {
@@ -34,7 +36,7 @@ func TestHandleLoginRequest_BadJSON(t *testing.T) {
 
 func TestHandleLoginRequest_InitiateAuthError(t *testing.T) {
 	mockCognitoClient := &mocks.CognitoClient{
-		InitiateAuthFunc: func(ctx context.Context, params *cognito.InitiateAuthInput, optFns ...func(*cognito.Options)) (*cognito.InitiateAuthOutput, error) {
+		InitiateAuthFunc: func(_ context.Context, _ *cognito.InitiateAuthInput, _ ...func(*cognito.Options)) (*cognito.InitiateAuthOutput, error) {
 			return nil, errors.New("mock cognito error")
 		},
 	}
@@ -59,7 +61,7 @@ func TestHandleLoginRequest_InitiateAuthError(t *testing.T) {
 
 func TestHandleLoginRequest_JSONMarshalError(t *testing.T) {
 	mockCognitoClient := &mocks.CognitoClient{
-		InitiateAuthFunc: func(ctx context.Context, params *cognito.InitiateAuthInput, optFns ...func(*cognito.Options)) (*cognito.InitiateAuthOutput, error) {
+		InitiateAuthFunc: func(_ context.Context, _ *cognito.InitiateAuthInput, _ ...func(*cognito.Options)) (*cognito.InitiateAuthOutput, error) {
 			return &cognito.InitiateAuthOutput{}, nil
 		},
 	}
@@ -69,7 +71,7 @@ func TestHandleLoginRequest_JSONMarshalError(t *testing.T) {
 
 	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
 
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(_ interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
@@ -91,7 +93,7 @@ func TestHandleLoginRequest_JSONMarshalError(t *testing.T) {
 
 func TestHandleLoginRequest_Success(t *testing.T) {
 	mockCognitoClient := &mocks.CognitoClient{
-		InitiateAuthFunc: func(ctx context.Context, params *cognito.InitiateAuthInput, optFns ...func(*cognito.Options)) (*cognito.InitiateAuthOutput, error) {
+		InitiateAuthFunc: func(_ context.Context, _ *cognito.InitiateAuthInput, _ ...func(*cognito.Options)) (*cognito.InitiateAuthOutput, error) {
 			return &cognito.InitiateAuthOutput{}, nil
 		},
 	}

@@ -1,15 +1,17 @@
+//nolint:all
 package assets
 
 import (
 	"context"
 	"errors"
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
 	"wdd/api/internal/wrappers"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	ddbtypes "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
 func TestHandleReadFactoryAssetsRequest_MissingIdError(t *testing.T) {
@@ -32,7 +34,7 @@ func TestHandleReadFactoryAssetsRequest_MissingIdError(t *testing.T) {
 
 func TestHandleReadFactoryAssetsRequest_QueryError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+		QueryFunc: func(_ context.Context, _ *dynamodb.QueryInput, _ ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -56,7 +58,7 @@ func TestHandleReadFactoryAssetsRequest_QueryError(t *testing.T) {
 
 func TestHandleReadFactoryAssetsRequest_UnmarshalListOfMapsError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+		QueryFunc: func(_ context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			items := []map[string]ddbtypes.AttributeValue{
 				{
 					"assetId":   &ddbtypes.AttributeValueMemberS{Value: "1"},
@@ -98,7 +100,7 @@ func TestHandleReadFactoryAssetsRequest_UnmarshalListOfMapsError(t *testing.T) {
 
 func TestHandleReadFactoryAssetsRequest_JSONMarshalError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+		QueryFunc: func(_ context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			items := []map[string]ddbtypes.AttributeValue{
 				{
 					"assetId":   &ddbtypes.AttributeValueMemberS{Value: "1"},
@@ -119,7 +121,7 @@ func TestHandleReadFactoryAssetsRequest_JSONMarshalError(t *testing.T) {
 
 	defer func() { wrappers.JSONMarshal = originalJSONMarshal }()
 
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(_ interface{}) ([]byte, error) {
 		return nil, errors.New("mock error")
 	}
 
@@ -141,7 +143,7 @@ func TestHandleReadFactoryAssetsRequest_JSONMarshalError(t *testing.T) {
 //nolint:dupl
 func TestHandleReadFactoryAssetsRequest_WithFactoryId_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+		QueryFunc: func(_ context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			items := []map[string]ddbtypes.AttributeValue{
 				{
 					"assetId":   &ddbtypes.AttributeValueMemberS{Value: "1"},
@@ -176,7 +178,7 @@ func TestHandleReadFactoryAssetsRequest_WithFactoryId_Success(t *testing.T) {
 //nolint:dupl
 func TestHandleReadFactoryAssetsRequest_WithAssetId_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		QueryFunc: func(ctx context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
+		QueryFunc: func(_ context.Context, params *dynamodb.QueryInput, optFns ...func(*dynamodb.Options)) (*dynamodb.QueryOutput, error) {
 			items := []map[string]ddbtypes.AttributeValue{
 				{
 					"assetId":   &ddbtypes.AttributeValueMemberS{Value: "1"},

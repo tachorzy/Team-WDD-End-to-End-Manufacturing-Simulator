@@ -1,5 +1,6 @@
 package properties
 
+//nolint:all
 import (
 	"context"
 	"errors"
@@ -68,7 +69,7 @@ func TestHandleUpdatePropertyRequest_UpdateExpressionBuilderError(t *testing.T) 
 func TestHandleUpdatePropertyRequest_UpdateItemError(t *testing.T) {
 	t.SkipNow()
 	mockDDBClient := &mocks.DynamoDBClient{
-		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
+		UpdateItemFunc: func(_ context.Context, _ *dynamodb.UpdateItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -94,7 +95,7 @@ func TestHandleUpdatePropertyRequest_UpdateItemError(t *testing.T) {
 func TestHandleUpdatePropertyRequest_Success(t *testing.T) {
 	t.SkipNow()
 	mockDDBClient := &mocks.DynamoDBClient{
-		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
+		UpdateItemFunc: func(_ context.Context, _ *dynamodb.UpdateItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
 			return &dynamodb.UpdateItemOutput{}, nil
 		},
 	}

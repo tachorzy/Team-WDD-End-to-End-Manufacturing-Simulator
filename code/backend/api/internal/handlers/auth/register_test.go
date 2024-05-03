@@ -1,13 +1,15 @@
 package auth
 
+//nolint:all
 import (
 	"context"
 	"errors"
-	"github.com/aws/aws-lambda-go/events"
-	cognito "github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
+
+	"github.com/aws/aws-lambda-go/events"
+	cognito "github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider"
 )
 
 func TestHandleRegisterRequest_BadJSON(t *testing.T) {
@@ -33,7 +35,7 @@ func TestHandleRegisterRequest_BadJSON(t *testing.T) {
 
 func TestHandleRegisterRequest_SignUpError(t *testing.T) {
 	mockCognitoClient := &mocks.CognitoClient{
-		SignUpFunc: func(ctx context.Context, params *cognito.SignUpInput, optFns ...func(*cognito.Options)) (*cognito.SignUpOutput, error) {
+		SignUpFunc: func(_ context.Context, _ *cognito.SignUpInput, _ ...func(*cognito.Options)) (*cognito.SignUpOutput, error) {
 			return nil, errors.New("mock cognito error")
 		},
 	}
@@ -58,7 +60,7 @@ func TestHandleRegisterRequest_SignUpError(t *testing.T) {
 
 func TestHandleRegisterRequest_Success(t *testing.T) {
 	mockCognitoClient := &mocks.CognitoClient{
-		SignUpFunc: func(ctx context.Context, params *cognito.SignUpInput, optFns ...func(*cognito.Options)) (*cognito.SignUpOutput, error) {
+		SignUpFunc: func(_ context.Context, _ *cognito.SignUpInput, _ ...func(*cognito.Options)) (*cognito.SignUpOutput, error) {
 			return &cognito.SignUpOutput{}, nil
 		},
 	}

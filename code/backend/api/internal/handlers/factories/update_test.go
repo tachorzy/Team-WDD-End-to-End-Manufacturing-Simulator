@@ -1,15 +1,17 @@
 package factories
 
+//nolint:all
 import (
 	"context"
 	"errors"
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"net/http"
 	"testing"
 	"wdd/api/internal/mocks"
 	"wdd/api/internal/wrappers"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
 func TestHandleUpdateFactoryRequest_BadJSON(t *testing.T) {
@@ -64,7 +66,7 @@ func TestHandleUpdateFactoryRequest_UpdateExpressionBuilderError(t *testing.T) {
 
 func TestHandleUpdateFactoryRequest_UpdateItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
+		UpdateItemFunc: func(_ context.Context, _ *dynamodb.UpdateItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
@@ -89,7 +91,7 @@ func TestHandleUpdateFactoryRequest_UpdateItemError(t *testing.T) {
 
 func TestHandleUpdateFactoryRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		UpdateItemFunc: func(ctx context.Context, params *dynamodb.UpdateItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
+		UpdateItemFunc: func(_ context.Context, _ *dynamodb.UpdateItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.UpdateItemOutput, error) {
 			return &dynamodb.UpdateItemOutput{}, nil
 		},
 	}

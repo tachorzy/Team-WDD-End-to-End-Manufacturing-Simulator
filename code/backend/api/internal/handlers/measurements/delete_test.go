@@ -1,5 +1,6 @@
 package measurements
 
+//nolint:all
 import (
 	"context"
 	"errors"
@@ -33,7 +34,7 @@ func TestHandleDeleteMeasurementRequest_MissingMeasurementId(t *testing.T) {
 
 func TestHandleDeleteMeasurementRequest_DeleteItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		DeleteItemFunc: func(ctx context.Context, params *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
+		DeleteItemFunc: func(_ context.Context, _ *dynamodb.DeleteItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
 			return nil, errors.New("mock DynamoDB error")
 		},
 	}
@@ -59,7 +60,7 @@ func TestHandleDeleteMeasurementRequest_DeleteItemError(t *testing.T) {
 
 func TestHandleDeleteMeasurementRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		DeleteItemFunc: func(ctx context.Context, params *dynamodb.DeleteItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
+		DeleteItemFunc: func(_ context.Context, _ *dynamodb.DeleteItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.DeleteItemOutput, error) {
 			return &dynamodb.DeleteItemOutput{}, nil
 		},
 	}

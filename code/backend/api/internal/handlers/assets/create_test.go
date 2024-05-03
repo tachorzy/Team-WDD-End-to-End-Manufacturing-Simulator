@@ -1,5 +1,6 @@
 package assets
 
+//nolint:all
 import (
 	"context"
 	"errors"
@@ -45,7 +46,7 @@ func TestHandleCreateAssetRequest_Base64DecodeStringError(t *testing.T) {
 
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
 
-	wrappers.Base64DecodeString = func(s string) ([]byte, error) {
+	wrappers.Base64DecodeString = func(_ string) ([]byte, error) {
 		return nil, errors.New("base64 decode error")
 	}
 
@@ -71,7 +72,7 @@ func TestHandleCreateAssetRequest_Base64DecodeStringError(t *testing.T) {
 func TestHandleCreateAssetRequest_UploadImageError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	mockS3Uploader := &mocks.S3Uploader{
-		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
+		UploadFunc: func(_ context.Context, _ *s3.PutObjectInput, _ ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
 			return nil, errors.New("upload error")
 		},
 	}
@@ -80,7 +81,7 @@ func TestHandleCreateAssetRequest_UploadImageError(t *testing.T) {
 
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
-	wrappers.Base64DecodeString = func(s string) ([]byte, error) {
+	wrappers.Base64DecodeString = func(_ string) ([]byte, error) {
 		return []byte(""), nil
 	}
 
@@ -104,7 +105,7 @@ func TestHandleCreateAssetRequest_UploadImageError(t *testing.T) {
 func TestHandleCreateAssetRequest_UploadModelError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	mockS3Uploader := &mocks.S3Uploader{
-		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
+		UploadFunc: func(_ context.Context, _ *s3.PutObjectInput, _ ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
 			return nil, errors.New("upload error")
 		},
 	}
@@ -113,7 +114,7 @@ func TestHandleCreateAssetRequest_UploadModelError(t *testing.T) {
 
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
-	wrappers.Base64DecodeString = func(s string) ([]byte, error) {
+	wrappers.Base64DecodeString = func(_ string) ([]byte, error) {
 		return []byte(""), nil
 	}
 
@@ -136,7 +137,7 @@ func TestHandleCreateAssetRequest_UploadModelError(t *testing.T) {
 func TestHandleCreateAssetRequest_MarshalMapError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{}
 	mockS3Uploader := &mocks.S3Uploader{
-		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
+		UploadFunc: func(_ context.Context, _ *s3.PutObjectInput, _ ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
 			return &manager.UploadOutput{}, nil
 		},
 	}
@@ -145,7 +146,7 @@ func TestHandleCreateAssetRequest_MarshalMapError(t *testing.T) {
 
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
-	wrappers.Base64DecodeString = func(s string) ([]byte, error) {
+	wrappers.Base64DecodeString = func(_ string) ([]byte, error) {
 		return []byte(""), nil
 	}
 
@@ -173,12 +174,12 @@ func TestHandleCreateAssetRequest_MarshalMapError(t *testing.T) {
 
 func TestHandleCreateAssetRequest_PutItemError(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return nil, errors.New("mock dynamodb error")
 		},
 	}
 	mockS3Uploader := &mocks.S3Uploader{
-		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
+		UploadFunc: func(_ context.Context, _ *s3.PutObjectInput, _ ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
 			return &manager.UploadOutput{}, nil
 		},
 	}
@@ -187,7 +188,7 @@ func TestHandleCreateAssetRequest_PutItemError(t *testing.T) {
 
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
-	wrappers.Base64DecodeString = func(s string) ([]byte, error) {
+	wrappers.Base64DecodeString = func(_ string) ([]byte, error) {
 		return []byte(""), nil
 	}
 
@@ -210,12 +211,12 @@ func TestHandleCreateAssetRequest_PutItemError(t *testing.T) {
 func TestHandleCreateAssetRequest_JSONMarshalError(t *testing.T) {
 	t.SkipNow()
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
 	}
 	mockS3Uploader := &mocks.S3Uploader{
-		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
+		UploadFunc: func(_ context.Context, _ *s3.PutObjectInput, _ ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
 			return &manager.UploadOutput{}, nil
 		},
 	}
@@ -224,13 +225,13 @@ func TestHandleCreateAssetRequest_JSONMarshalError(t *testing.T) {
 
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
-	wrappers.Base64DecodeString = func(s string) ([]byte, error) {
+	wrappers.Base64DecodeString = func(_ string) ([]byte, error) {
 		return []byte(""), nil
 	}
 
 	originalFactoryJSONMarshal := wrappers.JSONMarshal
 	defer func() { wrappers.JSONMarshal = originalFactoryJSONMarshal }()
-	wrappers.JSONMarshal = func(v interface{}) ([]byte, error) {
+	wrappers.JSONMarshal = func(_ interface{}) ([]byte, error) {
 		return nil, errors.New("mock marshal error")
 	}
 
@@ -252,12 +253,12 @@ func TestHandleCreateAssetRequest_JSONMarshalError(t *testing.T) {
 
 func TestHandleCreateAssetRequest_Success(t *testing.T) {
 	mockDDBClient := &mocks.DynamoDBClient{
-		PutItemFunc: func(ctx context.Context, params *dynamodb.PutItemInput, optFns ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
+		PutItemFunc: func(_ context.Context, _ *dynamodb.PutItemInput, _ ...func(*dynamodb.Options)) (*dynamodb.PutItemOutput, error) {
 			return &dynamodb.PutItemOutput{}, nil
 		},
 	}
 	mockS3Uploader := &mocks.S3Uploader{
-		UploadFunc: func(ctx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
+		UploadFunc: func(_ context.Context, _ *s3.PutObjectInput, _ ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
 			return &manager.UploadOutput{}, nil
 		},
 	}
@@ -266,7 +267,7 @@ func TestHandleCreateAssetRequest_Success(t *testing.T) {
 
 	originalBase64DecodeString := wrappers.Base64DecodeString
 	defer func() { wrappers.Base64DecodeString = originalBase64DecodeString }()
-	wrappers.Base64DecodeString = func(s string) ([]byte, error) {
+	wrappers.Base64DecodeString = func(_ string) ([]byte, error) {
 		return []byte(""), nil
 	}
 

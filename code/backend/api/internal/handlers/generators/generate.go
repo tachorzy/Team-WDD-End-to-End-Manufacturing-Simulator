@@ -62,7 +62,7 @@ func (g *ReplayGenerator) Generate(input float64, params GeneratorParams) float6
 
 type RandomGenerator struct{}
 
-func (g *RandomGenerator) Generate(input float64, params GeneratorParams) float64 {
+func (g *RandomGenerator) Generate(_ float64, params GeneratorParams) float64 {
 	randFloat, _ := cryptoRandFloat64()
 	return params.LowerBound + randFloat*(params.UpperBound-params.LowerBound)
 }

@@ -35,12 +35,12 @@ func (h *Handler) HandleCreateAttributeRequest(ctx context.Context, request even
 	}
 	attribute.AttributeID = uuid.NewString()
 
-	av, error := wrappers.MarshalMap(attribute)
-	if error != nil {
+	av, marsherror := wrappers.MarshalMap(attribute)
+	if marsherror != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
 			Headers:    headers,
-			Body:       fmt.Sprintf("Error marshalling attribute: %s", error.Error()),
+			Body:       fmt.Sprintf("Error marshalling attribute: %s", marsherror.Error()),
 		}, nil
 	}
 
