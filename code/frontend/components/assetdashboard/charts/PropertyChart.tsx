@@ -37,7 +37,7 @@ const LineChart = (props: { property: Property }) => {
 
                 const formattedData = Object.keys(values).map(
                     (key: string) => ({
-                        date: new Date(key),
+                        date: key, 
                         value: values[key].value,
                     }),
                 );
@@ -52,16 +52,18 @@ const LineChart = (props: { property: Property }) => {
 
     useEffect(() => {
         if (!data.length) {
-            console.log("Data array is empty, no chart to render");
+            console.log("No data");
             return;
         }
-
+    
+        const validData = data.filter(d => d.date && !isNaN(new Date(d.date).valueOf())); 
+    
         const margin = { top: 20, right: 30, bottom: 40, left: 50 };
         const width = 960 - margin.left - margin.right;
         const height = 500 - margin.top - margin.bottom;
-
+    
         d3.select(`#chart-${property.name}`).select("svg").remove();
-
+    
         const svg = d3
             .select(`#chart-${property.name}`)
             .append("svg")
@@ -69,37 +71,40 @@ const LineChart = (props: { property: Property }) => {
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
+    
+        const dateExtent = d3.extent(validData, d => new Date(d.date)) as Date[];
+    
         const xScale = d3
             .scaleTime()
-            .domain(d3.extent(data, (d) => d.date as Date))
+            .domain(dateExtent.length ? dateExtent : [new Date(), new Date()]) 
             .range([0, width]);
-
+    
         const yScale = d3
             .scaleLinear()
-            .domain([0, d3.max(data, (d) => d.value) || 0])
+            .domain([0, d3.max(validData, d => d.value) || 0])
             .range([height, 0]);
-
+    
         svg.append("g")
             .attr("transform", `translate(0, ${height})`)
             .call(d3.axisBottom(xScale));
-
+    
         svg.append("g").call(d3.axisLeft(yScale));
-
+    
         const line = d3
             .line<DataPoint>()
-            .x((d) => xScale(d.date as Date))
-            .y((d) => yScale(d.value))
+            .x(d => xScale(new Date(d.date)))
+            .y(d => yScale(d.value))
             .curve(d3.curveMonotoneX);
-
+    
         svg.append("path")
-            .datum(data)
+            .datum(validData)
             .attr("class", "line")
             .attr("d", line)
             .attr("fill", "none")
             .attr("stroke", "steelblue")
             .attr("stroke-width", 2);
-    }, [data]);
+    }, [data, property.name]);
+    
 
     return (
         <div
